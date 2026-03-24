@@ -189,6 +189,58 @@ a {
   opacity: 1;
 }
 
+.typewriter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.typewriter-text {
+  overflow: hidden;
+  white-space: nowrap;
+  margin: 0 auto;
+  font-weight: bold;
+  width: 30ch;
+
+  animation: typing 3.5s steps(35, end),
+             blink-caret .75s step-end infinite;
+}
+
+.typewriter h1{
+  color: var(--primary-red);
+  font-weight: bold;
+  font-size: var(--font-size-2xl);
+}
+
+.typewriter-text span {
+  font-size: var(--font-size-lg);
+  letter-spacing: 0.5px;
+  font-weight: normal;
+  text-transform: uppercase;
+}
+
+.hero-desc {
+  text-align: center;
+  font-size: var(--font-size-2xl);
+  letter-spacing: 0.2px;
+}
+
+.hero-desc span {
+  font-weight: bold;
+  font-style: italic;
+}
+
+/* KEEP typing */
+@keyframes typing {
+  from { width: 0 }
+  to { width: 30ch }
+}
+
+@keyframes blink-caret {
+  50% { border-color: transparent }
+}
 
 /* Ads */
 /* ADS SECTION */

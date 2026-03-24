@@ -17,20 +17,20 @@ export default function MarqueeFlow<T>({
   renderItem,
   gap = 24,
   speed = 3500,
-  mobileCount = 2,     // ← was 1, now 2 so cards aren't full-width
+  mobileCount = 2,
   tabletCount = 3,
-  desktopCount = 4
+  desktopCount = 4,
 }: MarqueeFlowProps<T>) {
   const [visibleItems, setVisibleItems] = useState(desktopCount);
-  const [activeGap, setActiveGap] = useState(gap);      // ← new: responsive gap
-  const [activeSpeed, setActiveSpeed] = useState(speed); // ← new: responsive speed
+  const [activeGap, setActiveGap] = useState(gap);
+  const [activeSpeed, setActiveSpeed] = useState(speed);
   const [isVisible, setIsVisible] = useState(true);
   const [isPaused, setIsPaused] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const indexRef = useRef(0);
-  const isResettingRef = useRef(false);
+  const isAnimatingRef = useRef(false); // ← replaces isResettingRef
 
   const scrollBy = 1;
   const cloneCount = visibleItems;
@@ -47,20 +47,50 @@ export default function MarqueeFlow<T>({
   const getTransform = (idx: number) =>
     `translateX(calc(${idx} * -1 * (100% + ${activeGap}px) / ${visibleItems}))`;
 
+  // Instantly teleport with no transition, using double rAF to ensure the
+  // browser has fully painted before re-enabling transitions.
   const jumpTo = (idx: number) => {
     const track = trackRef.current;
     if (!track) return;
     track.style.transition = "none";
     track.style.transform = getTransform(idx);
-    void track.offsetHeight;
+    // Double rAF: first queues after paint, second queues after that paint —
+    // guarantees the "none" transition is committed before any next slideTo.
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        isAnimatingRef.current = false;
+      });
+    });
   };
 
   const slideTo = (idx: number) => {
     const track = trackRef.current;
     if (!track) return;
-    track.style.transition = "transform 700ms ease-in-out";
+    isAnimatingRef.current = true;
+    track.style.transition = "transform 2000ms cubic-bezier(0.4, 0, 0.7, 1)";
     track.style.transform = getTransform(idx);
   };
+
+  // After each slide animation ends, check if we need to loop back.
+  // Using transitionend instead of a setTimeout avoids timing drift.
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+
+    const onTransitionEnd = (e: TransitionEvent) => {
+      if (e.propertyName !== "transform") return;
+      const idx = indexRef.current;
+      if (idx >= realOffset + items.length) {
+        indexRef.current = realOffset;
+        jumpTo(realOffset);
+      } else {
+        isAnimatingRef.current = false;
+      }
+    };
+
+    track.addEventListener("transitionend", onTransitionEnd);
+    return () => track.removeEventListener("transitionend", onTransitionEnd);
+  }, [realOffset, items.length, activeGap, visibleItems]);
 
   useEffect(() => {
     let timeoutId: NodeJS.Timeout;
@@ -68,8 +98,8 @@ export default function MarqueeFlow<T>({
       const w = window.innerWidth;
       if (w < 640) {
         setVisibleItems(mobileCount);
-        setActiveGap(Math.round(gap * 0.5));     // ← half gap on mobile
-        setActiveSpeed(Math.round(speed * 0.8)); // ← slightly faster on mobile
+        setActiveGap(Math.round(gap * 0.5));
+        setActiveSpeed(Math.round(speed * 0.8));
       } else if (w < 1024) {
         setVisibleItems(tabletCount);
         setActiveGap(gap);
@@ -94,6 +124,7 @@ export default function MarqueeFlow<T>({
 
   useEffect(() => {
     indexRef.current = realOffset;
+    isAnimatingRef.current = false;
     jumpTo(realOffset);
   }, [visibleItems, realOffset, activeGap]);
 
@@ -116,20 +147,12 @@ export default function MarqueeFlow<T>({
     }
 
     intervalRef.current = setInterval(() => {
-      if (isResettingRef.current) return;
+      // Skip tick if previous animation hasn't finished yet
+      if (isAnimatingRef.current) return;
       const next = indexRef.current + scrollBy;
       indexRef.current = next;
       slideTo(next);
-
-      if (next >= realOffset + items.length) {
-        isResettingRef.current = true;
-        setTimeout(() => {
-          indexRef.current = realOffset;
-          jumpTo(realOffset);
-          isResettingRef.current = false;
-        }, 720);
-      }
-    }, activeSpeed); // ← uses activeSpeed now
+    }, activeSpeed);
 
     return () => {
       if (intervalRef.current) {
@@ -152,7 +175,7 @@ export default function MarqueeFlow<T>({
         ref={trackRef}
         className="flex"
         style={{
-          gap: `${activeGap}px`,  // ← uses activeGap now
+          gap: `${activeGap}px`,
           transform: getTransform(realOffset),
           willChange: "transform",
         }}
@@ -160,7 +183,7 @@ export default function MarqueeFlow<T>({
         {cloned.map((item: T, i: number) => (
           <div
             key={i}
-            className="flex-shrink-0"
+            className="flex-shrink-0 flex items-end" 
             style={{
               flex: `0 0 calc((100% - ${(visibleItems - 1) * activeGap}px) / ${visibleItems})`,
             }}
