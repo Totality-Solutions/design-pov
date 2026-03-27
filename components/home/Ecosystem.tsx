@@ -6,6 +6,7 @@ import Section from '../common/Section'
 import { Container } from '../common/Container'
 import bgImage from '@/public/temp/ecosystem.png'
 import CTABtn from '../common/CTABtn'
+import Title from '../common/Title'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface EcosystemItem {
@@ -106,19 +107,8 @@ const EcosystemSection = () => {
         <Container>
 
         {/* Header */}
-        <div style={{ padding: '0 0 10px 0' }}>
-            <h1 className="text-4xl font-medium ">Five <span className='font-bold'>Pathways</span></h1>
-            <h2
-            style={{
-                fontStyle: 'italic',
-                fontSize: '56px',
-                fontWeight: 700,
-                color: '#e63422',
-                letterSpacing: '-0.01em',
-            }}
-            >
-            Ecosystem.
-            </h2>
+        <div style={{ padding: '0 0 20px 0' }}>
+          <Title normalText="Five Pathways" boldText="Ecosystem" />
         </div>
 
         {/* Cards Row */}

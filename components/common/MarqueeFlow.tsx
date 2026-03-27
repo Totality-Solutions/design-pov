@@ -4,163 +4,136 @@ import React, { useEffect, useState, useRef, useMemo } from "react";
 
 interface MarqueeFlowProps<T> {
   items: T[];
-  renderItem: (item: T, index: number) => React.ReactNode;
+  renderItem: (item: T, index: number, isExpanded: boolean) => React.ReactNode;
   gap?: number;
+  /** px per second */
   speed?: number;
   mobileCount?: number;
   tabletCount?: number;
   desktopCount?: number;
+  /** which visible position is always expanded (0 = first) */
+  defaultExpandedIndex?: number;
 }
 
 export default function MarqueeFlow<T>({
   items,
   renderItem,
   gap = 24,
-  speed = 3500,
+  speed = 30,
   mobileCount = 2,
   tabletCount = 3,
   desktopCount = 4,
+  defaultExpandedIndex,
 }: MarqueeFlowProps<T>) {
-  const [visibleItems, setVisibleItems] = useState(desktopCount);
-  const [activeGap, setActiveGap] = useState(gap);
-  const [activeSpeed, setActiveSpeed] = useState(speed);
-  const [isVisible, setIsVisible] = useState(true);
-  const [isPaused, setIsPaused] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const trackRef = useRef<HTMLDivElement>(null);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
-  const indexRef = useRef(0);
-  const isAnimatingRef = useRef(false); // ← replaces isResettingRef
+  const containerRef  = useRef<HTMLDivElement>(null);
+  const trackRef      = useRef<HTMLDivElement>(null);
+  const rafRef        = useRef<number>(0);
+  const offsetRef     = useRef(0);          // continuous px offset, never resets
+  const lastTsRef     = useRef<number>(0);
+  const pausedRef     = useRef(false);
+  const itemWidthRef  = useRef(0);          // width of one item + gap in px
+  const totalWidthRef = useRef(0);          // width of one full set in px
 
-  const scrollBy = 1;
-  const cloneCount = visibleItems;
+  const [visibleCount, setVisibleCount] = useState(desktopCount);
+  const [activeGap,    setActiveGap]    = useState(gap);
+  // expandedItemIndex: which real item index (0-based) is currently in the expanded slot
+  const [expandedItemIndex, setExpandedItemIndex] = useState(
+    defaultExpandedIndex !== undefined ? defaultExpandedIndex : -1
+  );
 
-  const cloned = useMemo(() => {
+  // We render 3 full copies so there's always content ahead and behind
+  const COPIES = 3;
+  const repeated = useMemo(() => {
     if (items.length === 0) return [];
-    const tail = items.slice(-cloneCount);
-    const head = items.slice(0, cloneCount);
-    return [...tail, ...items, ...head];
-  }, [items, cloneCount]);
+    return Array.from({ length: COPIES }, () => items).flat();
+  }, [items]);
 
-  const realOffset = cloneCount;
-
-  const getTransform = (idx: number) =>
-    `translateX(calc(${idx} * -1 * (100% + ${activeGap}px) / ${visibleItems}))`;
-
-  // Instantly teleport with no transition, using double rAF to ensure the
-  // browser has fully painted before re-enabling transitions.
-  const jumpTo = (idx: number) => {
-    const track = trackRef.current;
-    if (!track) return;
-    track.style.transition = "none";
-    track.style.transform = getTransform(idx);
-    // Double rAF: first queues after paint, second queues after that paint —
-    // guarantees the "none" transition is committed before any next slideTo.
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        isAnimatingRef.current = false;
-      });
-    });
-  };
-
-  const slideTo = (idx: number) => {
-    const track = trackRef.current;
-    if (!track) return;
-    isAnimatingRef.current = true;
-    track.style.transition = "transform 2000ms cubic-bezier(0.4, 0, 0.7, 1)";
-    track.style.transform = getTransform(idx);
-  };
-
-  // After each slide animation ends, check if we need to loop back.
-  // Using transitionend instead of a setTimeout avoids timing drift.
+  // ── Responsive ────────────────────────────────────────────────────────────
   useEffect(() => {
-    const track = trackRef.current;
-    if (!track) return;
-
-    const onTransitionEnd = (e: TransitionEvent) => {
-      if (e.propertyName !== "transform") return;
-      const idx = indexRef.current;
-      if (idx >= realOffset + items.length) {
-        indexRef.current = realOffset;
-        jumpTo(realOffset);
-      } else {
-        isAnimatingRef.current = false;
-      }
-    };
-
-    track.addEventListener("transitionend", onTransitionEnd);
-    return () => track.removeEventListener("transitionend", onTransitionEnd);
-  }, [realOffset, items.length, activeGap, visibleItems]);
-
-  useEffect(() => {
-    let timeoutId: NodeJS.Timeout;
+    let t: ReturnType<typeof setTimeout>;
     const update = () => {
       const w = window.innerWidth;
       if (w < 640) {
-        setVisibleItems(mobileCount);
+        setVisibleCount(mobileCount);
         setActiveGap(Math.round(gap * 0.5));
-        setActiveSpeed(Math.round(speed * 0.8));
       } else if (w < 1024) {
-        setVisibleItems(tabletCount);
+        setVisibleCount(tabletCount);
         setActiveGap(gap);
-        setActiveSpeed(speed);
       } else {
-        setVisibleItems(desktopCount);
+        setVisibleCount(desktopCount);
         setActiveGap(gap);
-        setActiveSpeed(speed);
       }
     };
-    const handleResize = () => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(update, 150);
-    };
+    const onResize = () => { clearTimeout(t); t = setTimeout(update, 150); };
     update();
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-      clearTimeout(timeoutId);
+    window.addEventListener("resize", onResize);
+    return () => { window.removeEventListener("resize", onResize); clearTimeout(t); };
+  }, [mobileCount, tabletCount, desktopCount, gap]);
+
+  // ── Measure item width after mount / resize ───────────────────────────────
+  useEffect(() => {
+    const measure = () => {
+      const container = containerRef.current;
+      if (!container) return;
+      const containerW = container.offsetWidth;
+      const iw = (containerW - (visibleCount - 1) * activeGap) / visibleCount;
+      itemWidthRef.current  = iw + activeGap;
+      totalWidthRef.current = itemWidthRef.current * items.length;
+      // Seed offset to start at copy #1 (middle copy) so we have room in both directions
+      offsetRef.current = totalWidthRef.current;
     };
-  }, [mobileCount, tabletCount, desktopCount, gap, speed]);
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, [visibleCount, activeGap, items.length]);
 
+  // ── rAF loop ──────────────────────────────────────────────────────────────
   useEffect(() => {
-    indexRef.current = realOffset;
-    isAnimatingRef.current = false;
-    jumpTo(realOffset);
-  }, [visibleItems, realOffset, activeGap]);
+    if (items.length === 0) return;
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => setIsVisible(entries[0].isIntersecting),
-      { threshold: 0.1 }
-    );
-    if (containerRef.current) observer.observe(containerRef.current);
-    return () => observer.disconnect();
-  }, []);
+    const tick = (ts: number) => {
+      rafRef.current = requestAnimationFrame(tick);
+      if (pausedRef.current) { lastTsRef.current = ts; return; }
 
-  useEffect(() => {
-    if (!isVisible || items.length === 0 || isPaused) {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-        intervalRef.current = null;
+      const dt = lastTsRef.current ? (ts - lastTsRef.current) / 1000 : 0;
+      lastTsRef.current = ts;
+
+      const iw    = itemWidthRef.current;
+      const total = totalWidthRef.current;
+      if (iw === 0 || total === 0) return;
+
+      // Advance offset
+      offsetRef.current += speed * dt;
+
+      // Seamless wrap: once we've scrolled past copy #2 start, jump back by one full set
+      // This is invisible because copy #1 and copy #3 are identical
+      if (offsetRef.current >= total * 2) {
+        offsetRef.current -= total;
       }
-      return;
-    }
 
-    intervalRef.current = setInterval(() => {
-      // Skip tick if previous animation hasn't finished yet
-      if (isAnimatingRef.current) return;
-      const next = indexRef.current + scrollBy;
-      indexRef.current = next;
-      slideTo(next);
-    }, activeSpeed);
+      const track = trackRef.current;
+      if (track) {
+        track.style.transform = `translateX(-${offsetRef.current}px)`;
+      }
 
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-        intervalRef.current = null;
+      // ── Update which item is in the expanded slot ──────────────────────────
+      if (defaultExpandedIndex !== undefined && iw > 0) {
+        // Use floor so the expanded item only hands off once the next item
+        // has fully entered the slot — no premature collapse
+        const scrolledItems = offsetRef.current / iw;
+        const idx = Math.floor(scrolledItems + defaultExpandedIndex) % items.length;
+        const normalized = (idx + items.length) % items.length;
+        setExpandedItemIndex((prev) => prev !== normalized ? normalized : prev);
       }
     };
-  }, [activeSpeed, isVisible, items.length, visibleItems, realOffset, isPaused]);
+
+    rafRef.current = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafRef.current);
+  }, [items.length, speed, defaultExpandedIndex]);
+
+  // ── Pause on hover ────────────────────────────────────────────────────────
+  const handleMouseEnter = () => { pausedRef.current = true; };
+  const handleMouseLeave = () => { pausedRef.current = false; };
 
   if (items.length === 0) return null;
 
@@ -168,29 +141,37 @@ export default function MarqueeFlow<T>({
     <div
       ref={containerRef}
       className="w-full overflow-hidden"
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       <div
         ref={trackRef}
         className="flex"
         style={{
           gap: `${activeGap}px`,
-          transform: getTransform(realOffset),
           willChange: "transform",
+          // No CSS transition — rAF owns all movement
         }}
       >
-        {cloned.map((item: T, i: number) => (
-          <div
-            key={i}
-            className="flex-shrink-0 flex items-end" 
-            style={{
-              flex: `0 0 calc((100% - ${(visibleItems - 1) * activeGap}px) / ${visibleItems})`,
-            }}
-          >
-            {renderItem(item, i % items.length)}
-          </div>
-        ))}
+        {repeated.map((item: T, i: number) => {
+          const realIndex = i % items.length;
+          const isExpanded =
+            defaultExpandedIndex !== undefined && realIndex === expandedItemIndex;
+
+          return (
+            <div
+              key={i}
+              className="flex-shrink-0 flex items-end"
+              style={{
+                // Fixed width based on visibleCount — same for all items
+                width: `calc((100vw - ${(visibleCount - 1) * activeGap}px) / ${visibleCount})`,
+                flexShrink: 0,
+              }}
+            >
+              {renderItem(item, realIndex, isExpanded)}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
