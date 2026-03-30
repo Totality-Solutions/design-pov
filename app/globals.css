@@ -57,8 +57,8 @@ body {
 
 /* ─── SELECTION ──────────────────────────────────────────── */
 ::selection {
-  background: var(--color-clay);
-  color: var(--color-black);
+  background: var(--primary-blue);
+  color: var(--color-white);
 }
 
 
@@ -237,15 +237,6 @@ a {
   font-style: italic;
 }
 
-/* KEEP typing */
-/* @keyframes typing {
-  from { width: 0 }
-  to { width: 30ch }
-}
-
-@keyframes blink-caret {
-  50% { border-color: transparent }
-} */
 
 /* Ads */
 /* ADS SECTION */
@@ -321,3 +312,19 @@ a {
   }
 }
 
+.marquee-track {
+  display: flex;
+  gap: 3rem;
+  width: max-content;
+  animation: marquee 18s linear infinite;
+  will-change: transform;
+}
+
+@keyframes marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}

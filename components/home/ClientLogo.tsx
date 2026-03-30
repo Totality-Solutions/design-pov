@@ -13,35 +13,19 @@ const ClientLogo = () => {
 
   return (
     <Container>
-      <div className="overflow-hidden border-b border-white/5 py-3.5 bg-black">
-        <div className="flex animate-marquee">
-          {/* Track 1 */}
-          <div className="flex gap-12">
-            {Client.map((logo, i) => (
-              <img
-                key={`a-${i}`}
-                src={logo.src}
-                alt={logo.alt}
-                className="h-20 w-auto object-contain"
-                draggable={false}
-              />
-            ))}
-          </div>
-
-          {/* Track 2 (duplicate) */}
-          <div className="flex gap-12">
-            {Client.map((logo, i) => (
-              <img
-                key={`b-${i}`}
-                src={logo.src}
-                alt={logo.alt}
-                className="h-20 w-auto object-contain"
-                draggable={false}
-              />
-            ))}
-          </div>
-        </div>
-      </div>
+      <div className="overflow-hidden border-b py-3.5">
+  <div className="marquee-track">
+    {[...Client, ...Client].map((logo, i) => (
+      <img
+        key={i}
+        src={logo.src}
+        alt={logo.alt}
+        className="h-20 w-auto object-contain shrink-0"
+        draggable={false}
+      />
+    ))}
+  </div>
+</div>
     </Container>
   );
 };

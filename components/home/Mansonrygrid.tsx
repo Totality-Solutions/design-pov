@@ -1,112 +1,118 @@
 "use client";
 
-import React, { forwardRef, useMemo } from "react";
+import React, { forwardRef } from "react";
 import { motion, MotionValue } from "framer-motion";
-import Image, { StaticImageData } from "next/image";
+import Image from "next/image";
 
-export type MasonryMediaItem = {
-  src: StaticImageData | string;
-  type?: "image" | "video";
+// ✅ Import images locally (inside this file only)
+import img1 from "@/public/temp/theme/11.png";
+import img2 from "@/public/temp/theme/2.png";
+import img3 from "@/public/temp/theme/3.png";
+import img4 from "@/public/temp/theme/4.png";
+import img5 from "@/public/temp/theme/5.png";
+import img6 from "@/public/temp/theme/6.png";
+import img7 from "@/public/temp/theme/7.png";
+import img8 from "@/public/temp/theme/12.png";
+
+// ✅ Flexible Cell (image | video | empty for color)
+function Cell({
+  type = "image",
+  src,
+  alt,
+}: {
+  type?: "image" | "video" | "empty";
+  src?: any;
   alt?: string;
-};
+}) {
+  if (type === "video" && src) {
+    return (
+      <video
+        src={src}
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="w-full h-full object-cover"
+      />
+    );
+  }
+
+  if (type === "image" && src) {
+    return (
+      <div className="relative w-full h-full">
+        <Image src={src} alt={alt || ""} fill className="object-cover" />
+      </div>
+    );
+  }
+
+  // empty → just color bg from parent
+  return null;
+}
 
 interface MasonryGridProps {
-  items: MasonryMediaItem[];
-  columns?: number;
-  gap?: number;
   y: MotionValue<number>;
 }
 
-// Square-ish heights so images tile tightly with no awkward gaps
-const HEIGHT_POOL = [280, 340, 300, 380, 260, 320, 360, 290];
-
-function seededRandom(seed: number) {
-  let s = seed;
-  return () => {
-    s = (s * 16807) % 2147483647;
-    return (s - 1) / 2147483646;
-  };
-}
-
-function MasonryCell({ item, height }: { item: MasonryMediaItem; height: number }) {
-  return (
-    <div style={{ height, width: "100%", overflow: "hidden", position: "relative", flexShrink: 0 }}>
-      {item.type === "video" ? (
-        <video
-          src={typeof item.src === "string" ? item.src : ""}
-          autoPlay muted loop playsInline
-          style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-        />
-      ) : (
-        <Image
-          src={item.src}
-          alt={item.alt || ""}
-          fill
-          style={{ objectFit: "cover" }}
-          sizes="35vw"
-        />
-      )}
-    </div>
-  );
-}
-
 const MasonryGrid = forwardRef<HTMLDivElement, MasonryGridProps>(
-  ({ items, columns = 2, gap = 0, y }, ref) => {
-    const rng = useMemo(() => seededRandom(42), []);
-
-    // Fill each column with enough items to overflow well past 100vh
-    // We need at least ~2500px of content per column
-    const allItems = useMemo(() => {
-      if (items.length === 0) return [];
-      const minItems = columns * 10; // enough for tall scroll
-      const repeated: MasonryMediaItem[] = [];
-      while (repeated.length < minItems) repeated.push(...items);
-      return repeated; // do NOT slice — use all repeated items
-    }, [items, columns]);
-
-    // Round-robin distribute
-    const columnItems: MasonryMediaItem[][] = useMemo(() => {
-      const cols: MasonryMediaItem[][] = Array.from({ length: columns }, () => []);
-      allItems.forEach((item, i) => cols[i % columns].push(item));
-      return cols;
-    }, [allItems, columns]);
-
-    // Heights — each item gets a height, cycling through pool
-    const columnHeights: number[][] = useMemo(() =>
-      columnItems.map((col) =>
-        col.map((_, i) => HEIGHT_POOL[(i + Math.floor(rng() * 3)) % HEIGHT_POOL.length])
-      ),
-    [columnItems]);
-
+  ({ y }, ref) => {
     return (
-      <div
-        ref={ref}
-        style={{ width: "100%", height: "100%", overflow: "hidden" }}
-      >
-        <motion.div
-          style={{
-            display: "flex",
-            alignItems: "flex-start",
-            gap,
-            y,
-          }}
-        >
-          {columnItems.map((col, ci) => (
-            <div
-              key={ci}
-              style={{
-                flex: 1,
-                display: "flex",
-                flexDirection: "column",
-                gap,
-                minWidth: 0,
-              }}
-            >
-              {col.map((item, i) => (
-                <MasonryCell key={i} item={item} height={columnHeights[ci][i]} />
-              ))}
+      <div ref={ref} className="w-full h-full overflow-hidden">
+        <motion.div style={{ y }}>
+          
+          <div className="grid grid-cols-2 auto-rows-[300px] w-full">
+
+            {/* 01 IMAGE */}
+            <div className="row-span-2">
+              <Cell type="image" src={img7} alt="Theme 1" />
             </div>
-          ))}
+
+            {/* 02 BRAND COLOR (KEEP) */}
+            <div className="bg-[var(--primary-blue)]">
+              <Cell type="empty" />
+            </div>
+
+            {/* 03 IMAGE */}
+            <div className="row-span-2">
+              <Cell type="image" src={img2} alt="Theme 2" />
+            </div>
+
+            {/* 04 BRAND COLOR (KEEP) */}
+            <div className="bg-[var(--primary-red)]">
+              <Cell type="empty" />
+            </div>
+
+            {/* 05 IMAGE */}
+            <div className="row-span-2">
+              <Cell type="image" src={img3} alt="Theme 3" />
+            </div>
+
+            {/* 06 VIDEO EXAMPLE */}
+            <div className="row-span-2">
+              <Cell type="video" src="/video/home.mp4" />
+            </div>
+
+            {/* 07 IMAGE */}
+            <div className="row-span-2">
+              <Cell type="image" src={img4} alt="Theme 4" />
+            </div>
+
+            {/* 08 IMAGE */}
+            <div>
+              <Cell type="image" src={img8} alt="Theme 5" />
+            </div>
+
+            {/* 09 BRAND BLACK (KEEP) */}
+            <div className="bg-[var(--color-black)]">
+              <Cell type="empty" />
+            </div>
+
+            {/* 10 FULL WIDTH IMAGE */}
+            <div className="col-span-2">
+              <Cell type="image" src={img1} alt="Theme 6" />
+            </div>
+
+          </div>
+
         </motion.div>
       </div>
     );

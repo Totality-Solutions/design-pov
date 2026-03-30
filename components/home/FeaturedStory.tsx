@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import Section from "../common/Section";
 import { Container } from "../common/Container";
 import Title from "../common/Title";
+import Image from "next/image";
 
 const slides = [
   {
@@ -123,7 +124,7 @@ export default function MarqueeCarousel() {
   const [imgKey, setImgKey] = useState(0);
   const [textKey, setTextKey] = useState(0);
   const [direction, setDirection] = useState<"up" | "down">("down");
-  const carouselRef = useRef(null);
+  const carouselRef = useRef<HTMLDivElement>(null);
   const autoRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const goTo = useCallback(
@@ -191,27 +192,19 @@ export default function MarqueeCarousel() {
   const current = slides[activeIndex];
 
   return (
-        <Container className="border-y border-gray-200 bottom-2">
+        <Container className="border-y border-gray-300 ">
     <Section>
         <style>{`
-            :root {
-            --bg: #f0ede8;
-            --ink: #0d0d0d;
-            --muted: #8a8782;
-            }
-
-            body { background: var(--bg); }
 
             .mc-root {
-            min-height: 100vh;
-            background: var(--bg);
+            max-height: 100vh;
+            background: var(--color-white);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-family: 'DM Sans', sans-serif;
             overflow: hidden;
             }
-
+            
             .mc-wrap {
             width: 100%;
             max-width: 1400px;
@@ -219,7 +212,8 @@ export default function MarqueeCarousel() {
             grid-template-columns: 1fr 130px 1fr;
             gap: 0 28px;
             align-items: center;
-            min-height: 540px;
+            max-height: fit-content;
+            padding: 1rem 0;
             }
 
             /* ──────────────────────────────────────
@@ -230,7 +224,7 @@ export default function MarqueeCarousel() {
             width: 100%;
             aspect-ratio: 16/10;
             overflow: hidden;
-            border-radius: 4px;
+            border-radius: 0px;
             }
 
             .hero-img {
@@ -296,7 +290,7 @@ export default function MarqueeCarousel() {
             /* base size */
             width: 80px;
             height: 56px;
-            border-radius: 3px;
+            border-radius: 0px;
             overflow: hidden;
             cursor: pointer;
             position: relative;
@@ -353,7 +347,7 @@ export default function MarqueeCarousel() {
             position: absolute;
             left: 0; top: 0; bottom: 0;
             width: 3px;
-            background: var(--ink);
+            background: var(--color-black);
             z-index: 2;
             animation: barIn 0.35s ease forwards;
             }
@@ -366,56 +360,69 @@ export default function MarqueeCarousel() {
             RIGHT: TEXT PANEL — slides RIGHT → LEFT
             ────────────────────────────────────── */
             .text-panel {
-            padding-left: 32px;
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
-            }
+  padding-left: 48px; /* more breathing space */
+  display: flex;
+  flex-direction: column;
+  gap: 32px; /* more vertical rhythm */
+}
 
-            /* Each animated child needs a clipping parent */
-            .clip { overflow: hidden; }
+/* clipping stays same */
+.clip { overflow: hidden; }
 
-            .text-desc {
-            font-size: 15px;
-            font-weight: 300;
-            line-height: 1.75;
-            color: var(--ink);
-            max-width: 340px;
-            }
-            .text-label {
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--ink);
-            letter-spacing: 0.02em;
-            }
-            .text-sub {
-            font-size: 13px;
-            font-weight: 300;
-            color: var(--muted);
-            letter-spacing: 0.01em;
-            margin-top: 3px;
-            }
-            .text-big {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: clamp(52px, 5.5vw, 88px);
-            letter-spacing: 0.02em;
-            line-height: 0.92;
-            color: var(--ink);
-            display: flex;
-            align-items: flex-end;
-            gap: 12px;
-            }
-            .text-arrow {
-            font-family: 'DM Sans', sans-serif;
-            font-size: 20px;
-            font-weight: 300;
-            margin-bottom: 6px;
-            opacity: 0.45;
-            cursor: pointer;
-            transition: opacity 0.2s, transform 0.2s;
-            flex-shrink: 0;
-            }
-            .text-arrow:hover { opacity: 1; transform: translate(2px,-2px); }
+/* Description */
+.text-desc {
+  font-size: 15px;
+  font-weight: 300;
+  line-height: 1.8;
+  color: var(--color-black);
+  max-width: 360px;
+}
+
+/* Label (small heading) */
+.text-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-black);
+  letter-spacing: 0.02em; /* more premium */
+  text-transform: uppercase;
+}
+
+/* Sub text */
+.text-sub {
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--color-black);
+  letter-spacing: 0.02em;
+  margin-top: 6px;
+}
+
+/* Big Title */
+.text-big {
+  font-size: clamp(48px, 3vw, 80px); /* slightly bigger */
+  font-weight: 700;
+  letter-spacing: 0px;
+  line-height: 0.9;
+  color: var(--color-black);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  cursor: pointer;
+  width: 100%;
+}
+
+/* Arrow */
+.text-arrow {
+  margin: 0px;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+/* Hover stays same but smoother */
+.text-big:hover .text-arrow {
+  opacity: 1;
+  transform: translate(4px, -4px);
+
+}
 
             /* RIGHT-TO-LEFT reveal animation */
             .rtl {
@@ -439,7 +446,7 @@ export default function MarqueeCarousel() {
             position: fixed;
             bottom: 0; left: 0;
             height: 2px;
-            background: var(--ink);
+            background: var(--color-black);
             animation: progAnim 4s linear forwards;
             }
             @keyframes progAnim {
@@ -461,11 +468,11 @@ export default function MarqueeCarousel() {
             .dot {
             width: 6px; height: 6px;
             border-radius: 50%;
-            background: var(--muted);
+            background: var(--color-black);
             cursor: pointer;
             transition: background 0.3s, transform 0.3s;
             }
-            .dot.active { background: var(--ink); transform: scale(1.5); }
+            .dot.active { background: var(--color-black); transform: scale(1.5); }
 
             @media (max-width: 900px) {
             .mc-wrap {
@@ -477,18 +484,20 @@ export default function MarqueeCarousel() {
             .text-panel { padding-left: 0; }
             }
         `}</style>
-        <Title normalText="Featured" boldText="Story" />
         <div className="mc-root">
-            <div className="mc-wrap">
+            <div className="mc-wrap ">
 
             {/* ── LEFT ── */}
+              <div className="w-full h-full flex flex-col items-start justify-start gap-10">
+                <Title normalText="Featured" boldText="Story" />
             <div className="hero-frame">
+             
                 {prevIndex !== null && (
-                <img
-                    className={`hero-img z1 ${direction === "down" ? "exit-down" : "exit-up"}`}
-                    src={slides[prevIndex].main}
-                    alt=""
-                />
+                  <img
+                  className={`hero-img z1 ${direction === "down" ? "exit-down" : "exit-up"}`}
+                  src={slides[prevIndex].main}
+                  alt=""
+                  />
                 )}
                 <img
                 key={imgKey}
@@ -497,6 +506,7 @@ export default function MarqueeCarousel() {
                 alt={current.title}
                 />
             </div>
+              </div>
 
             {/* ── CENTER ── */}
             <div className="thumb-strip" ref={carouselRef}>
@@ -509,7 +519,7 @@ export default function MarqueeCarousel() {
                 >
                     <img src={s.thumbnail} alt={s.title} loading="lazy" />
                 </div>
-                ))}
+                ))}   
             </div>
 
             {/* ── RIGHT ── */}
@@ -538,9 +548,9 @@ export default function MarqueeCarousel() {
 
                 {/* Big title */}
                 <div className="clip">
-                <div key={`big-${textKey}`} className="text-big rtl s4">
+                <div key={`big-${textKey}`} onClick={next} className="text-big rtl s4">
                     {current.title}
-                    <span className="text-arrow" onClick={next}>↗</span>
+                    <Image src="/icons/arrow-top-right.svg" alt="arrow" className="text-arrow" width={24} height={24} />
                 </div>
                 </div>
 
@@ -559,7 +569,7 @@ export default function MarqueeCarousel() {
                 onClick={() => goTo(i)}
                 />
             ))}
-            </div> */}
+            </div> */}  
         </div>
     </Section>
         </Container>

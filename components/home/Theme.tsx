@@ -3,7 +3,7 @@ import React, { useRef, useEffect, useState } from 'react'
 import { Container } from '../common/Container'
 import CTABtn from '../common/CTABtn'
 import { useScroll, useTransform, useSpring } from "framer-motion"
-import MasonryGrid, { MasonryMediaItem } from './Mansonrygrid'
+import MasonryGrid from './Mansonrygrid'
 import img1 from "@/public/temp/theme/1.png"
 import img2 from "@/public/temp/theme/2.png"
 import img3 from "@/public/temp/theme/3.png"
@@ -18,21 +18,7 @@ import img11 from "@/public/temp/theme/11.png"
 import img12 from "@/public/temp/theme/12.png"
 import img13 from "@/public/temp/theme/13.png"
 
-const MEDIA: MasonryMediaItem[] = [
-  { src: img1,  type: "image", alt: "Theme 1"  },
-  { src: img2,  type: "image", alt: "Theme 2"  },
-  { src: img3,  type: "image", alt: "Theme 3"  },
-  { src: img4,  type: "image", alt: "Theme 4"  },
-  { src: img5,  type: "image", alt: "Theme 5"  },
-  { src: img6,  type: "image", alt: "Theme 6"  },
-  { src: img7,  type: "image", alt: "Theme 7"  },
-  { src: img8,  type: "image", alt: "Theme 8"  },
-  { src: img9,  type: "image", alt: "Theme 9"  },
-  { src: img10, type: "image", alt: "Theme 10" },
-  { src: img11, type: "image", alt: "Theme 11" },
-  { src: img12, type: "image", alt: "Theme 12" },
-  { src: img13, type: "image", alt: "Theme 13" },
-]
+
 
 const Theme = () => {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -67,18 +53,18 @@ const Theme = () => {
     offset: ["start start", "end end"],
   })
 
-  const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 50,
-    damping: 20,
-    restDelta: 0.001,
-  })
+const smoothProgress = useSpring(scrollYProgress, {
+  stiffness: 220,
+  damping: 30,
+  mass: 0.4,
+});
 
   // y goes from 0 to -scrollRange
   // Start at 0 so first images are visible at top of right panel
   const y = useTransform(smoothProgress, [0, 1], [0, -scrollRange])
 
   return (
-    <div ref={containerRef} style={{ position: 'relative', height: '500vh' }}>
+    <div ref={containerRef} style={{ position: 'relative', height: '350vh' }}>
       <div style={{ position: 'sticky', top: 0, height: '100vh', overflow: 'hidden' }}>
         <Container>
           <div className="flex h-[100vh]">
@@ -97,9 +83,6 @@ const Theme = () => {
             <div className="w-[70%] h-full" style={{ overflow: 'hidden' }}>
               <MasonryGrid
                 ref={gridRef}
-                items={MEDIA}
-                columns={2}
-                gap={4}
                 y={y}
               />
             </div>

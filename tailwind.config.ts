@@ -11,9 +11,9 @@ const config: Config = {
       colors: {
         // Design POV Brand Colors
         "pov-black": "#0A0A0A",
-        "pov-white": "#F5F2ED",
-        "pov-cream": "#EDE8E0",
-        "pov-clay": "#C4A882",
+        "pov-white": "#ffffff",
+        "pov-cream": "#ffffff",
+        "pov-clay": "#ffffff",
         "pov-rust": "#B85C38",
         "pov-slate": "#2C2C2C",
         "pov-mist": "#8A8A8A",
