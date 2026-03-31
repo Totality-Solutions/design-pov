@@ -102,7 +102,7 @@ a {
 .row2 {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: end;
   padding: 50px 36px;
   height: 56px;
   margin-top: auto;
@@ -148,6 +148,86 @@ a {
   display: inline-flex;
   align-items: center;
 }
+
+/* Button Styles */
+/* ===== FULLY DYNAMIC FANCY BUTTON ===== */
+/* ===== FINAL DYNAMIC FANCY BUTTON ===== */
+
+.fancy-btn {
+  position: relative;
+  border: 2px solid var(--btn-border);
+  overflow: visible;
+  transition: all 0.3s ease;
+}
+
+/* LEFT LINE */
+.fancy-btn .before-line {
+  position: absolute;
+  width: 25px;
+  height: 2px;
+  background: var(--btn-line);
+  top: 50%;
+  left: 20px;
+  transform: translateY(-50%);
+  transition: all 0.3s ease;
+}
+
+/* TOP KEY */
+.fancy-btn .top-key {
+  position: absolute;
+  height: 2px;
+  width: 25px;
+  top: -2px;
+  left: 10px;
+  background: var(--btn-line);
+  transition: all 0.5s ease;
+}
+
+/* BOTTOM KEY 1 */
+.fancy-btn .bottom-key-1 {
+  position: absolute;
+  height: 2px;
+  width: var(--bk1-width);
+  bottom: -2px;
+  right: var(--bk1-right);
+  background: var(--btn-line);
+  transition: all 0.5s ease;
+}
+
+/* BOTTOM KEY 2 */
+.fancy-btn .bottom-key-2 {
+  position: absolute;
+  height: 2px;
+  width: var(--bk2-width);
+  bottom: -2px;
+  right: var(--bk2-right);
+  background: var(--btn-line);
+  transition: all 0.5s ease;
+}
+
+/* HOVER */
+.fancy-btn:hover {
+  border-color: var(--btn-border-hover);
+}
+
+.fancy-btn:hover .before-line {
+  width: 15px;
+  background: var(--btn-line-hover);
+}
+
+.fancy-btn:hover .top-key {
+  width: 0;
+  left: -2px;
+  background: var(--btn-line-hover);
+}
+
+.fancy-btn:hover .bottom-key-1,
+.fancy-btn:hover .bottom-key-2 {
+  width: 0;
+  right: 0;
+  background: var(--btn-line-hover);
+}
+
 
 /* ── STICKY HEADER (shows after scroll) ── */
 .stickyHeader {

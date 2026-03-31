@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { FiArrowUpRight, FiPlus, FiRefreshCcw, FiX } from "react-icons/fi";
+import { FiArrowUpRight, FiMinimize, FiMinus, FiPlus, FiRefreshCcw, FiX } from "react-icons/fi";
 
 interface CTABtnProps {
   label?: string;
@@ -23,6 +23,14 @@ interface CTABtnProps {
   iconType?: "arrow" | "reset" | "plus" | "x";
   className?: string;
   disabled?: boolean;
+  borderColor?: string;
+  borderHoverColor?: string;
+  lineColor?: string;
+  lineHoverColor?: string;
+  bottomKey1Width?: string;
+  bottomKey2Width?: string;
+  bottomKey1Right?: string;
+  bottomKey2Right?: string;
 }
 
 export default function CTABtn({
@@ -37,13 +45,21 @@ export default function CTABtn({
   showLabel = true,
   iconPosition = "right",
   iconType = "arrow",
-  btnBg = "var(--primary-blue)",
+  btnBg = "transparent",
   btnHoverBg = "var(--primary-blue)",
-  circleBg = "var(--primary-blue)",
-  iconColor = "var(--color-white)",
-  textColor = "var(--color-white)",
+  circleBg = "transparent",
+  iconColor = "var(--color-black)",
+  textColor = "var(--color-black)",
   className = "",
   disabled = false,
+  borderColor,
+  borderHoverColor,
+  lineColor,
+  lineHoverColor,
+  bottomKey1Width,
+  bottomKey2Width,
+  bottomKey1Right,
+  bottomKey2Right,
 }: CTABtnProps) {
   const [hovered, setHovered] = useState(false);
 
@@ -60,8 +76,8 @@ export default function CTABtn({
       h: "h-[50px]",
       circle: "w-[40px] h-[40px]",
       text: "var(--font-size-base)",
-      px: "pl-6 pr-1.5",
-      gap: "gap-6",
+      px: "pr-6 pl-1.5",
+      gap: "gap-3",
       iconSize: 15,
     },
     lg: {
@@ -78,12 +94,12 @@ export default function CTABtn({
 
   /* ICON */
   const Icon = () => {
-    const props = { size: cur.iconSize, color: iconColor };
+    const props = { size: cur.iconSize, color: "currentColor" };
 
     if (iconType === "x") return <FiX {...props} />;
     if (iconType === "plus") return <FiPlus {...props} />;
     if (iconType === "reset") return <FiRefreshCcw {...props} />;
-    return <FiArrowUpRight {...props} strokeWidth={2.5} />;
+    return <FiMinus {...props} strokeWidth={2.5} />;
   };
 
   /* ICON WRAPPER */
@@ -93,7 +109,7 @@ export default function CTABtn({
       style={{
         transform:
           hovered && (iconType === "arrow" || iconType === "reset")
-            ? "rotate(45deg) scale(1.5)"
+            ? "rotate(0deg) scale(1.9)"
             : "rotate(0deg)",
       }}
     >
@@ -106,12 +122,12 @@ export default function CTABtn({
     <div
       className={`${cur.circle}  flex items-center justify-center shrink-0 transition-all duration-300`}
       style={{
-        backgroundColor: showIconCircle
+        color: showIconCircle
           ? hovered
-            ? btnBg
-            : circleBg
-          : "var(--primary-blue)",
-        order: iconPosition === "right" ? 2 : 0,
+            ? "var(--color-white)"
+            : borderColor || "var(--color-white)"
+          : "var(--color-white)",
+        order: iconPosition === "left" ? 1 : 0,
       }}
     >
       {IconPart}
@@ -124,7 +140,7 @@ export default function CTABtn({
       className={`${cur.text} font-normal whitespace-nowrap`}
       style={{
         color: hovered ? "var(--color-white)" : textColor,
-        order: 1,
+        order: iconPosition === "left" ? 2 : 1,
       }}
     >
       {label}
@@ -142,13 +158,31 @@ export default function CTABtn({
       ${className}
       ${disabled ? "opacity-50 pointer-events-none" : ""}
     `,
-    style: {
-      backgroundColor: showButtonBg
-        ? hovered
-          ? btnHoverBg
-          : btnBg
-        : "var(--primary-blue)",
-    },
+style: {
+  backgroundColor: showButtonBg
+    ? hovered
+      ? btnHoverBg
+      : btnBg
+    : "transparent",
+
+  color: hovered ? "var(--color-white)" : textColor,
+
+  /* ✅ DYNAMIC COLORS */
+  ["--btn-border" as any]: borderColor || textColor,
+  ["--btn-border-hover" as any]:
+    borderHoverColor || "var(--color-white)",
+
+  ["--btn-line" as any]: lineColor || textColor,
+  ["--btn-line-hover" as any]:
+    lineHoverColor || "var(--color-white)",
+
+  /* ✅ BOTTOM KEY CONTROL */
+  ["--bk1-width" as any]: bottomKey1Width || "25px",
+  ["--bk2-width" as any]: bottomKey2Width || "10px",
+
+  ["--bk1-right" as any]: bottomKey1Right || "30px",
+  ["--bk2-right" as any]: bottomKey2Right || "10px",
+},
     onMouseEnter: () => setHovered(true),
     onMouseLeave: () => setHovered(false),
     onClick,
@@ -157,11 +191,24 @@ export default function CTABtn({
   const Component: any = href ? Link : "button";
 
   return (
-    <Component {...(href ? { ...commonProps, href } : commonProps)}>
-      <div className={`flex items-center w-full ${cur.gap}`}>
-        {LabelModule}
-        {(showIcon || showIconCircle) && CircleModule}
-      </div>
-    </Component>
+    <Component
+  {...(href ? { ...commonProps, href } : commonProps)}
+  className={`${commonProps.className} fancy-btn`}
+>
+  {/* TOP KEY */}
+  <span className="top-key" />
+
+  {/* BEFORE LINE */}
+  {/* <span className="before-line" /> */}
+
+  <div className={`flex items-center w-full ${cur.gap} relative z-10`}>
+    {(showIcon || showIconCircle) && CircleModule}
+    {LabelModule}
+  </div>
+
+  {/* BOTTOM KEYS */}
+  <span className="bottom-key-1" />
+  <span className="bottom-key-2" />
+</Component>
   );
 }

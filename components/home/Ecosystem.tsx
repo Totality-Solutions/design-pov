@@ -337,7 +337,27 @@ const EcosystemSection = () => {
                         </div>
 
                         {/* CTA Button */}
-                        <CTABtn label={item.cta} className='text-xs' />
+                        <CTABtn
+                                              label={item.cta}
+                                              iconType="arrow"
+                                              className='text-xs'
+                                               btnBg="var(--color-black)"
+                                      btnHoverBg="var(--primary-blue)"
+                                      textColor="var(--color-white)"
+                                    
+                                      borderColor="var(--color-white)"
+                                      borderHoverColor="var(--primary-blue)"
+                                    
+                                      lineColor="var(--color-black)"
+                                      lineHoverColor="var(--color-black)"
+                                    
+                                      bottomKey1Width="40px"
+                                      bottomKey2Width="12px"
+                                      bottomKey1Right="50px"
+                                      bottomKey2Right="15px"
+                                    
+                                      href="#tickets"
+                                            />
                         </motion.div>
                     </motion.div>
                     )}

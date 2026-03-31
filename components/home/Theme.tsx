@@ -76,7 +76,25 @@ const smoothProgress = useSpring(scrollYProgress, {
                 Lorem ipsum dolor sit amet consectetur.
                 psum dolor sit amet consectetur.
               </p>
-              <CTABtn label="2026 THEME" />
+              <CTABtn 
+              label="2026 THEME" 
+               btnBg="transparent"
+  btnHoverBg="var(--primary-blue)"
+  textColor="black"
+
+  borderColor="black"
+  borderHoverColor="white"
+
+  lineColor="white"
+  lineHoverColor="white"
+
+  bottomKey1Width="40px"
+  bottomKey2Width="12px"
+  bottomKey1Right="50px"
+  bottomKey2Right="15px"
+
+  href="#tickets"
+              />
             </div>
 
             {/* Right — gallery scrolls up as user scrolls page */}

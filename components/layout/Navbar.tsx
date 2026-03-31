@@ -11,15 +11,17 @@ type NavLink = { label: string; href: string };
 
 const TOP_NAV: NavLink[] = [
   { label: "About", href: "#about" },
-  { label: "Edition", href: "#edition" },
-  { label: "Contact", href: "#contact" },
+  { label: "26 Edition", href: "#edition" },
+  { label: "Collaborate", href: "#contact" },
+  { label: "Magazine", href: "#magazine" },
+  { label: "Ecosystem", href: "#ecosystem" },
 ];
 
-const BOTTOM_NAV: NavLink[] = [
-  { label: "Blogs", href: "#blogs" },
-  { label: "Hub", href: "#hub" },
-  { label: "POV Ecosystem", href: "#ecosystem" },
-];
+// const BOTTOM_NAV: NavLink[] = [
+//   { label: "Blogs", href: "#blogs" },
+//   { label: "Hub", href: "#hub" },
+//   { label: "POV Ecosystem", href: "#ecosystem" },
+// ];
 
 function HamburgerIcon({ open, white }: { open: boolean; white: boolean }) {
   return (
@@ -106,14 +108,33 @@ export default function Navbar() {
         </div>
 
         <div className="row2">
-          <div className="row2Left">
+          {/* <div className="row2Left">
             {BOTTOM_NAV.map((n) => (
               <a key={n.label} href={n.href} className="bottomLink">{n.label}</a>
             ))}
-          </div>
+          </div> */}
           <div className="row2Right">
             <a href="#tickets" className="ticketsLink">Tickets ₹1500</a>
-            <CTABtn label="APPLY AS DESIGNER" href="#apply" />
+            <CTABtn
+  label="Buy Tickets"
+  btnBg="transparent"
+  btnHoverBg="black"
+  textColor="black"
+
+  borderColor="black"
+  borderHoverColor="white"
+
+  lineColor="white"
+  lineHoverColor="white"
+
+  bottomKey1Width="40px"
+  bottomKey2Width="12px"
+  bottomKey1Right="50px"
+  bottomKey2Right="15px"
+
+  href="#tickets"
+/>
+            {/* <CTABtn label="Buy Tickets" href="#tickets" /> */}
           </div>
         </div>
       </div>
@@ -127,7 +148,27 @@ export default function Navbar() {
             {TOP_NAV.map((n) => (
               <a key={n.label} href={n.href} className="stickyLink">{n.label}</a>
             ))}
-            <HamburgerIcon open={menuOpen} white={true} />
+            {/* <HamburgerIcon open={menuOpen} white={true} /> */}
+            <CTABtn
+                      label="Buy Tickets"
+                      iconType="arrow"
+                       btnBg="var(--color-black)"
+              btnHoverBg="var(--primary-blue)"
+              textColor="var(--color-white)"
+            
+              borderColor="var(--color-white)"
+              borderHoverColor="var(--primary-blue)"
+            
+              lineColor="var(--color-black)"
+              lineHoverColor="var(--color-black)"
+            
+              bottomKey1Width="40px"
+              bottomKey2Width="12px"
+              bottomKey1Right="50px"
+              bottomKey2Right="15px"
+            
+              href="#tickets"
+                    />
           </div>
         </header>
       </Container>

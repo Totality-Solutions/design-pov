@@ -25,6 +25,22 @@ export default function Hero() {
         <CTABtn
           label="Apply as Designer"
           iconType="arrow"
+           btnBg="var(--primary-blue)"
+  btnHoverBg="var(--primary-blue)"
+  textColor="var(--color-white)"
+
+  borderColor="var(--color-white)"
+  borderHoverColor="var(--color-white)"
+
+  lineColor="var(--primary-blue)"
+  lineHoverColor="var(--primary-blue)"
+
+  bottomKey1Width="40px"
+  bottomKey2Width="12px"
+  bottomKey1Right="50px"
+  bottomKey2Right="15px"
+
+  href="#tickets"
         />
       </div>
 

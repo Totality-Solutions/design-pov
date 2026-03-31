@@ -13,6 +13,7 @@ interface MarqueeFlowProps<T> {
   desktopCount?: number;
   /** which visible position is always expanded (0 = first) */
   defaultExpandedIndex?: number;
+  expandPauseDuration?: number;
 }
 
 export default function MarqueeFlow<T>({
@@ -24,6 +25,7 @@ export default function MarqueeFlow<T>({
   tabletCount = 3,
   desktopCount = 4,
   defaultExpandedIndex,
+  expandPauseDuration = 3000,
 }: MarqueeFlowProps<T>) {
   const containerRef  = useRef<HTMLDivElement>(null);
   const trackRef      = useRef<HTMLDivElement>(null);
@@ -31,8 +33,10 @@ export default function MarqueeFlow<T>({
   const offsetRef     = useRef(0);          // continuous px offset, never resets
   const lastTsRef     = useRef<number>(0);
   const pausedRef     = useRef(false);
+  const pauseTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const itemWidthRef  = useRef(0);          // width of one item + gap in px
   const totalWidthRef = useRef(0);          // width of one full set in px
+   const previousExpandedRef = useRef<number>(-1);
 
   const [visibleCount, setVisibleCount] = useState(desktopCount);
   const [activeGap,    setActiveGap]    = useState(gap);
@@ -88,8 +92,38 @@ export default function MarqueeFlow<T>({
   }, [visibleCount, activeGap, items.length]);
 
   // ── rAF loop ──────────────────────────────────────────────────────────────
+  
+    useEffect(() => {
+    if (defaultExpandedIndex === undefined || expandPauseDuration === 0) return;
+
+    // Only pause if this is a NEW expanded item (not the same one repeatedly)
+    if (previousExpandedRef.current === expandedItemIndex) return;
+
+    previousExpandedRef.current = expandedItemIndex;
+
+    // Clear any existing pause timeout
+    if (pauseTimeoutRef.current) {
+      clearTimeout(pauseTimeoutRef.current);
+    }
+
+    // Start pause
+    pausedRef.current = true;
+
+    // Resume after duration
+    pauseTimeoutRef.current = setTimeout(() => {
+      pausedRef.current = false;
+      lastTsRef.current = 0; // Reset timestamp to prevent jump
+    }, expandPauseDuration);
+
+    return () => {
+      if (pauseTimeoutRef.current) {
+        clearTimeout(pauseTimeoutRef.current);
+      }
+    };
+  }, [expandedItemIndex, expandPauseDuration, defaultExpandedIndex]);
+  
   useEffect(() => {
-    if (items.length === 0) return;
+   if (items.length === 0) return;
 
     const tick = (ts: number) => {
       rafRef.current = requestAnimationFrame(tick);
