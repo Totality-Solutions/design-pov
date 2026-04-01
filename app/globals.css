@@ -53,6 +53,9 @@ body {
 @theme inline {
  --text-xl: var(--font-size-xl);
  --text-sm: var(--font-size-sm);
+ 
+
+ --text-color-black: var(--color-black);
 }
 
 /* ─── SELECTION ──────────────────────────────────────────── */
