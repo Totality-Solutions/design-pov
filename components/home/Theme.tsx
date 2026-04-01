@@ -22,23 +22,23 @@ import img13 from "@/public/temp/theme/13.png"
 
 const Theme = () => {
   const containerRef = useRef<HTMLDivElement>(null)
-  const gridRef      = useRef<HTMLDivElement>(null)
+  const gridRef = useRef<HTMLDivElement>(null)
   const [scrollRange, setScrollRange] = useState(1200) // sensible default
 
   useEffect(() => {
     // Measure after paint so grid heights are real
     const measure = () => {
       if (!gridRef.current) return
-      const gridH   = gridRef.current.scrollHeight
+      const gridH = gridRef.current.scrollHeight
       const parentH = gridRef.current.parentElement?.clientHeight ?? window.innerHeight
-      const range   = Math.max(gridH - parentH, 0)
+      const range = Math.max(gridH - parentH, 0)
       if (range > 0) setScrollRange(range)
     }
 
     // Measure immediately + after a frame to catch image load shifts
     measure()
     const raf = requestAnimationFrame(measure)
-    const t   = setTimeout(measure, 500)
+    const t = setTimeout(measure, 500)
     window.addEventListener('resize', measure)
 
     return () => {
@@ -53,59 +53,64 @@ const Theme = () => {
     offset: ["start start", "end end"],
   })
 
-const smoothProgress = useSpring(scrollYProgress, {
-  stiffness: 220,
-  damping: 30,
-  mass: 0.4,
-});
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 220,
+    damping: 30,
+    mass: 0.4,
+  });
 
   // y goes from 0 to -scrollRange
   // Start at 0 so first images are visible at top of right panel
-  const y = useTransform(smoothProgress, [0, 1], [0, -scrollRange])
+  const yRaw = useTransform(smoothProgress, [0, 1], [0, -scrollRange])
+
+  const y = useTransform(yRaw, (val) => {
+    return Math.max(val, -scrollRange) // 👈 prevents overscroll gap
+  })
 
   return (
-    <div ref={containerRef} style={{ position: 'relative', height: '350vh' }}>
+    <div ref={containerRef} style={{ position: 'relative', height: '200vh' }}>
       <div style={{ position: 'sticky', top: 0, height: '100vh', overflow: 'hidden' }}>
-        <Container>
-          <div className="flex h-[100vh]">
+        <Container >
+        <div className="flex flex-col lg:flex-row h-[100vh] py-12 gap-4">
 
-            {/* Left */}
-            <div className="w-[30%] px-10 flex flex-col justify-end pb-[10rem] gap-4">
-              <h1 className="text-5xl font-semibold uppercase">2026 THEME</h1>
-              <p className="text-lg">
-                Lorem ipsum dolor sit amet consectetur.
-                psum dolor sit amet consectetur.
-              </p>
-              <CTABtn 
-              label="2026 THEME" 
-               btnBg="transparent"
-  btnHoverBg="var(--primary-blue)"
-  textColor="black"
+          {/* Left */}
 
-  borderColor="black"
-  borderHoverColor="white"
+          <div className="w-full lg:w-[30%] flex flex-col justify-end md:pb-[10rem] gap-4 md:px-10 lg:px-0">
+            <h1 className="text-5xl font-semibold uppercase">2026 THEME</h1>
+            <p className="text-lg">
+              Lorem ipsum dolor sit amet consectetur.
+              psum dolor sit amet consectetur.
+            </p>
+            <CTABtn
+              label="2026 THEME"
+              btnBg="transparent"
+              btnHoverBg="var(--primary-blue)"
+              textColor="black"
 
-  lineColor="white"
-  lineHoverColor="white"
+              borderColor="black"
+              borderHoverColor="white"
 
-  bottomKey1Width="40px"
-  bottomKey2Width="12px"
-  bottomKey1Right="50px"
-  bottomKey2Right="15px"
+              lineColor="white"
+              lineHoverColor="white"
 
-  href="#tickets"
-              />
-            </div>
+              bottomKey1Width="40px"
+              bottomKey2Width="12px"
+              bottomKey1Right="50px"
+              bottomKey2Right="15px"
 
-            {/* Right — gallery scrolls up as user scrolls page */}
-            <div className="w-[70%] h-full" style={{ overflow: 'hidden' }}>
-              <MasonryGrid
-                ref={gridRef}
-                y={y}
-              />
-            </div>
-
+              href="#tickets"
+            />
           </div>
+
+          {/* Right — gallery scrolls up as user scrolls page */}
+          <div className="w-full lg:w-[70%] h-full" style={{ overflow: 'hidden' }}>
+            <MasonryGrid
+              ref={gridRef}
+              y={y}
+            />
+          </div>
+
+        </div>
         </Container>
       </div>
     </div>
