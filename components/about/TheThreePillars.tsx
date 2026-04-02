@@ -198,8 +198,8 @@ const TheThreePillars: React.FC = () => {
       <div className="relative flex flex-col md:flex-row items-start">
         
         {/* LEFT COLUMN: The Global Sticky Sidebar */}
-        <div className="w-full md:w-[388px] md:sticky md:top-[60px] md:h-[calc(100vh-60px)] p-8 md:p-0 md:pl-[70px] md:pt-[120px] md:pb-[60px] flex flex-col border-r border-[#DFDFDF] bg-white overflow-hidden">
-          
+        <div className="w-full md:w-[388px] md:sticky md:top-[60px] md:h-[calc(100vh-60px)] p-8 md:p-0 md:pl-[70px] md:pt-[60px] md:pb-[30px] flex flex-col justify-end border-r border-[#DFDFDF] bg-white overflow-hidden">
+        
           <AnimatePresence mode="wait">
             <motion.div
               key={activePillar}
@@ -207,7 +207,7 @@ const TheThreePillars: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-              className="flex flex-col gap-[50px]"
+              className="flex flex-col gap-[40px]" // Reduced gap slightly for a cleaner bottom-aligned look
             >
               <div className="flex flex-col gap-2.5 max-w-[288px]">
                 <h3 className="text-[22px] font-bold text-black tracking-wider uppercase">
@@ -217,8 +217,7 @@ const TheThreePillars: React.FC = () => {
                   {PILLAR_DATA[activePillar].description}
                 </p>
               </div>
-
-              {/* Your existing CTABtn component */}
+        
               <CTABtn 
                 label={PILLAR_DATA[activePillar].buttonLabel} 
                 href="#" 

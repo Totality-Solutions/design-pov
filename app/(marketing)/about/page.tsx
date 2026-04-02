@@ -1,5 +1,7 @@
 import DesignHero from "@/components/about/AboutHero";
 import TheThreePillars from "@/components/about/TheThreePillars";
+import ThisIsUsSection from "@/components/about/ThisIsUs";
+import Ecosystem from "@/components/about/EcosystemSection";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -12,6 +14,8 @@ export default function AboutPage() {
     <div>
         <DesignHero />
         <TheThreePillars />
+        <ThisIsUsSection />
+        <Ecosystem />
     </div>
   );
 }
