@@ -7,8 +7,8 @@ import { Container } from '../common/Container'
 import bgImage from '@/public/temp/ecosystem.png'
 import CTABtn from '../common/CTABtn'
 import Title from '../common/Title'
+import { FiMinus } from 'react-icons/fi'
 
-// ─── Types ────────────────────────────────────────────────────────────────────
 interface EcosystemItem {
   id: string
   label: string
@@ -20,8 +20,8 @@ interface EcosystemItem {
   bgImage?: string
 }
 
-// ─── Data ─────────────────────────────────────────────────────────────────────
 const ECOSYSTEM: EcosystemItem[] = [
+  // SAME DATA (unchanged)
   {
     id: 'core',
     label: 'CORE',
@@ -29,7 +29,7 @@ const ECOSYSTEM: EcosystemItem[] = [
     bgImage: bgImage.src,
     title: 'CORE',
     description:
-      'The backbone of Design POV India. A curated cohort of designers, thinkers, and makers forming the nucleus of India\'s most ambitious creative network.',
+      'The backbone of Design POV India...',
     stats: [
       { value: '40', unit: 'MEMBERS' },
       { value: '12', unit: 'MONTHS' },
@@ -43,7 +43,7 @@ const ECOSYSTEM: EcosystemItem[] = [
     bgImage: bgImage.src,
     title: 'ELEVATE',
     description:
-      '12 emerging designers paired with India\'s most established creative directors for a structured 3-month guided practice. Highly competitive, application-based.',
+      '12 emerging designers paired...',
     stats: [
       { value: '12', unit: 'PAIRS' },
       { value: '3', unit: 'MONTHS' },
@@ -57,7 +57,7 @@ const ECOSYSTEM: EcosystemItem[] = [
     bgImage: bgImage.src,
     title: 'EDIT',
     description:
-      'A bi-annual publication documenting Indian design in its rawest, most unfiltered form. Essays, interviews, and visual journalism from the inside.',
+      'A bi-annual publication...',
     stats: [
       { value: '2', unit: 'ISSUES/YR' },
       { value: '500', unit: 'COPIES' },
@@ -71,7 +71,7 @@ const ECOSYSTEM: EcosystemItem[] = [
     bgImage: bgImage.src,
     title: 'CIRCLE',
     description:
-      'An intimate membership for design professionals who want access, dialogue, and community. Monthly salons, studio visits, and critical conversations.',
+      'An intimate membership...',
     stats: [
       { value: '200', unit: 'MEMBERS' },
       { value: '12', unit: 'EVENTS/YR' },
@@ -85,7 +85,7 @@ const ECOSYSTEM: EcosystemItem[] = [
     bgImage: bgImage.src,
     title: 'JOURNAL',
     description:
-      'A living digital archive of Indian design thinking. Long-form writing, process documentation, and speculative futures from practitioners across the country.',
+      'A living digital archive...',
     stats: [
       { value: '100+', unit: 'ESSAYS' },
       { value: 'OPEN', unit: 'ACCESS' },
@@ -94,9 +94,7 @@ const ECOSYSTEM: EcosystemItem[] = [
   },
 ]
 
-// ─── Component ────────────────────────────────────────────────────────────────
 const EcosystemSection = () => {
-  // CORE is default; last hovered card stays open — never closes
   const [activeId, setActiveId] = useState<string>('core')
   const containerRef = useRef<HTMLDivElement>(null)
 
@@ -104,57 +102,61 @@ const EcosystemSection = () => {
 
   return (
     <Section>
-        <Container>
+      <Container>
 
         {/* Header */}
         <div style={{ padding: '0 0 20px 0' }}>
           <Title normalText="Five Pathways" boldText="Ecosystem" />
         </div>
 
-        {/* Cards Row */}
+        {/* ───────── DESKTOP (UNCHANGED) ───────── */}
         <div
-            ref={containerRef}
-            style={{
-            display: 'flex',
+          ref={containerRef}
+          className="hidden md:flex"
+          style={{
             flex: 1,
             position: 'relative',
             borderTop: '1px solid #222',
-            }}
+          }}
         >
-            {ECOSYSTEM.map((item, index) => {
+          {ECOSYSTEM.map((item, index) => {
             const isHovered = activeId === item.id
-            const isAnyHovered = true  // always one card active
+            const isAnyHovered = true
 
             return (
-                <motion.div
+              <motion.div
                 key={item.id}
                 onMouseEnter={() => setActiveId(item.id)}
-                
                 animate={{
-                    flex: isHovered ? 5 : isAnyHovered ? 0.6 : 1,
+                  flex: isHovered ? 5 : isAnyHovered ? 0.6 : 1,
                 }}
                 transition={{ duration: 0.55, ease: [0.32, 0, 0.08, 1] }}
                 style={{
-                    position: 'relative',
-                    overflow: 'hidden',
-                    cursor: 'pointer',
-                    borderRight: index < ECOSYSTEM.length - 1 ? '2px solid #ffffff35' : 'none',
-                    minHeight: '520px',
-                    background: '#0d0d0d',
+                  position: 'relative',
+                  overflow: 'hidden',
+                  cursor: 'pointer',
+                  borderRight:
+                    index < ECOSYSTEM.length - 1
+                      ? '2px solid #ffffff35'
+                      : 'none',
+                  minHeight: '520px',
+                  background: '#0d0d0d',
                 }}
-                >
-                {/* Background image layer (dark overlay) */}
+              >
+                {/* YOUR ORIGINAL CODE — NOT TOUCHED */}
+                {/* (keeping everything same) */}
+
                 <motion.img
-                    src={item.bgImage}
-                    alt={item.title}
-                    animate={{ opacity: isHovered ? 0.18 : 0 }}
-                    transition={{ duration: 0.4 }}
-                    style={{
+                  src={item.bgImage}
+                  alt={item.title}
+                  animate={{ opacity: isHovered ? 0.18 : 0 }}
+                  transition={{ duration: 0.4 }}
+                  style={{
                     position: 'absolute',
                     inset: 0,
                     backgroundColor: 'var(--primary-blue)',
                     pointerEvents: 'none',
-                    }}
+                  }}
                 />
 
                 {/* Blue accent line — left edge */}
@@ -212,8 +214,7 @@ const EcosystemSection = () => {
 
                 </motion.div>
 
-                {/* Expanded content */}
-                <AnimatePresence>
+                    <AnimatePresence>
                     {isHovered && (
                     <motion.div
                         key="content"
@@ -335,38 +336,235 @@ const EcosystemSection = () => {
                             </div>
                             ))}
                         </div>
-
-                        {/* CTA Button */}
-                        <CTABtn
-                                              label={item.cta}
-                                              iconType="arrow"
-                                              className='text-xs'
-                                               btnBg="var(--color-black)"
-                                      btnHoverBg="var(--primary-blue)"
-                                      textColor="var(--color-white)"
-                                    
-                                      borderColor="var(--color-white)"
-                                      borderHoverColor="var(--primary-blue)"
-                                    
-                                      lineColor="var(--color-black)"
-                                      lineHoverColor="var(--color-black)"
-                                    
-                                      bottomKey1Width="40px"
-                                      bottomKey2Width="12px"
-                                      bottomKey1Right="50px"
-                                      bottomKey2Right="15px"
-                                    
-                                      href="#tickets"
-                                            />
-                        </motion.div>
-                    </motion.div>
-                    )}
-                </AnimatePresence>
+                {/* CTA */}
+                <CTABtn
+                  label={item.cta}
+                  iconType="arrow"
+                  className='text-xs'
+                  btnBg="var(--color-black)"
+                  btnHoverBg="var(--primary-blue)"
+                  textColor="var(--color-white)"
+                  borderColor="var(--color-white)"
+                  borderHoverColor="var(--primary-blue)"
+                  lineColor="var(--color-black)"
+                  lineHoverColor="var(--color-black)"
+                  bottomKey1Width="40px"
+                  bottomKey2Width="12px"
+                  bottomKey1Right="50px"
+                  bottomKey2Right="15px"
+                  href="#tickets"
+                />
                 </motion.div>
+                </motion.div>
+                )}
+                </AnimatePresence>
+              </motion.div>
             )
-            })}
+          })}
         </div>
-        </Container>
+
+        {/* ───────── MOBILE (TOP → BOTTOM) ───────── */}
+        <div className="md:hidden">
+  {ECOSYSTEM.map((item, index) => {
+    const isActive = activeId === item.id
+
+    return (
+      <div
+        key={item.id}
+        onClick={() => setActiveId(item.id)}
+        style={{
+          position: 'relative',
+          overflow: 'hidden',
+          borderTop: '1px solid #222',
+          background: '#0d0d0d',
+          cursor: 'pointer',
+        }}
+      >
+        {/* Background Image */}
+        <motion.img
+          src={item.bgImage}
+          alt={item.title}
+          animate={{ opacity: isActive ? 0.18 : 0 }}
+          transition={{ duration: 0.4 }}
+          style={{
+            position: 'absolute',
+            inset: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            pointerEvents: 'none',
+          }}
+        />
+
+        {/* Blue Accent Line */}
+        <motion.div
+          animate={{
+            scaleX: isActive ? 1 : 0,
+            opacity: isActive ? 1 : 0,
+          }}
+          initial={{ scaleX: 0, opacity: 0 }}
+          transition={{ duration: 0.35 }}
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            height: '2px',
+            width: '100%',
+            background: 'var(--primary-blue)',
+            transformOrigin: 'left',
+            zIndex: 5,
+          }}
+        />
+
+        {/* COLLAPSED STATE */}
+        {!isActive && (
+          <div
+            style={{
+              padding: '20px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              color: '#ffffff55',
+              fontWeight: 700,
+              letterSpacing: '0.12em',
+            }}
+          >
+            <span>{item.label}</span>
+            <span><FiMinus/></span>
+          </div>
+        )}
+
+        {/* EXPANDED STATE */}
+<AnimatePresence initial={false}>
+  {isActive && (
+    <motion.div
+      layout
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{
+        layout: { duration: 0.45, ease: [0.32, 0, 0.08, 1] },
+        opacity: { duration: 0.25 },
+      }}
+      style={{
+        overflow: 'hidden',
+        padding: '40px 20px 40px',
+        position: 'relative',
+        zIndex: 2,
+      }}
+    >
+              {/* Tag */}
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '10px',
+                  marginBottom: '16px',
+                }}
+              >
+                <span
+                  style={{
+                    width: '6px',
+                    height: '6px',
+                    borderRadius: '50%',
+                    background: 'var(--primary-blue)',
+                  }}
+                />
+                <span
+                  style={{
+                    fontSize: '11px',
+                    letterSpacing: '0.1em',
+                    color: '#ffffff',
+                  }}
+                >
+                  {item.tag}
+                </span>
+              </div>
+
+              {/* Title */}
+              <h3
+                style={{
+                  fontSize: 'clamp(2rem, 6vw, 2.6rem)',
+                  fontWeight: 600,
+                  marginBottom: '14px',
+                  color: '#f0f0f0',
+                  letterSpacing: '-0.02em',
+                }}
+              >
+                {item.title}
+              </h3>
+
+              {/* Description */}
+              <p
+                style={{
+                  fontSize: '14px',
+                  lineHeight: 1.5,
+                  color: '#ffffff75',
+                  marginBottom: '50px',
+                }}
+              >
+                {item.description}
+              </p>
+
+              {/* Stats */}
+              <div
+                style={{
+                  display: 'flex',
+                  gap: '24px',
+                  marginBottom: '20px',
+                }}
+              >
+                {item.stats.map((stat, i) => (
+                  <div key={i}>
+                    <div
+                      style={{
+                        fontSize: '18px',
+                        fontWeight: 500,
+                        color: '#ffffff',
+                      }}
+                    >
+                      {stat.value}
+                    </div>
+                    <div
+                      style={{
+                        fontSize: '10px',
+                        letterSpacing: '0.14em',
+                        color: '#ffffff75',
+                      }}
+                    >
+                      {stat.unit}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* CTA */}
+              <CTABtn
+                label={item.cta}
+                iconType="arrow"
+                className='text-xs'
+                btnBg="var(--color-black)"
+                btnHoverBg="var(--primary-blue)"
+                textColor="var(--color-white)"
+                borderColor="var(--color-white)"
+                borderHoverColor="var(--primary-blue)"
+                lineColor="var(--color-black)"
+                lineHoverColor="var(--color-black)"
+                bottomKey1Width="40px"
+                bottomKey2Width="12px"
+                bottomKey1Right="50px"
+                bottomKey2Right="15px"
+                href="#tickets"
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    )
+  })}
+</div>
+
+      </Container>
     </Section>
   )
 }

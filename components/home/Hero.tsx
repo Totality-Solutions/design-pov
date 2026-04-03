@@ -1,10 +1,11 @@
 "use client";
 
+import { Container } from "../common/Container";
 import CTABtn from "../common/CTABtn";
 
 export default function Hero() {
   return (
-    <section className="w-full overflow-hidden">
+    <Container className="w-full overflow-hidden">
 
       {/* ── VIDEO CONTAINER ── */}
       <div className="relative w-full h-[35vh] sm:h-[50vh] md:h-[90vh] lg:h-[100vh]">
@@ -60,6 +61,6 @@ export default function Hero() {
           href="#tickets"
         />
       </div>
-    </section>
+    </Container>
   );
 }

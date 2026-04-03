@@ -15,198 +15,178 @@ interface MarqueeFlowProps<T> {
 export default function MarqueeFlow<T>({
   items,
   renderItem,
-  gap = 24,
-  speed = 60,
-  mobileCount = 1.2,
-  tabletCount = 2.2,
+  gap = 16,
+  speed = 80,
+  mobileCount = 1,
+  tabletCount = 2,
   desktopCount = 4,
 }: MarqueeFlowProps<T>) {
   const containerRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
 
+  // Animation refs
   const rafRef = useRef<number>(0);
   const offsetRef = useRef(0);
   const lastTsRef = useRef(0);
-
   const pausedRef = useRef(false);
   const speedRef = useRef(speed);
 
+  // Measurement refs
   const itemWidthRef = useRef(0);
-  const totalWidthRef = useRef(0);
+  const cycleWidthRef = useRef(0);
 
+  // State tracking
   const previousIndexRef = useRef<number>(-1);
   const pauseTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+  // UI State
   const [visibleCount, setVisibleCount] = useState(desktopCount);
   const [activeGap, setActiveGap] = useState(gap);
   const [itemWidth, setItemWidth] = useState(0);
   const [expandedIndex, setExpandedIndex] = useState(0);
 
-  const COPIES = 3;
-
+  // Create seamless loop - 4 copies for smooth infinite scroll
+  const COPIES = 4;
   const repeated = useMemo(() => {
     return Array.from({ length: COPIES }, () => items).flat();
   }, [items]);
 
-  // ✅ Responsive
+  // ✅ Responsive breakpoints
   useEffect(() => {
-    const update = () => {
+    const handleResize = () => {
       const w = window.innerWidth;
       if (w < 640) {
         setVisibleCount(mobileCount);
         setActiveGap(12);
       } else if (w < 1024) {
         setVisibleCount(tabletCount);
-        setActiveGap(16);
+        setActiveGap(14);
       } else {
         setVisibleCount(desktopCount);
         setActiveGap(gap);
       }
     };
 
-    update();
-    window.addEventListener("resize", update);
-    return () => window.removeEventListener("resize", update);
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, [mobileCount, tabletCount, desktopCount, gap]);
 
-  // ✅ Measure
+  // ✅ Measure items and container
   useEffect(() => {
     const measure = () => {
       const container = containerRef.current;
       if (!container) return;
 
       const containerW = container.offsetWidth;
-      const iw =
-        (containerW - (visibleCount - 1) * activeGap) / visibleCount;
+      const visibleItemsCount = Math.floor(visibleCount);
+      
+      // Calculate item width: (container - all gaps) / visible items
+      const totalGapWidth = (visibleItemsCount - 1) * activeGap;
+      const iw = (containerW - totalGapWidth) / visibleItemsCount;
 
       setItemWidth(iw);
+      itemWidthRef.current = iw;
 
-      itemWidthRef.current = iw + activeGap;
-      totalWidthRef.current = itemWidthRef.current * items.length;
+      // One cycle = all items + gaps
+      const cycleWidth = items.length * (iw + activeGap) - activeGap;
+      cycleWidthRef.current = cycleWidth;
 
-      offsetRef.current = totalWidthRef.current;
+      offsetRef.current = cycleWidth;
     };
 
-    measure();
+    const timer = setTimeout(measure, 100);
     window.addEventListener("resize", measure);
-    return () => window.removeEventListener("resize", measure);
+
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("resize", measure);
+    };
   }, [visibleCount, activeGap, items.length]);
 
-  // ✅ Smooth stop
-  const smoothStop = () => {
-    let start = performance.now();
-
-    const slowDown = (now: number) => {
-      const elapsed = now - start;
-      const progress = Math.min(elapsed / 300, 1);
-
-      speedRef.current = speed * (1 - progress);
-
-      if (progress < 1) {
-        requestAnimationFrame(slowDown);
-      } else {
-        pausedRef.current = true;
-      }
-    };
-
-    requestAnimationFrame(slowDown);
-  };
-
-  // ✅ Animation loop
+  // ✅ Animation loop with seamless wrapping
   useEffect(() => {
-    const tick = (ts: number) => {
+    let lastTime = 0;
+
+    const tick = (now: number) => {
       rafRef.current = requestAnimationFrame(tick);
 
-      const dt = lastTsRef.current
-        ? (ts - lastTsRef.current) / 1000
-        : 0;
+      if (!lastTime) lastTime = now;
+      const dt = (now - lastTime) / 1000;
+      lastTime = now;
 
-      lastTsRef.current = ts;
+      const iw = itemWidthRef.current;
+      const cycleWidth = cycleWidthRef.current;
 
+      if (!iw || !cycleWidth) return;
+
+      // Update offset
       if (!pausedRef.current) {
         offsetRef.current += speedRef.current * dt;
       }
 
-      const iw = itemWidthRef.current;
-      const total = totalWidthRef.current;
-
-      if (!iw || !total) return;
-
-      if (offsetRef.current >= total * 2) {
-        offsetRef.current -= total;
+      // Seamless loop - reset when we've scrolled one full cycle
+      if (offsetRef.current >= cycleWidth) {
+        offsetRef.current -= cycleWidth;
       }
 
+      // Apply transform
       if (trackRef.current) {
         trackRef.current.style.transform = `translateX(-${offsetRef.current}px)`;
       }
 
-      // ✅ LEFT-most detection
-      const scrolledItems = offsetRef.current / iw;
-      const leftIndex = Math.floor(scrolledItems) % items.length;
-      const normalized = (leftIndex + items.length) % items.length;
+      // ✅ Detect which item is at left edge (every gap + item width)
+      const itemWithGap = iw + activeGap;
+      const currentItemIndex = Math.floor(offsetRef.current / itemWithGap) % items.length;
 
-      if (previousIndexRef.current !== normalized) {
-        previousIndexRef.current = normalized;
+      // Only trigger expansion when item changes
+      if (previousIndexRef.current !== currentItemIndex) {
+        previousIndexRef.current = currentItemIndex;
+        setExpandedIndex(currentItemIndex);
 
-        // 🔥 smooth stop first
-   // Step 1: smooth stop
-let start = performance.now();
+        // Smooth pause animation
+        pausedRef.current = true;
 
-const slowDown = (now: number) => {
-  const elapsed = now - start;
-  const progress = Math.min(elapsed / 300, 1);
-
-  speedRef.current = speed * (1 - progress);
-
-  if (progress < 1) {
-    requestAnimationFrame(slowDown);
-  } else {
-    // ✅ FULLY STOPPED HERE
-    pausedRef.current = true;
-
-    // ✅ Step 2: NOW trigger expansion
-    setExpandedIndex(normalized);
-
-    // ✅ Step 3 + 4: total pause = 4000ms
-    if (pauseTimeoutRef.current) {
-      clearTimeout(pauseTimeoutRef.current);
-    }
-
-    pauseTimeoutRef.current = setTimeout(() => {
-      pausedRef.current = false;
-      speedRef.current = speed;
-      lastTsRef.current = 0;
-    }, 4000);
-  }
-};
-
-requestAnimationFrame(slowDown);
-
-        // 🔥 total pause = 4000ms
+        // Resume after 3000ms
         if (pauseTimeoutRef.current) {
           clearTimeout(pauseTimeoutRef.current);
         }
 
         pauseTimeoutRef.current = setTimeout(() => {
           pausedRef.current = false;
-          speedRef.current = speed;
-          lastTsRef.current = 0;
-        }, 4000);
+          lastTime = 0; // Reset delta time for smooth resume
+        }, 3000);
       }
     };
 
     rafRef.current = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(rafRef.current);
-  }, [items.length, speed]);
+
+    return () => {
+      cancelAnimationFrame(rafRef.current);
+      if (pauseTimeoutRef.current) {
+        clearTimeout(pauseTimeoutRef.current);
+      }
+    };
+  }, [items.length, activeGap, speed]);
 
   return (
-    <div ref={containerRef} className="w-full overflow-hidden">
+    <div
+      ref={containerRef}
+      className="w-full overflow-hidden"
+      style={{
+        clipPath: "inset(0)",
+        overflowX: "hidden",
+        overflowY: "visible",
+      }}
+    >
       <div
         ref={trackRef}
         className="flex"
         style={{
           gap: `${activeGap}px`,
           willChange: "transform",
+          backfaceVisibility: "hidden",
+          perspective: 1000,
         }}
       >
         {repeated.map((item, i) => {
@@ -215,10 +195,13 @@ requestAnimationFrame(slowDown);
 
           return (
             <div
-              key={i}
-              className="flex-shrink-0 flex items-end overflow-hidden"
+              key={`${i}-${realIndex}`}
+              className="flex-shrink-0 flex items-end overflow-visible"
               style={{
                 width: `${itemWidth}px`,
+                transition: isExpanded 
+                  ? "all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)" 
+                  : "all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
               }}
             >
               {renderItem(item, realIndex, isExpanded)}

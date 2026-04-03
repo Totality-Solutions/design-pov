@@ -167,411 +167,128 @@ export default function MarqueeCarousel() {
   }, [next]);
 
 
- useEffect(() => {
-  const container = carouselRef.current;
-  const el = container?.querySelector(`[data-idx="${activeIndex}"]`);
+  useEffect(() => {
+    const container = carouselRef.current;
+    const el = container?.querySelector(`[data-idx="${activeIndex}"]`) as HTMLElement;
 
-  if (!container || !el) return;
+    if (!container || !el) return;
 
-  const containerRect = container.getBoundingClientRect();
-  const elRect = el.getBoundingClientRect();
+    const isMobile = window.innerWidth <= 900;
 
-  const offset =
-    elRect.top -
-    containerRect.top +
-    container.scrollTop -
-    container.clientHeight / 2 +
-    el.clientHeight / 2;
+    if (isMobile) {
+      // 👉 Horizontal centering
+      const containerRect = container.getBoundingClientRect();
+      const elRect = el.getBoundingClientRect();
 
-  container.scrollTo({
-    top: offset,
-    behavior: "smooth",
-  });
-}, [activeIndex]);
-  
+      const offset =
+        elRect.left -
+        containerRect.left +
+        container.scrollLeft -
+        container.clientWidth / 2 +
+        el.clientWidth / 2;
+
+      container.scrollTo({
+        left: offset,
+        behavior: "smooth",
+      });
+    } else {
+      // 👉 Vertical centering (desktop)
+      const containerRect = container.getBoundingClientRect();
+      const elRect = el.getBoundingClientRect();
+
+      const offset =
+        elRect.top -
+        containerRect.top +
+        container.scrollTop -
+        container.clientHeight / 2 +
+        el.clientHeight / 2;
+
+      container.scrollTo({
+        top: offset,
+        behavior: "smooth",
+      });
+    }
+  }, [activeIndex]);
+
   const current = slides[activeIndex];
 
   return (
-        <Container className="border-y border-gray-300 ">
-    <Section>
-        <style>{`
-
-            .mc-root {
-            max-height: 100vh;
-            background: var(--color-white);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            }
-            
-            .mc-wrap {
-            width: 100%;
-            max-width: 1400px;
-            display: grid;
-            grid-template-columns: 1fr 130px 1fr;
-            gap: 0 28px;
-            align-items: center;
-            max-height: fit-content;
-            padding: 1rem 0;
-            }
-
-            /* ──────────────────────────────────────
-            LEFT: HERO IMAGE
-            ────────────────────────────────────── */
-            .hero-frame {
-            position: relative;
-            width: 100%;
-            aspect-ratio: 16/10;
-            overflow: hidden;
-            border-radius: 0px;
-            }
-
-            .hero-img {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            will-change: transform, opacity;
-            }
-            .hero-img.z2 { z-index: 2; }
-            .hero-img.z1 { z-index: 1; }
-
-            .hero-img.enter-down { animation: heroEnterDown 0.82s cubic-bezier(0.16,1,0.3,1) forwards; }
-            .hero-img.enter-up   { animation: heroEnterUp   0.82s cubic-bezier(0.16,1,0.3,1) forwards; }
-            .hero-img.exit-down  { animation: heroExitDown  0.6s  cubic-bezier(0.4,0,1,1) forwards; }
-            .hero-img.exit-up    { animation: heroExitUp    0.6s  cubic-bezier(0.4,0,1,1) forwards; }
-
-            @keyframes heroEnterDown {
-            from { transform: scale(1.1) translateY(5%); opacity: 0; }
-            to   { transform: scale(1)   translateY(0);  opacity: 1; }
-            }
-            @keyframes heroEnterUp {
-            from { transform: scale(1.1) translateY(-5%); opacity: 0; }
-            to   { transform: scale(1)   translateY(0);   opacity: 1; }
-            }
-            @keyframes heroExitDown {
-            from { transform: scale(1)    translateY(0);   opacity: 1; }
-            to   { transform: scale(0.96) translateY(-3%); opacity: 0; }
-            }
-            @keyframes heroExitUp {
-            from { transform: scale(1)    translateY(0);  opacity: 1; }
-            to   { transform: scale(0.96) translateY(3%); opacity: 0; }
-            }
-
-            /* bottom gradient */
-            .hero-frame::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to bottom, transparent 55%, rgba(0,0,0,0.2) 100%);
-            pointer-events: none;
-            z-index: 3;
-            }
-
-            /* ──────────────────────────────────────
-            CENTER: THUMBNAIL STRIP
-            Active thumb grows smoothly via CSS transition on width+height.
-            No JS layout tricks — pure transition.
-            ────────────────────────────────────── */
-            .thumb-strip {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            max-height: 480px;
-            overflow-y: auto;
-            scrollbar-width: none;
-            align-items: start;
-            }
-            .thumb-strip::-webkit-scrollbar { display: none; }
-
-            .thumb-item {
-            /* base size */
-            width: 80px;
-            height: 56px;
-            border-radius: 0px;
-            overflow: hidden;
-            cursor: pointer;
-            position: relative;
-            flex-shrink: 0;
-            /* THE key: transition width & height so growth is physically smooth */
-            transition:
-                width  0.5s cubic-bezier(0.34, 1.15, 0.64, 1),
-                height 0.5s cubic-bezier(0.34, 1.15, 0.64, 1),
-                box-shadow 0.4s ease;
-            }
-
-            /* Active thumb grows to larger size */
-            .thumb-item.active {
-            width: 112px;
-            height: 80px;
-            box-shadow: 0 8px 28px rgba(0,0,0,0.26);
-            }
-
-            .thumb-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-            transition: transform 0.5s ease;
-            }
-            .thumb-item:hover img { transform: scale(1.08); }
-
-            /* dim overlay fades out on active */
-            .thumb-item::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: rgba(0,0,0,0.3);
-            transition: opacity 0.45s ease;
-            pointer-events: none;
-            }
-            .thumb-item.active::after { opacity: 0; }
-
-            /* white left accent bar — scales in on active */
-            .thumb-item::before {
-            content: '';
-            position: absolute;
-            left: 0; top: 0; bottom: 0;
-            width: 3px;
-            background: #fff;
-            z-index: 2;
-            transform: scaleY(0);
-            transform-origin: top;
-            transition: transform 0.45s cubic-bezier(0.16,1,0.3,1);
-            }
-            /* active indicator bar */
-            .thumb-item.active::before {
-            content: '';
-            position: absolute;
-            left: 0; top: 0; bottom: 0;
-            width: 3px;
-            background: var(--color-black);
-            z-index: 2;
-            animation: barIn 0.35s ease forwards;
-            }
-            @keyframes barIn {
-            from { transform: scaleY(0); }
-            to   { transform: scaleY(1); }
-            }
-
-            /* ──────────────────────────────────────
-            RIGHT: TEXT PANEL — slides RIGHT → LEFT
-            ────────────────────────────────────── */
-            .text-panel {
-  padding-left: 48px; /* more breathing space */
-  display: flex;
-  flex-direction: column;
-  gap: 32px; /* more vertical rhythm */
-}
-
-/* clipping stays same */
-.clip { overflow: hidden; }
-
-/* Description */
-.text-desc {
-  font-size: 15px;
-  font-weight: 300;
-  line-height: 1.8;
-  color: var(--color-black);
-  max-width: 360px;
-}
-
-/* Label (small heading) */
-.text-label {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--color-black);
-  letter-spacing: 0.02em; /* more premium */
-  text-transform: uppercase;
-}
-
-/* Sub text */
-.text-sub {
-  font-size: 13px;
-  font-weight: 300;
-  color: var(--color-black);
-  letter-spacing: 0.02em;
-  margin-top: 6px;
-}
-
-/* Big Title */
-.text-big {
-  font-size: clamp(48px, 3vw, 80px); /* slightly bigger */
-  font-weight: 700;
-  letter-spacing: 0px;
-  line-height: 0.9;
-  color: var(--color-black);
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 14px;
-  cursor: pointer;
-  width: 100%;
-}
-
-/* Arrow */
-.text-arrow {
-  margin: 0px;
-  transition: opacity 0.25s ease, transform 0.25s ease;
-}
-
-/* Hover stays same but smoother */
-.text-big:hover .text-arrow {
-  opacity: 1;
-  transform: translate(4px, -4px);
-
-}
-
-            /* RIGHT-TO-LEFT reveal animation */
-            .rtl {
-            animation: rtlIn 0.58s cubic-bezier(0.16, 1, 0.3, 1) both;
-            }
-            /* staggered delays */
-            .rtl.s1 { animation-delay: 0.04s; }
-            .rtl.s2 { animation-delay: 0.10s; }
-            .rtl.s3 { animation-delay: 0.16s; }
-            .rtl.s4 { animation-delay: 0.22s; }
-
-            @keyframes rtlIn {
-            from { transform: translateX(72px); opacity: 0; }
-            to   { transform: translateX(0);    opacity: 1; }
-            }
-
-            /* ──────────────────────────────────────
-            PROGRESS BAR
-            ────────────────────────────────────── */
-            .progress-bar {
-            position: fixed;
-            bottom: 0; left: 0;
-            height: 2px;
-            background: var(--color-black);
-            animation: progAnim 4s linear forwards;
-            }
-            @keyframes progAnim {
-            from { width: 0%; }
-            to   { width: 100%; }
-            }
-
-            /* ──────────────────────────────────────
-            DOTS
-            ────────────────────────────────────── */
-            .dots {
-            position: fixed;
-            bottom: 18px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 8px;
-            }
-            .dot {
-            width: 6px; height: 6px;
-            border-radius: 50%;
-            background: var(--color-black);
-            cursor: pointer;
-            transition: background 0.3s, transform 0.3s;
-            }
-            .dot.active { background: var(--color-black); transform: scale(1.5); }
-
-            @media (max-width: 900px) {
-            .mc-wrap {
-                grid-template-columns: 1fr;
-                padding: 24px;
-                gap: 20px 0;
-            }
-            .thumb-strip { flex-direction: row; overflow-x: auto; }
-            .text-panel { padding-left: 0; }
-            }
-        `}</style>
+    <Container className="border-y border-gray-300 ">
+      <Section>
         <div className="mc-root">
-            <div className="mc-wrap ">
+          <div className="mc-wrap ">
 
             {/* ── LEFT ── */}
-              <div className="w-full h-full flex flex-col items-start justify-start gap-10">
-                <Title normalText="Featured" boldText="Story" />
-            <div className="hero-frame">
-             
+            <div className="w-full h-full flex flex-col items-start justify-start gap-10">
+              <Title normalText="Featured" boldText="Story" />
+              <div className="hero-frame">
+
                 {prevIndex !== null && (
                   <img
-                  className={`hero-img z1 ${direction === "down" ? "exit-down" : "exit-up"}`}
-                  src={slides[prevIndex].main}
-                  alt=""
+                    className={`hero-img z1 ${direction === "down" ? "exit-down" : "exit-up"}`}
+                    src={slides[prevIndex].main}
+                    alt=""
                   />
                 )}
                 <img
-                key={imgKey}
-                className={`hero-img z2 ${direction === "down" ? "enter-down" : "enter-up"}`}
-                src={current.main}
-                alt={current.title}
+                  key={imgKey}
+                  className={`hero-img z2 ${direction === "down" ? "enter-down" : "enter-up"}`}
+                  src={current.main}
+                  alt={current.title}
                 />
-            </div>
               </div>
+            </div>
 
             {/* ── CENTER ── */}
             <div className="thumb-strip" ref={carouselRef}>
-                {slides.map((s, i) => (
+              {slides.map((s, i) => (
                 <div
-                    key={s.id}
-                    data-idx={i}
-                    className={`thumb-item${i === activeIndex ? " active" : ""}`}
-                    onClick={() => goTo(i)}
+                  key={s.id}
+                  data-idx={i}
+                  className={`thumb-item${i === activeIndex ? " active" : ""}`}
+                  onClick={() => goTo(i)}
                 >
-                    <img src={s.thumbnail} alt={s.title} loading="lazy" />
+                  <img src={s.thumbnail} alt={s.title} loading="lazy" />
                 </div>
-                ))}   
+              ))}
             </div>
 
             {/* ── RIGHT ── */}
             <div className="text-panel">
 
-                {/* Description */}
-                <div className="clip">
+              {/* Description */}
+              <div className="clip">
                 <p key={`desc-${textKey}`} className="text-desc rtl s1">
-                    {current.description}
+                  {current.description}
                 </p>
-                </div>
+              </div>
 
-                {/* Meta: title + subtitle share one clip wrapper to animate together */}
-                <div>
+              {/* Meta: title + subtitle share one clip wrapper to animate together */}
+              <div>
                 <div className="clip">
-                    <p key={`label-${textKey}`} className="text-label rtl s2">
+                  <p key={`label-${textKey}`} className="text-label rtl s2">
                     {current.title}
-                    </p>
+                  </p>
                 </div>
                 <div className="clip">
-                    <p key={`sub-${textKey}`} className="text-sub rtl s3">
+                  <p key={`sub-${textKey}`} className="text-sub rtl s3">
                     {current.subtitle}
-                    </p>
+                  </p>
                 </div>
-                </div>
+              </div>
 
-                {/* Big title */}
-                <div className="clip">
+              {/* Big title */}
+              <div className="clip">
                 <div key={`big-${textKey}`} onClick={next} className="text-big rtl s4">
-                    {current.title}
-                    <Image src="/icons/arrow-top-right.svg" alt="arrow" className="text-arrow" width={24} height={24} />
+                  {current.title}
+                  <Image src="/icons/arrow-top-right.svg" alt="arrow" className="text-arrow" width={24} height={24} />
                 </div>
-                </div>
+              </div>
 
             </div>
-            </div>
-
-            {/* Progress bar — key forces re-mount on every slide change */}
-            {/* <div key={`prog-${activeIndex}`} className="progress-bar" /> */}
-
-            {/* Dots */}
-            {/* <div className="dots">
-            {slides.map((_, i) => (
-                <div
-                key={i}
-                className={`dot${i === activeIndex ? " active" : ""}`}
-                onClick={() => goTo(i)}
-                />
-            ))}
-            </div> */}  
+          </div>
         </div>
-    </Section>
-        </Container>
+      </Section>
+    </Container>
   );
 }

@@ -116,14 +116,14 @@ const marqueeBlurPx = useTransform(marqueeBlur, (v) => `blur(${v}px)`);
 
   return (
     // 300vh tall scroll canvas — gives 3× viewport of scroll room
-    <div ref={containerRef} style={{ position: 'relative', height: 'clamp(400vh, 500vh, 600vh)' }}>
+    <div ref={containerRef} style={{ position: 'relative', height: 'clamp(200vh, 300vh, 400vh)', }}>
 
       {/* Sticky viewport — pins content while scroll drives animations */}
       <div
         style={{
           position: 'sticky',
-          top: 100,
-          height: '100vh',
+          top: '200px',
+          height: '80vh',
           overflow: 'hidden',
           display: 'flex',
           flexDirection: 'column',

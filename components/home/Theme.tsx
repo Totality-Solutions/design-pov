@@ -17,6 +17,7 @@ import img10 from "@/public/temp/theme/10.png"
 import img11 from "@/public/temp/theme/11.png"
 import img12 from "@/public/temp/theme/12.png"
 import img13 from "@/public/temp/theme/13.png"
+import Section from '../common/Section'
 
 
 
@@ -68,14 +69,13 @@ const Theme = () => {
   })
 
   return (
+    
+    
     <div ref={containerRef} style={{ position: 'relative', height: '200vh' }}>
       <div style={{ position: 'sticky', top: 0, height: '100vh', overflow: 'hidden' }}>
-        <Container >
-        <div className="flex flex-col lg:flex-row h-[100vh] py-12 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-[3fr_7fr] w-full h-full py-12 gap-4">
 
-          {/* Left */}
-
-          <div className="w-full lg:w-[30%] flex flex-col justify-end md:pb-[10rem] gap-4 md:px-10 lg:px-0">
+          <div className="w-full h-full flex flex-col justify-end gap-4 px-3 lg:px-14">
             <h1 className="text-5xl font-semibold uppercase">2026 THEME</h1>
             <p className="text-lg">
               Lorem ipsum dolor sit amet consectetur.
@@ -92,18 +92,16 @@ const Theme = () => {
 
               lineColor="white"
               lineHoverColor="white"
-
+              
               bottomKey1Width="40px"
               bottomKey2Width="12px"
               bottomKey1Right="50px"
               bottomKey2Right="15px"
-
+              
               href="#tickets"
-            />
+              />
           </div>
-
-          {/* Right — gallery scrolls up as user scrolls page */}
-          <div className="w-full lg:w-[70%] h-full" style={{ overflow: 'hidden' }}>
+          <div className="w-full h-full" style={{ overflow: 'hidden' }}>
             <MasonryGrid
               ref={gridRef}
               y={y}
@@ -111,7 +109,6 @@ const Theme = () => {
           </div>
 
         </div>
-        </Container>
       </div>
     </div>
   )
