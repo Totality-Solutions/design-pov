@@ -1,3 +1,5 @@
+import PartnersSection from "@/components/edition26/PartnersSection";
+import ScheduleSection from "@/components/edition26/ScheduleSection";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -61,6 +63,9 @@ export default function Edition2026() {
           </div>
         </div>
       </section>
+
+      <ScheduleSection />
+      <PartnersSection />
     </div>
   );
 }

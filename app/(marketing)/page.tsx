@@ -15,9 +15,9 @@ export default function HomePage() {
   return (
     <>
       <Hero />
-      <WhatPOV/>
-      <Theme/>
-      <Ecosystem/>
+      <WhatPOV />
+      <Theme />
+      <Ecosystem />
       <FeaturedDesigners />
       <FeaturedStory />
       <ClientLogo />
