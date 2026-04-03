@@ -1,17 +1,41 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 const CATEGORIES = [
   "Sponsors",
   "Build Partners",
   "Art Curation",
   "Space Scenting",
-  "Operations"
+  "Operations",
+  "Media", // Added more to test scrolling
+  "Strategy"
 ];
 
 const PartnersSection: React.FC = () => {
   const [activeTab, setActiveTab] = useState("Sponsors");
+  const [isMobile, setIsMobile] = useState(false);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  // Logic to scroll the active tab into view
+  const handleTabClick = (cat: string, e: React.MouseEvent<HTMLButtonElement>) => {
+    setActiveTab(cat);
+    const target = e.currentTarget;
+    
+    // Smooth scroll the clicked button into the center of the viewport
+    target.scrollIntoView({
+      behavior: 'smooth',
+      block: 'nearest',
+      inline: 'center'
+    });
+  };
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const partners = [
     { id: 1, category: "Sponsors", logo: "/logos/logo1.svg" },
@@ -31,17 +55,13 @@ const PartnersSection: React.FC = () => {
     { id: 15, category: "Build Partners", logo: "/logos/logo15.svg" },
     { id: 16, category: "Sponsors", logo: "/logos/logo16.svg" },
     { id: 17, category: "Build Partners", logo: "/logos/logo17.svg" },
-
   ];
   
   const filtered = partners.filter(p => p.category === activeTab);
   
-  // Logic: Complete the row based on the 6-column desktop layout
-  const columns = 6;
+  const columns = isMobile ? 3 : 6;
   const remainder = filtered.length % columns;
   const paddingNeeded = remainder === 0 ? 0 : columns - remainder;
-  
-  // If no partners, show 1 empty row (6 cells), otherwise fill the row
   const displayCount = filtered.length === 0 ? columns : filtered.length + paddingNeeded;
   const gridCells = Array.from({ length: displayCount });
 
@@ -49,30 +69,34 @@ const PartnersSection: React.FC = () => {
     <section className="w-full bg-white flex flex-col font-['Montserrat',sans-serif]">
       
       {/* 1. HEADER AREA */}
-      <div className="w-full px-6 md:px-[60px] py-[20px] border-b border-[#DFDFDF] flex items-center justify-start">
-        <div className="flex items-center gap-[10px]">
-          <div className="relative w-[33.33px] h-[33.33px] flex items-center justify-center">
-            <div className="absolute w-[13.33px] h-[13.33px] bg-[#E02914] opacity-20 rounded-full blur-[6.67px]" />
-            <div className="w-[6.67px] h-[6.67px] bg-[#E02914] rounded-full" />
+      <div className="w-full px-5 md:px-[60px] py-[25px] border-b border-[#EEEEEE] flex items-center justify-start">
+        <div className="flex items-center gap-[12px]">
+          <div className="relative w-[28px] h-[28px] flex items-center justify-center">
+            <div className="absolute w-[12px] h-[12px] bg-[#E02914] opacity-30 rounded-full blur-[4px]" />
+            <div className="w-[6px] h-[6px] bg-[#E02914] rounded-full relative z-10" />
           </div>
-          <h2 className="text-[22px] leading-[36px] text-black">
-            <span className="font-medium">Partners_</span>
+          <h2 className="text-[20px] md:text-[22px] tracking-tight text-black">
+            <span className="font-normal">Partners_</span>
             <span className="font-bold">2026</span>
           </h2>
         </div>
       </div>
 
-      {/* 2. TAB NAVIGATION */}
-      <div className="w-full bg-white border-b border-[#DDDDDD] overflow-x-auto scrollbar-hide">
-        <div className="flex px-6 md:px-[60px] gap-6 md:gap-[24px]">
+      {/* 2. TAB NAVIGATION (With auto-centering scroll) */}
+      <div 
+        ref={scrollContainerRef}
+        className="w-full bg-white border-b border-[#EEEEEE] overflow-x-auto scroll-smooth snap-x snap-mandatory no-scrollbar md:mx-16 lg:mx-0"
+        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+      >
+        <div className="flex px-5 md:px-[60px] gap-8 min-w-max">
           {CATEGORIES.map((cat) => (
             <button
               key={cat}
-              onClick={() => setActiveTab(cat)}
-              className={`py-[20px] text-[18px] transition-all duration-300 border-b-2 whitespace-nowrap ${
+              onClick={(e) => handleTabClick(cat, e)}
+              className={`py-[18px] text-[16px] md:text-[18px] transition-all duration-300 border-b-2 whitespace-nowrap outline-none snap-start ${
                 activeTab === cat 
-                ? "border-[#E02914] text-[#E02914] opacity-100" 
-                : "border-transparent text-black opacity-50 hover:opacity-80"
+                ? "border-[#E02914] text-[#E02914] font-medium" 
+                : "border-transparent text-[#999999] hover:text-black"
               }`}
             >
               {cat}
@@ -82,29 +106,36 @@ const PartnersSection: React.FC = () => {
       </div>
 
       {/* 3. PARTNER LOGO GRID */}
-      <div className="w-full px-6 md:px-[70px] py-[50px] bg-white">
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 border-l border-t border-[#DDDDDD]/30">
+      <div className="w-full bg-white">
+        <div className="grid grid-cols-3 md:grid-cols-6 border-t border-[#EEEEEE]">
           {gridCells.map((_, index) => {
             const partner = filtered[index];
             return (
               <div
                 key={index}
-                className="aspect-square flex items-center justify-center p-6 border-r border-b border-[#DDDDDD]/30 transition-colors duration-500 hover:bg-gray-50/50"
+                className="aspect-square flex items-center justify-center p-4 md:p-8 border-r border-b border-[#EEEEEE] transition-colors duration-300 hover:bg-gray-50/50"
               >
                 {partner ? (
                   <img 
                     src={partner.logo} 
-                    alt="Partner" 
-                    className="max-w-[80%] max-h-[60%] object-contain grayscale hover:grayscale-0 transition-all duration-700"
+                    alt="Partner Logo" 
+                    className="max-w-[75%] max-h-[50%] object-contain grayscale brightness-0 opacity-80 hover:opacity-100 transition-all duration-500"
                   />
                 ) : (
-                  <div className="w-full h-full opacity-0" />
+                  <div className="w-full h-full" />
                 )}
               </div>
             );
           })}
         </div>
       </div>
+
+      {/* CSS for hiding scrollbars (Tailwind doesn't have native no-scrollbar by default) */}
+      <style jsx>{`
+        .no-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+      `}</style>
     </section>
   );
 };
