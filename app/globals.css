@@ -822,3 +822,37 @@ a {
 
 
 }
+
+
+/* Desktop: phase-3 + marquee pinned to bottom half of viewport */
+@media (min-width: 768px) {
+  .phase-3-marquee-wrapper {
+     position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10rem;
+        padding-bottom: 0;
+        margin-top: auto;
+  }
+  
+ 
+}
+
+/* Mobile: normal flow, centered, with breathing room */
+@media (max-width: 767px) {
+  .phase-3-marquee-wrapper {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    padding: 2rem 0 0;
+  }
+}

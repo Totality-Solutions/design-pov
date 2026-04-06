@@ -73,7 +73,7 @@ const Theme = () => {
     
     <div ref={containerRef} style={{ position: 'relative', height: '200vh' }}>
       <div style={{ position: 'sticky', top: 0, height: '100vh', overflow: 'hidden' }}>
-        <div className="grid grid-cols-1 lg:grid-cols-[3fr_7fr] w-full h-full py-12 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-[3fr_7fr] w-full h-full py-12 gap-10 md:gap-4">
 
           <div className="w-full h-full flex flex-col justify-end gap-4 px-3 lg:px-14">
             <h1 className="text-5xl font-semibold uppercase">2026 THEME</h1>

@@ -172,7 +172,7 @@ export default function MarqueeFlow<T>({
   return (
     <div
       ref={containerRef}
-      className="w-full overflow-hidden"
+      className="w-full overflow-hidden px-0"
       style={{
         clipPath: "inset(0)",
         overflowX: "hidden",

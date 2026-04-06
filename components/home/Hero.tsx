@@ -19,7 +19,7 @@ export default function Hero() {
         />
 
         {/* DARK OVERLAY */}
-        <div className="absolute inset-0 bg-black/30" />
+        {/* <div className="absolute inset-0 bg-black/30" /> */}
 
         {/* DESKTOP CTA BUTTON — hidden on mobile */}
         <div className="hidden sm:block absolute z-10 mb-8 mr-8 bottom-0 right-0">
