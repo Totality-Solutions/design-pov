@@ -28,7 +28,6 @@ const ScheduleSection = () => {
   const [activeDate, setActiveDate] = useState<DateKey>("15");
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
 
-  // Function to move to the next slide
   const nextSlide = useCallback(() => {
     setActiveDate((prev) => {
       const currentIndex = DATES.indexOf(prev);
@@ -37,31 +36,30 @@ const ScheduleSection = () => {
     });
   }, []);
 
-  // Auto-cycle logic
   useEffect(() => {
     let interval: NodeJS.Timeout;
     if (isAutoPlaying) {
       interval = setInterval(() => {
         nextSlide();
-      }, 4000); // Change slide every 4 seconds
+      }, 4000);
     }
     return () => clearInterval(interval);
   }, [isAutoPlaying, nextSlide]);
 
   const handleInteraction = (date: DateKey) => {
     setActiveDate(date);
-    setIsAutoPlaying(false); // Stop auto-playing when user manually interacts
+    setIsAutoPlaying(false);
   };
 
   return (
     <section 
       className="w-full bg-black pt-8 pb-10 flex flex-col font-['Montserrat',sans-serif]"
-      onMouseEnter={() => setIsAutoPlaying(false)} // Pause on hover
-      onMouseLeave={() => setIsAutoPlaying(true)}  // Resume when mouse leaves
+      onMouseEnter={() => setIsAutoPlaying(false)}
+      onMouseLeave={() => setIsAutoPlaying(true)}
     >
       
       {/* 1. HEADER */}
-      <div className="flex items-center gap-3 pb-6 px-[60px]">
+      <div className="flex items-center gap-3 pb-6 px-[20px] lg:px-[60px]">
         <div className="relative w-8 h-8 flex items-center justify-center">
           <div className="absolute w-[14px] h-[14px] bg-[#E02914] opacity-20 rounded-full blur-[6px]" />
           <div className="w-[7px] h-[7px] bg-[#E02914] rounded-full" />
@@ -72,108 +70,111 @@ const ScheduleSection = () => {
         </h2>
       </div>
 
-      {/* 2. PRIMARY CONTAINER (20% | 80%) */}
-      <div className="relative w-full flex flex-col md:flex-row items-stretch border-t border-b border-white/20 px-[40px] overflow-hidden min-h-[220px]">
+      {/* 2. PRIMARY CONTAINER */}
+      <div className="relative w-full flex flex-col lg:flex-row items-stretch border-t border-b border-white/20 px-[20px] lg:px-[60px] overflow-hidden min-h-[220px]">
         
         {/* LEFT COLUMN - Static Label */}
-        <div className="w-full md:w-[15%] flex flex-col justify-center py-8 md:py-0 border-b md:border-b-0 md:border-r border-white/20 z-10">
+        <div className="w-full lg:w-[15%] flex flex-row lg:flex-col justify-between lg:justify-center py-6 lg:py-0 border-b lg:border-b-0 lg:border-r border-white/20 z-10">
           <div className="text-white">
-            <h3 className="text-[26px] font-medium leading-[0.9] tracking-tighter flex items-baseline">
+            <h3 className="text-[32px] lg:text-[42px] font-bold leading-[0.8] tracking-tighter flex items-baseline">
               <span>DAY&nbsp;0</span>
               <AnimatePresence mode="wait">
-                <motion.span
-                  key={activeDate}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.3 }} // Slightly slower for auto-cycle feel
-                >
+                <motion.span key={activeDate} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
                   {SCHEDULE_DATA[activeDate].digit}
                 </motion.span>
               </AnimatePresence>
             </h3>
-            <p className="text-[20px] font-medium mt-1">Schedule</p>
+            <p className="text-[18px] lg:text-[20px] font-medium  uppercase lg:normal-case">Schedule</p>
+          </div>
+
+          {/* Mobile Only Date Picker with Vertical Line */}
+          <div className="flex lg:hidden items-center gap-4 pt-2">
+            <div className="flex gap-3">
+              {DATES.map((date) => (
+                <div key={date} className="relative flex items-center justify-center w-[32px] h-[32px]">
+                   {activeDate === date && (
+                      <>
+                        {/* Vertical line joining from top only */}
+                        <motion.div 
+                          layoutId="verticalLineMobile" 
+                          className="absolute w-[1px] bg-white pointer-events-none" 
+                          style={{ top: '-100px', bottom: '100%', left: '50%' }} 
+                          transition={{ type: "spring", bounce: 0, duration: 0.6 }} 
+                        />
+                        <motion.div 
+                          layoutId="activeIndicatorMobile" 
+                          className="absolute inset-0 bg-white" 
+                          transition={{ type: "spring", bounce: 0, duration: 0.6 }} 
+                        />
+                      </>
+                    )}
+                  <button 
+                    onClick={() => handleInteraction(date)} 
+                    className={`relative z-10 text-[18px] font-bold transition-colors duration-300 ${activeDate === date ? "text-black" : "text-white/40"}`}
+                  >
+                    {date}
+                  </button>
+                </div>
+              ))}
+            </div>
+            <div className="flex flex-col text-white text-[14px] font-bold uppercase leading-none">
+              <span>May</span><span>2026</span>
+            </div>
           </div>
         </div>
 
-        {/* RIGHT COLUMN - Nested content */}
-        <div className="w-full md:w-full flex flex-col md:flex-row items-center relative py-10 md:py-0">
+        {/* RIGHT COLUMN */}
+        <div className="w-full lg:flex-1 flex flex-col lg:flex-row items-center relative py-8 lg:py-0">
           
-          <div className="flex-1 pl-4 pr-4 z-10">
+          <div className="flex-1 lg:pl-10 lg:pr-10 z-10">
             <AnimatePresence mode="wait">
               <motion.p
                 key={activeDate + "desc"}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 0.6 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
-                className="text-white text-[18px] md:text-[18px] font-normal leading-[1.4] tracking-tight"
+                className="text-white text-[16px] lg:text-[18px] font-normal leading-[1.4] tracking-tight"
               >
                 {SCHEDULE_DATA[activeDate].description}
               </motion.p>
             </AnimatePresence>
           </div>
 
-          <div className="w-full md:w-[260px] aspect-video relative overflow-hidden z-10 mt-6 md:mt-0">
+          <div className="w-full lg:w-[260px] aspect-video relative overflow-hidden z-10 mt-8 lg:mt-0">
             <AnimatePresence mode="wait">
               <motion.img
                 key={activeDate + "img"}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 0.4 }}
                 src={SCHEDULE_DATA[activeDate].image}
                 className="w-full h-full object-cover grayscale"
               />
             </AnimatePresence>
           </div>
 
-          <div className="w-full md:w-[300px] flex items-start top-10 pl-4 justify-center md:justify-end relative mt-10 md:mt-0 h-full">
-            <div className="flex items-center gap-8 z-20">
-              <div className="flex items-center gap-6">
+          {/* DESKTOP ONLY DATE SELECTOR */}
+          <div className="hidden lg:flex w-[300px] items-start pl-10 justify-end relative h-full">
+            <div className="flex items-center gap-8 z-20 h-full">
+              <div className="flex items-center gap-6 h-full">
                 {DATES.map((date) => (
-                  <div 
-                    key={date} 
-                    className="relative flex items-center justify-center w-[32px] h-[32px]"
-                    onMouseEnter={() => handleInteraction(date)}
-                  >
+                  <div key={date} className="relative flex items-center justify-center w-[32px] h-[32px]" onMouseEnter={() => handleInteraction(date)}>
                     {activeDate === date && (
                       <>
-                        <motion.div 
-                          layoutId="verticalLine"
-                          className="absolute hidden md:block w-[1px] bg-white pointer-events-none"
-                          style={{ 
-                              top: '-600px', 
-                              bottom: '-600px',
-                              left: '50%',
-                              translateX: '-50%' 
-                          }}
-                          transition={{ type: "spring", bounce: 0, duration: 0.6 }}
-                        />
-                        <motion.div 
-                          layoutId="activeIndicator"
-                          className="absolute inset-0 bg-white"
-                          transition={{ type: "spring", bounce: 0, duration: 0.6 }}
-                        />
+                        <motion.div layoutId="verticalLine" className="absolute w-[1px] bg-white" style={{ top: '-600px', bottom: '-600px', left: '50%' }} transition={{ type: "spring", bounce: 0, duration: 0.6 }} />
+                        <motion.div layoutId="activeIndicator" className="absolute inset-0 bg-white" transition={{ type: "spring", bounce: 0, duration: 0.6 }} />
                       </>
                     )}
-                    <button
-                      onClick={() => handleInteraction(date)}
-                      className={`relative z-10 text-[18px] font-semibold transition-colors duration-300 ${
-                        activeDate === date ? "text-black" : "text-white/40"
-                      }`}
-                    >
+                    <button className={`relative z-10 text-[18px] font-semibold ${activeDate === date ? "text-black" : "text-white/40"}`}>
                       {date}
                     </button>
                   </div>
                 ))}
               </div>
-
-              <div className="flex items-start text-white gap-1">
-                <span className="text-[18px] font-semibold uppercase tracking-wide">May-26</span>
-              </div>
+              <div className="text-white text-[18px] font-semibold uppercase">May-26</div>
             </div>
           </div>
+
         </div>
       </div>
     </section>

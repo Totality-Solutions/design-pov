@@ -1,5 +1,7 @@
+import CoreSection from "@/components/edition26/CoreSection";
 import PartnersSection from "@/components/edition26/PartnersSection";
 import ScheduleSection from "@/components/edition26/ScheduleSection";
+import ThemeSection from "@/components/edition26/ThemeSection";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -8,20 +10,20 @@ export const metadata: Metadata = {
   description: "The Design POV 2026 edition. A meditation on how design speaks to our bodies before our minds.",
 };
 
-const SECTIONS = [
-  { label: "Theme", href: "/2026/theme", desc: "Sense & Sensibility — the conceptual framework" },
-  { label: "Core Collective", href: "/2026/core", desc: "The studios defining this edition" },
-  { label: "Design Partners", href: "/2026/design-partners", desc: "Brands building the culture" },
-  { label: "The Circle", href: "/2026/circle", desc: "Panels, speakers, conversation" },
-  { label: "Art & Installations", href: "/2026/art-installations", desc: "Commissioned works" },
-  { label: "Visit", href: "/2026/visit", desc: "Join the waitlist for May 2026" },
-];
+// const SECTIONS = [
+//   { label: "Theme", href: "/2026/theme", desc: "Sense & Sensibility — the conceptual framework" },
+//   { label: "Core Collective", href: "/2026/core", desc: "The studios defining this edition" },
+//   { label: "Design Partners", href: "/2026/design-partners", desc: "Brands building the culture" },
+//   { label: "The Circle", href: "/2026/circle", desc: "Panels, speakers, conversation" },
+//   { label: "Art & Installations", href: "/2026/art-installations", desc: "Commissioned works" },
+//   { label: "Visit", href: "/2026/visit", desc: "Join the waitlist for May 2026" },
+// ];
 
 export default function Edition2026() {
   return (
     <div className="bg-pov-black min-h-screen">
       {/* Hero */}
-      <section className="pt-32 pb-16 section-pov border-b border-white/5">
+      {/* <section className="pt-32 pb-16 section-pov border-b border-white/5">
         <div className="container-pov">
           <p className="text-label text-pov-clay mb-6">Design POV · 2026 Edition</p>
           <h1
@@ -37,10 +39,10 @@ export default function Edition2026() {
             with bodies before minds — through texture, light, temperature, and material memory.
           </p>
         </div>
-      </section>
+      </section> */}
 
-      {/* Section Navigation */}
-      <section className="section-pov">
+
+      {/* <section className="section-pov">
         <div className="container-pov">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-white/5">
             {SECTIONS.map((s) => (
@@ -62,8 +64,10 @@ export default function Edition2026() {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
+      <ThemeSection />
+      <CoreSection />
       <ScheduleSection />
       <PartnersSection />
     </div>

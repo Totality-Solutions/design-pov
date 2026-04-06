@@ -8,7 +8,7 @@ const CATEGORIES = [
   "Art Curation",
   "Space Scenting",
   "Operations",
-  "Media", // Added more to test scrolling
+  "Media",
   "Strategy"
 ];
 
@@ -17,12 +17,10 @@ const PartnersSection: React.FC = () => {
   const [isMobile, setIsMobile] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-  // Logic to scroll the active tab into view
   const handleTabClick = (cat: string, e: React.MouseEvent<HTMLButtonElement>) => {
     setActiveTab(cat);
     const target = e.currentTarget;
     
-    // Smooth scroll the clicked button into the center of the viewport
     target.scrollIntoView({
       behavior: 'smooth',
       block: 'nearest',
@@ -69,7 +67,7 @@ const PartnersSection: React.FC = () => {
     <section className="w-full bg-white flex flex-col font-['Montserrat',sans-serif]">
       
       {/* 1. HEADER AREA */}
-      <div className="w-full px-5 md:px-[60px] py-[25px] border-b border-[#EEEEEE] flex items-center justify-start">
+      <div className="w-full px-5 lg:px-[60px] py-[25px] border-b border-[#EEEEEE] flex items-center justify-start">
         <div className="flex items-center gap-[12px]">
           <div className="relative w-[28px] h-[28px] flex items-center justify-center">
             <div className="absolute w-[12px] h-[12px] bg-[#E02914] opacity-30 rounded-full blur-[4px]" />
@@ -82,21 +80,24 @@ const PartnersSection: React.FC = () => {
         </div>
       </div>
 
-      {/* 2. TAB NAVIGATION (With auto-centering scroll) */}
+      {/* 2. TAB NAVIGATION (Responsive Spacing Fix) */}
       <div 
         ref={scrollContainerRef}
-        className="w-full bg-white border-b border-[#EEEEEE] overflow-x-auto scroll-smooth snap-x snap-mandatory no-scrollbar md:mx-16 lg:mx-0"
+        className="w-full bg-white border-b border-[#EEEEEE] overflow-x-auto scroll-smooth no-scrollbar"
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       >
-        <div className="flex px-5 md:px-[60px] gap-8 min-w-max">
+        {/* Added px-5 (mobile) and lg:px-[60px] (desktop) to match the header.
+            gap-6 (mobile) to gap-10 (desktop) for better breathing room.
+        */}
+        <div className="flex gap-6 md:gap-10 px-5 lg:px-[60px] min-w-max">
           {CATEGORIES.map((cat) => (
             <button
               key={cat}
               onClick={(e) => handleTabClick(cat, e)}
-              className={`py-[18px] text-[16px] md:text-[18px] transition-all duration-300 border-b-2 whitespace-nowrap outline-none snap-start ${
+              className={`py-[18px] text-[15px] md:text-[18px] transition-all duration-300 border-b-2 whitespace-nowrap outline-none relative ${
                 activeTab === cat 
-                ? "border-[#E02914] text-[#E02914] font-medium" 
-                : "border-transparent text-[#999999] hover:text-black"
+                ? "border-[#E02914] text-[#E02914] font-semibold" 
+                : "border-transparent text-[#999999] hover:text-black font-medium"
               }`}
             >
               {cat}
@@ -130,7 +131,6 @@ const PartnersSection: React.FC = () => {
         </div>
       </div>
 
-      {/* CSS for hiding scrollbars (Tailwind doesn't have native no-scrollbar by default) */}
       <style jsx>{`
         .no-scrollbar::-webkit-scrollbar {
           display: none;
