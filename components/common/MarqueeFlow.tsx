@@ -6,177 +6,178 @@ interface MarqueeFlowProps<T> {
   items: T[];
   renderItem: (item: T, index: number, isExpanded: boolean) => React.ReactNode;
   gap?: number;
-  /** px per second */
   speed?: number;
   mobileCount?: number;
   tabletCount?: number;
   desktopCount?: number;
-  /** which visible position is always expanded (0 = first) */
-  defaultExpandedIndex?: number;
-  expandPauseDuration?: number;
 }
 
 export default function MarqueeFlow<T>({
   items,
   renderItem,
-  gap = 24,
-  speed = 30,
-  mobileCount = 2,
-  tabletCount = 3,
+  gap = 16,
+  speed = 80,
+  mobileCount = 1,
+  tabletCount = 2,
   desktopCount = 4,
-  defaultExpandedIndex,
-  expandPauseDuration = 3000,
 }: MarqueeFlowProps<T>) {
-  const containerRef  = useRef<HTMLDivElement>(null);
-  const trackRef      = useRef<HTMLDivElement>(null);
-  const rafRef        = useRef<number>(0);
-  const offsetRef     = useRef(0);          // continuous px offset, never resets
-  const lastTsRef     = useRef<number>(0);
-  const pausedRef     = useRef(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+
+  // Animation refs
+  const rafRef = useRef<number>(0);
+  const offsetRef = useRef(0);
+  const lastTsRef = useRef(0);
+  const pausedRef = useRef(false);
+  const speedRef = useRef(speed);
+
+  // Measurement refs
+  const itemWidthRef = useRef(0);
+  const cycleWidthRef = useRef(0);
+
+  // State tracking
+  const previousIndexRef = useRef<number>(-1);
   const pauseTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const itemWidthRef  = useRef(0);          // width of one item + gap in px
-  const totalWidthRef = useRef(0);          // width of one full set in px
-   const previousExpandedRef = useRef<number>(-1);
 
+  // UI State
   const [visibleCount, setVisibleCount] = useState(desktopCount);
-  const [activeGap,    setActiveGap]    = useState(gap);
-  // expandedItemIndex: which real item index (0-based) is currently in the expanded slot
-  const [expandedItemIndex, setExpandedItemIndex] = useState(
-    defaultExpandedIndex !== undefined ? defaultExpandedIndex : -1
-  );
+  const [activeGap, setActiveGap] = useState(gap);
+  const [itemWidth, setItemWidth] = useState(0);
+  const [expandedIndex, setExpandedIndex] = useState(0);
 
-  // We render 3 full copies so there's always content ahead and behind
-  const COPIES = 3;
+  // Create seamless loop - 4 copies for smooth infinite scroll
+  const COPIES = 4;
   const repeated = useMemo(() => {
-    if (items.length === 0) return [];
     return Array.from({ length: COPIES }, () => items).flat();
   }, [items]);
 
-  // ── Responsive ────────────────────────────────────────────────────────────
+  // ✅ Responsive breakpoints
   useEffect(() => {
-    let t: ReturnType<typeof setTimeout>;
-    const update = () => {
+    const handleResize = () => {
       const w = window.innerWidth;
       if (w < 640) {
         setVisibleCount(mobileCount);
-        setActiveGap(Math.round(gap * 0.5));
+        setActiveGap(12);
       } else if (w < 1024) {
         setVisibleCount(tabletCount);
-        setActiveGap(gap);
+        setActiveGap(14);
       } else {
         setVisibleCount(desktopCount);
         setActiveGap(gap);
       }
     };
-    const onResize = () => { clearTimeout(t); t = setTimeout(update, 150); };
-    update();
-    window.addEventListener("resize", onResize);
-    return () => { window.removeEventListener("resize", onResize); clearTimeout(t); };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, [mobileCount, tabletCount, desktopCount, gap]);
 
-  // ── Measure item width after mount / resize ───────────────────────────────
+  // ✅ Measure items and container
   useEffect(() => {
     const measure = () => {
       const container = containerRef.current;
       if (!container) return;
+
       const containerW = container.offsetWidth;
-      const iw = (containerW - (visibleCount - 1) * activeGap) / visibleCount;
-      itemWidthRef.current  = iw + activeGap;
-      totalWidthRef.current = itemWidthRef.current * items.length;
-      // Seed offset to start at copy #1 (middle copy) so we have room in both directions
-      offsetRef.current = totalWidthRef.current;
+      const visibleItemsCount = Math.floor(visibleCount);
+      
+      // Calculate item width: (container - all gaps) / visible items
+      const totalGapWidth = (visibleItemsCount - 1) * activeGap;
+      const iw = (containerW - totalGapWidth) / visibleItemsCount;
+
+      setItemWidth(iw);
+      itemWidthRef.current = iw;
+
+      // One cycle = all items + gaps
+      const cycleWidth = items.length * (iw + activeGap) - activeGap;
+      cycleWidthRef.current = cycleWidth;
+
+      offsetRef.current = cycleWidth;
     };
-    measure();
+
+    const timer = setTimeout(measure, 100);
     window.addEventListener("resize", measure);
-    return () => window.removeEventListener("resize", measure);
-  }, [visibleCount, activeGap, items.length]);
-
-  // ── rAF loop ──────────────────────────────────────────────────────────────
-  
-    useEffect(() => {
-    if (defaultExpandedIndex === undefined || expandPauseDuration === 0) return;
-
-    // Only pause if this is a NEW expanded item (not the same one repeatedly)
-    if (previousExpandedRef.current === expandedItemIndex) return;
-
-    previousExpandedRef.current = expandedItemIndex;
-
-    // Clear any existing pause timeout
-    if (pauseTimeoutRef.current) {
-      clearTimeout(pauseTimeoutRef.current);
-    }
-
-    // Start pause
-    pausedRef.current = true;
-
-    // Resume after duration
-    pauseTimeoutRef.current = setTimeout(() => {
-      pausedRef.current = false;
-      lastTsRef.current = 0; // Reset timestamp to prevent jump
-    }, expandPauseDuration);
 
     return () => {
-      if (pauseTimeoutRef.current) {
-        clearTimeout(pauseTimeoutRef.current);
-      }
+      clearTimeout(timer);
+      window.removeEventListener("resize", measure);
     };
-  }, [expandedItemIndex, expandPauseDuration, defaultExpandedIndex]);
-  
+  }, [visibleCount, activeGap, items.length]);
+
+  // ✅ Animation loop with seamless wrapping
   useEffect(() => {
-   if (items.length === 0) return;
+    let lastTime = 0;
 
-    const tick = (ts: number) => {
+    const tick = (now: number) => {
       rafRef.current = requestAnimationFrame(tick);
-      if (pausedRef.current) { lastTsRef.current = ts; return; }
 
-      const dt = lastTsRef.current ? (ts - lastTsRef.current) / 1000 : 0;
-      lastTsRef.current = ts;
+      if (!lastTime) lastTime = now;
+      const dt = (now - lastTime) / 1000;
+      lastTime = now;
 
-      const iw    = itemWidthRef.current;
-      const total = totalWidthRef.current;
-      if (iw === 0 || total === 0) return;
+      const iw = itemWidthRef.current;
+      const cycleWidth = cycleWidthRef.current;
 
-      // Advance offset
-      offsetRef.current += speed * dt;
+      if (!iw || !cycleWidth) return;
 
-      // Seamless wrap: once we've scrolled past copy #2 start, jump back by one full set
-      // This is invisible because copy #1 and copy #3 are identical
-      if (offsetRef.current >= total * 2) {
-        offsetRef.current -= total;
+      // Update offset
+      if (!pausedRef.current) {
+        offsetRef.current += speedRef.current * dt;
       }
 
-      const track = trackRef.current;
-      if (track) {
-        track.style.transform = `translateX(-${offsetRef.current}px)`;
+      // Seamless loop - reset when we've scrolled one full cycle
+      if (offsetRef.current >= cycleWidth) {
+        offsetRef.current -= cycleWidth;
       }
 
-      // ── Update which item is in the expanded slot ──────────────────────────
-      if (defaultExpandedIndex !== undefined && iw > 0) {
-        // Use floor so the expanded item only hands off once the next item
-        // has fully entered the slot — no premature collapse
-        const scrolledItems = offsetRef.current / iw;
-        const idx = Math.floor(scrolledItems + defaultExpandedIndex) % items.length;
-        const normalized = (idx + items.length) % items.length;
-        setExpandedItemIndex((prev) => prev !== normalized ? normalized : prev);
+      // Apply transform
+      if (trackRef.current) {
+        trackRef.current.style.transform = `translateX(-${offsetRef.current}px)`;
+      }
+
+      // ✅ Detect which item is at left edge (every gap + item width)
+      const itemWithGap = iw + activeGap;
+      const currentItemIndex = Math.floor(offsetRef.current / itemWithGap) % items.length;
+
+      // Only trigger expansion when item changes
+      if (previousIndexRef.current !== currentItemIndex) {
+        previousIndexRef.current = currentItemIndex;
+        setExpandedIndex(currentItemIndex);
+
+        // Smooth pause animation
+        pausedRef.current = true;
+
+        // Resume after 3000ms
+        if (pauseTimeoutRef.current) {
+          clearTimeout(pauseTimeoutRef.current);
+        }
+
+        pauseTimeoutRef.current = setTimeout(() => {
+          pausedRef.current = false;
+          lastTime = 0; // Reset delta time for smooth resume
+        }, 3000);
       }
     };
 
     rafRef.current = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(rafRef.current);
-  }, [items.length, speed, defaultExpandedIndex]);
 
-  // ── Pause on hover ────────────────────────────────────────────────────────
-  const handleMouseEnter = () => { pausedRef.current = true; };
-  const handleMouseLeave = () => { pausedRef.current = false; };
-
-  if (items.length === 0) return null;
+    return () => {
+      cancelAnimationFrame(rafRef.current);
+      if (pauseTimeoutRef.current) {
+        clearTimeout(pauseTimeoutRef.current);
+      }
+    };
+  }, [items.length, activeGap, speed]);
 
   return (
     <div
       ref={containerRef}
       className="w-full overflow-hidden"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      style={{
+        clipPath: "inset(0)",
+        overflowX: "hidden",
+        overflowY: "visible",
+      }}
     >
       <div
         ref={trackRef}
@@ -184,22 +185,23 @@ export default function MarqueeFlow<T>({
         style={{
           gap: `${activeGap}px`,
           willChange: "transform",
-          // No CSS transition — rAF owns all movement
+          backfaceVisibility: "hidden",
+          perspective: 1000,
         }}
       >
-        {repeated.map((item: T, i: number) => {
+        {repeated.map((item, i) => {
           const realIndex = i % items.length;
-          const isExpanded =
-            defaultExpandedIndex !== undefined && realIndex === expandedItemIndex;
+          const isExpanded = realIndex === expandedIndex;
 
           return (
             <div
-              key={i}
-              className="flex-shrink-0 flex items-end"
+              key={`${i}-${realIndex}`}
+              className="flex-shrink-0 flex items-end overflow-visible"
               style={{
-                // Fixed width based on visibleCount — same for all items
-                width: `calc((100vw - ${(visibleCount - 1) * activeGap}px) / ${visibleCount})`,
-                flexShrink: 0,
+                width: `${itemWidth}px`,
+                transition: isExpanded 
+                  ? "all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)" 
+                  : "all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
               }}
             >
               {renderItem(item, realIndex, isExpanded)}

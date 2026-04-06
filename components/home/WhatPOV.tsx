@@ -108,16 +108,22 @@ const WhatPOV = () => {
     { id: 6, img: img3, title: 'Simply Dummy', href: '#' },
   ]
 
+  // Marquee appears AFTER hero desc (0.75 → 0.95)
+const marqueeOpacity = useTransform(smooth, [0.78, 0.95], [0, 1]);
+const marqueeY = useTransform(smooth, [0.75, 0.9], [80, 0]);
+const marqueeBlur = useTransform(smooth, [0.75, 0.9], [10, 0]);
+const marqueeBlurPx = useTransform(marqueeBlur, (v) => `blur(${v}px)`);
+
   return (
     // 300vh tall scroll canvas — gives 3× viewport of scroll room
-    <div ref={containerRef} style={{ position: 'relative', height: '600vh' }}>
+    <div ref={containerRef} style={{ position: 'relative', height: 'clamp(200vh, 300vh, 400vh)', }}>
 
       {/* Sticky viewport — pins content while scroll drives animations */}
       <div
         style={{
           position: 'sticky',
-          top: 50,
-          height: '100vh',
+          top: '200px',
+          height: '80vh',
           overflow: 'hidden',
           display: 'flex',
           flexDirection: 'column',
@@ -126,7 +132,7 @@ const WhatPOV = () => {
       >
         <Section>
           <Container>
-            <div className="hero-text">
+            <div className="hero-text text-center md:text-left">
               <div className="typewriter-wrapper" style={{ overflow: 'hidden' }}>
 
                 {/* ── Typewriter block (p + h1) — fades out as a unit during exit ── */}
@@ -168,9 +174,9 @@ const WhatPOV = () => {
                   }}
                 >
                   <span>Design POV India</span> is an annual platform that brings
-                  together the most progressive creative <br /> minds in the country.
+                  together the most progressive creative <span className="hidden md:inline"><br /></span> minds in the country.
                   Through <span>Residencies, Exhibitions, Publications,</span> and{' '}
-                  <span>Critical Dialogue</span>, we <br /> shape the narrative of
+                  <span>Critical Dialogue</span>, we <span className="hidden md:inline"><br /></span> shape the narrative of
                   Indian design—on Indian terms.
                 </motion.h1>
 
@@ -178,27 +184,28 @@ const WhatPOV = () => {
             </div>
 
               <motion.div
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }} // run only once
-                transition={{ duration: 2, ease: "easeOut" }}
-                className="mt-8 h-[350px] flex items-end justify-center"
-              >
+  style={{
+    opacity: marqueeOpacity,
+    y: marqueeY,
+    filter: marqueeBlurPx,
+  }}
+  className="mt-8 w-full  h-[220px] sm:h-[260px] md:h-[320px] lg:h-[350px] flex items-end justify-center overflow-hidden"
+>
               <MarqueeFlow
                 items={NEW_ARRIVALS}
                 gap={5}
                 speed={200}
                 desktopCount={4}
-                defaultExpandedIndex={0}
                 renderItem={(item, _index, isExpanded) => (
                   <Link
                     href={item.href || '#'}
                     className="relative block w-full overflow-hidden shadow-xl"
                     style={{
-                      aspectRatio: isExpanded ? '6/5' : '10/5',
-                      transition: 'aspect-ratio 2000ms cubic-bezier(0.4, 0, 0.2, 1)',
-                      transformOrigin: 'top center',
-                    }}
+  aspectRatio: isExpanded ? '6/5' : '10/5', // fixed base
+  // transform: isExpanded ? 'scaleY(1.2)' : 'scaleY(1)',
+  transition: "aspect-ratio 2000ms cubic-bezier(0.22, 1, 0.36, 1)",
+  transformOrigin: 'bottom',
+}}
                     onMouseEnter={(e) => {
                       const el = e.currentTarget
                       el.style.aspectRatio = '6/5'

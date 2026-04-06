@@ -56,10 +56,9 @@ interface MasonryGridProps {
 const MasonryGrid = forwardRef<HTMLDivElement, MasonryGridProps>(
   ({ y }, ref) => {
     return (
-      <div ref={ref} className="w-full h-full overflow-hidden">
+      <div ref={ref} className="w-full overflow-hidden h-full">
         <motion.div style={{ y }}>
-          
-          <div className="grid grid-cols-2 auto-rows-[300px] w-full">
+          <div className="h-full grid grid-cols-2 auto-rows-[300px] w-full">
 
             {/* 01 IMAGE */}
             <div className="row-span-2">
@@ -82,7 +81,7 @@ const MasonryGrid = forwardRef<HTMLDivElement, MasonryGridProps>(
             </div>
 
             {/* 05 IMAGE */}
-            <div className="row-span-2">
+            <div className="row-span-3">
               <Cell type="image" src={img3} alt="Theme 3" />
             </div>
 
@@ -92,14 +91,14 @@ const MasonryGrid = forwardRef<HTMLDivElement, MasonryGridProps>(
             </div>
 
             {/* 07 IMAGE */}
-            <div className="row-span-2">
+            {/* <div className="row-span-2">
               <Cell type="image" src={img4} alt="Theme 4" />
-            </div>
+            </div> */}
 
             {/* 08 IMAGE */}
-            <div>
+            {/* <div>
               <Cell type="image" src={img8} alt="Theme 5" />
-            </div>
+            </div> */}
 
             {/* 09 BRAND BLACK (KEEP) */}
             <div className="bg-[var(--color-black)]">
