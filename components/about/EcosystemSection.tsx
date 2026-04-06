@@ -1,96 +1,109 @@
 "use client";
-import React from 'react';
-import MarqueeFlow from '@/components/common/MarqueeFlow';
 
-// Sample data structure
-interface EcosystemItem {
-  id: number;
-  title: string;
-  image: string;
-}
+import React, { useRef } from 'react';
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useSpring,
+} from 'framer-motion';
+import MarqueeFlow from '../common/MarqueeFlow';
+import Image from 'next/image';
+import Link from 'next/link';
 
-const ECOSYSTEM_DATA: EcosystemItem[] = [
-  { id: 1, title: "Architects", image: "https://placehold.co/400x600" },
-  { id: 2, title: "Designers", image: "https://placehold.co/400x600" },
-  { id: 3, title: "Builders", image: "https://placehold.co/400x600" },
-  { id: 4, title: "Brands", image: "https://placehold.co/400x600" },
-  { id: 5, title: "Creative", image: "https://placehold.co/400x600" },
+// Sample data items
+const ITEMS = [
+  { id: 1, img: "/temp/1.jpg", title: 'Architects', href: '#' },
+  { id: 2, img: "/temp/2.jpg", title: 'Designers', href: '#' },
+  { id: 3, img: "/temp/3.jpg", title: 'Builders', href: '#' },
+  { id: 4, img: "/temp/4.jpeg", title: 'Brands', href: '#' },
+  { id: 5, img: "/temp/5.jpg", title: 'Creative', href: '#' },
 ];
 
-const EcosystemSection: React.FC = () => {
+const EcosystemSection = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start start', 'end end'],
+  });
+
+  const smooth = useSpring(scrollYProgress, { 
+    stiffness: 80, 
+    damping: 20, 
+    restDelta: 0.001 
+  });
+
+  // Scroll ranges for the Marquee appearance (matching your reference)
+  const marqueeOpacity = useTransform(smooth, [0.78, 0.95], [0, 1]);
+  const marqueeY = useTransform(smooth, [0.75, 0.9], [80, 0]);
+  const marqueeBlur = useTransform(smooth, [0.75, 0.9], [10, 0]);
+  const marqueeBlurPx = useTransform(marqueeBlur, (v) => `blur(${v}px)`);
+
   return (
-    <section className="relative z-20 w-full bg-white flex flex-col font-['Montserrat',sans-serif]">
-      
-      {/* HEADER (NOT STICKY) */}
-      <div className="w-full h-[60px] bg-white border-b border-[#DFDFDF] px-6 md:px-[70px] flex items-center justify-between">
-        <div className="flex items-center gap-2.5">
-          
-          {/* Red Glowing Dot Icon */}
-          <div className="relative w-[33.33px] h-[33.33px] flex items-center justify-center">
-            <div className="absolute w-[13.33px] h-[13.33px] bg-[#E02914] opacity-20 rounded-full blur-[6.67px]" />
-            <div className="w-[6.67px] h-[6.67px] bg-[#E02914] rounded-full" />
-          </div>
-
-          <h2 className="text-[22px] leading-none text-black">
-            <span className="font-medium">Press_</span>
-            <span className="font-bold">Mentions</span>
-          </h2>
-        </div>
-        
-        <div className="hidden md:flex gap-[100px]">
-          <span className="opacity-60 text-lg font-medium tracking-tight uppercase">
-            LOREM IPSUM
-          </span>
-        </div>
+    <div ref={containerRef} className="relative h-[300vh] bg-white">
+      <div
+        className="sticky top-0 h-screen flex flex-col justify-center overflow-hidden"
+      >
+        <motion.div
+          style={{
+            opacity: marqueeOpacity,
+            y: marqueeY,
+            filter: marqueeBlurPx,
+          }}
+          className="w-full flex items-end justify-center overflow-hidden"
+        >
+          <MarqueeFlow
+                items={ITEMS}
+                gap={5}
+                speed={200}
+                desktopCount={4}
+                renderItem={(item, _index, isExpanded) => (
+                  <Link
+                    href={item.href || '#'}
+                    className="relative block w-full overflow-hidden shadow-xl"
+                    style={{
+  aspectRatio: isExpanded ? '6/5' : '10/5', // fixed base
+  // transform: isExpanded ? 'scaleY(1.2)' : 'scaleY(1)',
+  transition: "aspect-ratio 2000ms cubic-bezier(0.22, 1, 0.36, 1)",
+  transformOrigin: 'bottom',
+}}
+                    onMouseEnter={(e) => {
+                      const el = e.currentTarget
+                      el.style.aspectRatio = '6/5'
+                      const img = el.querySelector('img')
+                      if (img) img.style.transform = 'translate3d(0,0,0) scale(1.15)'
+                    }}
+                    onMouseLeave={(e) => {
+                      const el = e.currentTarget
+                      el.style.aspectRatio = isExpanded ? '6/5' : '10/5'
+                      const img = el.querySelector('img')
+                      if (img) img.style.transform = isExpanded
+                        ? 'translate3d(0,0,0) scale(1.15)'
+                        : 'translate3d(0,0,0) scale(1)'
+                    }}
+                  >
+                    <Image
+                      src={item.img}
+                      alt={item.title || 'New Arrival'}
+                      fill
+                      className="object-cover will-change-transform"
+                      style={{
+                        transform: isExpanded
+                          ? 'translate3d(0,0,0) scale(1.15)'
+                          : 'translate3d(0, 0, 0) scale(1)',
+                        backfaceVisibility: 'hidden',
+                        transition: 'transform 2000ms cubic-bezier(0.4, 0, 0.2, 1)',
+                        transformOrigin: 'bottom center',
+                      }}
+                      sizes="(max-width: 400px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 25vw"
+                    />
+                  </Link>
+                )}
+              />
+        </motion.div>
       </div>
-
-      {/* MARQUEE CONTAINER */}
-      <div className="w-full py-20 border-b border-[#DFDFDF]">
-        <MarqueeFlow
-          items={ECOSYSTEM_DATA}
-          gap={32}
-          speed={40}
-          desktopCount={4}
-          tabletCount={2}
-          mobileCount={1}
-          defaultExpandedIndex={0}
-          expandPauseDuration={3000}
-          renderItem={(item, index, isExpanded) => (
-            <div className="relative w-full transition-all duration-700 ease-in-out px-2">
-              
-              {/* IMAGE */}
-              <div
-                className={`relative overflow-hidden transition-all duration-700 ${
-                  isExpanded
-                    ? 'h-[500px] scale-100'
-                    : 'h-[350px] scale-95 opacity-40 grayscale'
-                }`}
-              >
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  className="w-full h-full object-cover rounded-sm"
-                />
-              </div>
-
-              {/* TEXT */}
-              <div className="mt-6 flex flex-col gap-2">
-                <span className="text-xs font-bold opacity-30 tracking-widest uppercase">
-                  0{index + 1}
-                </span>
-                <h3
-                  className={`text-2xl font-bold uppercase transition-opacity duration-500 ${
-                    isExpanded ? 'opacity-100' : 'opacity-10'
-                  }`}
-                >
-                  {item.title}
-                </h3>
-              </div>
-            </div>
-          )}
-        />
-      </div>
-    </section>
+    </div>
   );
 };
 
