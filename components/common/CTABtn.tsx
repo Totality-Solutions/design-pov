@@ -63,32 +63,32 @@ export default function CTABtn({
 }: CTABtnProps) {
   const [hovered, setHovered] = useState(false);
 
-  const config = {
-    sm: {
-      h: "h-10",
-      circle: "w-8 h-8",
-      text: "var(--font-size-sm)",
-      px: "pl-4 pr-1",
-      gap: "gap-3",
-      iconSize: 10,
-    },
-    md: {
-      h: "h-[50px]",
-      circle: "w-[40px] h-[40px]",
-      text: "var(--font-size-base)",
-      px: "pr-6 pl-1.5",
-      gap: "gap-3",
-      iconSize: 15,
-    },
-    lg: {
-      h: "h-16",
-      circle: "w-12 h-12",
-      text: "var(--font-size-base)",
-      px: "pl-8 pr-2",
-      gap: "gap-8",
-      iconSize: 20,
-    },
-  };
+const config = {
+  sm: {
+    h: "h-8 sm:h-9 md:h-10",
+    circle: "w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8",
+    text: "text-xs sm:text-sm",
+    px: "pl-3 pr-1",
+    gap: "gap-2",
+    iconSize: 10,
+  },
+  md: {
+    h: "h-9 sm:h-10 md:h-11",
+    circle: "w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9",
+    text: "text-sm",
+    px: "pl-3 pr-2 sm:pl-4",
+    gap: "gap-2 sm:gap-3",
+    iconSize: 12,
+  },
+  lg: {
+    h: "h-10 sm:h-11 md:h-12",
+    circle: "w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10",
+    text: "text-sm md:text-base",
+    px: "pl-4 pr-2 sm:pl-5",
+    gap: "gap-3",
+    iconSize: 14,
+  },
+};
 
   const cur = config[size];
 
