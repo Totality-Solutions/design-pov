@@ -111,7 +111,7 @@ const DesignHero: React.FC = () => {
       {/* Fixed aspect-video to keep it cinematic across all devices */}
       <div className="w-full aspect-[4/3] md:aspect-[16/7] overflow-hidden bg-gray-100 mt-12 md:mt-0 rounded-sm">
         <img
-          src="https://placehold.co/1920x1080" 
+          src="/temp/about/1.png" 
           alt="Design POV"
           className="w-full h-full object-cover transition-transform duration-[2000ms] group-hover:scale-105"
         />

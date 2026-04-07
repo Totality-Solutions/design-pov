@@ -6,11 +6,15 @@ import Image from 'next/image';
 import CTAStrip from '@/components/common/CTAStrip';
 import CTABtn from '../common/CTABtn';
 
+import Img1 from '@/public/temp/about/1.png'
+import Img2 from '@/public/temp/about/2.png'
+import Img3 from '@/public/temp/about/3.png'
+
 interface Pillar {
   id: string;
   title: string;
   description: string;
-  image: string;
+  image: any;
   buttonLabel: string;
 }
 
@@ -19,21 +23,21 @@ const PILLAR_DATA: Pillar[] = [
     id: "arch",
     title: "ARCHITECTS",
     description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-    image: "https://placehold.co/940x1000",
+    image: Img1 ,
     buttonLabel: "Default"
   },
   {
     id: "brand",
     title: "BRANDS",
     description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-    image: "https://placehold.co/940x1001",
+    image: Img2 ,
     buttonLabel: "Default"
   },
   {
     id: "build",
     title: "BUILD PARTNERS",
     description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-    image: "https://placehold.co/940x1002",
+    image: Img3 ,
     buttonLabel: "Default"
   }
 ];
@@ -106,7 +110,22 @@ const TheThreePillars: React.FC = () => {
                   {PILLAR_DATA[activePillar].description}
                 </p>
               </div>
-              <CTABtn label={PILLAR_DATA[activePillar].buttonLabel} href="#" />
+              <CTABtn
+                label={PILLAR_DATA[activePillar].buttonLabel}
+                iconType="arrow"
+                btnBg="var(--color-white)"
+                btnHoverBg="var(--primary-blue)"
+                textColor="var(--color-black)"
+                borderColor="var(--color-black)"
+                borderHoverColor="transparent"
+                lineColor="var(--color-white)"
+                lineHoverColor="var(--primary-blue)"
+                bottomKey1Width="40px"
+                bottomKey2Width="12px"
+                bottomKey1Right="50px"
+                bottomKey2Right="15px"
+                href="#tickets"
+              />
             </motion.div>
           </AnimatePresence>
         </div>
@@ -130,13 +149,29 @@ const TheThreePillars: React.FC = () => {
                   </p>
                 </div>
                 <div>
-                  <CTABtn label={pillar.buttonLabel} href="#" />
+                  {/* <CTABtn label={pillar.buttonLabel} href="#" /> */}
+                  <CTABtn
+                    label={pillar.buttonLabel}
+                    iconType="arrow"
+                    btnBg="var(--color-white)"
+                    btnHoverBg="var(--primary-blue)"
+                    textColor="var(--color-black)"
+                    borderColor="var(--color-black)"
+                    borderHoverColor="transparent"
+                    lineColor="var(--color-white)"
+                    lineHoverColor="var(--primary-blue)"
+                    bottomKey1Width="40px"
+                    bottomKey2Width="12px"
+                    bottomKey1Right="50px"
+                    bottomKey2Right="15px"
+                    href="#tickets"
+                  />
                 </div>
               </div>
 
               {/* IMAGE CONTAINER (Used for both Mobile and Desktop) */}
               <div className="p-6 md:p-[40px] flex items-center justify-center">
-                <div className="w-full h-[35vh] md:h-[85vh] relative overflow-hidden grayscale md:hover:grayscale-0 transition-all duration-1000 ease-in-out">
+                <div className="w-full h-[35vh] md:h-[85vh] relative overflow- transition-all duration-1000 ease-in-out">
                   <Image 
                     src={pillar.image} 
                     alt={pillar.title} 
@@ -153,14 +188,13 @@ const TheThreePillars: React.FC = () => {
 
       {/* 3. FULL WIDTH CTA STRIP */}
       <div className="w-full z-10 bg-white border-t border-[#DFDFDF]">
-        <CTAStrip 
-          src="https://placehold.co/1320x120" 
-          alt="Dialogue Section"
-          width={1920} 
-          height={140} 
+        <CTAStrip
           title="Where Design Meets Dialogue"
-          label="Apply As a Designer"
-          className="w-full"
+          ctaLabel="Apply"
+          ctaHref="#"
+          hoverBgColor="#000000"
+          textColor='var(--primary-red)'
+          hoverTextColor='var(--color-white)'
         />
       </div>
     </section>
