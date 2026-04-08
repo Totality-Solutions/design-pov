@@ -1,11 +1,13 @@
 "use client";
 import React, { useState, useRef } from 'react';
 import { Maximize2, Volume2, VolumeX, Play, Pause } from 'lucide-react';
+import SectionHeading from '../common/SectionHeading';
 
 const ThisIsUs: React.FC = () => {
   const [isMuted, setIsMuted] = useState(true);
   const [isPlaying, setIsPlaying] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [isHovered, setIsHovered] = useState(false);
 
   const togglePlay = () => {
     if (videoRef.current) {
@@ -27,9 +29,12 @@ const ThisIsUs: React.FC = () => {
   const textContent = `Design today exists in limbo. Business reduces it to a price tag while museums place it just beyond reach. Design POV fills the gap in between. Here, design thrives and shifts under perspective. The idea is to encourage visitors to play an active role in each encounter, through immersive displays that acquaint the creator and their story with the consumer. Business reduces it to a price tag while museums place.`;
 
   return (
-    <section className="w-full bg-white min-h-screen flex flex-col font-['Montserrat',sans-serif] border-t border-[#DFDFDF] overflow-hidden">
+    <section className="w-full bg-white min-h-screen flex flex-col font-['Montserrat',sans-serif] border-t border-[#DFDFDF] overflow-hidden"
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+    >
       {/* HEADER */}
-      <div className="w-full h-[60px] bg-white px-6 md:px-[70px] pt-8 flex items-center justify-between shrink-0">
+      {/* <div className="w-full h-[60px] bg-white px-6 md:px-[70px] pt-8 flex items-center justify-between shrink-0">
         <div className="flex items-center gap-2.5">
           <div className="relative w-[33.33px] h-[33.33px] flex items-center justify-center">
             <div className="absolute w-[13.33px] h-[13.33px] bg-[#E02914] opacity-20 rounded-full blur-[6.67px]" />
@@ -44,7 +49,19 @@ const ThisIsUs: React.FC = () => {
           <span className="opacity-60 text-sm md:text-lg font-medium tracking-tight uppercase">POV_Insights</span>
           <span className="opacity-60 text-lg font-medium tracking-tight uppercase">Volume_01</span>
         </div>
-      </div>
+      </div> */}
+
+      <SectionHeading 
+        titleMain="This_Is_Us_" 
+        titleBold="POV" 
+        sticky={false}
+        isSectionHovered={isHovered} 
+      >
+        <div className="hidden md:flex gap-[100px]">
+          <span className="opacity-60 text-[16px] lg:text-lg font-medium">POV_Insights</span>
+          <span className="opacity-60 text-[16px] lg:text-lg font-medium">Volume_01</span>
+        </div>
+      </SectionHeading>
 
       {/* CONTENT AREA */}
       <div className="flex-1 px-6 md:px-[70px] py-8 md:py-12 overflow-y-auto scrollbar-hide">

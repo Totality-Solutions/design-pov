@@ -97,17 +97,17 @@ export default function Hero() {
         {/* <div className="absolute inset-0 bg-black/30" /> */}
 
         {/* DESKTOP CTA BUTTON — hidden on mobile */}
-        <div className="hidden sm:block absolute z-10 mb-8 mr-8 bottom-0 right-0">
+        <div className="hidden sm:block absolute z-10 mb-8 mr-5 bottom-0 right-0">
           <CTABtn
-            label="Apply as Designer"
+            label="Apply Now"
             iconType="arrow"
             btnBg="var(--primary-blue)"
             btnHoverBg="var(--primary-blue)"
             textColor="var(--color-white)"
-            borderColor="var(--color-white)"
-            borderHoverColor="var(--color-white)"
-            lineColor="var(--primary-blue)"
-            lineHoverColor="var(--primary-blue)"
+            borderColor="var(--primary-blue)"
+            borderHoverColor="var(--primary-blue)"
+            lineColor="transparent"
+            lineHoverColor="transparent"
             bottomKey1Width="40px"
             bottomKey2Width="12px"
             bottomKey1Right="50px"

@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import SectionHeading from '../common/SectionHeading';
 
 const SCHEDULE_DATA = {
   "15": {
@@ -27,6 +28,7 @@ const DATES: DateKey[] = ["15", "16", "17"];
 const ScheduleSection = () => {
   const [activeDate, setActiveDate] = useState<DateKey>("15");
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+    const [isHovered, setIsHovered] = useState(false);
 
   const nextSlide = useCallback(() => {
     setActiveDate((prev) => {
@@ -53,22 +55,30 @@ const ScheduleSection = () => {
 
   return (
     <section 
-      className="w-full bg-black pt-8 pb-10 flex flex-col font-['Montserrat',sans-serif]"
-      onMouseEnter={() => setIsAutoPlaying(false)}
-      onMouseLeave={() => setIsAutoPlaying(true)}
+      className="w-full bg-black pb-10 flex flex-col font-['Montserrat',sans-serif]"
+      onMouseEnter={() => {
+        setIsAutoPlaying(false);
+        setIsHovered(true);
+      }}
+      onMouseLeave={() => {
+        setIsAutoPlaying(true);
+        setIsHovered(false);
+      }}
     >
-      
-      {/* 1. HEADER */}
-      <div className="flex items-center gap-3 pb-6 px-[20px] lg:px-[60px]">
-        <div className="relative w-8 h-8 flex items-center justify-center">
-          <div className="absolute w-[14px] h-[14px] bg-[#E02914] opacity-20 rounded-full blur-[6px]" />
-          <div className="w-[7px] h-[7px] bg-[#E02914] rounded-full" />
+
+      <SectionHeading 
+        titleMain="Circle_Schedule_" 
+        titleBold="2026" 
+        sticky={false}
+        bgColor = "black"
+        textColor="text-white"
+        isSectionHovered={isHovered} 
+      >
+        <div className="hidden md:flex gap-[100px]">
+          <span className="opacity-60 text-[16px] lg:text-lg font-medium">POV_Insights</span>
+          <span className="opacity-60 text-[16px] lg:text-lg font-medium">Volume_01</span>
         </div>
-        <h2 className="text-[20px] text-white leading-none tracking-tight">
-          <span className="font-medium">Schedule_</span>
-          <span className="font-bold">2026</span>
-        </h2>
-      </div>
+      </SectionHeading>
 
       {/* 2. PRIMARY CONTAINER */}
       <div className="relative w-full flex flex-col lg:flex-row items-stretch border-t border-b border-white/20 px-[20px] lg:px-[60px] overflow-hidden min-h-[220px]">

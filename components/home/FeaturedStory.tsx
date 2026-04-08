@@ -5,6 +5,7 @@ import Section from "../common/Section";
 import { Container } from "../common/Container";
 import Title from "../common/Title";
 import Image from "next/image";
+import SectionHeading from "../common/SectionHeading";
 
 const slides = [
   {
@@ -126,6 +127,7 @@ export default function MarqueeCarousel() {
   const [direction, setDirection] = useState<"up" | "down">("down");
   const carouselRef = useRef<HTMLDivElement>(null);
   const autoRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [isHovered, setIsHovered] = useState(false);
 
   const goTo = useCallback(
     (index: number, dir?: "up" | "down") => {
@@ -213,14 +215,25 @@ export default function MarqueeCarousel() {
   const current = slides[activeIndex];
 
   return (
-    <Container className="border-y border-gray-300 ">
-      <Section>
+    <Container className="border-y border-gray-300"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+     >
+     <SectionHeading
+       titleMain="Featured_" 
+       titleBold="Story" 
+       sticky={false}
+       isSectionHovered={isHovered} 
+       className=' !border-t-0'
+     >
+     </SectionHeading>
+      <Section className="!py-0 ">
         <div className="mc-root">
           <div className="mc-wrap ">
 
             {/* ── LEFT ── */}
-            <div className="w-full h-full flex flex-col items-start justify-start gap-10">
-              <Title normalText="Featured" boldText="Story" />
+            <div className="w-full h-full flex flex-col items-start justify-center gap-10">
+              {/* <Title normalText="Featured" boldText="Story" /> */}
               <div className="hero-frame">
 
                 {prevIndex !== null && (

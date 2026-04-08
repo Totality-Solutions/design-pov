@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from 'react';
+import SectionHeading from '../common/SectionHeading';
 
 const CATEGORIES = [
   "Sponsors",
@@ -62,23 +63,22 @@ const PartnersSection: React.FC = () => {
   const paddingNeeded = remainder === 0 ? 0 : columns - remainder;
   const displayCount = filtered.length === 0 ? columns : filtered.length + paddingNeeded;
   const gridCells = Array.from({ length: displayCount });
+      const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <section className="w-full bg-white flex flex-col font-['Montserrat',sans-serif]">
-      
-      {/* 1. HEADER AREA */}
-      <div className="w-full px-5 lg:px-[60px] py-[25px] border-b border-[#EEEEEE] flex items-center justify-start">
-        <div className="flex items-center gap-[12px]">
-          <div className="relative w-[28px] h-[28px] flex items-center justify-center">
-            <div className="absolute w-[12px] h-[12px] bg-[#E02914] opacity-30 rounded-full blur-[4px]" />
-            <div className="w-[6px] h-[6px] bg-[#E02914] rounded-full relative z-10" />
-          </div>
-          <h2 className="text-[20px] md:text-[22px] tracking-tight text-black">
-            <span className="font-normal">Partners_</span>
-            <span className="font-bold">2026</span>
-          </h2>
-        </div>
-      </div>
+    <section className="w-full bg-white flex flex-col font-['Montserrat',sans-serif]"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+
+      <SectionHeading 
+        titleMain="Partners_" 
+        titleBold="2026" 
+        sticky={false}
+        bgColor = "black"
+        isSectionHovered={isHovered} 
+      >
+      </SectionHeading>
 
       {/* 2. TAB NAVIGATION (Responsive Spacing Fix) */}
       <div 

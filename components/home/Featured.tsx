@@ -11,6 +11,7 @@ import img5 from "@/public/temp/featured/3.png";
 import Section from "../common/Section";
 import { Container } from "../common/Container";
 import Title from "../common/Title";
+import SectionHeading from "../common/SectionHeading";
 
 type DesignerMedia = {
   src: StaticImageData | string;
@@ -190,6 +191,7 @@ const designers: Designer[] = [
 export default function FeaturedDesigners() {
   const [isMobile, setIsMobile] = useState(false);
   const sliderRef = useRef<HTMLDivElement>(null);
+  const [isHovered, setIsHovered] = useState(false)
 
   const baseSlots = designers;
   const loopedSlots = [...baseSlots, ...baseSlots, ...baseSlots];
@@ -237,68 +239,83 @@ useEffect(() => {
 }, [activeIndex, isMobile, baseSlots.length]);
 
   return (
-    <Section>
-      <Container>
-        <Title normalText="Featured" boldText="Designers" />
 
-        {/* DESKTOP */}
-        {!isMobile && (
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr 1.8fr 1fr 1fr",
-              gridTemplateRows: "250px 320px",
-              gap: "4px",
-            }}
-          >
-            {baseSlots.map((d, i) => (
-              <DesignerTile
-                key={i}
-                designer={d}
-                isFeatured={i === 2}
-                gridPos={GRID_POSITIONS[i]}
-                isMobile={false}
-              />
-            ))}
-          </div>
-        )}
-
-        {/* MOBILE */}
-        {isMobile && (
-  <div
-    style={{
-      width: "100%",
-      overflow: "hidden",
-      position: "relative",
-    }}
-  >
-    <div
-      style={{
-        display: "flex",
-        width: "100%",
-        transform: `translateX(-${activeIndex * 100}%)`,
-        transition: "transform 0.5s ease",
-      }}
+    <div  
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className="pt-4"
     >
-      {loopedSlots.map((d, i) => (
-        <div
-          key={i}
-          style={{
-            width: "100%",
-            flex: "0 0 100%",
-          }}
-        >
-          <DesignerTile
-            designer={d}
-            isMobile={true}
-            isActiveSlide={i === activeIndex}
-          />
-        </div>
-      ))}
-    </div>
-  </div>
-)}
+      <SectionHeading
+        titleMain="Featured_" 
+        titleBold="Designers" 
+        sticky={false}
+        isSectionHovered={isHovered} 
+        className=' !border-0'
+      >
+      </SectionHeading>
+
+      <Section className="!py-0 !pb-8">
+        <Container>
+    
+          {/* DESKTOP */}
+          {!isMobile && (
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr 1.8fr 1fr 1fr",
+                gridTemplateRows: "250px 320px",
+                gap: "4px",
+              }}
+            >
+              {baseSlots.map((d, i) => (
+                <DesignerTile
+                  key={i}
+                  designer={d}
+                  isFeatured={i === 2}
+                  gridPos={GRID_POSITIONS[i]}
+                  isMobile={false}
+                />
+              ))}
+            </div>
+          )}
+  
+          {/* MOBILE */}
+          {isMobile && (
+            <div
+              style={{
+                width: "100%",
+                overflow: "hidden",
+                position: "relative",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  width: "100%",
+                  transform: `translateX(-${activeIndex * 100}%)`,
+                  transition: "transform 0.5s ease",
+                }}
+              >
+                {loopedSlots.map((d, i) => (
+                  <div
+                    key={i}
+                    style={{
+                      width: "100%",
+                      flex: "0 0 100%",
+                    }}
+                  >
+                    <DesignerTile
+                      designer={d}
+                      isMobile={true}
+                      isActiveSlide={i === activeIndex}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
       </Container>
     </Section>
+  </div>
   );
 }

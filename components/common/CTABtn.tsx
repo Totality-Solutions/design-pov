@@ -130,7 +130,7 @@ export default function CTABtn({
         color: showIconCircle
           ? hovered
             ? "var(--color-white)"
-            : borderColor || "var(--color-white)"
+            : textColor || "var(--color-white)"
           : "var(--color-white)",
         order: iconPosition === "left" ? 1 : 0,
       }}

@@ -5,6 +5,7 @@ import type { NextPage } from 'next';
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from 'framer-motion';
+import SectionHeading from '../common/SectionHeading';
 
 const projects = [
   { id: 1, title: "Design Studio", img: "/temp/theme/11.png", url: "#" },
@@ -26,6 +27,7 @@ const Core2026: NextPage = () => {
   const [isIntroActive, setIsIntroActive] = useState(true);
   const [isDesktop, setIsDesktop] = useState(false); // Default to false for SSR
   const totalCards = fullProjects.length;
+    const [isHovered, setIsHovered] = useState(false);
 
   // Detect Screen Size
   useEffect(() => {
@@ -71,20 +73,19 @@ const Core2026: NextPage = () => {
   }, [isDesktop]);
 
   return (
-    <div className="min-h-max w-full bg-white flex flex-col items-center select-none">
-      <nav className="w-full h-[60px] border-y border-[#DFDFDF] flex items-center justify-between px-6 lg:px-[53px] sticky top-0 bg-white z-50">
-        <div className="flex items-center gap-[10px]">
-          <div className="relative w-[33px] h-[33px]">
-            <div className="absolute inset-0 m-auto w-[13px] h-[13px] bg-[#E02914] opacity-20 blur-[6px] rounded-full" />
-            <div className="absolute inset-0 m-auto w-[7px] h-[7px] bg-[#E02914] rounded-full" />
-          </div>
-          <div className="font-['Montserrat'] text-[18px] lg:text-[22px] font-medium text-black">
-            Core_<span className="font-bold">2026</span>
-          </div>
-        </div>
-        <div className="font-['Montserrat'] text-[14px] lg:text-[18px] opacity-60">Lorem Ipsum</div>
-      </nav>
+    <section className="min-h-max w-full bg-white flex flex-col items-center select-none" 
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
 
+    <SectionHeading
+      titleMain="Core_" 
+      titleBold="2026" 
+      sticky={false}
+      isSectionHovered={isHovered} 
+    >
+    </SectionHeading>
+    
       <main className="w-full max-w-[1420px] pt-[30px] lg:pt-[50px] px-6 lg:px-[50px] pb-20">
         {/* Responsive Grid: 1 col mobile, 2 col tab, 5 col desktop */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 lg:gap-[50px]">
@@ -139,7 +140,7 @@ const Core2026: NextPage = () => {
           })}
         </div>
       </main>
-    </div>
+    </section>
   );
 };
 

@@ -5,7 +5,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import CTAStrip from '@/components/common/CTAStrip';
 import CTABtn from '../common/CTABtn';
+import SectionHeading from '../common/SectionHeading';
 
+// Assets
 import Img1 from '@/public/temp/about/1.png'
 import Img2 from '@/public/temp/about/2.png'
 import Img3 from '@/public/temp/about/3.png'
@@ -23,30 +25,30 @@ const PILLAR_DATA: Pillar[] = [
     id: "arch",
     title: "ARCHITECTS",
     description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-    image: Img1 ,
+    image: Img1,
     buttonLabel: "Default"
   },
   {
     id: "brand",
     title: "BRANDS",
     description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-    image: Img2 ,
+    image: Img2,
     buttonLabel: "Default"
   },
   {
     id: "build",
     title: "BUILD PARTNERS",
     description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-    image: Img3 ,
+    image: Img3,
     buttonLabel: "Default"
   }
 ];
 
 const TheThreePillars: React.FC = () => {
   const [activePillar, setActivePillar] = useState<number>(0);
+  const [isHovered, setIsHovered] = useState(false); // Track hover for the dot animation
 
   useEffect(() => {
-    // Only run IntersectionObserver on Desktop to handle sticky text swap
     if (window.innerWidth < 768) return;
 
     const elements = document.querySelectorAll('.pillar-image-trigger');
@@ -67,32 +69,35 @@ const TheThreePillars: React.FC = () => {
   }, []);
 
   return (
-    <section className="w-full bg-white flex flex-col font-['Montserrat',sans-serif]">
+    <section 
+      className="w-full bg-white flex flex-col font-['Montserrat',sans-serif]"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
       
-      {/* 1. STICKY SECTION HEADER */}
-      <div className="sticky top-0 z-50 w-full h-[60px] bg-white border-b border-[#DFDFDF] px-6 md:px-[70px] flex items-center justify-between">
-        <div className="flex items-center gap-2.5">
-          <div className="relative w-8 h-8 flex items-center justify-center">
-            <div className="absolute w-[14px] h-[14px] bg-[#E02914] opacity-20 rounded-full blur-[6px]" />
-            <div className="w-[7px] h-[7px] bg-[#E02914] rounded-full" />
-          </div>
-          <h2 className="text-[18px] md:text-[22px] leading-none text-black">
-            The_Three_<span className="font-bold">Pillars</span>
-          </h2>
+      {/* 1. FLEXIBLE SECTION HEADER */}
+      <SectionHeading 
+        titleMain="The_Three_" 
+        titleBold="Pillars" 
+        sticky={true}
+        stickyTop="top-20"
+        isSectionHovered={isHovered} 
+      >
+        {/* Right side content: Passing multiple elements as children */}
+        <div className="hidden md:flex gap-[60px] lg:gap-[100px]">
+          <span className="opacity-60 text-[16px] lg:text-lg font-medium">Design POV</span>
+          <span className="opacity-60 text-[16px] lg:text-lg font-medium">Vol. 01</span>
         </div>
-        <div className="hidden md:flex gap-[100px]">
-          <span className="opacity-60 text-lg font-medium">Design POV</span>
-          <span className="opacity-60 text-lg font-medium">Vol. 01</span>
-        </div>
-        {/* Mobile secondary text placeholder to match your header screenshot */}
-        <div className="md:hidden text-xs opacity-40 uppercase font-medium">Lorem Ipsum</div>
-      </div>
+        
+        {/* You could even add a CTA here if needed */}
+        {/* <CTABtn label="Contact" href="/contact" ... /> */}
+      </SectionHeading>
 
       {/* 2. MAIN CONTENT AREA */}
       <div className="relative flex flex-col md:flex-row items-start">
         
-        {/* DESKTOP ONLY SIDEBAR (Hidden on Mobile) */}
-        <div className="hidden md:flex w-[388px] sticky top-[60px] h-[calc(100vh-60px)] pl-[70px] pt-[60px] pb-[60px] flex-col justify-end border-r border-[#DFDFDF] bg-white overflow-hidden">
+        {/* DESKTOP ONLY SIDEBAR */}
+        <div className="hidden md:flex w-[388px] sticky top-[90px] h-[calc(100vh-90px)] pl-[70px] pt-[60px] pb-[60px] flex-col justify-end border-r border-[#DFDFDF] bg-white overflow-hidden">
           <AnimatePresence mode="wait">
             <motion.div
               key={activePillar}
@@ -138,7 +143,7 @@ const TheThreePillars: React.FC = () => {
               data-index={index}
               className="pillar-image-trigger w-full flex flex-col border-b border-[#DFDFDF] last:border-b-0"
             >
-              {/* MOBILE ONLY TEXT (Shown only on small screens) */}
+              {/* MOBILE ONLY TEXT */}
               <div className="md:hidden flex flex-col p-8 gap-6 bg-white">
                 <div className="flex flex-col gap-3">
                   <h3 className="text-[20px] font-bold text-black tracking-tight uppercase">
@@ -149,7 +154,6 @@ const TheThreePillars: React.FC = () => {
                   </p>
                 </div>
                 <div>
-                  {/* <CTABtn label={pillar.buttonLabel} href="#" /> */}
                   <CTABtn
                     label={pillar.buttonLabel}
                     iconType="arrow"
@@ -169,9 +173,9 @@ const TheThreePillars: React.FC = () => {
                 </div>
               </div>
 
-              {/* IMAGE CONTAINER (Used for both Mobile and Desktop) */}
+              {/* IMAGE CONTAINER */}
               <div className="p-6 md:p-[40px] flex items-center justify-center">
-                <div className="w-full h-[35vh] md:h-[85vh] relative overflow- transition-all duration-1000 ease-in-out">
+                <div className="w-full h-[35vh] md:h-[85vh] relative transition-all duration-1000 ease-in-out">
                   <Image 
                     src={pillar.image} 
                     alt={pillar.title} 

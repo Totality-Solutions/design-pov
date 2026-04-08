@@ -5,6 +5,7 @@ import MarqueeFlow from "../common/MarqueeFlow";
 import Image from "next/image";
 import Link from "next/link";
 import SectionHeading from "../common/SectionHeading";
+import CTABtn from "../common/CTABtn";
 
 const ITEMS = [
   { id: 1, img: "/temp/1.jpg", title: "Architects", href: "#" },
@@ -38,12 +39,14 @@ const EcosystemSection = () => {
         </div>
       </div> */}
       <SectionHeading 
-        titleMain="The_Three_" 
-        titleBold="Pillars" 
-        rightText="Lorem Ipsum"
+        titleMain="Press_" 
+        titleBold="Mentions" 
         sticky={false}
         isSectionHovered={isHovered} 
-      />
+      >
+        {/* <p className="text-sm opacity-60">View all our work</p>
+        <CTABtn /> */}
+      </SectionHeading>
       <div className="w-full overflow-hidden h-[220px] sm:h-[260px] md:h-[320px] lg:h-[320px] flex items-end">
         <MarqueeFlow
           items={ITEMS}

@@ -8,6 +8,8 @@ import bgImage from '@/public/temp/ecosystem.png'
 import CTABtn from '../common/CTABtn'
 import Title from '../common/Title'
 import { FiMinus } from 'react-icons/fi'
+import SectionHeading from '../common/SectionHeading'
+import CTAStrip from '../common/CTAStrip'
 
 interface EcosystemItem {
   id: string
@@ -97,18 +99,25 @@ const ECOSYSTEM: EcosystemItem[] = [
 const EcosystemSection = () => {
   const [activeId, setActiveId] = useState<string>('core')
   const containerRef = useRef<HTMLDivElement>(null)
+  const [isHovered, setIsHovered ] = useState(false)
 
   const activeItem = ECOSYSTEM.find((e) => e.id === activeId)!
 
   return (
-    <Section>
+    <div  
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+        <SectionHeading
+          titleMain="Five Pathways" 
+          titleBold="Ecosystem" 
+          sticky={false}
+          isSectionHovered={isHovered} 
+        >
+        </SectionHeading>
+
+    <Section className='!py-8'>
       <Container>
-
-        {/* Header */}
-        <div style={{ padding: '0 0 20px 0' }}>
-          <Title normalText="Five Pathways" boldText="Ecosystem" />
-        </div>
-
         {/* ───────── DESKTOP (UNCHANGED) ───────── */}
         <div
           ref={containerRef}
@@ -573,6 +582,18 @@ const EcosystemSection = () => {
 
       </Container>
     </Section>
+
+      <div className="w-full z-10 bg-white border-t border-b border-[#DFDFDF]">
+        <CTAStrip
+          title="Where Design Meets Dialogue"
+          ctaLabel="Apply"
+          ctaHref="#"
+          hoverBgColor="#000000"
+          textColor='var(--primary-red)'
+          hoverTextColor='var(--color-white)'
+        />
+      </div>
+    </div>
   )
 }
 
