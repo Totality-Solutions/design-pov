@@ -822,3 +822,59 @@ a {
 
 
 }
+
+
+/* 
+
+
+*/
+:root {
+  /* Column & Flare Sizes */
+  --footer-col-width: 260px;
+  --base-flare-width: 1017px;
+  
+  /* Paddings & Spacings */
+  --footer-px: 64px;       /* Horizontal padding for the container */
+  --footer-pr-links: 80px; /* The lg:pr-20 you mentioned */
+  --footer-py-left: 70px;  /* Vertical padding for left side */
+  --footer-py-right: 84px; /* Vertical padding for right side links */
+  --footer-gap-links: 0px; 
+}
+
+@media (max-width: 1536px) {
+  :root {
+    --footer-col-width: 220px;
+    --base-flare-width: 900px;
+    --footer-pr-links: 40px;
+  }
+}
+
+@media (max-width: 1280px) {
+  :root {
+    --footer-col-width: 200px;
+    --base-flare-width: 800px;
+    --footer-px: 40px;
+    --footer-pr-links: 20px;
+    --footer-py-left: 50px;
+    --footer-py-right: 60px;
+  }
+}
+
+@media (max-width: 1024px) {
+  :root {
+    --footer-col-width: 170px;
+    --base-flare-width: 1050px;
+    --footer-px: 24px;
+    --footer-pr-links: 0px;
+  }
+}
+
+
+@media (max-width: 768px) {
+  :root {
+    --footer-col-width: 150px;
+    --base-flare-width: 1050px;
+    --footer-px: 24px;
+    --footer-pr-links: 0px;
+  }
+}
