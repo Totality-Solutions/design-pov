@@ -1,0 +1,81 @@
+"use client";
+
+import React, { useState } from "react";
+import MarqueeFlow from "../common/MarqueeFlow";
+import Image from "next/image";
+import Link from "next/link";
+import SectionHeading from "../common/SectionHeading";
+
+const ITEMS = [
+  { id: 1, img: "/temp/1.jpg", title: "Architects", href: "#" },
+  { id: 2, img: "/temp/2.jpg", title: "Designers", href: "#" },
+  { id: 3, img: "/temp/3.jpg", title: "Builders", href: "#" },
+  { id: 4, img: "/temp/4.jpeg", title: "Brands", href: "#" },
+  { id: 5, img: "/temp/5.jpg", title: "Creative", href: "#" },
+];
+
+const EcosystemSection = () => {
+  const [isHovered, setIsHovered] = useState(false);
+  return (
+    <section 
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)} 
+      className="w-full bg-white py-16"
+    >
+      {/* <div className="w-full h-[60px] bg-white px-6 md:px-[70px] py-12 flex items-center border-b justify-between shrink-0">
+        <div className="flex items-center gap-2.5">
+          <div className="relative w-[33.33px] h-[33.33px] flex items-center justify-center">
+            <div className="absolute w-[13.33px] h-[13.33px] bg-[#E02914] opacity-20 rounded-full blur-[6.67px]" />
+            <div className="w-[6.67px] h-[6.67px] bg-[#E02914] rounded-full" />
+          </div>
+          <h2 className="text-[18px] md:text-[22px] leading-none text-black">
+            <span className="font-medium">Press_</span>
+            <span className="font-bold">Mentions</span>
+          </h2>
+        </div>
+        <div className="hidden md:flex gap-[100px]">
+          <span className="opacity-60 text-sm md:text-lg font-medium tracking-tight uppercase">Lorem Ipsum</span>
+        </div>
+      </div> */}
+      <SectionHeading 
+        titleMain="The_Three_" 
+        titleBold="Pillars" 
+        rightText="Lorem Ipsum"
+        sticky={false}
+        isSectionHovered={isHovered} 
+      />
+      <div className="w-full overflow-hidden h-[220px] sm:h-[260px] md:h-[320px] lg:h-[320px] flex items-end">
+        <MarqueeFlow
+          items={ITEMS}
+          gap={5}
+          speed={120} // adjust for smoothness
+          desktopCount={4}
+          renderItem={(item, _index, isExpanded) => (
+            <Link
+              href={item.href || "#"}
+              className="relative block w-full overflow-hidden shadow-xl"
+              style={{
+                aspectRatio: isExpanded ? "6/5" : "10/5",
+                transition:
+                  "aspect-ratio 800ms cubic-bezier(0.22, 1, 0.36, 1)",
+              }}
+            >
+              <Image
+                src={item.img}
+                alt={item.title}
+                fill
+                className="object-cover"
+                style={{
+                  transform: isExpanded ? "scale(1.1)" : "scale(1)",
+                  transition: "transform 800ms ease",
+                }}
+              />
+            </Link>
+          )}
+        />
+      </div>
+    </section>
+  );
+};
+
+export default EcosystemSection;

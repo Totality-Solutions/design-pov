@@ -53,6 +53,9 @@ body {
 @theme inline {
  --text-xl: var(--font-size-xl);
  --text-sm: var(--font-size-sm);
+ 
+
+ --text-color-black: var(--color-black);
 }
 
 /* ─── SELECTION ──────────────────────────────────────────── */
@@ -157,7 +160,7 @@ a {
   position: relative;
   border: 2px solid var(--btn-border);
   overflow: visible;
-  transition: all 0.3s ease;
+  transition: all 0.3s ease-in-out;
 }
 
 /* LEFT LINE */
@@ -169,7 +172,7 @@ a {
   top: 50%;
   left: 20px;
   transform: translateY(-50%);
-  transition: all 0.3s ease;
+  transition: all 0.3s ease-in-out;
 }
 
 /* TOP KEY */
@@ -180,7 +183,7 @@ a {
   top: -2px;
   left: 10px;
   background: var(--btn-line);
-  transition: all 0.5s ease;
+  transition: all 0.5s ease-in-out;
 }
 
 /* BOTTOM KEY 1 */
@@ -191,7 +194,7 @@ a {
   bottom: -2px;
   right: var(--bk1-right);
   background: var(--btn-line);
-  transition: all 0.5s ease;
+  transition: all 0.5s ease-in-out;
 }
 
 /* BOTTOM KEY 2 */
@@ -202,31 +205,77 @@ a {
   bottom: -2px;
   right: var(--bk2-right);
   background: var(--btn-line);
-  transition: all 0.5s ease;
+  transition: all 0.5s ease-in-out;
 }
 
-/* HOVER */
-.fancy-btn:hover {
+/* --- HOVER & FORCED HOVER STATES --- */
+
+/* Border Change */
+.fancy-btn:hover,
+.fancy-btn.is-hovered {
   border-color: var(--btn-border-hover);
 }
 
-.fancy-btn:hover .before-line {
+/* Before Line Shrink */
+.fancy-btn:hover .before-line,
+.fancy-btn.is-hovered .before-line {
   width: 15px;
   background: var(--btn-line-hover);
 }
 
-.fancy-btn:hover .top-key {
+/* Top Key Disappear */
+.fancy-btn:hover .top-key,
+.fancy-btn.is-hovered .top-key {
   width: 0;
   left: -2px;
   background: var(--btn-line-hover);
 }
 
+/* Bottom Keys Disappear */
 .fancy-btn:hover .bottom-key-1,
-.fancy-btn:hover .bottom-key-2 {
+.fancy-btn.is-hovered .bottom-key-1,
+.fancy-btn:hover .bottom-key-2,
+.fancy-btn.is-hovered .bottom-key-2 {
   width: 0;
   right: 0;
   background: var(--btn-line-hover);
 }
+
+
+
+
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 0.2;
+    transform: scale(1);
+    filter: blur(2px);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.2);
+    filter: blur(8px);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s infinite ease-in-out;
+}
+
+
+
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+
+
 
 
 /* ── STICKY HEADER (shows after scroll) ── */
