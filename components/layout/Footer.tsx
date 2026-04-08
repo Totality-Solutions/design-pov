@@ -110,9 +110,13 @@ const Footer = () => {
             style={{ paddingTop: "var(--footer-py-left)", paddingBottom: "var(--footer-py-left)" }}
           >
             <div className="flex flex-col gap-[30px] lg:gap-[47px]">
-              <h1 className="text-[28px] md:text-[36px] lg:text-[44px] font-black tracking-tighter text-white leading-none font-['Montserrat']">
-                DESIGN <span className="font-light">POV</span>
-              </h1>
+             <div className="w-full max-w-[200px] lg:max-w-[280px]">
+                <img 
+                  src="/DesignPOV.png" 
+                  alt="Design POV Logo" 
+                  className="w-full h-auto block"
+                />
+              </div>
               <div className="text-white font-['Montserrat'] text-[10px] lg:text-[12px] opacity-80 space-y-4 lg:space-y-6">
                 <p className="break-words leading-relaxed">
                   designpovindia.com<br/>
@@ -199,14 +203,14 @@ const MagneticFollowFlare = ({ index, mouseX, imageSrc, colWidth, baseFlareWidth
 const FooterTextColumn = ({ title, items, subText }: any) => (
   <div className="flex flex-col justify-between h-full px-4 lg:px-6" style={{ width: "var(--footer-col-width)" }}>
     <div className="flex flex-col gap-4 lg:gap-[24px]">
-      <h3 className="text-white text-[11px] lg:text-[14px] font-['Montserrat'] uppercase tracking-[0.15em] font-medium">{title}</h3>
+      <h3 className="text-white text-[11px] lg:text-[14px] font-['Montserrat'] tracking-[0.15em]">{title}</h3>
       <ul className="flex flex-col gap-3 lg:gap-5">
         {items.map((item: string) => (
-          <li key={item} className="text-white/60 text-[12px] lg:text-[14px] font-['Montserrat'] hover:text-white cursor-pointer transition-colors font-light whitespace-nowrap">{item}</li>
+          <li key={item} className="text-white text-[12px] lg:text-[14px] font-['Montserrat'] hover:text-white cursor-pointer transition-colors font-light whitespace-nowrap">{item}</li>
         ))}
       </ul>
     </div>
-    <p className="text-white/40 text-[10px] lg:text-[12px] font-['Montserrat'] uppercase cursor-pointer hover:text-white transition-colors tracking-wide leading-tight">{subText}</p>
+    <p className="text-white text-[10px] lg:text-[12px] font-['Montserrat'] uppercase cursor-pointer hover:text-white transition-colors tracking-wide leading-tight">{subText}</p>
   </div>
 );
 
