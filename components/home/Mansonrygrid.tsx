@@ -5,14 +5,14 @@ import { motion, MotionValue } from "framer-motion";
 import Image from "next/image";
 
 // ✅ Import images locally (inside this file only)
-import img1 from "@/public/temp/theme/11.png";
-import img2 from "@/public/temp/theme/2.png";
-import img3 from "@/public/temp/theme/3.png";
-import img4 from "@/public/temp/theme/4.png";
-import img5 from "@/public/temp/theme/5.png";
-import img6 from "@/public/temp/theme/6.png";
-import img7 from "@/public/temp/theme/7.png";
-import img8 from "@/public/temp/theme/12.png";
+import img1 from "@/public/temp/home/theme/WEBSITE_THEME BANNER_1.jpg.jpeg";
+import img2 from "@/public/temp/home/theme/WEBSITE_THEME BANNER_2.jpg.jpeg";
+import img3 from "@/public/temp/home/theme/WEBSITE_THEME BANNER_3.jpg.jpeg";
+import img4 from "@/public/temp/home/theme/WEBSITE_THEME BANNER_4.jpg.jpeg";
+// import img5 from "@/public/temp/theme/5.png";
+// import img6 from "@/public/temp/theme/6.png";
+// import img7 from "@/public/temp/theme/4.png";
+// import img8 from "@/public/temp/theme/12.png";
 
 // ✅ Flexible Cell (image | video | empty for color)
 function Cell({
@@ -62,7 +62,7 @@ const MasonryGrid = forwardRef<HTMLDivElement, MasonryGridProps>(
 
             {/* 01 IMAGE */}
             <div className="row-span-2">
-              <Cell type="image" src={img7} alt="Theme 1" />
+              <Cell type="image" src={img4} alt="Theme 1" />
             </div>
 
             {/* 02 BRAND COLOR (KEEP) */}

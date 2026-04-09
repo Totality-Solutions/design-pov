@@ -11,14 +11,28 @@ import {
 } from 'framer-motion'
 import { Container } from '../common/Container'
 import MarqueeFlow from '../common/MarqueeFlow'
-import Image from 'next/image'
+import Image, { StaticImageData } from 'next/image'
 import Link from 'next/link'
-import img1 from "@/public/temp/1.jpg"
-import img2 from "@/public/temp/2.jpg"
-import img3 from "@/public/temp/3.jpg"
-import img4 from "@/public/temp/4.jpeg"
-import img5 from "@/public/temp/5.jpg"
+import img1 from  "@/public/temp/home/section2/1.jpg"
+import img2 from  "@/public/temp/home/section2/2.jpg"
+import img3 from  "@/public/temp/home/section2/3.jpg"
+import img4 from  "@/public/temp/home/section2/4.jpg"
+import img5 from  "@/public/temp/home/section2/5.jpg"
+import img6 from  "@/public/temp/home/section2/6.jpg"
+import img7 from  "@/public/temp/home/section2/7.jpg"
+import img8 from  "@/public/temp/home/section2/8.jpg"
+import img9 from  "@/public/temp/home/section2/9.jpg"
+
+
+
 import Section from '../common/Section'
+
+interface ArrivalItem {
+  id: number;
+  img: string | StaticImageData;
+  title: string;
+  href: string;
+}
 
 // ─── Typewriter ─────────────────────────────────────────────
 function ScrollTypewriter({
@@ -118,14 +132,21 @@ const WhatPOV = () => {
   // FIX: Adjusted container height for better scroll behavior on mobile
   const containerHeight = isMobile ? '250vh' : '200vh'
 
-  const NEW_ARRIVALS = [
+const NEW_ARRIVALS: ArrivalItem[] = [
     { id: 1, img: img1, title: 'Simply Dummy', href: '#' },
-    { id: 2, img: img2, title: 'Simply Dummy', href: '#' },
+    { id: 10, img: '/temp/home/section2/1.mp4', title: 'Simply Dummy', href: '#' },
+    { id: 2, img: img2, title: 'Dynamic Video', href: '#' }, // Ensure this is in /public
+    { id: 11, img: '/temp/home/section2/2.mp4', title: 'Simply Dummy', href: '#' },
     { id: 3, img: img3, title: 'Simply Dummy', href: '#' },
+    { id: 12, img: '/temp/home/section2/3.mp4', title: 'Simply Dummy', href: '#' },
     { id: 4, img: img4, title: 'Simply Dummy', href: '#' },
+    { id: 13, img: '/temp/home/section2/4.mp4', title: 'Simply Dummy', href: '#' },
     { id: 5, img: img5, title: 'Simply Dummy', href: '#' },
-    { id: 6, img: img3, title: 'Simply Dummy', href: '#' },
-  ]
+    { id: 6, img: img6, title: 'Simply Dummy', href: '#' },
+    { id: 7, img: img7, title: 'Simply Dummy', href: '#' },
+    { id: 8, img: img8, title: 'Simply Dummy', href: '#' },
+    { id: 9, img: img9, title: 'Simply Dummy', href: '#' },
+  ];
 
   return (
     <div
@@ -232,53 +253,71 @@ const WhatPOV = () => {
               className="mt-8 w-full  h-[220px] sm:h-[260px] md:h-[320px] lg:h-[350px] flex items-end justify-center overflow-hidden"
             >
               <MarqueeFlow
-                items={NEW_ARRIVALS}
-                gap={5}
-                speed={200}
-                desktopCount={4}
-                renderItem={(item, _index, isExpanded) => (
-                  <Link
-                    href={item.href || '#'}
-                    className="relative block w-full overflow-hidden shadow-xl"
-                    style={{
-                      aspectRatio: isExpanded ? '6/5' : '10/5', // fixed base
-                      // transform: isExpanded ? 'scaleY(1.2)' : 'scaleY(1)',
-                      transition: "aspect-ratio 2000ms cubic-bezier(0.22, 1, 0.36, 1)",
-                      transformOrigin: 'bottom',
+                    items={NEW_ARRIVALS}
+                    gap={5}
+                    speed={200}
+                    desktopCount={4}
+                    renderItem={(item: ArrivalItem, _index, isExpanded) => {
+                      // Detect if media is a video string
+                      const isVideo = typeof item.img === 'string' && item.img.match(/\.(mp4|webm|ogg)$/i);
+
+                      return (
+                        <Link
+                          href={item.href || '#'}
+                          className="relative block w-full overflow-hidden shadow-xl"
+                          style={{
+                            aspectRatio: isExpanded ? '6/5' : '10/5',
+                            transition: "aspect-ratio 2000ms cubic-bezier(0.22, 1, 0.36, 1)",
+                            transformOrigin: 'bottom',
+                          }}
+                          onMouseEnter={(e: React.MouseEvent<HTMLAnchorElement>) => {
+                            const el = e.currentTarget;
+                            el.style.aspectRatio = '6/5';
+                            const media = el.querySelectorAll<HTMLElement>('img, video');
+                            media.forEach(m => m.style.transform = 'translate3d(0,0,0) scale(1.15)');
+                          }}
+                          onMouseLeave={(e: React.MouseEvent<HTMLAnchorElement>) => {
+                            const el = e.currentTarget;
+                            el.style.aspectRatio = isExpanded ? '6/5' : '10/5';
+                            const media = el.querySelectorAll<HTMLElement>('img, video');
+                            media.forEach(m => {
+                              m.style.transform = isExpanded ? 'translate3d(0,0,0) scale(1.15)' : 'translate3d(0,0,0) scale(1)';
+                            });
+                          }}
+                        >
+                          {isVideo ? (
+                            <video
+                              src={item.img as string}
+                              autoPlay
+                              loop
+                              muted
+                              playsInline
+                              className="absolute inset-0 w-full h-full object-cover will-change-transform"
+                              style={{
+                                transform: isExpanded ? 'translate3d(0,0,0) scale(1.15)' : 'translate3d(0,0,0) scale(1)',
+                                transition: 'transform 2000ms cubic-bezier(0.4, 0, 0.2, 1)',
+                                transformOrigin: 'bottom center',
+                              }}
+                            />
+                          ) : (
+                            <Image
+                              src={item.img}
+                              alt={item.title}
+                              fill
+                              className="object-cover will-change-transform"
+                              style={{
+                                transform: isExpanded ? 'translate3d(0,0,0) scale(1.15)' : 'translate3d(0,0,0) scale(1)',
+                                transition: 'transform 2000ms cubic-bezier(0.4, 0, 0.2, 1)',
+                                transformOrigin: 'bottom center',
+                                backfaceVisibility: 'hidden',
+                              }}
+                              sizes="(max-width: 768px) 50vw, 25vw"
+                            />
+                          )}
+                        </Link>
+                      );
                     }}
-                    onMouseEnter={(e) => {
-                      const el = e.currentTarget
-                      el.style.aspectRatio = '6/5'
-                      const img = el.querySelector('img')
-                      if (img) img.style.transform = 'translate3d(0,0,0) scale(1.15)'
-                    }}
-                    onMouseLeave={(e) => {
-                      const el = e.currentTarget
-                      el.style.aspectRatio = isExpanded ? '6/5' : '10/5'
-                      const img = el.querySelector('img')
-                      if (img) img.style.transform = isExpanded
-                        ? 'translate3d(0,0,0) scale(1.15)'
-                        : 'translate3d(0,0,0) scale(1)'
-                    }}
-                  >
-                    <Image
-                      src={item.img}
-                      alt={item.title || 'New Arrival'}
-                      fill
-                      className="object-cover will-change-transform"
-                      style={{
-                        transform: isExpanded
-                          ? 'translate3d(0,0,0) scale(1.15)'
-                          : 'translate3d(0, 0, 0) scale(1)',
-                        backfaceVisibility: 'hidden',
-                        transition: 'transform 2000ms cubic-bezier(0.4, 0, 0.2, 1)',
-                        transformOrigin: 'bottom center',
-                      }}
-                      sizes="(max-width: 400px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 25vw"
-                    />
-                  </Link>
-                )}
-              />
+                  />
             </motion.div>
 
           </div>

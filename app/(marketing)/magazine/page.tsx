@@ -2,6 +2,10 @@ import type { Metadata } from "next";
 import ApplyFunnels from "@/components/apply/ApplyFunnels";
 import MagazineHero from "@/components/magazine/MagazineHero";
 import MagazineNav from "@/components/magazine/MagazineNav";
+import PressSection from "@/components/magazine/PressSection";
+import AprilIssueSection from "@/components/magazine/AprilIssueSection";
+import InterviewsSection from "@/components/magazine/InterviewSection";
+import FeaturedBlogSection from "@/components/magazine/FeaturedBlogSection";
 
 export const metadata: Metadata = {
   title: "Magazine",
@@ -14,6 +18,10 @@ export default function MagazinePage() {
     <main>
       <MagazineHero />
       <MagazineNav />
+      <PressSection />'
+      <AprilIssueSection />
+      <FeaturedBlogSection />
+      <InterviewsSection />
     </main>
   );
 }

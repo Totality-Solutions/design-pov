@@ -4,7 +4,7 @@ import React, { ReactNode } from "react";
 
 interface SectionHeadingProps {
   titleMain: string;
-  titleBold: string;
+  titleBold?: string;
   subTitle?: string;
   children?: ReactNode;
   isSectionHovered?: boolean;
