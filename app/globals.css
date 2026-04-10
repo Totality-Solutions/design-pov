@@ -3,30 +3,96 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ─── FONTS ──────────────────────────────────────────────── */
-
 /* ─── CSS VARIABLES ──────────────────────────────────────── */
 :root {
-  --font-display: 'Montserrat';
-  --font-body: 'Montserrat';
-  --font-mono: 'Montserrat';
+  /* Consolidated Font Variable */
+  --font-main: 'Montserrat', sans-serif;
 
+  /* Original Color Variables */
   --primary-blue: #0000B3;
   --primary-red: #E02914;
   --color-black: #0A0A0A;
   --color-white: #fff;
 
+  /* Original Transition Variables */
   --transition-default: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   --transition-slow: 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  
+  /* LETTER SPACING */
+  --tracking-h1: -0.5px;
+  --tracking-h2: -0.3px;
+  --tracking-cta: 0.5px;
 
-  --font-size-base: 16px;
-  --font-size-sm: 14px;
-  --font-size-lg: 18px;
-  --font-size-xl: 20px;
-  --font-size-2xl: 24px;
+  /* =========================
+      DESKTOP SIZES (Min-width: 1024px)
+  ========================= */
+  --text-hero: 95px;
+  --text-h1: 56px;
+  --text-h2: 40px;
+  --text-h3: 28px;
+  --text-body: 18px;
+  --text-small: 14px;
 
+  /* =========================
+      TABLET SIZES (Min-width: 768px)
+  ========================= */
+  --tab-text-hero: 64px;
+  --tab-text-h1: 42px;
+  --tab-text-h2: 32px;
+  --tab-text-h3: 22px;
+  --tab-text-body: 16px;
+  --tab-text-small: 12px;
+
+  /* =========================
+      MOBILE SIZES
+  ========================= */
+  --mobile-text-hero: 42px;
+  --mobile-text-h1: 30px;
+  --mobile-text-h2: 24px;
+  --mobile-text-h3: 18px;
+  --mobile-text-body: 15px;
+  --mobile-text-small: 10px;
 }
 
+@theme inline {
+  /* Font */
+  --font-sans: var(--font-main);
+
+  /* Original Colors mapped to Theme */
+  --color-primary-blue: var(--primary-blue);
+  --color-primary-red: var(--primary-red);
+  --color-black: var(--color-black);
+  --color-white: var(--color-white);
+
+  /* Desktop Mappings */
+  --text-hero: var(--text-hero);
+  --text-h1: var(--text-h1);
+  --text-h2: var(--text-h2);
+  --text-h3: var(--text-h3);
+  --text-body: var(--text-body);
+  --text-small: var(--text-small);
+
+  /* Tablet Mappings */
+  --text-hero-tab: var(--tab-text-hero);
+  --text-h1-tab: var(--tab-text-h1);
+  --text-h2-tab: var(--tab-text-h2);
+  --text-h3-tab: var(--tab-text-h3);
+  --text-body-tab: var(--tab-text-body);
+  --text-small-tab: var(--tab-text-small);
+
+  /* Mobile Mappings */
+  --text-hero-mobile: var(--mobile-text-hero);
+  --text-h1-mobile: var(--mobile-text-h1);
+  --text-h2-mobile: var(--mobile-text-h2);
+  --text-h3-mobile: var(--mobile-text-h3);
+  --text-body-mobile: var(--mobile-text-body);
+  --text-small-mobile: var(--mobile-text-small);
+
+  /* Letter Spacing */
+  --tracking-h1: var(--tracking-h1);
+  --tracking-h2: var(--tracking-h2);
+  --tracking-cta: var(--tracking-cta);
+}
 
 
 /* ─── BASE ───────────────────────────────────────────────── */
@@ -50,13 +116,6 @@ body {
   letter-spacing: 0.01em;
 }
 
-@theme inline {
- --text-xl: var(--font-size-xl);
- --text-sm: var(--font-size-sm);
- 
-
- --text-color-black: var(--color-black);
-}
 
 /* ─── SELECTION ──────────────────────────────────────────── */
 ::selection {

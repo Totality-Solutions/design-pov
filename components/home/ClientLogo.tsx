@@ -28,7 +28,7 @@ const ClientLogo = () => {
         isSectionHovered={isHovered} 
       >
       </SectionHeading>
-      <div className="marquee-track ">
+      <div className="marquee-track">
         {[...Client, ...Client].map((logo, i) => (
           <img
             key={i}
