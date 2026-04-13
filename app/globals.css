@@ -6,7 +6,9 @@
 /* ─── CSS VARIABLES ──────────────────────────────────────── */
 :root {
   /* Consolidated Font Variable */
-  --font-main: 'Montserrat', sans-serif;
+  --font-display: 'Montserrat';
+  --font-body: 'Montserrat';
+  --font-mono: 'Montserrat';
 
   /* Original Color Variables */
   --primary-blue: #0000B3;
@@ -56,7 +58,9 @@
 
 @theme inline {
   /* Font */
-  --font-sans: var(--font-main);
+  --font-body: var(--font-body);
+  --font-mono: var(--font-mono);
+  --font-display: var(--font-display);
 
   /* Original Colors mapped to Theme */
   --color-primary-blue: var(--primary-blue);

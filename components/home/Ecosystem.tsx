@@ -4,12 +4,17 @@ import React, { useState, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Section from '../common/Section'
 import { Container } from '../common/Container'
-import bgImage from '@/public/temp/ecosystem.png'
 import CTABtn from '../common/CTABtn'
 import Title from '../common/Title'
 import { FiMinus } from 'react-icons/fi'
 import SectionHeading from '../common/SectionHeading'
 import CTAStrip from '../common/CTAStrip'
+
+import bgImage1 from '@/public/temp/home/ecosystem/N1.jpg'
+import bgImage2 from '@/public/temp/home/ecosystem/N-2.jpg'
+import bgImage3 from '@/public/temp/home/ecosystem/N-3.jpg'
+import bgImage4 from '@/public/temp/home/ecosystem/N-2.jpg'
+import bgImage5 from '@/public/temp/home/ecosystem/N1.jpg'
 
 interface EcosystemItem {
   id: string
@@ -28,7 +33,7 @@ const ECOSYSTEM: EcosystemItem[] = [
     id: 'core',
     label: 'CORE',
     tag: 'THE FOUNDATION TRACK',
-    bgImage: bgImage.src,
+    bgImage: bgImage1.src,
     title: 'CORE',
     description:
       'The backbone of Design POV India...',
@@ -42,7 +47,7 @@ const ECOSYSTEM: EcosystemItem[] = [
     id: 'elevate',
     label: 'ELEVATE',
     tag: 'THE MENTORSHIP TRACK',
-    bgImage: bgImage.src,
+    bgImage: bgImage2.src,
     title: 'ELEVATE',
     description:
       '12 emerging designers paired...',
@@ -56,7 +61,7 @@ const ECOSYSTEM: EcosystemItem[] = [
     id: 'edit',
     label: 'EDIT',
     tag: 'THE PUBLICATION TRACK',
-    bgImage: bgImage.src,
+    bgImage: bgImage3.src,
     title: 'EDIT',
     description:
       'A bi-annual publication...',
@@ -70,7 +75,7 @@ const ECOSYSTEM: EcosystemItem[] = [
     id: 'circle',
     label: 'CIRCLE',
     tag: 'THE COMMUNITY TRACK',
-    bgImage: bgImage.src,
+    bgImage: bgImage4.src,
     title: 'CIRCLE',
     description:
       'An intimate membership...',
@@ -84,7 +89,7 @@ const ECOSYSTEM: EcosystemItem[] = [
     id: 'journal',
     label: 'JOURNAL',
     tag: 'THE ARCHIVE TRACK',
-    bgImage: bgImage.src,
+    bgImage: bgImage5.src,
     title: 'JOURNAL',
     description:
       'A living digital archive...',
@@ -109,7 +114,7 @@ const EcosystemSection = () => {
       onMouseLeave={() => setIsHovered(false)}
     >
         <SectionHeading
-          titleMain="Five Pathways" 
+          titleMain="Five_Pathways_" 
           titleBold="Ecosystem" 
           sticky={false}
           isSectionHovered={isHovered} 
@@ -148,7 +153,7 @@ const EcosystemSection = () => {
                     index < ECOSYSTEM.length - 1
                       ? '2px solid #ffffff35'
                       : 'none',
-                  minHeight: '520px',
+                  minHeight: '480px',
                   background: '#0d0d0d',
                 }}
               >
@@ -158,13 +163,14 @@ const EcosystemSection = () => {
                 <motion.img
                   src={item.bgImage}
                   alt={item.title}
-                  animate={{ opacity: isHovered ? 0.18 : 0 }}
+                  animate={{ opacity: isHovered ? 0.30 : 0 }}
                   transition={{ duration: 0.4 }}
                   style={{
                     position: 'absolute',
                     inset: 0,
                     backgroundColor: 'var(--primary-blue)',
                     pointerEvents: 'none',
+                    objectFit: 'cover',
                   }}
                 />
 
