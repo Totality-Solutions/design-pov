@@ -38,7 +38,7 @@ export default function SectionHeading({
     <div
       className={`
         w-full flex flex-col md:flex-row items-start md:items-center justify-between border-b
-        px-6 md:px-[60px] py-6 z-40 transition-colors duration-300 
+        px-6 md:px-[40px] py-6 z-40 transition-colors duration-300 
         ${sticky ? `sticky ${stickyTop}` : "relative"}
         ${bgColor}
         ${className}

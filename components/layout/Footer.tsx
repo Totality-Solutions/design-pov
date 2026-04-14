@@ -88,7 +88,7 @@ const Footer = () => {
         </div>
 
         {/* LAYER 2: CONTENT */}
-        <div className="relative z-20 w-full h-full flex flex-row justify-between px-6 md:px-10 lg:px-[64px] items-center mix-blend-difference pointer-events-none">
+        <div className="relative z-20 w-full h-full flex flex-row justify-between px-6 md:px-10 lg:px-14 items-center mix-blend-difference pointer-events-none">
           {/* Left Section */}
           <div className="flex flex-col justify-between h-full py-10 lg:py-[70px] w-full max-w-[240px] lg:max-w-[302px]">
             <div className="flex flex-col gap-[30px] lg:gap-[47px]">
