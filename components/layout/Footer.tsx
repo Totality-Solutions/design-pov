@@ -19,7 +19,6 @@ const Footer = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [elementWidth, setElementWidth] = useState(1600);
   
-  // States to sync CSS numbers for Framer Motion math
   const [currentColWidth, setCurrentColWidth] = useState(260);
   const [baseFlareWidth, setBaseFlareWidth] = useState(1017);
 
@@ -76,10 +75,10 @@ const Footer = () => {
           className="absolute inset-0 z-10 flex flex-row justify-end items-center pointer-events-none overflow-hidden"
           style={{ 
             paddingLeft: "var(--footer-px)", 
-            paddingRight: "var(--footer-px)" 
+            paddingRight: "0px" // Removed padding to let flares hit the edge
           }}
         >
-          <div className="flex h-full" style={{ paddingRight: "var(--footer-pr-links)", gap: "var(--footer-gap-links)" }}>
+          <div className="flex h-full" style={{ paddingRight: "0px", gap: "var(--footer-gap-links)" }}>
             {[0, 1, 2, 3].map((i) => {
               const img = i < 2 ? navLinks.Partners.img : i === 2 ? navLinks.AboutUs.img : navLinks.Originals.img;
               return (
@@ -102,7 +101,7 @@ const Footer = () => {
         {/* LAYER 2: CONTENT */}
         <div 
           className="relative z-20 w-full h-full flex flex-row justify-between items-center mix-blend-difference pointer-events-none"
-          style={{ paddingLeft: "var(--footer-px)", paddingRight: "var(--footer-px)" }}
+          style={{ paddingLeft: "var(--footer-px)", paddingRight: "0px" }} // Right padding removed
         >
           {/* Left Section */}
           <div 
@@ -138,7 +137,7 @@ const Footer = () => {
             style={{ 
               paddingTop: "var(--footer-py-right)", 
               paddingBottom: "var(--footer-py-right)",
-              paddingRight: "var(--footer-pr-links)",
+              paddingRight: "0px", // Flushed to the end
               gap: "var(--footer-gap-links)" 
             }}
           >
@@ -156,21 +155,27 @@ const Footer = () => {
 
 const MagneticFollowFlare = ({ index, mouseX, imageSrc, colWidth, baseFlareWidth, isPastHalfway, parentWidth }: any) => {
   const responsiveScale = Math.min(parentWidth / 1600, 1); 
-  const sizeReductionFactor = Math.pow(0.85, index);
+  const sizeReductionFactor = Math.pow(1, index);
   const finalWidth = baseFlareWidth * responsiveScale * sizeReductionFactor;
   
   const baseCenter = (colWidth / 2) - (finalWidth / 2);
+  
+  const darkOffsets = [120, 80, 40, 0];
+  const lightOffsets = [0, -40, -80, -120];
+  const offsets = isPastHalfway ? darkOffsets : lightOffsets; 
+  const startingOffset = (offsets[index] || 0) * responsiveScale;
+
   const movementRange = 100 * responsiveScale * sizeReductionFactor;
 
   const rawX = useTransform(
     mouseX,
     [0, parentWidth * 0.4, parentWidth * 0.5, parentWidth * 0.6, parentWidth],
     [
-      baseCenter - movementRange, 
-      baseCenter - movementRange, 
-      baseCenter, 
-      baseCenter + movementRange, 
-      baseCenter + movementRange
+      baseCenter + startingOffset - movementRange,
+      baseCenter + startingOffset - movementRange, 
+      baseCenter + startingOffset,                 
+      baseCenter + startingOffset + movementRange, 
+      baseCenter + startingOffset + movementRange
     ]
   );
 

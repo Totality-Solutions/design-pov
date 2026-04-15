@@ -980,7 +980,7 @@ a {
   --base-flare-width: 1017px;
   
   /* Paddings & Spacings */
-  --footer-px: 64px;       /* Horizontal padding for the container */
+  --footer-px: 56px;       /* Horizontal padding for the container */
   --footer-pr-links: 80px; /* The lg:pr-20 you mentioned */
   --footer-py-left: 70px;  /* Vertical padding for left side */
   --footer-py-right: 84px; /* Vertical padding for right side links */

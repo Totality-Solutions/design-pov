@@ -1,60 +1,15 @@
-
 "use client";
 
 import { useEffect, useRef, useState } from "react";
 import React from "react";
 import Image from "next/image";
+import Link from "next/link"; // Added Link import
 import Logo from "@/public/logo/Logo.svg";
 import CTABtn from "../common/CTABtn";
 import { Container } from "../common/Container";
 
-// --- Types ---
-type SubLink = { label: string; href: string };
-type SubmenuContent = {
-  video: string;
-  col1Title: string;
-  col1Links: SubLink[];
-  col2Title: string;
-  col2Links: SubLink[];
-};
-
-const NAV_DATA: Record<string, SubmenuContent> = {
-  About: {
-    video: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_30MB.mp4",
-    col1Title: "Company",
-    col1Links: [{ label: "Our Story", href: "#" }, { label: "Mission", href: "#" }, { label: "Team", href: "#" }],
-    col2Title: "Impact",
-    col2Links: [{ label: "Sustainability", href: "#" }, { label: "Community", href: "#" }, { label: "Report", href: "#" }],
-  },
-  "26 Edition": {
-    video: "/video1.mp4",
-    col1Title: "Theme",
-    col1Links: [{ label: "Theme", href: "#" }, { label: "Brands", href: "#" }, { label: "Core", href: "#" }],
-    col2Title: "Details",
-    col2Links: [{ label: "Schedule", href: "#" }, { label: "Art", href: "#" }, { label: "Speakers", href: "#" }],
-  },
-  Collaborate: {
-    video: "/video2.mp4",
-    col1Title: "Partnerships",
-    col1Links: [{ label: "Brands", href: "#" }, { label: "Agencies", href: "#" }, { label: "Creators", href: "#" }],
-    col2Title: "Opportunities",
-    col2Links: [{ label: "Sponsorship", href: "#" }, { label: "Exhibit", href: "#" }, { label: "Press Kit", href: "#" }],
-  },
-  Magazine: {
-    video: "/video3.mp4",
-    col1Title: "Content",
-    col1Links: [{ label: "Latest Issue", href: "#" }, { label: "Interviews", href: "#" }, { label: "Archive", href: "#" }],
-    col2Title: "Contribute",
-    col2Links: [{ label: "Submissions", href: "#" }, { label: "Guidelines", href: "#" }, { label: "Work With Us", href: "#" }],
-  },
-  Ecosystem: {
-    video: "/video4.mp4",
-    col1Title: "Network",
-    col1Links: [{ label: "Design Hub", href: "#" }, { label: "Blogs", href: "#" }, { label: "Directory", href: "#" }],
-    col2Title: "Resources",
-    col2Links: [{ label: "Tools", href: "#" }, { label: "Case Studies", href: "#" }, { label: "Forum", href: "#" }],
-  },
-};
+// Import modularized data
+import { NAV_DATA, NAV_LABELS } from "@/app/constants/navigation";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -72,7 +27,7 @@ export default function Navbar() {
     checkScreenSize();
     window.addEventListener("resize", checkScreenSize);
     
-    const onScroll = () => setScrolled(window.scrollY > 50);
+    const onScroll = () => setScrolled(window.scrollY > 450);
     window.addEventListener("scroll", onScroll, { passive: true });
     
     return () => {
@@ -91,10 +46,19 @@ export default function Navbar() {
       {/* 1. INITIAL HERO AREA (Desktop) */}
       <div ref={heroRef} className="hero !h-[450px] hidden lg:flex flex-col bg-white">
         <div className="row1 flex justify-between items-center px-10 py-5">
-          <Image src={Logo} alt="Design POV" width={250} height={40} style={{ objectFit: "contain" }} />
+          {/* Logo with Link to Home */}
+          <Link href="/" className="cursor-pointer">
+            <Image src={Logo} alt="Design POV" width={250} height={40} style={{ objectFit: "contain" }} />
+          </Link>
+          
           <div className="row1Links flex gap-6">
-            {Object.keys(NAV_DATA).map((label) => (
-              <a key={label} href="#" className="topLink text-black font-medium" onMouseEnter={() => setActiveMenu(label)}>
+            {NAV_LABELS.map((label) => (
+              <a 
+                key={label} 
+                href={NAV_DATA[label].mainHref} 
+                className="topLink text-black font-medium" 
+                onMouseEnter={() => setActiveMenu(label)}
+              >
                 {label}
               </a>
             ))}
@@ -132,7 +96,7 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* 2. STICKY NAVBAR - FIXED BUTTON VISIBILITY */}
+      {/* 2. STICKY NAVBAR */}
       <header
         className={`fixed top-0 inset-x-0 transition-all duration-300 ease-in-out z-[1600] ${
           scrolled || mobileOpen 
@@ -143,29 +107,36 @@ export default function Navbar() {
         <Container>
           <div className="flex justify-between items-center px-5 py-4 lg:py-5 lg:px-14">
             <div className="stickyLeft">
-              <Image 
-                src={Logo} 
-                alt="Logo" 
-                width={150} 
-                height={30} 
-                className={`object-contain transition-all duration-300 ${scrolled || mobileOpen ? "invert" : "invert-0"}`} 
-              />
+              {/* Logo with Link to Home for Sticky Nav */}
+              <Link href="/" className="cursor-pointer">
+                <Image 
+                  src={Logo} 
+                  alt="Logo" 
+                  width={150} 
+                  height={30} 
+                  className={`object-contain transition-all duration-300 ${scrolled || mobileOpen ? "invert" : "invert-0"}`} 
+                />
+              </Link>
             </div>
             
             <div className="hidden lg:flex gap-8 items-center">
-              {Object.keys(NAV_DATA).map((label) => (
-                <a key={label} href="#" onMouseEnter={() => setActiveMenu(label)} className="text-sm hover:text-blue-400 transition-colors">
+              {NAV_LABELS.map((label) => (
+                <a 
+                  key={label} 
+                  href={NAV_DATA[label].mainHref} 
+                  onMouseEnter={() => setActiveMenu(label)} 
+                  className="text-[16px] hover:text-blue-400 transition-colors"
+                >
                   {label}
                 </a>
               ))}
               
-              {/* FIXED: Using explicit colors instead of CSS variables for reliability */}
               <CTABtn
                 label="Buy Tickets"
                 iconType="arrow"
-                btnBg={scrolled ? "black" : "black"} 
+                btnBg="black" 
                 btnHoverBg="#0000B3" 
-                textColor={scrolled ? "white" : "white"}
+                textColor="white"
                 borderColor={scrolled ? "white" : "black"}
                 borderHoverColor="#0000B3"
                 lineColor={scrolled ? "black" : "white"}
@@ -178,7 +149,6 @@ export default function Navbar() {
               />
             </div>
 
-            {/* HAMBURGER TRIGGER */}
             <button 
               className="lg:hidden p-2 flex items-center justify-center relative w-10 h-10 z-[1601]"
               onClick={() => setMobileOpen(!mobileOpen)}
@@ -245,7 +215,7 @@ export default function Navbar() {
       }`}>
         <div className="pt-24 h-full flex flex-col">
           <div className="flex-1 overflow-y-auto border-t border-gray-100">
-            {Object.keys(NAV_DATA).map((label) => (
+            {NAV_LABELS.map((label) => (
               <div key={label} className="border-b border-gray-100">
                 <button 
                   className="w-full flex justify-between items-center px-8 py-6 text-gray-400 text-lg font-light transition-colors"
@@ -281,7 +251,7 @@ export default function Navbar() {
           <div className="p-12 flex justify-center items-center bg-white border-t border-gray-50">
             <a href="#tickets" className="bg-[#0000CC] text-white px-10 py-3 flex items-center gap-4 rounded-sm shadow-lg active:scale-95 transition-transform">
               <span className="text-xs opacity-60">—</span>
-              <span className="text-[15px] font-medium tracking-wide">Default</span>
+              <span className="text-[15px] font-medium tracking-wide">Buy Tickets</span>
             </a>
           </div>
         </div>
