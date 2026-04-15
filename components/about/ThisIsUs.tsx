@@ -29,7 +29,7 @@ const ThisIsUs: React.FC = () => {
   const textContent = `Design today exists in limbo. Business reduces it to a price tag while museums place it just beyond reach. Design POV fills the gap in between. Here, design thrives and shifts under perspective. The idea is to encourage visitors to play an active role in each encounter, through immersive displays that acquaint the creator and their story with the consumer. Business reduces it to a price tag while museums place.`;
 
   return (
-    <section className="w-full bg-white min-h-screen flex flex-col font-['Montserrat',sans-serif] border-t border-[#DFDFDF] overflow-hidden"
+    <section className="w-full bg-white min-h-screen flex flex-col font-display border-t border-[#DFDFDF] overflow-hidden"
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
     >

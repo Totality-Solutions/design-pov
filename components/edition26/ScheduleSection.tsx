@@ -55,7 +55,7 @@ const ScheduleSection = () => {
 
   return (
     <section 
-      className="w-full bg-black pb-10 flex flex-col font-['Montserrat',sans-serif]"
+      className="w-full bg-black pb-10 flex flex-col font-display"
       onMouseEnter={() => {
         setIsAutoPlaying(false);
         setIsHovered(true);

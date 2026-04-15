@@ -66,7 +66,7 @@ const PartnersSection: React.FC = () => {
       const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <section className="w-full bg-white flex flex-col font-['Montserrat',sans-serif]"
+    <section className="w-full bg-white flex flex-col font-display"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >

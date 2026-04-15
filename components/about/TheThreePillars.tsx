@@ -70,7 +70,7 @@ const TheThreePillars: React.FC = () => {
 
   return (
     <section 
-      className="w-full bg-white flex flex-col font-['Montserrat',sans-serif]"
+      className="w-full bg-white flex flex-col font-display"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >

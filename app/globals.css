@@ -6,9 +6,7 @@
 /* ─── CSS VARIABLES ──────────────────────────────────────── */
 :root {
   /* Consolidated Font Variable */
-  --font-display: 'Montserrat';
-  --font-body: 'Montserrat';
-  --font-mono: 'Montserrat';
+  --font-family: 'Montserrat';
 
   /* Original Color Variables */
   --primary-blue: #0000B3;
@@ -58,9 +56,7 @@
 
 @theme inline {
   /* Font */
-  --font-body: var(--font-body);
-  --font-mono: var(--font-mono);
-  --font-display: var(--font-display);
+  --font-family: var(--font-family);
 
   /* Original Colors mapped to Theme */
   --color-primary-blue: var(--primary-blue);
@@ -108,14 +104,14 @@
 
 html {
   scroll-behavior: smooth;
-  -webkit-font-smoothing: var(--font-display);
+  -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 body {
   background-color: var(--color-white);
   color: var(--color-black);
-  font-family: var(--font-body);
+  font-family: var(--font-family);
   font-weight: 300;
   letter-spacing: 0.01em;
 }
