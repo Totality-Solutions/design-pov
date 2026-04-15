@@ -5,12 +5,29 @@ import Section from "../common/Section";
 import { Container } from "../common/Container";
 import Title from "../common/Title";
 import Image from "next/image";
+import SectionHeading from "../common/SectionHeading";
+import BlogImg1 from "@/public/temp/home/blogs/blog-1.jpg"
+import BlogImg2 from "@/public/temp/home/blogs/blog-2.jpg"
+import BlogImg3 from "@/public/temp/home/blogs/blog-3.jpg"
+import BlogImg4 from "@/public/temp/home/blogs/blog-4.jpg"
+import BlogImg5 from "@/public/temp/home/blogs/blog-5.jpg"
+import BlogImg6 from "@/public/temp/home/blogs/blog-6.jpg"
+import BlogImg7 from "@/public/temp/home/blogs/blog-7.webp"
+import BlogImg8 from "@/public/temp/home/blogs/blog-8.webp"
+import BlogImg9 from "@/public/temp/home/blogs/blog-9.jpg"
+import BlogImg10 from "@/public/temp/home/blogs/blog-10.jpg"
+import BlogImg11 from "@/public/temp/home/blogs/blog-11.jpg"
+import BlogImg12 from "@/public/temp/home/blogs/blog-12.webp"
+import BlogImg13 from "@/public/temp/home/blogs/blog-13.jpg"
+import BlogImg14 from "@/public/temp/home/blogs/blog-14.jpg"
+import BlogImg15 from "@/public/temp/home/blogs/blog-15.jpg"
+import BlogImg16 from "@/public/temp/home/blogs/blog-16.jpg"
 
 const slides = [
   {
     id: 1,
-    thumbnail: "https://images.unsplash.com/photo-1614732414444-096e5f1122d5?w=200&q=80",
-    main: "https://images.unsplash.com/photo-1614732414444-096e5f1122d5?w=900&q=90",
+    thumbnail: BlogImg1 ,
+    main: BlogImg1,
     title: "NEBULA DRIFT",
     subtitle: "Vol. 01 — Cosmos Series",
     description:
@@ -18,8 +35,8 @@ const slides = [
   },
   {
     id: 2,
-    thumbnail: "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=200&q=80",
-    main: "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=900&q=90",
+    thumbnail: BlogImg2,
+    main: BlogImg2,
     title: "VOID SIGNAL",
     subtitle: "Vol. 02 — Deep Space",
     description:
@@ -27,8 +44,8 @@ const slides = [
   },
   {
     id: 3,
-    thumbnail: "https://images.unsplash.com/photo-1545156521-77bd85671d30?w=200&q=80",
-    main: "https://images.unsplash.com/photo-1545156521-77bd85671d30?w=900&q=90",
+    thumbnail: BlogImg3,
+    main: BlogImg3,
     title: "CHROMATIC BURST",
     subtitle: "Vol. 03 — Light Study",
     description:
@@ -36,8 +53,8 @@ const slides = [
   },
   {
     id: 4,
-    thumbnail: "https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?w=200&q=80",
-    main: "https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?w=900&q=90",
+    thumbnail: BlogImg4,
+    main: BlogImg4,
     title: "AURORA PHASE",
     subtitle: "Vol. 04 — Atmosphere",
     description:
@@ -45,8 +62,8 @@ const slides = [
   },
   {
     id: 5,
-    thumbnail: "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=200&q=80",
-    main: "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=900&q=90",
+    thumbnail: BlogImg5,
+    main: BlogImg5,
     title: "STELLAR MASS",
     subtitle: "Vol. 05 — Star Formation",
     description:
@@ -54,8 +71,8 @@ const slides = [
   },
   {
     id: 6,
-    thumbnail: "https://images.unsplash.com/photo-1540198163009-7afda7da2945?w=200&q=80",
-    main: "https://images.unsplash.com/photo-1540198163009-7afda7da2945?w=900&q=90",
+    thumbnail: BlogImg6,
+    main: BlogImg6,
     title: "DARK MATTER",
     subtitle: "Vol. 06 — The Unseen",
     description:
@@ -63,8 +80,8 @@ const slides = [
   },
   {
     id: 7,
-    thumbnail: "https://images.unsplash.com/photo-1502134249126-9f3755a50d78?w=200&q=80",
-    main: "https://images.unsplash.com/photo-1502134249126-9f3755a50d78?w=900&q=90",
+    thumbnail: BlogImg7,
+    main: BlogImg7,
     title: "EVENT HORIZON",
     subtitle: "Vol. 07 — Singularity",
     description:
@@ -72,8 +89,8 @@ const slides = [
   },
   {
     id: 8,
-    thumbnail: "https://images.unsplash.com/photo-1545156521-77bd85671d30?w=200&q=80",
-    main: "https://images.unsplash.com/photo-1545156521-77bd85671d30?w=900&q=90",
+    thumbnail: BlogImg8,
+    main: BlogImg8,
     title: "CHROMATIC BURST",
     subtitle: "Vol. 03 — Light Study",
     description:
@@ -81,8 +98,8 @@ const slides = [
   },
   {
     id: 9,
-    thumbnail: "https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?w=200&q=80",
-    main: "https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?w=900&q=90",
+    thumbnail: BlogImg9,
+    main: BlogImg9,
     title: "AURORA PHASE",
     subtitle: "Vol. 04 — Atmosphere",
     description:
@@ -90,8 +107,8 @@ const slides = [
   },
   {
     id: 10,
-    thumbnail: "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=200&q=80",
-    main: "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=900&q=90",
+    thumbnail: BlogImg10,
+    main: BlogImg10,
     title: "STELLAR MASS",
     subtitle: "Vol. 05 — Star Formation",
     description:
@@ -99,8 +116,8 @@ const slides = [
   },
   {
     id: 11,
-    thumbnail: "https://images.unsplash.com/photo-1540198163009-7afda7da2945?w=200&q=80",
-    main: "https://images.unsplash.com/photo-1540198163009-7afda7da2945?w=900&q=90",
+    thumbnail: BlogImg11,
+    main: BlogImg11,
     title: "DARK MATTER",
     subtitle: "Vol. 06 — The Unseen",
     description:
@@ -108,8 +125,44 @@ const slides = [
   },
   {
     id: 12,
-    thumbnail: "https://images.unsplash.com/photo-1502134249126-9f3755a50d78?w=200&q=80",
-    main: "https://images.unsplash.com/photo-1502134249126-9f3755a50d78?w=900&q=90",
+    thumbnail: BlogImg12,
+    main: BlogImg12,
+    title: "EVENT HORIZON",
+    subtitle: "Vol. 07 — Singularity",
+    description:
+      "The boundary beyond which nothing returns. At the edge of a black hole, time itself becomes geography.",
+  },
+  {
+    id: 13,
+    thumbnail: BlogImg13,
+    main: BlogImg13,
+    title: "EVENT HORIZON",
+    subtitle: "Vol. 07 — Singularity",
+    description:
+      "The boundary beyond which nothing returns. At the edge of a black hole, time itself becomes geography.",
+  },
+  {
+    id: 14,
+    thumbnail: BlogImg14,
+    main: BlogImg14,
+    title: "EVENT HORIZON",
+    subtitle: "Vol. 07 — Singularity",
+    description:
+      "The boundary beyond which nothing returns. At the edge of a black hole, time itself becomes geography.",
+  },
+  {
+    id: 15,
+    thumbnail: BlogImg15,
+    main: BlogImg15,
+    title: "EVENT HORIZON",
+    subtitle: "Vol. 07 — Singularity",
+    description:
+      "The boundary beyond which nothing returns. At the edge of a black hole, time itself becomes geography.",
+  },
+  {
+    id: 16,
+    thumbnail: BlogImg16,
+    main: BlogImg16,
     title: "EVENT HORIZON",
     subtitle: "Vol. 07 — Singularity",
     description:
@@ -126,6 +179,7 @@ export default function MarqueeCarousel() {
   const [direction, setDirection] = useState<"up" | "down">("down");
   const carouselRef = useRef<HTMLDivElement>(null);
   const autoRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [isHovered, setIsHovered] = useState(false);
 
   const goTo = useCallback(
     (index: number, dir?: "up" | "down") => {
@@ -213,24 +267,35 @@ export default function MarqueeCarousel() {
   const current = slides[activeIndex];
 
   return (
-    <Container className="border-y border-gray-300 ">
-      <Section>
+    <Container className="border-y border-gray-300"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+     >
+     <SectionHeading
+       titleMain="Featured_" 
+       titleBold="Story" 
+       sticky={false}
+       isSectionHovered={isHovered} 
+       className=' !border-t-0'
+     >
+     </SectionHeading>
+      <Section className="!py-0 ">
         <div className="mc-root">
           <div className="mc-wrap ">
 
             {/* ── LEFT ── */}
-            <div className="w-full h-full flex flex-col items-start justify-start gap-10">
-              <Title normalText="Featured" boldText="Story" />
+            <div className="w-full h-full flex flex-col items-start justify-center gap-10">
+              {/* <Title normalText="Featured" boldText="Story" /> */}
               <div className="hero-frame">
 
                 {prevIndex !== null && (
-                  <img
+                  <Image
                     className={`hero-img z1 ${direction === "down" ? "exit-down" : "exit-up"}`}
                     src={slides[prevIndex].main}
                     alt=""
                   />
                 )}
-                <img
+                <Image
                   key={imgKey}
                   className={`hero-img z2 ${direction === "down" ? "enter-down" : "enter-up"}`}
                   src={current.main}
@@ -248,7 +313,7 @@ export default function MarqueeCarousel() {
                   className={`thumb-item${i === activeIndex ? " active" : ""}`}
                   onClick={() => goTo(i)}
                 >
-                  <img src={s.thumbnail} alt={s.title} loading="lazy" />
+                  <Image src={s.thumbnail} alt={s.title} loading="lazy" />
                 </div>
               ))}
             </div>

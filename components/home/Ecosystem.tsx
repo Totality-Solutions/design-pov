@@ -4,10 +4,17 @@ import React, { useState, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Section from '../common/Section'
 import { Container } from '../common/Container'
-import bgImage from '@/public/temp/ecosystem.png'
 import CTABtn from '../common/CTABtn'
 import Title from '../common/Title'
 import { FiMinus } from 'react-icons/fi'
+import SectionHeading from '../common/SectionHeading'
+import CTAStrip from '../common/CTAStrip'
+
+import bgImage1 from '@/public/temp/home/ecosystem/N1.jpg'
+import bgImage2 from '@/public/temp/home/ecosystem/N-2.jpg'
+import bgImage3 from '@/public/temp/home/ecosystem/N-3.jpg'
+import bgImage4 from '@/public/temp/home/ecosystem/N-2.jpg'
+import bgImage5 from '@/public/temp/home/ecosystem/N1.jpg'
 
 interface EcosystemItem {
   id: string
@@ -26,7 +33,7 @@ const ECOSYSTEM: EcosystemItem[] = [
     id: 'core',
     label: 'CORE',
     tag: 'THE FOUNDATION TRACK',
-    bgImage: bgImage.src,
+    bgImage: bgImage1.src,
     title: 'CORE',
     description:
       'The backbone of Design POV India...',
@@ -40,7 +47,7 @@ const ECOSYSTEM: EcosystemItem[] = [
     id: 'elevate',
     label: 'ELEVATE',
     tag: 'THE MENTORSHIP TRACK',
-    bgImage: bgImage.src,
+    bgImage: bgImage2.src,
     title: 'ELEVATE',
     description:
       '12 emerging designers paired...',
@@ -54,7 +61,7 @@ const ECOSYSTEM: EcosystemItem[] = [
     id: 'edit',
     label: 'EDIT',
     tag: 'THE PUBLICATION TRACK',
-    bgImage: bgImage.src,
+    bgImage: bgImage3.src,
     title: 'EDIT',
     description:
       'A bi-annual publication...',
@@ -68,7 +75,7 @@ const ECOSYSTEM: EcosystemItem[] = [
     id: 'circle',
     label: 'CIRCLE',
     tag: 'THE COMMUNITY TRACK',
-    bgImage: bgImage.src,
+    bgImage: bgImage4.src,
     title: 'CIRCLE',
     description:
       'An intimate membership...',
@@ -82,7 +89,7 @@ const ECOSYSTEM: EcosystemItem[] = [
     id: 'journal',
     label: 'JOURNAL',
     tag: 'THE ARCHIVE TRACK',
-    bgImage: bgImage.src,
+    bgImage: bgImage5.src,
     title: 'JOURNAL',
     description:
       'A living digital archive...',
@@ -97,18 +104,25 @@ const ECOSYSTEM: EcosystemItem[] = [
 const EcosystemSection = () => {
   const [activeId, setActiveId] = useState<string>('core')
   const containerRef = useRef<HTMLDivElement>(null)
+  const [isHovered, setIsHovered ] = useState(false)
 
   const activeItem = ECOSYSTEM.find((e) => e.id === activeId)!
 
   return (
-    <Section>
+    <div  
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+        <SectionHeading
+          titleMain="Five_Pathways_" 
+          titleBold="Ecosystem" 
+          sticky={false}
+          isSectionHovered={isHovered} 
+        >
+        </SectionHeading>
+
+    <Section className='!py-8'>
       <Container>
-
-        {/* Header */}
-        <div style={{ padding: '0 0 20px 0' }}>
-          <Title normalText="Five Pathways" boldText="Ecosystem" />
-        </div>
-
         {/* ───────── DESKTOP (UNCHANGED) ───────── */}
         <div
           ref={containerRef}
@@ -139,7 +153,7 @@ const EcosystemSection = () => {
                     index < ECOSYSTEM.length - 1
                       ? '2px solid #ffffff35'
                       : 'none',
-                  minHeight: '520px',
+                  minHeight: '480px',
                   background: '#0d0d0d',
                 }}
               >
@@ -149,13 +163,14 @@ const EcosystemSection = () => {
                 <motion.img
                   src={item.bgImage}
                   alt={item.title}
-                  animate={{ opacity: isHovered ? 0.18 : 0 }}
+                  animate={{ opacity: isHovered ? 0.30 : 0 }}
                   transition={{ duration: 0.4 }}
                   style={{
                     position: 'absolute',
                     inset: 0,
                     backgroundColor: 'var(--primary-blue)',
                     pointerEvents: 'none',
+                    objectFit: 'cover',
                   }}
                 />
 
@@ -435,24 +450,28 @@ const EcosystemSection = () => {
         )}
 
         {/* EXPANDED STATE */}
-<AnimatePresence initial={false}>
+<motion.div
+  initial={false}
+  animate={{
+    height: isActive ? "auto" : 0,
+    opacity: isActive ? 1 : 0,
+  }}
+  transition={{
+    height: { duration: 0.45, ease: [0.32, 0, 0.08, 1] },
+    opacity: { duration: 0.2 },
+  }}
+  style={{
+    overflow: "hidden",
+  }}
+>
   {isActive && (
-    <motion.div
-      layout
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{
-        layout: { duration: 0.45, ease: [0.32, 0, 0.08, 1] },
-        opacity: { duration: 0.25 },
-      }}
-      style={{
-        overflow: 'hidden',
-        padding: '40px 20px 40px',
-        position: 'relative',
-        zIndex: 2,
-      }}
-    >
+  <div
+    style={{
+      padding: "40px 20px 40px",
+      position: "relative",
+      zIndex: 2,
+    }}
+  >
               {/* Tag */}
               <div
                 style={{
@@ -481,84 +500,87 @@ const EcosystemSection = () => {
                 </span>
               </div>
 
-              {/* Title */}
-              <h3
-                style={{
-                  fontSize: 'clamp(2rem, 6vw, 2.6rem)',
-                  fontWeight: 600,
-                  marginBottom: '14px',
-                  color: '#f0f0f0',
-                  letterSpacing: '-0.02em',
-                }}
-              >
-                {item.title}
-              </h3>
+              <div className=" flex flex-col gap-12 justify-start items-start">
+              <div className="">
+                {/* Title */}
+                <h3
+                  style={{
+                    fontSize: 'clamp(2rem, 6vw, 2.6rem)',
+                    fontWeight: 600,
+                    marginBottom: '14px',
+                    color: '#f0f0f0',
+                    letterSpacing: '-0.02em',
+                  }}
+                >
+                  {item.title}
+                </h3>
 
-              {/* Description */}
-              <p
-                style={{
-                  fontSize: '14px',
-                  lineHeight: 1.5,
-                  color: '#ffffff75',
-                  marginBottom: '50px',
-                }}
-              >
-                {item.description}
-              </p>
-
-              {/* Stats */}
-              <div
-                style={{
-                  display: 'flex',
-                  gap: '24px',
-                  marginBottom: '20px',
-                }}
-              >
-                {item.stats.map((stat, i) => (
-                  <div key={i}>
-                    <div
-                      style={{
-                        fontSize: '18px',
-                        fontWeight: 500,
-                        color: '#ffffff',
-                      }}
-                    >
-                      {stat.value}
-                    </div>
-                    <div
-                      style={{
-                        fontSize: '10px',
-                        letterSpacing: '0.14em',
-                        color: '#ffffff75',
-                      }}
-                    >
-                      {stat.unit}
-                    </div>
-                  </div>
-                ))}
+                {/* Description */}
+                <p
+                  style={{
+                    fontSize: '14px',
+                    lineHeight: 1.5,
+                    color: '#ffffff75',
+                  }}
+                >
+                  {item.description}
+                </p>
               </div>
 
-              {/* CTA */}
-              <CTABtn
-                label={item.cta}
-                iconType="arrow"
-                className='text-xs'
-                btnBg="var(--color-black)"
-                btnHoverBg="var(--primary-blue)"
-                textColor="var(--color-white)"
-                borderColor="var(--color-white)"
-                borderHoverColor="var(--primary-blue)"
-                lineColor="var(--color-black)"
-                lineHoverColor="var(--color-black)"
-                bottomKey1Width="40px"
-                bottomKey2Width="12px"
-                bottomKey1Right="50px"
-                bottomKey2Right="15px"
-                href="#tickets"
-              />
-            </motion.div>
+                  {/* Stats */}
+                  <div
+                    style={{
+                      display: 'flex',
+                      gap: '24px',
+                    }}
+                  >
+                    {item.stats.map((stat, i) => (
+                      <div key={i}>
+                        <div
+                          style={{
+                            fontSize: '18px',
+                            fontWeight: 500,
+                            color: '#ffffff',
+                          }}
+                        >
+                          {stat.value}
+                        </div>
+                        <div
+                          style={{
+                            fontSize: '10px',
+                            letterSpacing: '0.14em',
+                            color: '#ffffff75',
+                          }}
+                        >
+                          {stat.unit}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* CTA */}
+                  <CTABtn
+                    label={item.cta}
+                    iconType="arrow"
+                    className='text-xs'
+                    btnBg="var(--color-black)"
+                    btnHoverBg="var(--primary-blue)"
+                    textColor="var(--color-white)"
+                    borderColor="var(--color-white)"
+                    borderHoverColor="var(--primary-blue)"
+                    lineColor="var(--color-black)"
+                    lineHoverColor="var(--color-black)"
+                    bottomKey1Width="40px"
+                    bottomKey2Width="12px"
+                    bottomKey1Right="50px"
+                    bottomKey2Right="15px"
+                    href="#tickets"
+                  />
+              </div>
+
+            </div>
           )}
-        </AnimatePresence>
+        </motion.div>
       </div>
     )
   })}
@@ -566,6 +588,18 @@ const EcosystemSection = () => {
 
       </Container>
     </Section>
+
+      <div className="w-full z-10 bg-white border-t border-b border-[#DFDFDF]">
+        <CTAStrip
+          title="Where Design Meets Dialogue"
+          ctaLabel="Apply"
+          ctaHref="#"
+          hoverBgColor="#000000"
+          textColor='var(--primary-red)'
+          hoverTextColor='var(--color-white)'
+        />
+      </div>
+    </div>
   )
 }
 

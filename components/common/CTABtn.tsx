@@ -31,6 +31,8 @@ interface CTABtnProps {
   bottomKey2Width?: string;
   bottomKey1Right?: string;
   bottomKey2Right?: string;
+  // ✅ The Force Hover Prop
+  forceHover?: boolean;
 }
 
 export default function CTABtn({
@@ -60,8 +62,12 @@ export default function CTABtn({
   bottomKey2Width,
   bottomKey1Right,
   bottomKey2Right,
+  forceHover = false,
 }: CTABtnProps) {
-  const [hovered, setHovered] = useState(false);
+  const [internalHover, setInternalHover] = useState(false);
+
+  // ✅ Combine internal hover and parent forced hover
+  const hovered = internalHover || forceHover;
 
   const config = {
     sm: {
@@ -70,15 +76,15 @@ export default function CTABtn({
       text: "var(--font-size-sm)",
       px: "pl-4 pr-1",
       gap: "gap-3",
-      iconSize: 10,
+      iconSize: 20,
     },
     md: {
-      h: "h-[50px]",
-      circle: "w-[40px] h-[40px]",
+      h: "h-auto",
+      circle: "w-auto h-auto",
       text: "var(--font-size-base)",
-      px: "pr-6 pl-1.5",
+      px: "px-10 py-2",
       gap: "gap-3",
-      iconSize: 15,
+      iconSize: 30,
     },
     lg: {
       h: "h-16",
@@ -86,7 +92,7 @@ export default function CTABtn({
       text: "var(--font-size-base)",
       px: "pl-8 pr-2",
       gap: "gap-8",
-      iconSize: 20,
+      iconSize: 40,
     },
   };
 
@@ -95,11 +101,10 @@ export default function CTABtn({
   /* ICON */
   const Icon = () => {
     const props = { size: cur.iconSize, color: "currentColor" };
-
     if (iconType === "x") return <FiX {...props} />;
     if (iconType === "plus") return <FiPlus {...props} />;
     if (iconType === "reset") return <FiRefreshCcw {...props} />;
-    return <FiMinus {...props} strokeWidth={2.5} />;
+    return <FiMinus {...props} strokeWidth={1.2} />;
   };
 
   /* ICON WRAPPER */
@@ -109,7 +114,7 @@ export default function CTABtn({
       style={{
         transform:
           hovered && (iconType === "arrow" || iconType === "reset")
-            ? "rotate(0deg) scale(1.9)"
+            ? "rotate(0deg) scale(0.6)"
             : "rotate(0deg)",
       }}
     >
@@ -120,12 +125,12 @@ export default function CTABtn({
   /* CIRCLE */
   const CircleModule = (
     <div
-      className={`${cur.circle}  flex items-center justify-center shrink-0 transition-all duration-300`}
+      className={`${cur.circle} flex items-center justify-center shrink-1 transition-all duration-300`}
       style={{
         color: showIconCircle
           ? hovered
             ? "var(--color-white)"
-            : borderColor || "var(--color-white)"
+            : textColor || "var(--color-white)"
           : "var(--color-white)",
         order: iconPosition === "left" ? 1 : 0,
       }}
@@ -147,44 +152,44 @@ export default function CTABtn({
     </span>
   );
 
-  /* COMMON */
+  /* COMMON PROPS */
   const commonProps = {
     className: `
-      relative flex items-center  overflow-hidden
+      relative flex items-center overflow-visible
       transition-all duration-300
       ${cur.h}
       ${width === "full" ? "w-full" : "w-fit"}
       ${cur.px}
       ${className}
       ${disabled ? "opacity-50 pointer-events-none" : ""}
+      fancy-btn ${hovered ? "is-hovered" : ""}
     `,
-style: {
-  backgroundColor: showButtonBg
-    ? hovered
-      ? btnHoverBg
-      : btnBg
-    : "transparent",
+    style: {
+      backgroundColor: showButtonBg
+        ? hovered
+          ? btnHoverBg
+          : btnBg
+        : "transparent",
 
-  color: hovered ? "var(--color-white)" : textColor,
+      color: hovered ? "var(--color-white)" : textColor,
 
-  /* ✅ DYNAMIC COLORS */
-  ["--btn-border" as any]: borderColor || textColor,
-  ["--btn-border-hover" as any]:
-    borderHoverColor || "var(--color-white)",
+      transform: hovered ? "scale(0.95)" : "scale(1)",
+      transformOrigin: "center",
 
-  ["--btn-line" as any]: lineColor || textColor,
-  ["--btn-line-hover" as any]:
-    lineHoverColor || "var(--color-white)",
+      /* ✅ DYNAMIC COLORS */
+      ["--btn-border" as any]: borderColor || textColor,
+      ["--btn-border-hover" as any]: borderHoverColor || "var(--color-white)",
+      ["--btn-line" as any]: lineColor || textColor,
+      ["--btn-line-hover" as any]: lineHoverColor || "var(--color-white)",
 
-  /* ✅ BOTTOM KEY CONTROL */
-  ["--bk1-width" as any]: bottomKey1Width || "25px",
-  ["--bk2-width" as any]: bottomKey2Width || "10px",
-
-  ["--bk1-right" as any]: bottomKey1Right || "30px",
-  ["--bk2-right" as any]: bottomKey2Right || "10px",
-},
-    onMouseEnter: () => setHovered(true),
-    onMouseLeave: () => setHovered(false),
+      /* ✅ BOTTOM KEY CONTROL */
+      ["--bk1-width" as any]: bottomKey1Width || "25px",
+      ["--bk2-width" as any]: bottomKey2Width || "10px",
+      ["--bk1-right" as any]: bottomKey1Right || "30px",
+      ["--bk2-right" as any]: bottomKey2Right || "10px",
+    },
+    onMouseEnter: () => setInternalHover(true),
+    onMouseLeave: () => setInternalHover(false),
     onClick,
   };
 
@@ -192,23 +197,19 @@ style: {
 
   return (
     <Component
-  {...(href ? { ...commonProps, href } : commonProps)}
-  className={`${commonProps.className} fancy-btn`}
->
-  {/* TOP KEY */}
-  <span className="top-key" />
+      {...(href ? { ...commonProps, href } : commonProps)}
+    >
+      {/* TOP KEY */}
+      <span className="top-key" />
 
-  {/* BEFORE LINE */}
-  {/* <span className="before-line" /> */}
+      <div className={`flex items-center w-full ${cur.gap} relative z-10`}>
+        {(showIcon || showIconCircle) && CircleModule}
+        {LabelModule}
+      </div>
 
-  <div className={`flex items-center w-full ${cur.gap} relative z-10`}>
-    {(showIcon || showIconCircle) && CircleModule}
-    {LabelModule}
-  </div>
-
-  {/* BOTTOM KEYS */}
-  <span className="bottom-key-1" />
-  <span className="bottom-key-2" />
-</Component>
+      {/* BOTTOM KEYS */}
+      <span className="bottom-key-1" />
+      <span className="bottom-key-2" />
+    </Component>
   );
 }

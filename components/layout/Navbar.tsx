@@ -141,7 +141,7 @@ export default function Navbar() {
         }`}
       >
         <Container>
-          <div className="flex justify-between items-center px-5 py-4 lg:py-5">
+          <div className="flex justify-between items-center px-5 py-4 lg:py-5 lg:px-14">
             <div className="stickyLeft">
               <Image 
                 src={Logo} 

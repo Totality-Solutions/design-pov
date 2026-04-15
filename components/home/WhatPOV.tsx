@@ -1,45 +1,57 @@
 "use client"
 
-import React, { useRef } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import {
   motion,
   useScroll,
   useTransform,
   useSpring,
+  useMotionValue,
   MotionValue,
 } from 'framer-motion'
-import Section from '../common/Section'
 import { Container } from '../common/Container'
 import MarqueeFlow from '../common/MarqueeFlow'
-import Image from 'next/image'
+import Image, { StaticImageData } from 'next/image'
 import Link from 'next/link'
-import img1 from "@/public/temp/1.jpg"
-import img2 from "@/public/temp/2.jpg"
-import img3 from "@/public/temp/3.jpg"
-import img4 from "@/public/temp/4.jpeg"
-import img5 from "@/public/temp/5.jpg"
+import img1 from  "@/public/temp/home/section2/1.jpg"
+import img2 from  "@/public/temp/home/section2/2.jpg"
+import img3 from  "@/public/temp/home/section2/3.jpg"
+import img4 from  "@/public/temp/home/section2/4.jpg"
+import img5 from  "@/public/temp/home/section2/5.jpg"
+import img6 from  "@/public/temp/home/section2/6.jpg"
+import img7 from  "@/public/temp/home/section2/7.jpg"
+import img8 from  "@/public/temp/home/section2/8.jpg"
+import img9 from  "@/public/temp/home/section2/9.jpg"
 
-// ─── Scroll-driven typewriter ─────────────────────────────────────────────────
-// Maps a 0→1 MotionValue to a character-slice of `text`
+
+
+import Section from '../common/Section'
+
+interface ArrivalItem {
+  id: number;
+  img: string | StaticImageData;
+  title: string;
+  href: string;
+}
+
+// ─── Typewriter ─────────────────────────────────────────────
 function ScrollTypewriter({
   text,
-  progress,          // MotionValue<number> 0→1
-  className,
+  progress,
+  isMobile,
 }: {
   text: string
   progress: MotionValue<number>
-  className?: string
+  isMobile: boolean
 }) {
-  // We render all chars but hide the ones beyond current progress via opacity
   return (
-    <span className={className} aria-label={text} style={{ display: 'inline' }}>
+    <span aria-label={text}>
       {text.split('').map((char, i) => {
-        // Each char becomes visible when progress passes i/total
         const threshold = i / text.length
         // eslint-disable-next-line react-hooks/rules-of-hooks
         const opacity = useTransform(progress, [threshold, threshold + 0.04], [0, 1])
         return (
-          <motion.span key={i} style={{ opacity }}>
+          <motion.span key={i} style={{ opacity: isMobile ? 1 : opacity }}>
             {char}
           </motion.span>
         )
@@ -48,200 +60,271 @@ function ScrollTypewriter({
   )
 }
 
-// ─── Component ────────────────────────────────────────────────────────────────
+// ─── Component ─────────────────────────────────────────────
 const WhatPOV = () => {
-  // The outer div is 300vh tall — sticky inner pins content while scroll drives animation
   const containerRef = useRef<HTMLDivElement>(null)
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768)
+    check()
+    window.addEventListener('resize', check)
+    return () => window.removeEventListener('resize', check)
+  }, [])
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start start', 'end end'],
   })
 
-  // Smooth the scroll so it feels physical, not jittery
-  const smooth = useSpring(scrollYProgress, { stiffness: 80, damping: 20, restDelta: 0.001 })
+  const smooth = useSpring(scrollYProgress, {
+    stiffness: 120,
+    damping: 25,
+    restDelta: 0.001,
+  })
 
-  // ── Scroll ranges (all map from smooth 0→1) ────────────────────────────────
-  // 0.00 – 0.30  typewriter p appears char by char
-  // 0.30 – 0.50  h1 blurs in
-  // 0.50 – 0.65  p exits LEFT, h1 exits RIGHT
-  // 0.65 – 0.85  hero-desc fades + slides up
+  const lockedProgress = useMotionValue(isMobile ? 1 : 0)
+  const typeProgressRaw = useTransform(smooth, [0, 0.30], [0, 1])
+  const typeProgress = isMobile ? lockedProgress : typeProgressRaw
 
-  // Typewriter progress: 0→1 over scroll 0→0.30
-  const typeProgress = useTransform(smooth, [0, 0.30], [0, 1])
+  // FIX: Adjusted opacity ranges for better visibility of h1
+  const h1Opacity = useTransform(smooth, [0.25, 0.45], [0, 1])
+  const h1Blur = useTransform(smooth, [0.25, 0.45], [14, 0])
+  const h1BlurPx = useTransform(h1Blur, v => `blur(${v}px)`)
 
-  // H1 blur-in: opacity 0→1, blur 14px→0 over 0.30→0.50
-  const h1Opacity  = useTransform(smooth, [0.30, 0.50], [0, 1])
-  const h1Blur     = useTransform(smooth, [0.30, 0.50], [14, 0])
-  const h1BlurPx   = useTransform(h1Blur, (v) => `blur(${v}px)`)
+  const pX = useTransform(smooth, [0.45, 0.60], ['0vw', '-120vw'])
+  const pOpacity = useTransform(smooth, [0.45, 0.60], [1, 0])
 
-  // Exit — p slides LEFT: x 0→-120vw over 0.50→0.65
-  const pX         = useTransform(smooth, [0.50, 0.65], ['0vw', '-120vw'])
-  const pOpacity   = useTransform(smooth, [0.50, 0.65], [1, 0])
+  const h1X = useTransform(smooth, [0.45, 0.60], ['0vw', '120vw'])
+  const h1ExitOp = useTransform(smooth, [0.45, 0.60], [1, 0])
 
-  // Exit — h1 slides RIGHT: x 0→120vw over 0.50→0.65
-  const h1X        = useTransform(smooth, [0.50, 0.65], ['0vw', '120vw'])
-  const h1ExitOp   = useTransform(smooth, [0.50, 0.65], [1, 0])
-
-  // Combined h1 opacity = enter opacity * exit opacity
   const h1CombinedOp = useTransform(
     [h1Opacity, h1ExitOp] as MotionValue[],
     ([enter, exit]: number[]) => enter * exit
   )
 
-  // Hero desc: opacity 0→1, y 24→0, blur 10→0 over 0.65→0.85
-  const descOpacity = useTransform(smooth, [0.65, 0.85], [0, 1])
-  const descY       = useTransform(smooth, [0.65, 0.85], [24, 0])
-  const descBlur    = useTransform(smooth, [0.65, 0.85], [10, 0])
-  const descBlurPx  = useTransform(descBlur, (v) => `blur(${v}px)`)
+  const typeBlockOpacity = useTransform(smooth, [0.59, 0.61], [1, 0], { clamp: true })
 
-  // Hide typewriter block when exiting (past 0.65) — use opacity on wrapper
-  const typeBlockOpacity = useTransform(smooth, [0.64, 0.66], [1, 0])
-  const typeBlockPointer = useTransform(smooth, [0.65], ['auto']) // not needed but explicit
+  // FIX: Adjusted scroll ranges for mobile-friendly marquee visibility
+  const descOpacity = useTransform(smooth, isMobile ? [0.30, 0.50] : [0.60, 0.80], [0, 1])
+  const descY = useTransform(smooth, isMobile ? [0.30, 0.50] : [0.60, 0.80], [24, 0])
+  const descBlur = useTransform(smooth, isMobile ? [0.30, 0.50] : [0.60, 0.80], [10, 0])
+  const descBlurPx = useTransform(descBlur, v => `blur(${v}px)`)
 
-  const NEW_ARRIVALS = [
+  // FIX: Marquee appears earlier and stays longer on mobile
+  const marqueeOpacity = useTransform(
+    smooth,
+    isMobile ? [0.45, 0.70] : [0.70, 0.95],
+    [0, 1]
+  )
+  const marqueeY = useTransform(
+    smooth,
+    isMobile ? [0.40, 0.65] : [0.65, 0.90],
+    [80, 0]
+  )
+  const marqueeBlur = useTransform(
+    smooth,
+    isMobile ? [0.40, 0.65] : [0.65, 0.90],
+    [10, 0]
+  )
+  const marqueeBlurPx = useTransform(marqueeBlur, v => `blur(${v}px)`)
+
+  // FIX: Adjusted container height for better scroll behavior on mobile
+  const containerHeight = isMobile ? '250vh' : '200vh'
+
+const NEW_ARRIVALS: ArrivalItem[] = [
     { id: 1, img: img1, title: 'Simply Dummy', href: '#' },
-    { id: 2, img: img2, title: 'Simply Dummy', href: '#' },
+    { id: 10, img: '/temp/home/section2/1.mp4', title: 'Simply Dummy', href: '#' },
+    { id: 2, img: img2, title: 'Dynamic Video', href: '#' }, // Ensure this is in /public
+    { id: 11, img: '/temp/home/section2/2.mp4', title: 'Simply Dummy', href: '#' },
     { id: 3, img: img3, title: 'Simply Dummy', href: '#' },
+    { id: 12, img: '/temp/home/section2/3.mp4', title: 'Simply Dummy', href: '#' },
     { id: 4, img: img4, title: 'Simply Dummy', href: '#' },
+    { id: 13, img: '/temp/home/section2/4.mp4', title: 'Simply Dummy', href: '#' },
     { id: 5, img: img5, title: 'Simply Dummy', href: '#' },
-    { id: 6, img: img3, title: 'Simply Dummy', href: '#' },
-  ]
-
-  // Marquee appears AFTER hero desc (0.75 → 0.95)
-const marqueeOpacity = useTransform(smooth, [0.78, 0.95], [0, 1]);
-const marqueeY = useTransform(smooth, [0.75, 0.9], [80, 0]);
-const marqueeBlur = useTransform(smooth, [0.75, 0.9], [10, 0]);
-const marqueeBlurPx = useTransform(marqueeBlur, (v) => `blur(${v}px)`);
+    { id: 6, img: img6, title: 'Simply Dummy', href: '#' },
+    { id: 7, img: img7, title: 'Simply Dummy', href: '#' },
+    { id: 8, img: img8, title: 'Simply Dummy', href: '#' },
+    { id: 9, img: img9, title: 'Simply Dummy', href: '#' },
+  ];
 
   return (
-    // 300vh tall scroll canvas — gives 3× viewport of scroll room
-    <div ref={containerRef} style={{ position: 'relative', height: 'clamp(200vh, 300vh, 400vh)', }}>
-
-      {/* Sticky viewport — pins content while scroll drives animations */}
+    <div
+      ref={containerRef}
+      style={{ position: 'relative', height: containerHeight }}
+    >
+      {/* ── Sticky viewport ── */}
       <div
         style={{
           position: 'sticky',
-          top: '200px',
-          height: '80vh',
+          top: 0,
+          height: '100vh',
           overflow: 'hidden',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
         }}
       >
         <Section>
           <Container>
-            <div className="hero-text text-center md:text-left">
-              <div className="typewriter-wrapper" style={{ overflow: 'hidden' }}>
 
-                {/* ── Typewriter block (p + h1) — fades out as a unit during exit ── */}
-                <motion.div
-                  className="typewriter"
-                  style={{ overflow: 'hidden', opacity: typeBlockOpacity }}
-                >
-                  {/* P: scroll-driven char reveal + exits LEFT */}
-                  <motion.p
-                    className="typewriter-text"
-                    style={{ x: pX, opacity: pOpacity }}
-                  >
-                    <ScrollTypewriter
-                      text="India's Most INTERNATIONAL"
-                      progress={typeProgress}
-                    />
-                  </motion.p>
+        {/* ── Single centered anchor — everything overlaps here ── */}
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: isMobile ? '40px' : '20px',
+            paddingBottom: isMobile ? '40px' : '0px',
+          }}
+        >
 
-                  {/* H1: blurs in then exits RIGHT */}
-                  <motion.h1
-                    className="italic uppercase focus-text"
-                    style={{
-                      opacity: h1CombinedOp,
-                      filter: h1BlurPx,
-                      x: h1X,
-                    }}
-                  >
-                    DESIGN PLATFORMS.
-                  </motion.h1>
-                </motion.div>
-
-                {/* ── Hero description — scroll-driven fade in ── */}
-                <motion.h1
-                  className="hero-desc"
-                  style={{
-                    opacity: descOpacity,
-                    y: descY,
-                    filter: descBlurPx,
-                  }}
-                >
-                  <span>Design POV India</span> is an annual platform that brings
-                  together the most progressive creative <span className="hidden md:inline"><br /></span> minds in the country.
-                  Through <span>Residencies, Exhibitions, Publications,</span> and{' '}
-                  <span>Critical Dialogue</span>, we <span className="hidden md:inline"><br /></span> shape the narrative of
-                  Indian design—on Indian terms.
-                </motion.h1>
-
-              </div>
-            </div>
-
-              <motion.div
-  style={{
-    opacity: marqueeOpacity,
-    y: marqueeY,
-    filter: marqueeBlurPx,
-  }}
-  className="mt-8 w-full  h-[220px] sm:h-[260px] md:h-[320px] lg:h-[350px] flex items-end justify-center overflow-hidden"
->
-              <MarqueeFlow
-                items={NEW_ARRIVALS}
-                gap={5}
-                speed={200}
-                desktopCount={4}
-                renderItem={(item, _index, isExpanded) => (
-                  <Link
-                    href={item.href || '#'}
-                    className="relative block w-full overflow-hidden shadow-xl"
-                    style={{
-  aspectRatio: isExpanded ? '6/5' : '10/5', // fixed base
-  // transform: isExpanded ? 'scaleY(1.2)' : 'scaleY(1)',
-  transition: "aspect-ratio 2000ms cubic-bezier(0.22, 1, 0.36, 1)",
-  transformOrigin: 'bottom',
-}}
-                    onMouseEnter={(e) => {
-                      const el = e.currentTarget
-                      el.style.aspectRatio = '6/5'
-                      const img = el.querySelector('img')
-                      if (img) img.style.transform = 'translate3d(0,0,0) scale(1.15)'
-                    }}
-                    onMouseLeave={(e) => {
-                      const el = e.currentTarget
-                      el.style.aspectRatio = isExpanded ? '6/5' : '10/5'
-                      const img = el.querySelector('img')
-                      if (img) img.style.transform = isExpanded
-                        ? 'translate3d(0,0,0) scale(1.15)'
-                        : 'translate3d(0,0,0) scale(1)'
-                    }}
-                  >
-                    <Image
-                      src={item.img}
-                      alt={item.title || 'New Arrival'}
-                      fill
-                      className="object-cover will-change-transform"
-                      style={{
-                        transform: isExpanded
-                          ? 'translate3d(0,0,0) scale(1.15)'
-                          : 'translate3d(0, 0, 0) scale(1)',
-                        backfaceVisibility: 'hidden',
-                        transition: 'transform 2000ms cubic-bezier(0.4, 0, 0.2, 1)',
-                        transformOrigin: 'bottom center',
-                      }}
-                      sizes="(max-width: 400px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 25vw"
-                    />
-                  </Link>
-                )}
+          {/* ── PHASE 1 + 2 wrapper: typewriter line + h1 (overlap each other) ── */}
+          <motion.div
+            style={{ opacity: typeBlockOpacity }}
+            className="w-full text-center px-4 sm:px-6 typewriter"
+          >
+            {/* Phase 1 — typewriter line */}
+            <motion.p
+              className="typewriter-text text-sm sm:text-base md:text-lg"
+              style={{ x: pX, opacity: pOpacity }}
+            >
+              <ScrollTypewriter
+                text="India's Most INTERNATIONAL"
+                progress={typeProgress}
+                isMobile={isMobile}
               />
+            </motion.p>
+
+            {/* Phase 2 — focus h1, sits directly below typewriter line */}
+            <motion.h1
+              className="italic uppercase focus-text text-2xl sm:text-3xl md:text-5xl lg:text-6xl"
+              style={{
+                opacity: h1CombinedOp,
+                filter: h1BlurPx,
+                x: h1X,
+              }}
+            >
+              DESIGN PLATFORMS.
+            </motion.h1>
+          </motion.div>
+
+          <div className="phase-3-marquee-wrapper w-full">
+
+            {/* Phase 3 — hero-desc: hidden on mobile, visible on desktop */}
+            <motion.h1
+              className="hero-desc w-full text-center px-4 sm:px-6 hidden md:block text-lg md:text-xl lg:text-2xl leading-relaxed"
+              style={{
+                opacity: descOpacity,
+                y: descY,
+                filter: descBlurPx,
+                pointerEvents: 'none',
+              }}
+            >
+              <span className="font-semibold">Design POV India</span> is an annual platform that brings
+              together the most progressive creative minds in the country.
+              Through <span className="font-semibold">Residencies, Exhibitions, Publications,</span> and{' '}
+              <span className="font-semibold">Critical Dialogue</span>, we shape the narrative of
+              Indian design—on Indian terms.
+            </motion.h1>
+
+            {/* Phase 3 — Mobile description: visible on mobile only */}
+            <motion.h1
+              className="hero-desc w-full text-center px-4 sm:px-6 md:hidden text-base leading-relaxed"
+              style={{
+                opacity: descOpacity,
+                y: descY,
+                filter: descBlurPx,
+                pointerEvents: 'none',
+              }}
+            >
+              <span className="font-semibold">Design POV India</span> brings together progressive creative minds.
+              Through <span className="font-semibold">Residencies, Exhibitions, Publications,</span> and{' '}
+              <span className="font-semibold">Critical Dialogue</span>, we shape Indian design.
+            </motion.h1>
+
+            {/* Marquee */}
+            <motion.div
+              style={{
+                opacity: marqueeOpacity,
+                y: marqueeY,
+                filter: marqueeBlurPx,
+              }}
+              className="mt-8 w-full  h-[220px] sm:h-[260px] md:h-[320px] lg:h-[350px] flex items-end justify-center overflow-hidden"
+            >
+              <MarqueeFlow
+                    items={NEW_ARRIVALS}
+                    gap={5}
+                    speed={200}
+                    desktopCount={4}
+                    renderItem={(item: ArrivalItem, _index, isExpanded) => {
+                      // Detect if media is a video string
+                      const isVideo = typeof item.img === 'string' && item.img.match(/\.(mp4|webm|ogg)$/i);
+
+                      return (
+                        <Link
+                          href={item.href || '#'}
+                          className="relative block w-full overflow-hidden shadow-xl"
+                          style={{
+                            aspectRatio: isExpanded ? '6/5' : '10/5',
+                            transition: "aspect-ratio 2000ms cubic-bezier(0.22, 1, 0.36, 1)",
+                            transformOrigin: 'bottom',
+                          }}
+                          onMouseEnter={(e: React.MouseEvent<HTMLAnchorElement>) => {
+                            const el = e.currentTarget;
+                            el.style.aspectRatio = '6/5';
+                            const media = el.querySelectorAll<HTMLElement>('img, video');
+                            media.forEach(m => m.style.transform = 'translate3d(0,0,0) scale(1.15)');
+                          }}
+                          onMouseLeave={(e: React.MouseEvent<HTMLAnchorElement>) => {
+                            const el = e.currentTarget;
+                            el.style.aspectRatio = isExpanded ? '6/5' : '10/5';
+                            const media = el.querySelectorAll<HTMLElement>('img, video');
+                            media.forEach(m => {
+                              m.style.transform = isExpanded ? 'translate3d(0,0,0) scale(1.15)' : 'translate3d(0,0,0) scale(1)';
+                            });
+                          }}
+                        >
+                          {isVideo ? (
+                            <video
+                              src={item.img as string}
+                              autoPlay
+                              loop
+                              muted
+                              playsInline
+                              className="absolute inset-0 w-full h-full object-cover will-change-transform"
+                              style={{
+                                transform: isExpanded ? 'translate3d(0,0,0) scale(1.15)' : 'translate3d(0,0,0) scale(1)',
+                                transition: 'transform 2000ms cubic-bezier(0.4, 0, 0.2, 1)',
+                                transformOrigin: 'bottom center',
+                              }}
+                            />
+                          ) : (
+                            <Image
+                              src={item.img}
+                              alt={item.title}
+                              fill
+                              className="object-cover will-change-transform"
+                              style={{
+                                transform: isExpanded ? 'translate3d(0,0,0) scale(1.15)' : 'translate3d(0,0,0) scale(1)',
+                                transition: 'transform 2000ms cubic-bezier(0.4, 0, 0.2, 1)',
+                                transformOrigin: 'bottom center',
+                                backfaceVisibility: 'hidden',
+                              }}
+                              sizes="(max-width: 768px) 50vw, 25vw"
+                            />
+                          )}
+                        </Link>
+                      );
+                    }}
+                  />
             </motion.div>
+
+          </div>
+
+        </div>
           </Container>
-        </Section>
+          </Section>
       </div>
     </div>
   )
