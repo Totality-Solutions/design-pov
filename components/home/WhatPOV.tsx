@@ -331,3 +331,5 @@ const NEW_ARRIVALS: ArrivalItem[] = [
 }
 
 export default WhatPOV
+
+

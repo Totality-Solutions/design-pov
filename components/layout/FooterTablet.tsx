@@ -16,9 +16,13 @@ const FooterTablet = ({ navLinks }: Props) => {
     >
       <div className="flex flex-col lg:flex-row justify-between items-start gap-12">
         <div className="flex flex-col gap-6">
-          <h1 className="text-[36px] font-black tracking-tighter leading-none">
-            DESIGN <span className="font-light">POV</span>
-          </h1>
+           <div className="w-full max-w-[200px] lg:max-w-[280px]">
+                <img 
+                  src="/DesignPOV.png" 
+                  alt="Design POV Logo" 
+                  className="w-full h-auto block"
+                />
+              </div>
           <div className="text-[13px] opacity-70 space-y-2">
             <p>designpovindia.com</p>
             <p>hello@designpovindia.com</p>

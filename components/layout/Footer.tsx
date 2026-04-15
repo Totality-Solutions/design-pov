@@ -1,5 +1,3 @@
-
-
 "use client";
 
 import React, { useRef, useState, useEffect } from "react";
@@ -20,10 +18,9 @@ const Footer = () => {
   const [isPastHalfway, setIsPastHalfway] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [elementWidth, setElementWidth] = useState(1600);
-
-  // --- Responsive Column Width Logic ---
-  // Large: 260px | Medium: 200px | Below md: Tablet Component
-  const currentColWidth = elementWidth > 1280 ? 260 : 200;
+  
+  const [currentColWidth, setCurrentColWidth] = useState(260);
+  const [baseFlareWidth, setBaseFlareWidth] = useState(1017);
 
   useEffect(() => {
     const handleResize = () => {
@@ -33,6 +30,13 @@ const Footer = () => {
       if (containerRef.current) {
         setElementWidth(containerRef.current.offsetWidth);
       }
+
+      const root = document.documentElement;
+      const cssColWidth = getComputedStyle(root).getPropertyValue('--footer-col-width');
+      const cssFlareWidth = getComputedStyle(root).getPropertyValue('--base-flare-width');
+      
+      if (cssColWidth) setCurrentColWidth(parseInt(cssColWidth, 10));
+      if (cssFlareWidth) setBaseFlareWidth(parseInt(cssFlareWidth, 10));
     };
 
     handleResize();
@@ -66,18 +70,25 @@ const Footer = () => {
         className="relative overflow-hidden flex items-center w-full"
         style={{ height: "654px", isolation: "isolate" }}
       >
-        {/* LAYER 1: AUTOMATICALLY SCALED FLARES */}
-        <div className="absolute inset-0 z-10 flex flex-row justify-end px-6 md:px-10 lg:px-[64px] items-center pointer-events-none overflow-hidden">
-          <div className="flex gap-0 h-full lg:pr-20">
+        {/* LAYER 1: FLARES */}
+        <div 
+          className="absolute inset-0 z-10 flex flex-row justify-end items-center pointer-events-none overflow-hidden"
+          style={{ 
+            paddingLeft: "var(--footer-px)", 
+            paddingRight: "0px" // Removed padding to let flares hit the edge
+          }}
+        >
+          <div className="flex h-full" style={{ paddingRight: "0px", gap: "var(--footer-gap-links)" }}>
             {[0, 1, 2, 3].map((i) => {
               const img = i < 2 ? navLinks.Partners.img : i === 2 ? navLinks.AboutUs.img : navLinks.Originals.img;
               return (
-                <div key={i} className="relative h-full overflow-hidden" style={{ width: currentColWidth }}>
+                <div key={i} className="relative h-full overflow-hidden" style={{ width: "var(--footer-col-width)" }}>
                   <MagneticFollowFlare
                     index={i}
                     mouseX={mouseX}
                     imageSrc={img}
                     colWidth={currentColWidth}
+                    baseFlareWidth={baseFlareWidth}
                     isPastHalfway={isPastHalfway}
                     parentWidth={elementWidth}
                   />
@@ -88,13 +99,23 @@ const Footer = () => {
         </div>
 
         {/* LAYER 2: CONTENT */}
-        <div className="relative z-20 w-full h-full flex flex-row justify-between px-6 md:px-10 lg:px-14 items-center mix-blend-difference pointer-events-none">
+        <div 
+          className="relative z-20 w-full h-full flex flex-row justify-between items-center mix-blend-difference pointer-events-none"
+          style={{ paddingLeft: "var(--footer-px)", paddingRight: "0px" }} // Right padding removed
+        >
           {/* Left Section */}
-          <div className="flex flex-col justify-between h-full py-10 lg:py-[70px] w-full max-w-[240px] lg:max-w-[302px]">
+          <div 
+            className="flex flex-col justify-between h-full w-full max-w-[240px] lg:max-w-[302px]"
+            style={{ paddingTop: "var(--footer-py-left)", paddingBottom: "var(--footer-py-left)" }}
+          >
             <div className="flex flex-col gap-[30px] lg:gap-[47px]">
-              <h1 className="text-[28px] md:text-[36px] lg:text-[44px] font-black tracking-tighter text-white leading-none font-['Montserrat']">
-                DESIGN <span className="font-light">POV</span>
-              </h1>
+             <div className="w-full max-w-[200px] lg:max-w-[280px]">
+                <img 
+                  src="/DesignPOV.png" 
+                  alt="Design POV Logo" 
+                  className="w-full h-auto block"
+                />
+              </div>
               <div className="text-white font-['Montserrat'] text-[10px] lg:text-[12px] opacity-80 space-y-4 lg:space-y-6">
                 <p className="break-words leading-relaxed">
                   designpovindia.com<br/>
@@ -111,38 +132,50 @@ const Footer = () => {
           </div>
 
           {/* Right Section (Links) */}
-          <div className="flex gap-0 h-full py-16 lg:py-[84px] lg:pr-20 pointer-events-auto">
-            <FooterTextColumn title="Partners" items={navLinks.Partners.items} subText="Privacy policy" width={currentColWidth} />
-            <FooterTextColumn title="About us" items={navLinks.AboutUs.items} subText="Terms of Use" width={currentColWidth} />
-            <FooterTextColumn title="Originals" items={navLinks.Originals.items} subText="Made by Design POV" width={currentColWidth} />
+          <div 
+            className="flex h-full pointer-events-auto"
+            style={{ 
+              paddingTop: "var(--footer-py-right)", 
+              paddingBottom: "var(--footer-py-right)",
+              paddingRight: "0px", // Flushed to the end
+              gap: "var(--footer-gap-links)" 
+            }}
+          >
+            <FooterTextColumn title="Partners" items={navLinks.Partners.items} subText="Privacy policy" />
+            <FooterTextColumn title="About us" items={navLinks.AboutUs.items} subText="Terms of Use" />
+            <FooterTextColumn title="Originals" items={navLinks.Originals.items} subText="Made by Design POV" />
           </div>
         </div>
 
-        {/* GRAIN OVERLAY */}
         <div className="absolute inset-0 z-30 pointer-events-none opacity-[0.05] mix-blend-overlay bg-[url('https://res.cloudinary.com/dn7noog99/image/upload/v1711281898/noise_vms8cy.png')]" />
       </motion.footer>
     </Container>
   );
 };
 
-const MagneticFollowFlare = ({ index, mouseX, imageSrc, colWidth, isPastHalfway, parentWidth }: any) => {
-  const BASE_FLARE_WIDTH = 1017;
+const MagneticFollowFlare = ({ index, mouseX, imageSrc, colWidth, baseFlareWidth, isPastHalfway, parentWidth }: any) => {
   const responsiveScale = Math.min(parentWidth / 1600, 1); 
-  const sizeReductionFactor = Math.pow(0.85, index);
-  const finalWidth = BASE_FLARE_WIDTH * responsiveScale * sizeReductionFactor;
+  const sizeReductionFactor = Math.pow(1, index);
+  const finalWidth = baseFlareWidth * responsiveScale * sizeReductionFactor;
   
   const baseCenter = (colWidth / 2) - (finalWidth / 2);
-  const movementRange = 100 * responsiveScale * sizeReductionFactor; // Slightly reduced for better md-screen stability
+  
+  const darkOffsets = [120, 80, 40, 0];
+  const lightOffsets = [0, -40, -80, -120];
+  const offsets = isPastHalfway ? darkOffsets : lightOffsets; 
+  const startingOffset = (offsets[index] || 0) * responsiveScale;
+
+  const movementRange = 100 * responsiveScale * sizeReductionFactor;
 
   const rawX = useTransform(
     mouseX,
     [0, parentWidth * 0.4, parentWidth * 0.5, parentWidth * 0.6, parentWidth],
     [
-      baseCenter - movementRange, 
-      baseCenter - movementRange, 
-      baseCenter, 
-      baseCenter + movementRange, 
-      baseCenter + movementRange
+      baseCenter + startingOffset - movementRange,
+      baseCenter + startingOffset - movementRange, 
+      baseCenter + startingOffset,                 
+      baseCenter + startingOffset + movementRange, 
+      baseCenter + startingOffset + movementRange
     ]
   );
 
@@ -172,17 +205,17 @@ const MagneticFollowFlare = ({ index, mouseX, imageSrc, colWidth, isPastHalfway,
   );
 };
 
-const FooterTextColumn = ({ title, items, subText, width }: any) => (
-  <div className="flex flex-col justify-between h-full px-4 lg:px-6" style={{ width: `${width}px` }}>
+const FooterTextColumn = ({ title, items, subText }: any) => (
+  <div className="flex flex-col justify-between h-full px-4 lg:px-6" style={{ width: "var(--footer-col-width)" }}>
     <div className="flex flex-col gap-4 lg:gap-[24px]">
-      <h3 className="text-white text-[11px] lg:text-[14px] font-['Montserrat'] uppercase tracking-[0.15em] font-medium">{title}</h3>
+      <h3 className="text-white text-[11px] lg:text-[14px] font-['Montserrat'] tracking-[0.15em]">{title}</h3>
       <ul className="flex flex-col gap-3 lg:gap-5">
         {items.map((item: string) => (
-          <li key={item} className="text-white/60 text-[12px] lg:text-[14px] font-['Montserrat'] hover:text-white cursor-pointer transition-colors font-light whitespace-nowrap">{item}</li>
+          <li key={item} className="text-white text-[12px] lg:text-[14px] font-['Montserrat'] hover:text-white cursor-pointer transition-colors font-light whitespace-nowrap">{item}</li>
         ))}
       </ul>
     </div>
-    <p className="text-white/40 text-[10px] lg:text-[12px] font-['Montserrat'] uppercase cursor-pointer hover:text-white transition-colors tracking-wide leading-tight">{subText}</p>
+    <p className="text-white text-[10px] lg:text-[12px] font-['Montserrat'] uppercase cursor-pointer hover:text-white transition-colors tracking-wide leading-tight">{subText}</p>
   </div>
 );
 
