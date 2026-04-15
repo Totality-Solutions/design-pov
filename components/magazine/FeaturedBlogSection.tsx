@@ -5,6 +5,7 @@ import Image from "next/image";
 import SectionHeading from "../common/SectionHeading";
 import CTABtn from "../common/CTABtn";
 
+
 /* ================= TYPES ================= */
 
 type Blog = {
@@ -38,7 +39,7 @@ export default function FeaturedBlogSection() {
       type: "blog",
       id: 1,
       title: "The Future of Architectural Storytelling",
-      image: "/temp/blog-main.jpg",
+      image: "/temp/magazine/blogs/blog-1.png",
       date: "18 Mar 2026",
       author: "Manisha AR",
       category: "Editorial",
@@ -55,7 +56,7 @@ export default function FeaturedBlogSection() {
       type: "blog",
       id: 2,
       title: "Reimagining Spaces Through Materiality",
-      image: "/temp/press-1.jpg",
+      image: "/temp/magazine/blogs/blog-1.png",
       date: "26 Feb 2026",
       author: "Design POV",
       category: "Architecture",
@@ -72,7 +73,7 @@ export default function FeaturedBlogSection() {
       type: "blog",
       id: 3,
       title: "Modern Living: A Deep Dive into Urban Spaces",
-      image: "/temp/press-2.jpg",
+      image: "/temp/magazine/blogs/blog-1.png",
       date: "20 Feb 2026",
       author: "Design POV",
       category: "Interiors",
@@ -91,15 +92,11 @@ export default function FeaturedBlogSection() {
 
   /* ================= DYNAMIC SIDEBAR ================= */
 
-  const sidebarBlogs = blogs.filter(
-    (blog) => blog.id !== activeBlog.id
-  );
-
+  const sidebarBlogs = blogs.filter((blog) => blog.id !== activeBlog.id);
   const sidebarItems: SidebarItem[] = [];
 
   sidebarBlogs.forEach((blog, index) => {
     sidebarItems.push(blog);
-
     if (index === 0) {
       sidebarItems.push({
         type: "ad",
@@ -108,7 +105,6 @@ export default function FeaturedBlogSection() {
         aspect: "aspect-[3/4]"
       });
     }
-
     if (index === 1) {
       sidebarItems.push({
         type: "ad",
@@ -132,8 +128,6 @@ export default function FeaturedBlogSection() {
         titleBold="Draft"
         subTitle="Editorial & Longform"
         isSectionHovered={isHovered}
-        sticky={true}
-        stickyTop="top-0"
       >
         <div className="hidden md:flex">
           <span className="text-base md:text-lg font-medium text-black">
@@ -145,60 +139,62 @@ export default function FeaturedBlogSection() {
       <div className="px-4 sm:px-6 md:px-[60px] lg:px-[80px] mt-10 md:mt-12">
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-10 lg:gap-12">
 
-          {/* MAIN BLOG */}
-          <div className="flex flex-col gap-6 md:gap-8 lg:border-r lg:border-neutral-100 lg:pr-10">
+          {/* MAIN BLOG COLUMN */}
+{/* MAIN BLOG COLUMN */}
+<div className="flex flex-col gap-6 md:gap-8 lg:border-r lg:border-neutral-100 lg:pr-10">
 
-            <div className="relative aspect-[16/9] w-full overflow-hidden bg-gray-100">
-              <Image
-                src={activeBlog.image}
-                alt={activeBlog.title}
-                fill
-                className="object-cover transition-transform duration-700 hover:scale-105"
-              />
-            </div>
 
-            <div className="flex flex-col gap-5 md:gap-6">
+    <div className="sticky top-0 left-0 w-full h-full">
+      <div className="relative w-full h-screen -mt-[25%] md:-mt-[10%]">
+        {/* The h-screen and negative margin ensure the image is tall enough 
+            to stay "fixed" and centered as the container moves.
+        */}
+        <Image
+          src={activeBlog.image}
+          alt={activeBlog.title}
+          fill
+          priority
+          className="object-cover"
+        />
+    </div>
+  </div>
 
-              <div className="flex flex-wrap items-center gap-3 md:gap-4 text-sm md:text-base">
-                <span className="text-black font-medium">
-                  {activeBlog.date}
-                </span>
-                <div className="hidden md:block w-[1px] h-5 bg-black/20" />
-                <span className="text-black font-medium">
-                  {activeBlog.author}
-                </span>
-              </div>
+  {/* CONTENT SECTION */}
+  <div className="flex flex-col gap-5 md:gap-6 relative z-10 bg-white">
+    <div className="flex flex-wrap items-center gap-3 md:gap-4 text-sm md:text-base">
+      <span className="text-black font-medium">{activeBlog.date}</span>
+      <div className="hidden md:block w-[1px] h-5 bg-black/20" />
+      <span className="text-black font-medium">{activeBlog.author}</span>
+    </div>
 
-              <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-black leading-tight">
-                {activeBlog.title}
-              </h2>
+    <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-black leading-tight">
+      {activeBlog.title}
+    </h2>
 
-              {activeBlog.content.map((para, i) => (
-                <p
-                  key={i}
-                  className="text-black/60 text-sm sm:text-base md:text-lg leading-relaxed max-w-[900px]"
-                >
-                  {para}
-                </p>
-              ))}
+    {activeBlog.content.map((para, i) => (
+      <p
+        key={i}
+        className="text-black/60 text-sm sm:text-base md:text-lg leading-relaxed max-w-[900px]"
+      >
+        {para}
+      </p>
+    ))}
 
-              <div className="mt-2 md:mt-4">
-                <CTABtn
-                  label="Read More"
-                  href="/blog/article-slug"
-                  textColor="black"
-                  borderColor="black"
-                  btnBg="transparent"
-                />
-              </div>
-            </div>
-          </div>
+    <div className="mt-2 md:mt-4">
+      <CTABtn
+        label="Read More"
+        href="/blog/article-slug"
+        textColor="black"
+        borderColor="black"
+        btnBg="transparent"
+      />
+    </div>
+  </div>
+</div>
 
           {/* SIDEBAR */}
-          <div className="flex flex-col gap-8 md:gap-10 lg:sticky lg:top-24 h-fit">
-
+          <div className="flex flex-col gap-8 md:gap-10 h-fit">
             {sidebarItems.map((item) => {
-
               if (item.type === "blog") {
                 return (
                   <div
@@ -207,60 +203,37 @@ export default function FeaturedBlogSection() {
                       setActiveBlog(item);
                     }}
                     className={`flex flex-col gap-4 group cursor-pointer transition-all duration-300 ${
-                      activeBlog.id === item.id ? "ring-1 ring-black" : ""
+                      activeBlog.id === item.id ? "opacity-40" : ""
                     }`}
                   >
                     <div className="relative aspect-[4/3] w-full overflow-hidden">
-
                       <Image
                         src={item.image}
                         alt={item.title}
                         fill
                         className="object-cover transition-transform duration-500 group-hover:scale-110"
                       />
-
                       <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-80" />
-
                       <div className="absolute bottom-3 md:bottom-4 left-3 md:left-4 right-3 md:right-4 z-10">
                         <span className="text-white/60 text-[9px] md:text-[10px] uppercase tracking-widest">
                           {item.category}
                         </span>
-
                         <h4 className="text-white text-xs md:text-sm mt-1 leading-tight">
                           {item.title}
                         </h4>
-
-                        <div className="hidden md:flex items-center gap-2 mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                          <span className="text-white/40 text-[9px]">
-                            by {item.author}
-                          </span>
-                          <span className="text-white/40 text-[9px]">
-                            | {item.date}
-                          </span>
-                        </div>
                       </div>
                     </div>
                   </div>
                 );
               }
 
-              // AD
               return (
                 <div key={item.id} className="flex flex-col gap-2">
                   <span className="text-[9px] text-black/20 uppercase tracking-widest font-bold">
                     Advertisement
                   </span>
-
-                  <div
-                    className={`relative ${item.aspect} w-full bg-gray-50 border border-neutral-100 overflow-hidden flex items-center justify-center`}
-                  >
-                    <Image
-                      src={item.image}
-                      alt="Ad"
-                      fill
-                      className="object-cover"
-                    />
-
+                  <div className={`relative ${item.aspect} w-full bg-gray-50 border border-neutral-100 overflow-hidden flex items-center justify-center`}>
+                    <Image src={item.image} alt="Ad" fill className="object-cover" />
                     {item.overlayText && (
                       <span className="relative z-10 text-black text-[10px] font-bold uppercase tracking-widest text-center px-4 whitespace-pre-line">
                         {item.overlayText}
@@ -270,7 +243,6 @@ export default function FeaturedBlogSection() {
                 </div>
               );
             })}
-
           </div>
         </div>
       </div>

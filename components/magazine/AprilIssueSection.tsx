@@ -37,8 +37,6 @@ const AprilIssueSection = () => {
         titleBold="April Issue"
         subTitle="Discover the latest issue"
         isSectionHovered={isHovered}
-        sticky={true}
-        stickyTop="top-0"
       >
       <CTABtn
         label="View Issues"
