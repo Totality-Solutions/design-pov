@@ -18,7 +18,7 @@ const typingSpeed = 80;
 const deletingSpeed = 40;
 const pauseTime = 1200;
 
-const DesignHero: React.FC = () => {
+const DesignHero: React.FC<{}> = () => {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [displayText, setDisplayText] = useState<string>("");
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
@@ -49,7 +49,7 @@ const DesignHero: React.FC = () => {
   }, [displayText, isDeleting, currentIndex]);
 
   return (
-    <section className="relative w-full h-full bg-white px-6 md:px-12 lg:px-20 pt-24 pb-10 flex flex-col font-['Montserrat',sans-serif] overflow-hidden">
+    <section className="relative w-full h-full bg-white px-6 md:px-12 lg:px-20 pt-24 pb-10 flex flex-col font-display overflow-hidden">
       
       {/* 1. TYPEWRITER HEADER */}
       {/* Mobile: Light gray/Smaller | Desktop: Black-opacity/Huge */}
@@ -109,7 +109,7 @@ const DesignHero: React.FC = () => {
 
       {/* 3. HERO IMAGE */}
       {/* Fixed aspect-video to keep it cinematic across all devices */}
-      <div className="w-full aspect-[4/3] md:aspect-[16/7] overflow-hidden bg-gray-100 mt-12 md:mt-0 rounded-sm">
+      <div className="group w-full aspect-[4/3] md:aspect-[16/7] overflow-hidden bg-gray-100 mt-12 md:mt-0 rounded-sm">
         <img
           src="/temp/about/1.png" 
           alt="Design POV"

@@ -78,7 +78,7 @@ const CTAStrip = ({
         <div className="flex-1 max-w-[300px]">
           <h2
             className="text-2xl md:text-2xl font-semibold transition-colors tracking-tight duration-300"
-            style={{ color: currentText, fontFamily: 'Montserrat, sans-serif' }}
+            style={{ color: currentText, fontFamily: 'Montserrat' }}
           >
             {title}
           </h2>

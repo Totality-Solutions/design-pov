@@ -1,6 +1,12 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/react";
+import { Montserrat } from 'next/font/google';
+
+const montserrat = Montserrat({
+  subsets: ['latin'],
+  variable: '--font-family',
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://designpov.com"),
@@ -34,7 +40,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className={montserrat.variable}>
       <body className="grain">
         {children}
         <Analytics />

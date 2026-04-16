@@ -19,9 +19,7 @@ const config: Config = {
         "pov-mist": "#8A8A8A",
       },
       fontFamily: {
-        display: ["var(--font-display)", "serif"],
-        body: ["var(--font-body)", "sans-serif"],
-        mono: ["var(--font-mono)", "monospace"],
+        display: ["var(--font-family)"]
       },
       fontSize: {
         "display-2xl": ["clamp(4rem, 10vw, 9rem)", { lineHeight: "0.9" }],
