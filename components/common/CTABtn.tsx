@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { FiArrowUpRight, FiMinimize, FiMinus, FiPlus, FiRefreshCcw, FiX } from "react-icons/fi";
+import { FiMinus, FiPlus, FiRefreshCcw, FiX } from "react-icons/fi";
 
 interface CTABtnProps {
   label?: string;
@@ -31,7 +31,6 @@ interface CTABtnProps {
   bottomKey2Width?: string;
   bottomKey1Right?: string;
   bottomKey2Right?: string;
-  // ✅ The Force Hover Prop
   forceHover?: boolean;
 }
 
@@ -65,40 +64,30 @@ export default function CTABtn({
   forceHover = false,
 }: CTABtnProps) {
   const [internalHover, setInternalHover] = useState(false);
+  const [canHover, setCanHover] = useState(false);
 
-  // ✅ Combine internal hover and parent forced hover
+  useEffect(() => {
+    // Determine if the device supports actual hover (mouse/trackpad)
+    const hoverMedia = window.matchMedia("(hover: hover)");
+    setCanHover(hoverMedia.matches);
+    
+    // Optional: Listener for screen changes
+    const handler = (e: MediaQueryListEvent) => setCanHover(e.matches);
+    hoverMedia.addEventListener("change", handler);
+    return () => hoverMedia.removeEventListener("change", handler);
+  }, []);
+
+  // Combine internal mouse hover and parent forced hover
   const hovered = internalHover || forceHover;
 
   const config = {
-    sm: {
-      h: "h-10",
-      circle: "w-8 h-8",
-      text: "var(--font-size-sm)",
-      px: "pl-4 pr-1",
-      gap: "gap-3",
-      iconSize: 20,
-    },
-    md: {
-      h: "h-auto",
-      circle: "w-auto h-auto",
-      text: "var(--font-size-base)",
-      px: "px-10 py-2",
-      gap: "gap-3",
-      iconSize: 30,
-    },
-    lg: {
-      h: "h-16",
-      circle: "w-12 h-12",
-      text: "var(--font-size-base)",
-      px: "pl-8 pr-2",
-      gap: "gap-8",
-      iconSize: 40,
-    },
+    sm: { h: "h-10", circle: "w-8 h-8", text: "var(--font-size-sm)", px: "pl-4 pr-1", gap: "gap-3", iconSize: 20 },
+    md: { h: "h-auto", circle: "w-auto h-auto", text: "var(--font-size-sm) md:var(--font-size-base)", px: "px-5 md:px-10 py-1 md:py-2", gap: "gap-3", iconSize: 30 },
+    lg: { h: "h-12", circle: "w-10 h-10", text: "var(--font-size-base)", px: "px-5 py-1", gap: "gap-2", iconSize: 25 },
   };
 
   const cur = config[size];
 
-  /* ICON */
   const Icon = () => {
     const props = { size: cur.iconSize, color: "currentColor" };
     if (iconType === "x") return <FiX {...props} />;
@@ -107,52 +96,6 @@ export default function CTABtn({
     return <FiMinus {...props} strokeWidth={1.2} />;
   };
 
-  /* ICON WRAPPER */
-  const IconPart = showIcon && (
-    <div
-      className="flex items-center justify-center transition-transform duration-300"
-      style={{
-        transform:
-          hovered && (iconType === "arrow" || iconType === "reset")
-            ? "rotate(0deg) scale(0.6)"
-            : "rotate(0deg)",
-      }}
-    >
-      <Icon />
-    </div>
-  );
-
-  /* CIRCLE */
-  const CircleModule = (
-    <div
-      className={`${cur.circle} flex items-center justify-center shrink-1 transition-all duration-300`}
-      style={{
-        color: showIconCircle
-          ? hovered
-            ? "var(--color-white)"
-            : textColor || "var(--color-white)"
-          : "var(--color-white)",
-        order: iconPosition === "left" ? 1 : 0,
-      }}
-    >
-      {IconPart}
-    </div>
-  );
-
-  /* LABEL */
-  const LabelModule = showLabel && label && (
-    <span
-      className={`${cur.text} font-normal whitespace-nowrap`}
-      style={{
-        color: hovered ? "var(--color-white)" : textColor,
-        order: iconPosition === "left" ? 2 : 1,
-      }}
-    >
-      {label}
-    </span>
-  );
-
-  /* COMMON PROPS */
   const commonProps = {
     className: `
       relative flex items-center overflow-visible
@@ -165,30 +108,21 @@ export default function CTABtn({
       fancy-btn ${hovered ? "is-hovered" : ""}
     `,
     style: {
-      backgroundColor: showButtonBg
-        ? hovered
-          ? btnHoverBg
-          : btnBg
-        : "transparent",
-
+      backgroundColor: showButtonBg ? (hovered ? btnHoverBg : btnBg) : "transparent",
       color: hovered ? "var(--color-white)" : textColor,
-
       transform: hovered ? "scale(0.95)" : "scale(1)",
       transformOrigin: "center",
-
-      /* ✅ DYNAMIC COLORS */
       ["--btn-border" as any]: borderColor || textColor,
       ["--btn-border-hover" as any]: borderHoverColor || "var(--color-white)",
       ["--btn-line" as any]: lineColor || textColor,
       ["--btn-line-hover" as any]: lineHoverColor || "var(--color-white)",
-
-      /* ✅ BOTTOM KEY CONTROL */
       ["--bk1-width" as any]: bottomKey1Width || "25px",
       ["--bk2-width" as any]: bottomKey2Width || "10px",
       ["--bk1-right" as any]: bottomKey1Right || "30px",
       ["--bk2-right" as any]: bottomKey2Right || "10px",
     },
-    onMouseEnter: () => setInternalHover(true),
+    // Hover event only fires if the device supports actual hover
+    onMouseEnter: () => canHover && setInternalHover(true),
     onMouseLeave: () => setInternalHover(false),
     onClick,
   };
@@ -196,15 +130,47 @@ export default function CTABtn({
   const Component: any = href ? Link : "button";
 
   return (
-    <Component
-      {...(href ? { ...commonProps, href } : commonProps)}
-    >
+    <Component {...(href ? { ...commonProps, href } : commonProps)}>
       {/* TOP KEY */}
       <span className="top-key" />
 
       <div className={`flex items-center w-full ${cur.gap} relative z-10`}>
-        {(showIcon || showIconCircle) && CircleModule}
-        {LabelModule}
+        {(showIcon || showIconCircle) && (
+          <div
+            className={`${cur.circle} flex items-center justify-center shrink-1 transition-all duration-300`}
+            style={{
+              color: showIconCircle
+                ? hovered
+                  ? "var(--color-white)"
+                  : textColor || "var(--color-white)"
+                : "var(--color-white)",
+              order: iconPosition === "left" ? 1 : 0,
+            }}
+          >
+            <div
+              className="flex items-center justify-center transition-transform duration-300"
+              style={{
+                transform:
+                  hovered && (iconType === "arrow" || iconType === "reset")
+                    ? "rotate(0deg) scale(0.6)"
+                    : "rotate(0deg)",
+              }}
+            >
+              <Icon />
+            </div>
+          </div>
+        )}
+        {showLabel && label && (
+          <span
+            className={`${cur.text} font-normal whitespace-nowrap`}
+            style={{
+              color: hovered ? "var(--color-white)" : textColor,
+              order: iconPosition === "left" ? 2 : 1,
+            }}
+          >
+            {label}
+          </span>
+        )}
       </div>
 
       {/* BOTTOM KEYS */}

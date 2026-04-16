@@ -236,7 +236,7 @@ a {
 }
 
 /* LEFT LINE */
-.fancy-btn .before-line {
+/* .fancy-btn .before-line {
   position: absolute;
   width: 25px;
   height: 2px;
@@ -245,10 +245,10 @@ a {
   left: 20px;
   transform: translateY(-50%);
   transition: all 0.3s ease-in-out;
-}
+} */
 
 /* TOP KEY */
-.fancy-btn .top-key {
+/* .fancy-btn .top-key {
   position: absolute;
   height: 2px;
   width: 25px;
@@ -256,10 +256,10 @@ a {
   left: 10px;
   background: var(--btn-line);
   transition: all 0.5s ease-in-out;
-}
+} */
 
 /* BOTTOM KEY 1 */
-.fancy-btn .bottom-key-1 {
+/* .fancy-btn .bottom-key-1 {
   position: absolute;
   height: 2px;
   width: var(--bk1-width);
@@ -267,10 +267,10 @@ a {
   right: var(--bk1-right);
   background: var(--btn-line);
   transition: all 0.5s ease-in-out;
-}
+} */
 
 /* BOTTOM KEY 2 */
-.fancy-btn .bottom-key-2 {
+/* .fancy-btn .bottom-key-2 {
   position: absolute;
   height: 2px;
   width: var(--bk2-width);
@@ -278,40 +278,55 @@ a {
   right: var(--bk2-right);
   background: var(--btn-line);
   transition: all 0.5s ease-in-out;
-}
+} */
 
-/* --- HOVER & FORCED HOVER STATES --- */
+/* --- DESKTOP ONLY HOVER --- */
+/* @media (hover: hover) {
+  .fancy-btn:hover,
+  .fancy-btn.is-hovered {
+    border-color: var(--btn-border-hover);
+  }
 
-/* Border Change */
-.fancy-btn:hover,
-.fancy-btn.is-hovered {
+  .fancy-btn:hover .before-line,
+  .fancy-btn.is-hovered .before-line {
+    width: 15px;
+    background: var(--btn-line-hover);
+  }
+
+  .fancy-btn:hover .top-key,
+  .fancy-btn.is-hovered .top-key {
+    width: 0;
+    left: -2px;
+    background: var(--btn-line-hover);
+  }
+
+  .fancy-btn:hover .bottom-key-1,
+  .fancy-btn.is-hovered .bottom-key-1,
+  .fancy-btn:hover .bottom-key-2,
+  .fancy-btn.is-hovered .bottom-key-2 {
+    width: 0;
+    right: 0;
+    background: var(--btn-line-hover);
+  }
+} */
+
+/* --- FORCED HOVER (If specifically triggered via React Prop) --- */
+/* .fancy-btn.is-hovered {
   border-color: var(--btn-border-hover);
 }
-
-/* Before Line Shrink */
-.fancy-btn:hover .before-line,
 .fancy-btn.is-hovered .before-line {
   width: 15px;
   background: var(--btn-line-hover);
 }
-
-/* Top Key Disappear */
-.fancy-btn:hover .top-key,
 .fancy-btn.is-hovered .top-key {
   width: 0;
   left: -2px;
-  background: var(--btn-line-hover);
 }
-
-/* Bottom Keys Disappear */
-.fancy-btn:hover .bottom-key-1,
 .fancy-btn.is-hovered .bottom-key-1,
-.fancy-btn:hover .bottom-key-2,
 .fancy-btn.is-hovered .bottom-key-2 {
   width: 0;
   right: 0;
-  background: var(--btn-line-hover);
-}
+} */
 
 
 
@@ -410,7 +425,7 @@ a {
   white-space: nowrap;
   text-align: center;
   margin: 0 auto;
-  font-weight: bold;
+  font-weight: normal;
   width: 100%;
 }
 
@@ -758,8 +773,8 @@ a {
 }
 
 /* ──────────────────────────────────────
-            RIGHT: TEXT PANEL — slides RIGHT → LEFT
-            ────────────────────────────────────── */
+RIGHT: TEXT PANEL — slides RIGHT → LEFT
+────────────────────────────────────── */
 .text-panel {
   padding-left: 48px;
   /* more breathing space */

@@ -24,18 +24,16 @@ const fullProjects = [...projects, ...Array(10 - projects.length).fill(projects[
 
 const Core2026: NextPage = () => {
   const [highlightedIndices, setHighlightedIndices] = useState<number[]>([]);
-  const [isIntroActive, setIsIntroActive] = useState(true);
-  const [isDesktop, setIsDesktop] = useState(false); // Default to false for SSR
+  const [isIntroActive, setIsIntroActive] = useState(false); // Start false, trigger on view
+  const [isDesktop, setIsDesktop] = useState(false); 
+  const [isHovered, setIsHovered] = useState(false);
   const totalCards = fullProjects.length;
-    const [isHovered, setIsHovered] = useState(false);
 
   // Detect Screen Size
   useEffect(() => {
     const checkScreen = () => {
-      // 1024px is usually the threshold for Desktop (LG in Tailwind)
       setIsDesktop(window.innerWidth >= 1024);
     };
-    
     checkScreen();
     window.addEventListener('resize', checkScreen);
     return () => window.removeEventListener('resize', checkScreen);
@@ -43,51 +41,38 @@ const Core2026: NextPage = () => {
 
   // Strobe Logic
   useEffect(() => {
-    if (!isIntroActive || !isDesktop) return; // Disable strobe on mobile/tab
+    if (!isIntroActive || !isDesktop) return; 
 
     const interval = setInterval(() => {
-      const randomCount = Math.floor(Math.random() * 1) + 3; 
+      const randomCount = 3; 
       const newIndices = Array.from({ length: randomCount }, () => 
         Math.floor(Math.random() * totalCards)
       );
       setHighlightedIndices(newIndices);
-      setTimeout(() => {
-        if(isIntroActive) setHighlightedIndices([]);
-      }, 450); 
+      
+      const timeout = setTimeout(() => {
+        setHighlightedIndices([]);
+      }, 450);
+
+      return () => clearTimeout(timeout);
     }, 700);
 
     return () => clearInterval(interval);
-  }, [totalCards, isIntroActive, isDesktop]);
-
-  // Intro Timer
-  useEffect(() => {
-    if (!isDesktop) {
-      setIsIntroActive(false); // Immediately end intro for mobile
-      return;
-    }
-    const introTimer = setTimeout(() => {
-      setIsIntroActive(false);
-      setHighlightedIndices([]); 
-    }, 5000); 
-    return () => clearTimeout(introTimer);
-  }, [isDesktop]);
+  }, [isIntroActive, isDesktop, totalCards]);
 
   return (
     <section className="min-h-max w-full bg-white flex flex-col items-center select-none" 
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-
-    <SectionHeading
-      titleMain="Core_" 
-      titleBold="2026" 
-      sticky={false}
-      isSectionHovered={isHovered} 
-    >
-    </SectionHeading>
+      <SectionHeading
+        titleMain="Core_" 
+        titleBold="2026" 
+        sticky={false}
+        isSectionHovered={isHovered} 
+      />
     
       <main className="w-full max-w-[1420px] pt-[30px] lg:pt-[50px] px-6 lg:px-[50px] pb-20">
-        {/* Responsive Grid: 1 col mobile, 2 col tab, 5 col desktop */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 lg:gap-[50px]">
           {fullProjects.map((project, i) => {
             const isHighlighted = highlightedIndices.includes(i);
@@ -95,7 +80,14 @@ const Core2026: NextPage = () => {
             return (
               <Link href={project.url} key={project.id} passHref>
                 <motion.div
-                  // Animations and Hovers only apply if isDesktop is true
+                  // This triggers the intro only when the first element is seen
+                  onViewportEnter={() => {
+                    if (isDesktop && !isIntroActive) {
+                      setIsIntroActive(true);
+                      setTimeout(() => setIsIntroActive(false), 5000);
+                    }
+                  }}
+                  viewport={{ once: true, amount: 0.2 }}
                   animate={isDesktop ? {
                     filter: (isIntroActive && isHighlighted) ? "grayscale(0%)" : "grayscale(100%)",
                     opacity: (isIntroActive && isHighlighted) ? 1 : 0.1,
@@ -131,7 +123,6 @@ const Core2026: NextPage = () => {
                     <span className="font-['Montserrat'] text-[14px] text-black font-medium">
                       {project.title}
                     </span>
-                    {/* Only show/animate icon background on desktop */}
                     <div className="w-[11px] h-[11px] border-[1.5px] border-black lg:group-hover:bg-black transition-colors" />
                   </div>
                 </motion.div>

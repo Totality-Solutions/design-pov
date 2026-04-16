@@ -23,8 +23,6 @@ import img7 from  "@/public/temp/home/section2/7.jpg"
 import img8 from  "@/public/temp/home/section2/8.jpg"
 import img9 from  "@/public/temp/home/section2/9.jpg"
 
-
-
 import Section from '../common/Section'
 
 interface ArrivalItem {
@@ -34,33 +32,6 @@ interface ArrivalItem {
   href: string;
 }
 
-// ─── Typewriter ─────────────────────────────────────────────
-function ScrollTypewriter({
-  text,
-  progress,
-  isMobile,
-}: {
-  text: string
-  progress: MotionValue<number>
-  isMobile: boolean
-}) {
-  return (
-    <span aria-label={text}>
-      {text.split('').map((char, i) => {
-        const threshold = i / text.length
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        const opacity = useTransform(progress, [threshold, threshold + 0.04], [0, 1])
-        return (
-          <motion.span key={i} style={{ opacity: isMobile ? 1 : opacity }}>
-            {char}
-          </motion.span>
-        )
-      })}
-    </span>
-  )
-}
-
-// ─── Component ─────────────────────────────────────────────
 const WhatPOV = () => {
   const containerRef = useRef<HTMLDivElement>(null)
   const [isMobile, setIsMobile] = useState(false)
@@ -83,12 +54,8 @@ const WhatPOV = () => {
     restDelta: 0.001,
   })
 
-  const lockedProgress = useMotionValue(isMobile ? 1 : 0)
-  const typeProgressRaw = useTransform(smooth, [0, 0.30], [0, 1])
-  const typeProgress = isMobile ? lockedProgress : typeProgressRaw
-
-  // FIX: Adjusted opacity ranges for better visibility of h1
-  const h1Opacity = useTransform(smooth, [0.25, 0.45], [0, 1])
+  // Animation values (exactly as per your original logic)
+  const h1Opacity = useTransform(smooth, [1, 1], [1, 1])
   const h1Blur = useTransform(smooth, [0.25, 0.45], [14, 0])
   const h1BlurPx = useTransform(h1Blur, v => `blur(${v}px)`)
 
@@ -105,13 +72,11 @@ const WhatPOV = () => {
 
   const typeBlockOpacity = useTransform(smooth, [0.59, 0.61], [1, 0], { clamp: true })
 
-  // FIX: Adjusted scroll ranges for mobile-friendly marquee visibility
   const descOpacity = useTransform(smooth, isMobile ? [0.30, 0.50] : [0.60, 0.80], [0, 1])
   const descY = useTransform(smooth, isMobile ? [0.30, 0.50] : [0.60, 0.80], [24, 0])
   const descBlur = useTransform(smooth, isMobile ? [0.30, 0.50] : [0.60, 0.80], [10, 0])
   const descBlurPx = useTransform(descBlur, v => `blur(${v}px)`)
 
-  // FIX: Marquee appears earlier and stays longer on mobile
   const marqueeOpacity = useTransform(
     smooth,
     isMobile ? [0.45, 0.70] : [0.70, 0.95],
@@ -129,13 +94,12 @@ const WhatPOV = () => {
   )
   const marqueeBlurPx = useTransform(marqueeBlur, v => `blur(${v}px)`)
 
-  // FIX: Adjusted container height for better scroll behavior on mobile
   const containerHeight = isMobile ? '250vh' : '200vh'
 
-const NEW_ARRIVALS: ArrivalItem[] = [
+  const NEW_ARRIVALS: ArrivalItem[] = [
     { id: 1, img: img1, title: 'Simply Dummy', href: '#' },
     { id: 10, img: '/temp/home/section2/1.mp4', title: 'Simply Dummy', href: '#' },
-    { id: 2, img: img2, title: 'Dynamic Video', href: '#' }, // Ensure this is in /public
+    { id: 2, img: img2, title: 'Dynamic Video', href: '#' },
     { id: 11, img: '/temp/home/section2/2.mp4', title: 'Simply Dummy', href: '#' },
     { id: 3, img: img3, title: 'Simply Dummy', href: '#' },
     { id: 12, img: '/temp/home/section2/3.mp4', title: 'Simply Dummy', href: '#' },
@@ -153,7 +117,6 @@ const NEW_ARRIVALS: ArrivalItem[] = [
       ref={containerRef}
       style={{ position: 'relative', height: containerHeight }}
     >
-      {/* ── Sticky viewport ── */}
       <div
         style={{
           position: 'sticky',
@@ -164,101 +127,87 @@ const NEW_ARRIVALS: ArrivalItem[] = [
       >
         <Section>
           <Container>
-
-        {/* ── Single centered anchor — everything overlaps here ── */}
-        <div
-          style={{
-            position: 'absolute',
-            inset: 0,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: isMobile ? '40px' : '20px',
-            paddingBottom: isMobile ? '40px' : '0px',
-          }}
-        >
-
-          {/* ── PHASE 1 + 2 wrapper: typewriter line + h1 (overlap each other) ── */}
-          <motion.div
-            style={{ opacity: typeBlockOpacity }}
-            className="w-full text-center px-4 sm:px-6 typewriter"
-          >
-            {/* Phase 1 — typewriter line */}
-            <motion.p
-              className="typewriter-text text-sm sm:text-base md:text-lg"
-              style={{ x: pX, opacity: pOpacity }}
-            >
-              <ScrollTypewriter
-                text="India's Most INTERNATIONAL"
-                progress={typeProgress}
-                isMobile={isMobile}
-              />
-            </motion.p>
-
-            {/* Phase 2 — focus h1, sits directly below typewriter line */}
-            <motion.h1
-              className="italic uppercase focus-text text-2xl sm:text-3xl md:text-5xl lg:text-6xl"
+            <div
               style={{
-                opacity: h1CombinedOp,
-                filter: h1BlurPx,
-                x: h1X,
+                position: 'absolute',
+                inset: 0,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: isMobile ? '40px' : '20px',
+                paddingBottom: isMobile ? '40px' : '0px',
               }}
             >
-              DESIGN PLATFORMS.
-            </motion.h1>
-          </motion.div>
+              <motion.div
+                style={{ opacity: typeBlockOpacity }}
+                className="w-full text-center px-4 sm:px-6 typewriter"
+              >
+                {/* ── Typewriter component removed, plain motion.p used with same styles ── */}
+                <motion.p
+                  className="typewriter-text text-sm sm:text-base md:text-lg"
+                  style={{ x: pX, opacity: pOpacity }}
+                >
+                  India&apos;s Most INTERNATIONAL
+                </motion.p>
 
-          <div className="phase-3-marquee-wrapper w-full">
+                <motion.h1
+                  className="italic uppercase focus-text text-2xl sm:text-3xl md:text-5xl lg:text-6xl"
+                  style={{
+                    opacity: h1CombinedOp,
+                    // filter: h1BlurPx,
+                    x: h1X,
+                  }}
+                >
+                  DESIGN PLATFORMS.
+                </motion.h1>
+              </motion.div>
 
-            {/* Phase 3 — hero-desc: hidden on mobile, visible on desktop */}
-            <motion.h1
-              className="hero-desc w-full text-center px-4 sm:px-6 hidden md:block text-lg md:text-xl lg:text-2xl leading-relaxed"
-              style={{
-                opacity: descOpacity,
-                y: descY,
-                filter: descBlurPx,
-                pointerEvents: 'none',
-              }}
-            >
-              <span className="font-semibold">Design POV India</span> is an annual platform that brings
-              together the most progressive creative minds in the country.
-              Through <span className="font-semibold">Residencies, Exhibitions, Publications,</span> and{' '}
-              <span className="font-semibold">Critical Dialogue</span>, we shape the narrative of
-              Indian design—on Indian terms.
-            </motion.h1>
+              <div className="phase-3-marquee-wrapper w-full">
+                <motion.h1
+                  className="hero-desc w-full text-center px-4 sm:px-6 hidden md:block text-lg md:text-xl lg:text-2xl leading-relaxed"
+                  style={{
+                    opacity: descOpacity,
+                    y: descY,
+                    filter: descBlurPx,
+                    pointerEvents: 'none',
+                  }}
+                >
+                  <span className="font-semibold">Design POV India</span> is an annual platform that brings
+                  together the most progressive creative minds in the country.
+                  Through <span className="font-semibold">Residencies, Exhibitions, Publications,</span> and{' '}
+                  <span className="font-semibold">Critical Dialogue</span>, we shape the narrative of
+                  Indian design—on Indian terms.
+                </motion.h1>
 
-            {/* Phase 3 — Mobile description: visible on mobile only */}
-            <motion.h1
-              className="hero-desc w-full text-center px-4 sm:px-6 md:hidden text-base leading-relaxed"
-              style={{
-                opacity: descOpacity,
-                y: descY,
-                filter: descBlurPx,
-                pointerEvents: 'none',
-              }}
-            >
-              <span className="font-semibold">Design POV India</span> brings together progressive creative minds.
-              Through <span className="font-semibold">Residencies, Exhibitions, Publications,</span> and{' '}
-              <span className="font-semibold">Critical Dialogue</span>, we shape Indian design.
-            </motion.h1>
+                <motion.h1
+                  className="hero-desc w-full text-center px-4 sm:px-6 md:hidden text-base leading-relaxed"
+                  style={{
+                    opacity: descOpacity,
+                    y: descY,
+                    filter: descBlurPx,
+                    pointerEvents: 'none',
+                  }}
+                >
+                  <span className="font-semibold">Design POV India</span> brings together progressive creative minds.
+                  Through <span className="font-semibold">Residencies, Exhibitions, Publications,</span> and{' '}
+                  <span className="font-semibold">Critical Dialogue</span>, we shape Indian design.
+                </motion.h1>
 
-            {/* Marquee */}
-            <motion.div
-              style={{
-                opacity: marqueeOpacity,
-                y: marqueeY,
-                filter: marqueeBlurPx,
-              }}
-              className="mt-8 w-full  h-[220px] sm:h-[260px] md:h-[320px] lg:h-[350px] flex items-end justify-center overflow-hidden"
-            >
-              <MarqueeFlow
+                <motion.div
+                  style={{
+                    opacity: marqueeOpacity,
+                    y: marqueeY,
+                    filter: marqueeBlurPx,
+                  }}
+                  className="mt-8 w-full  h-[220px] sm:h-[260px] md:h-[320px] lg:h-[350px] flex items-end justify-center overflow-hidden"
+                >
+                  <MarqueeFlow
                     items={NEW_ARRIVALS}
                     gap={5}
                     speed={200}
                     desktopCount={4}
                     renderItem={(item: ArrivalItem, _index, isExpanded) => {
-                      // Detect if media is a video string
                       const isVideo = typeof item.img === 'string' && item.img.match(/\.(mp4|webm|ogg)$/i);
 
                       return (
@@ -318,18 +267,14 @@ const NEW_ARRIVALS: ArrivalItem[] = [
                       );
                     }}
                   />
-            </motion.div>
-
-          </div>
-
-        </div>
+                </motion.div>
+              </div>
+            </div>
           </Container>
-          </Section>
+        </Section>
       </div>
     </div>
   )
 }
 
 export default WhatPOV
-
-
