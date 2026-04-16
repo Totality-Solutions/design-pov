@@ -24,6 +24,7 @@ type CTAProps = {
 
   // Floating Image (3D effect)
   floatingImage?: string;
+  floatingImageHeight?: number
   floatingImageWidth?: number;
   
   className?: string;
@@ -41,6 +42,7 @@ const CTAStrip = ({
   hoverTextColor,
   floatingImage,
   floatingImageWidth = 150,
+  floatingImageHeight= 140,
   className = "",
 }: CTAProps) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -83,25 +85,27 @@ const CTAStrip = ({
         </div>
 
         {/* Right Side: Image + Button */}
-        <div className="flex items-center gap-6 md:gap-12 relative">
-          
+        <div className="flex items-center gap-6 md:gap-12 relative h-full">
+
           {floatingImage && (
+            /* Change: absolute positioning and right-full to place it 
+               to the left of the button without taking up height.
+            */
             <div 
-              className={`relative z-20 transition-all duration-700 ease-out pointer-events-none 
-                ${isHovered ? "scale-110 -translate-y-16 rotate-3" : "scale-100 -translate-y-10"}`}
-              style={{ width: floatingImageWidth, height: floatingImageWidth }}
+              className={`absolute right-[110%] bottom-[-20%] z-20 transition-all duration-700 ease-out pointer-events-none 
+                ${isHovered ? "scale-110 -rotate-12" : "scale-100 translate-y-0 rotate-3"}`}
+              style={{ width: floatingImageWidth, height: floatingImageHeight }}
             >
               <Image 
                 src={floatingImage} 
                 alt="3D element" 
                 fill 
-                className="object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.3)]" 
+                className="object-contain" 
               />
             </div>
           )}
 
-          <div className="shrink-0">
-            {/* THE FIXED CTA BUTTON */}
+          <div className="shrink-0 relative z-30">
             <CTABtn
               label={ctaLabel}
               href={ctaHref}

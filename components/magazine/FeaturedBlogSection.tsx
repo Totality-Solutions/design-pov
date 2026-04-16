@@ -141,11 +141,11 @@ export default function FeaturedBlogSection() {
 
           {/* MAIN BLOG COLUMN */}
 {/* MAIN BLOG COLUMN */}
-<div className="flex flex-col gap-6 md:gap-8 lg:border-r lg:border-neutral-100 lg:pr-10">
+<div className="flex flex-col gap-6 md:gap-8 border border-neutral-100 ">
 
 
     <div className="sticky top-0 left-0 w-full h-full">
-      <div className="relative w-full h-screen -mt-[25%] md:-mt-[10%]">
+      <div className="relative w-full h-screen ">
         {/* The h-screen and negative margin ensure the image is tall enough 
             to stay "fixed" and centered as the container moves.
         */}
@@ -160,7 +160,7 @@ export default function FeaturedBlogSection() {
   </div>
 
   {/* CONTENT SECTION */}
-  <div className="flex flex-col gap-5 md:gap-6 relative z-10 bg-white">
+  <div className="flex flex-col gap-5 md:gap-6 relative z-10 bg-white p-4">
     <div className="flex flex-wrap items-center gap-3 md:gap-4 text-sm md:text-base">
       <span className="text-black font-medium">{activeBlog.date}</span>
       <div className="hidden md:block w-[1px] h-5 bg-black/20" />
@@ -183,10 +183,18 @@ export default function FeaturedBlogSection() {
     <div className="mt-2 md:mt-4">
       <CTABtn
         label="Read More"
-        href="/blog/article-slug"
+        btnBg="transparent"
+        btnHoverBg="var(--primary-blue)"
         textColor="black"
         borderColor="black"
-        btnBg="transparent"
+        borderHoverColor="white"
+        lineColor="white"
+        lineHoverColor="white"
+        bottomKey1Width="40px"
+        bottomKey2Width="12px"
+        bottomKey1Right="50px"
+        bottomKey2Right="15px"
+        href="#tickets"
       />
     </div>
   </div>

@@ -45,14 +45,14 @@ const modules = [
     '/temp/home/theme/WEBSITE_THEME BANNER_2.jpg.jpeg',
     ],
   },
-  {
-    name: "Visitor",
-    images: [
-    '/temp/home/theme/WEBSITE_THEME BANNER_2.jpg.jpeg',
-    '/temp/home/theme/WEBSITE_THEME BANNER_3.jpg.jpeg',
-    '/temp/home/theme/WEBSITE_THEME BANNER_1.jpg.jpeg',
-    ],
-  },
+  // {
+  //   name: "Visitor",
+  //   images: [
+  //   '/temp/home/theme/WEBSITE_THEME BANNER_2.jpg.jpeg',
+  //   '/temp/home/theme/WEBSITE_THEME BANNER_3.jpg.jpeg',
+  //   '/temp/home/theme/WEBSITE_THEME BANNER_1.jpg.jpeg',
+  //   ],
+  // },
 ];
 
 export default function ParticipationSection() {

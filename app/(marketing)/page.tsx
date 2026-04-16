@@ -21,7 +21,7 @@ export default function HomePage() {
       <Ecosystem />
       <FeaturedDesigners />
       <FeaturedStory />
-      <div className="w-full z-10 bg-white  border-b border-[#DFDFDF]">
+      <div className="w-full z-10 bg-white  ">
         <CTAStrip
           title="Where Design Meets Dialogue"
           ctaLabel="Apply"
@@ -29,6 +29,8 @@ export default function HomePage() {
           hoverBgColor="#000000"
           textColor='var(--primary-red)'
           hoverTextColor='var(--color-white)'
+          // floatingImage="/temp/ctastrip/strip-1.png"
+          // className="!py-0"
         />
       </div>
       <ClientLogo />
