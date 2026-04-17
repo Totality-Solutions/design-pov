@@ -139,7 +139,7 @@ const CollaborateSection = () => {
               />
 
               {/* Overlay */}
-              <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+              <div className="absolute inset-0 bg-black/50 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition flex items-center justify-center">
                 <button
                   onClick={() => {
                     setActiveIndex(i % images.length);

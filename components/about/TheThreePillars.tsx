@@ -74,14 +74,16 @@ const TheThreePillars: React.FC = () => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      
+
+
       {/* 1. FLEXIBLE SECTION HEADER */}
       <SectionHeading 
         titleMain="The_Three_" 
         titleBold="Pillars" 
         sticky={true}
-        stickyTop="top-20"
+        stickyTop="top-0"
         isSectionHovered={isHovered} 
+        className='z-[9999]'
       >
         {/* Right side content: Passing multiple elements as children */}
         <div className="hidden md:flex gap-[60px] lg:gap-[100px]">

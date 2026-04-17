@@ -154,9 +154,13 @@ const Footer = () => {
 };
 
 const MagneticFollowFlare = ({ index, mouseX, imageSrc, colWidth, baseFlareWidth, isPastHalfway, parentWidth }: any) => {
-  const responsiveScale = Math.min(parentWidth / 1600, 1); 
-  const sizeReductionFactor = Math.pow(1, index);
-  const finalWidth = baseFlareWidth * responsiveScale * sizeReductionFactor;
+// Replace the old responsiveScale line with this:
+const responsiveScale = Math.max(0.7, Math.min(parentWidth / 1600, 1));
+const sizeReductionFactor = Math.pow(1, index);
+const calculatedWidth = baseFlareWidth * (parentWidth / 1600);
+
+// Ensure the flare is at least 800px wide, but no more than the baseFlareWidth
+const finalWidth = Math.max(800, Math.min(calculatedWidth, baseFlareWidth)) * sizeReductionFactor;
   
   const baseCenter = (colWidth / 2) - (finalWidth / 2);
   
