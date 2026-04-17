@@ -279,7 +279,7 @@ export default function MarqueeCarousel() {
        className=' !border-t-0'
      >
      </SectionHeading>
-      <Section className="!py-0 ">
+      <Section className="!py-0 !pb-6 md:!pb-0 ">
         <div className="mc-root">
           <div className="mc-wrap ">
 

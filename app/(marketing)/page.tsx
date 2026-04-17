@@ -1,4 +1,6 @@
-import type { Metadata } from "next";
+"use client";
+
+import React, { useState } from "react";
 import Hero from "@/components/home/Hero";
 import WhatPOV from "@/components/home/WhatPOV";
 import Theme from "@/components/home/Theme";
@@ -7,12 +9,12 @@ import FeaturedDesigners from "@/components/home/Featured";
 import ClientLogo from "@/components/home/ClientLogo";
 import FeaturedStory from "@/components/home/FeaturedStory";
 import CTAStrip from "@/components/common/CTAStrip";
-
-export const metadata: Metadata = {
-  title: "Design POV — A Platform for Design Beyond Sight",
-};
+import PopupForm from "@/components/common/PopupForm"; // 1. Import the Form
 
 export default function HomePage() {
+  // 2. Define the state to control the popup
+  const [isFormOpen, setIsFormOpen] = useState(false);
+
   return (
     <>
       <Hero />
@@ -21,19 +23,26 @@ export default function HomePage() {
       <Ecosystem />
       <FeaturedDesigners />
       <FeaturedStory />
-      <div className="w-full z-10 bg-white  ">
+      
+      <div className="w-full z-10 bg-white border-b">
         <CTAStrip
           title="Where Design Meets Dialogue"
           ctaLabel="Apply"
-          ctaHref="#"
+          // 3. Pass the open function to onClick
+          onClick={() => setIsFormOpen(true)} 
           hoverBgColor="#000000"
           textColor='var(--primary-red)'
           hoverTextColor='var(--color-white)'
-          // floatingImage="/temp/ctastrip/strip-1.png"
-          // className="!py-0"
         />
       </div>
+
       <ClientLogo />
+
+      {/* 4. Place the PopupForm component here */}
+      <PopupForm 
+        isOpen={isFormOpen} 
+        onClose={() => setIsFormOpen(false)} 
+      />
     </>
   );
 }
