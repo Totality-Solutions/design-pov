@@ -8,8 +8,9 @@ import img2 from "@/public/temp/featured/2.png";
 import img3 from "@/public/temp/featured/3.png";
 import img4 from "@/public/temp/featured/1.png";
 import img5 from "@/public/temp/featured/3.png";
-import Section from "../common/Section";
+const video1 = "/temp/featured/4.mp4";
 import { Container } from "../common/Container";
+import Section from "../common/Section";
 import Title from "../common/Title";
 import SectionHeading from "../common/SectionHeading";
 
@@ -26,18 +27,37 @@ type Designer = {
 };
 
 const GRID_POSITIONS = [
+  // TOP ROW
   { col: "1 / 2", row: "1 / 2" },
   { col: "2 / 3", row: "1 / 2" },
-  { col: "3 / 4", row: "1 / 3" },
+  { col: "3 / 4", row: "1 / 3" }, // center (unchanged)
   { col: "4 / 5", row: "1 / 2" },
   { col: "5 / 6", row: "1 / 2" },
-  { col: "1 / 3", row: "2 / 3" },
-  { col: "4 / 6", row: "2 / 3" },
+
+  // BOTTOM ROW (FIXED → no spanning)
+  { col: "1 / 2", row: "2 / 3" },
+  { col: "2 / 3", row: "2 / 3" },
+  { col: "4 / 5", row: "2 / 3" },
+  { col: "5 / 6", row: "2 / 3" },
 ];
 
 // ─── Media ─────────────────────────
-function MediaCell({ src }: any) {
-  return <Image src={src} alt="" fill style={{ objectFit: "cover" }} />;
+function MediaCell({ src, type }: any) {
+  if (type === "video") {
+    return (
+      <video
+        src={src}
+        aria-label="video"
+        autoPlay
+        muted
+        loop
+        style={{ width: "100%", height: "100%", objectFit: "cover" }}
+      />
+    );
+  }
+  return (
+    <Image src={src} alt="" fill style={{ objectFit: "cover" }} />
+  );
 }
 
 // ─── Tile ─────────────────────────
@@ -58,7 +78,7 @@ function DesignerTile({
     setIsActive(true);
     intervalRef.current = setInterval(() => {
       setMediaIndex((p: number) => (p + 1) % designer.media.length);
-    }, 400);
+    }, 700);
   };
 
   const stopHover = () => {
@@ -80,7 +100,7 @@ function DesignerTile({
 
         intervalRef.current = setInterval(() => {
           setMediaIndex((p: number) => (p + 1) % designer.media.length);
-        }, 400);
+        }, 700);
       }, 3000);
 
       return () => {
@@ -127,7 +147,7 @@ function DesignerTile({
           transition={{ duration: 0.08 }}
           style={{ position: "absolute", inset: 0 }}
         >
-          <MediaCell src={currentMedia.src} />
+          <MediaCell src={currentMedia.src} type={currentMedia.type} />
         </motion.div>
       </AnimatePresence>
 
@@ -178,13 +198,15 @@ function DesignerTile({
 
 // ─── Data ─────────────────────────
 const designers: Designer[] = [
-  { id: 1, name: "Rahul Mehta", role: "", media: [{ src: img1 }, { src: img2 }, { src: img3 }] },
+  { id: 1, name: "Rahul Mehta", role: "", media: [{ src: img1 }, { src: img2 }] },
   { id: 2, name: "Priya Nair", role: "", media: [{ src: img2 }, { src: img4 }] },
-  { id: 3, name: "Arjun Sharma", role: "", media: [{ src: img3 }, { src: img5 }, { src: img1 }] },
+  { id: 3, name: "Arjun Sharma", role: "", media: [{ src: video1, type: "video" }] },
   { id: 4, name: "Meera Iyer", role: "", media: [{ src: img4 }, { src: img5 }] },
   { id: 5, name: "Kabir Das", role: "", media: [{ src: img5 }, { src: img2 }] },
   { id: 6, name: "Ananya Roy", role: "", media: [{ src: img1 }, { src: img3 }] },
   { id: 7, name: "Dev Patel", role: "", media: [{ src: img2 }, { src: img5 }] },
+  { id: 8, name: "Ananya Roy", role: "", media: [{ src: img1 }, { src: img3 }] },
+  { id: 9, name: "Dev Patel", role: "", media: [{ src: img2 }, { src: img5 }] },
 ];
 
 // ─── Main ─────────────────────────
@@ -263,7 +285,7 @@ useEffect(() => {
               style={{
                 display: "grid",
                 gridTemplateColumns: "1fr 1fr 1.8fr 1fr 1fr",
-                gridTemplateRows: "250px 320px",
+                gridTemplateRows: "290px 290px",
                 gap: "4px",
               }}
             >
