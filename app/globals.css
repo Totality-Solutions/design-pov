@@ -80,7 +80,6 @@
   /* Desktop Mappings */
   --text-hero: var(--text-hero);
   --text-h1: var(--text-h1);
-  --text-h2: var(--text-h2);
   --text-h3: var(--text-h3);
   --text-body: var(--text-body);
   --text-small: var(--text-small);
@@ -819,11 +818,11 @@ RIGHT: TEXT PANEL — slides RIGHT → LEFT
 
 /* Big Title */
 .text-big {
-  font-size: clamp(48px, 3vw, 80px);
+  font-size: clamp(24px, 1vw, 40px);
   /* slightly bigger */
   font-weight: 700;
   letter-spacing: 0px;
-  line-height: 0.9;
+  line-height: 1;
   color: var(--color-black);
   display: flex;
   align-items: flex-start;

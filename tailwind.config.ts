@@ -22,6 +22,7 @@ const config: Config = {
         display: ["var(--font-family)"]
       },
       fontSize: {
+        h7: '40px',
         "display-2xl": ["clamp(4rem, 10vw, 9rem)", { lineHeight: "0.9" }],
         "display-xl": ["clamp(3rem, 7vw, 6rem)", { lineHeight: "0.95" }],
         "display-lg": ["clamp(2rem, 5vw, 4rem)", { lineHeight: "1" }],

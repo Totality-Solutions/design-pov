@@ -76,7 +76,7 @@ const Theme = () => {
         <div className="grid grid-cols-1 lg:grid-cols-[3fr_7fr] w-full h-full md:py-12 py-0 gap-10 md:gap-4">
 
           <div className="w-full h-full flex flex-col justify-end gap-4 px-3 lg:px-14">
-            <h1 className="text-5xl font-semibold uppercase">2026 THEME</h1>
+            <h1 className="text-display-2xl font-semibold uppercase">2026 THEME</h1>
             <p className="text-lg">
               Lorem ipsum dolor sit amet consectetur.
               psum dolor sit amet consectetur.

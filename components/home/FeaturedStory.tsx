@@ -11,7 +11,7 @@ import { Container } from "../common/Container";
 import SectionHeading from "../common/SectionHeading";
 
 // Import External Data
-import { slides } from "../common/data/slidesData";
+import { slides } from "../../data/slidesData";
 
 export default function MarqueeCarousel() {
   const [activeIndex, setActiveIndex] = useState(0);
