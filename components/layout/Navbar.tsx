@@ -17,7 +17,7 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
   const heroRef = useRef<HTMLDivElement>(null);
-
+  
   useEffect(() => {
     const checkScreenSize = () => {
       const isLg = window.innerWidth >= 1024;
@@ -27,7 +27,10 @@ export default function Navbar() {
     checkScreenSize();
     window.addEventListener("resize", checkScreenSize);
     
-    const onScroll = () => setScrolled(window.scrollY > 450);
+    
+    const onScroll = () => {
+  setScrolled(window.scrollY > 350);
+};
     window.addEventListener("scroll", onScroll, { passive: true });
     
     return () => {
@@ -36,6 +39,8 @@ export default function Navbar() {
     };
   }, []);
 
+  const isVisible = scrolled || mobileOpen;
+  
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? "hidden" : "unset";
   }, [mobileOpen]);
@@ -97,13 +102,13 @@ export default function Navbar() {
       </div>
 
       {/* 2. STICKY NAVBAR */}
-      <header
-        className={`fixed top-0 inset-x-0 transition-all duration-300 ease-in-out z-[1600] ${
-          scrolled || mobileOpen 
-            ? "bg-black text-white translate-y-0 shadow-lg" 
-            : "bg-white lg:bg-transparent text-black lg:-translate-y-full lg:opacity-0"
-        }`}
-      >
+<header
+  className={`fixed top-0 inset-x-0 z-[1600] transition-all duration-300 ${
+    scrolled
+      ? "bg-black backdrop-blur-md text-white shadow-lg opacity-100"
+      : "hidden text-white opacity-100"
+  }`}
+>
         <Container>
           <div className="flex justify-between items-center px-5 py-4 lg:py-5 lg:px-14">
             <div className="stickyLeft">

@@ -135,7 +135,7 @@ const WhatPOV = () => {
                 flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
-                gap: isMobile ? '40px' : '20px',
+                gap: isMobile ? '40px' : '32px',
                 paddingBottom: isMobile ? '40px' : '0px',
               }}
             >
@@ -163,44 +163,47 @@ const WhatPOV = () => {
                 </motion.h1>
               </motion.div>
 
-              <div className="phase-3-marquee-wrapper w-full">
-                <motion.h1
-                  className="hero-desc w-full text-center px-4 sm:px-6 hidden md:block text-lg md:text-xl lg:text-2xl leading-relaxed"
-                  style={{
-                    opacity: descOpacity,
-                    y: descY,
-                    filter: descBlurPx,
-                    pointerEvents: 'none',
-                  }}
-                >
-                  <span className="font-semibold">Design POV India</span> is an annual platform that brings
-                  together the most progressive creative minds in the country.
-                  Through <span className="font-semibold">Residencies, Exhibitions, Publications,</span> and{' '}
-                  <span className="font-semibold">Critical Dialogue</span>, we shape the narrative of
-                  Indian design—on Indian terms.
-                </motion.h1>
+              <div className="phase-3-marquee-wrapper w-full text-center flex flex-col items-center justify-center gap-6 md:gap-8 h-full">
+                <div className="w-full h-[100%] flex items-end justify-center">
+                  <motion.h1
+                    className="hero-desc w-full md:w-[85%] lg:w-[75%] xl:w-[85%] text-center px-8 md:px-10 hidden md:block text-base md:text-lg lg:text-xl xl:text-2xl leading-relaxed"
+                    style={{
+                      opacity: descOpacity,
+                      y: descY,
+                      filter: descBlurPx,
+                      pointerEvents: 'none',
+                    }}
+                  >
+                    <span className="font-semibold">Design POV India</span> is an annual platform that brings
+                    together the most progressive creative minds in the country.
+                    Through <span className="font-semibold">Residencies, Exhibitions, Publications,</span> and{' '}
+                    <span className="font-semibold">Critical Dialogue</span>, we shape the narrative of
+                    Indian design—on Indian terms.
+                  </motion.h1>
 
-                <motion.h1
-                  className="hero-desc w-full text-center px-4 sm:px-6 md:hidden text-base leading-relaxed"
-                  style={{
-                    opacity: descOpacity,
-                    y: descY,
-                    filter: descBlurPx,
-                    pointerEvents: 'none',
-                  }}
-                >
-                  <span className="font-semibold">Design POV India</span> brings together progressive creative minds.
-                  Through <span className="font-semibold">Residencies, Exhibitions, Publications,</span> and{' '}
-                  <span className="font-semibold">Critical Dialogue</span>, we shape Indian design.
-                </motion.h1>
+                  <motion.h1
+                    className="hero-desc w-full text-center px-10 sm:px-6 md:hidden text-base leading-relaxed"
+                    style={{
+                      opacity: descOpacity,
+                      y: descY,
+                      filter: descBlurPx,
+                      pointerEvents: 'none',
+                    }}
+                  >
+                    <span className="font-semibold">Design POV India</span> brings together progressive creative minds.
+                    Through <span className="font-semibold">Residencies, Exhibitions, Publications,</span> and{' '}
+                    <span className="font-semibold">Critical Dialogue</span>, we shape Indian design.
+                  </motion.h1>
 
+                </div>
+                <div className="w-full">
                 <motion.div
                   style={{
                     opacity: marqueeOpacity,
                     y: marqueeY,
                     filter: marqueeBlurPx,
                   }}
-                  className="mt-8 w-full  h-[220px] sm:h-[260px] md:h-[320px] lg:h-[350px] flex items-end justify-center overflow-hidden"
+                  className="w-full h-[220px] sm:h-[260px] md:h-[280px] lg:h-[350px] xl:h-[400px] flex items-center justify-center overflow-hidden"
                 >
                   <MarqueeFlow
                     items={NEW_ARRIVALS}
@@ -268,6 +271,9 @@ const WhatPOV = () => {
                     }}
                   />
                 </motion.div>
+
+                </div>
+
               </div>
             </div>
           </Container>

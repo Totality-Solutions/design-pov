@@ -93,18 +93,20 @@ export default function Hero() {
   };
 
   return (
-    <Container className="w-full overflow-hidden lg:max-w-none px-0 pt-20">
-      {/* Added 'group' class here to detect hover */}
-      <div className="relative group w-full h-[35vh] sm:h-[50vh] md:h-[90vh] lg:h-[100vh]">
+ <div className="w-full overflow-hidden pt-20 ">
+    
+    {/* FULL WIDTH HERO */}
+    <div className="relative group w-full h-[35vh] sm:h-[50vh] md:h-[90vh] lg:h-[90vh]">
         <video
-          ref={videoRef}
-          src="/video/POV AD.mp4"
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover"
-        />
+        ref={videoRef}
+        src="/video/pov-adresizer.mp4"
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="absolute inset-0 w-full h-full object-contain"
+      />
+
 
         {/* ── VIDEO CONTROLS ── */}
         {/* Added 'opacity-0 group-hover:opacity-100' for the hover effect */}
@@ -166,6 +168,6 @@ export default function Hero() {
           href="#tickets"
         />
       </div>
-    </Container>
+    </div>
   );
 }
