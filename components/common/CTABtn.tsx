@@ -80,21 +80,43 @@ export default function CTABtn({
   // Combine internal mouse hover and parent forced hover
   const hovered = internalHover || forceHover;
 
-  const config = {
-    sm: { h: "h-10", circle: "w-8 h-8", text: "var(--font-size-sm)", px: "pl-4 pr-1", gap: "gap-3", iconSize: 20 },
-    md: { h: "h-auto", circle: "w-auto h-auto", text: "var(--font-size-sm) md:var(--font-size-base)", px: "px-5 md:px-10 py-1 md:py-2", gap: "gap-3", iconSize: 30 },
-    lg: { h: "h-12", circle: "w-10 h-10", text: "var(--font-size-base)", px: "px-5 py-1", gap: "gap-2", iconSize: 25 },
-  };
+const config = {
+  sm: { 
+    h: "h-10", 
+    circle: "w-8 h-8", 
+    text: "var(--text-small-mobile)", // 10px
+    px: "pl-4 pr-1", 
+    gap: "gap-3", 
+    iconSize: 20 
+  },
+  md: { 
+    h: "h-auto", 
+    circle: "w-auto h-auto", 
+    // Using --text-small-tab which is defined as 12px in your :root
+    text: "var(--text-small-tab)", 
+    px: "px-5 md:px-10 py-1 md:py-2", 
+    gap: "gap-3", 
+    iconSize: 30 
+  },
+  lg: { 
+    h: "h-12", 
+    circle: "w-10 h-10", 
+    text: "var(--text-body-tab)", // 18px (Desktop)
+    px: "px-5 py-1", 
+    gap: "gap-2", 
+    iconSize: 25 
+  },
+};
 
   const cur = config[size];
 
-  const Icon = () => {
-    const props = { size: cur.iconSize, color: "currentColor" };
-    if (iconType === "x") return <FiX {...props} />;
-    if (iconType === "plus") return <FiPlus {...props} />;
-    if (iconType === "reset") return <FiRefreshCcw {...props} />;
-    return <FiMinus {...props} strokeWidth={1.2} />;
-  };
+  // const Icon = () => {
+  //   const props = { size: cur.iconSize, color: "currentColor" };
+  //   if (iconType === "x") return <FiX {...props} />;
+  //   if (iconType === "plus") return <FiPlus {...props} />;
+  //   if (iconType === "reset") return <FiRefreshCcw {...props} />;
+  //   return <FiMinus {...props} strokeWidth={1.2} />;
+  // };
 
   const commonProps = {
     className: `
@@ -135,7 +157,7 @@ export default function CTABtn({
       <span className="top-key" />
 
       <div className={`flex items-center w-full ${cur.gap} relative z-10`}>
-        {(showIcon || showIconCircle) && (
+        {/* {(showIcon || showIconCircle) && (
           <div
             className={`${cur.circle} flex items-center justify-center shrink-1 transition-all duration-300`}
             style={{
@@ -159,7 +181,7 @@ export default function CTABtn({
               <Icon />
             </div>
           </div>
-        )}
+        )} */}
         {showLabel && label && (
           <span
             className={`${cur.text} font-normal whitespace-nowrap`}

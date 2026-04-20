@@ -3,45 +3,45 @@
 import React, { useState, useEffect, useRef } from "react";
 import Image, { StaticImageData } from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
+
+// Assets
 import img1 from "@/public/temp/featured/1.png";
 import img2 from "@/public/temp/featured/2.png";
 import img3 from "@/public/temp/featured/3.png";
 import img4 from "@/public/temp/featured/1.png";
 import img5 from "@/public/temp/featured/3.png";
 const video1 = "/temp/featured/4.mp4";
+
+// Components
 import { Container } from "../common/Container";
 import Section from "../common/Section";
-import Title from "../common/Title";
 import SectionHeading from "../common/SectionHeading";
 
 type DesignerMedia = {
   src: StaticImageData | string;
   type?: "image" | "video";
+  name: string;
+  link: string;
 };
 
 type Designer = {
   id: number;
-  name: string;
-  role: string;
   media: DesignerMedia[];
 };
 
 const GRID_POSITIONS = [
-  // TOP ROW
   { col: "1 / 2", row: "1 / 2" },
   { col: "2 / 3", row: "1 / 2" },
-  { col: "3 / 4", row: "1 / 3" }, // center (unchanged)
+  { col: "3 / 4", row: "1 / 3" }, // Center Feature
   { col: "4 / 5", row: "1 / 2" },
   { col: "5 / 6", row: "1 / 2" },
-
-  // BOTTOM ROW (FIXED → no spanning)
   { col: "1 / 2", row: "2 / 3" },
   { col: "2 / 3", row: "2 / 3" },
   { col: "4 / 5", row: "2 / 3" },
   { col: "5 / 6", row: "2 / 3" },
 ];
 
-// ─── Media ─────────────────────────
+// ─── Media Cell ─────────────────────────
 function MediaCell({ src, type }: any) {
   if (type === "video") {
     return (
@@ -51,6 +51,7 @@ function MediaCell({ src, type }: any) {
         autoPlay
         muted
         loop
+        playsInline
         style={{ width: "100%", height: "100%", objectFit: "cover" }}
       />
     );
@@ -60,7 +61,7 @@ function MediaCell({ src, type }: any) {
   );
 }
 
-// ─── Tile ─────────────────────────
+// ─── Designer Tile ─────────────────────────
 function DesignerTile({
   designer,
   gridPos,
@@ -68,60 +69,58 @@ function DesignerTile({
   isMobile,
   isActiveSlide,
 }: any) {
-  const [isActive, setIsActive] = useState(false);
+  const [isActive, setIsActive] = useState(true);
   const [mediaIndex, setMediaIndex] = useState(0);
   const intervalRef = useRef<any>(null);
 
-  // Desktop hover (unchanged)
-  const startHover = () => {
-    if (isMobile) return;
+  const startCycling = () => {
     setIsActive(true);
+    if (intervalRef.current) clearInterval(intervalRef.current);
     intervalRef.current = setInterval(() => {
       setMediaIndex((p: number) => (p + 1) % designer.media.length);
     }, 700);
   };
 
-  const stopHover = () => {
-    if (isMobile) return;
+  const stopCycling = () => {
     setIsActive(false);
-    clearInterval(intervalRef.current);
-    setMediaIndex(0);
+    if (intervalRef.current) clearInterval(intervalRef.current);
   };
 
-  // Mobile blinking logic
+  useEffect(() => {
+    if (!isMobile) startCycling();
+    return () => clearInterval(intervalRef.current);
+  }, [isMobile]);
+
+  const handleMouseEnter = () => {
+    if (isMobile) return;
+    stopCycling();
+  };
+
+  const handleMouseLeave = () => {
+    if (isMobile) return;
+    startCycling();
+  };
+
   useEffect(() => {
     if (!isMobile) return;
-
-    clearInterval(intervalRef.current);
-
     if (isActiveSlide) {
-      const timeout = setTimeout(() => {
-        setIsActive(true);
-
-        intervalRef.current = setInterval(() => {
-          setMediaIndex((p: number) => (p + 1) % designer.media.length);
-        }, 700);
-      }, 3000);
-
-      return () => {
-        clearTimeout(timeout);
-        clearInterval(intervalRef.current);
-        setIsActive(false);
-        setMediaIndex(0);
-      };
+      stopCycling();
     } else {
-      setIsActive(false);
-      setMediaIndex(0);
+      startCycling();
     }
+    return () => clearInterval(intervalRef.current);
   }, [isActiveSlide, isMobile, designer.media.length]);
 
   const currentMedia = designer.media[mediaIndex];
 
   return (
-    <div
-      onMouseEnter={startHover}
-      onMouseLeave={stopHover}
+    <a
+      href={currentMedia.link}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
       style={{
+        display: "block",
+        textDecoration: "none",
         ...(isMobile
           ? {
               width: "100%",
@@ -138,22 +137,23 @@ function DesignerTile({
         background: "#0a0a0a",
       }}
     >
-      <AnimatePresence mode="wait">
+      <AnimatePresence mode="popLayout">
         <motion.div
           key={mediaIndex}
-          initial={{ opacity: isActive ? 0 : 1 }}
+          initial={{ opacity: 0.9 }}
           animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.08 }}
+          exit={{ opacity: 0.9 }}
+          transition={{ duration: 0.1 }}
           style={{ position: "absolute", inset: 0 }}
         >
           <MediaCell src={currentMedia.src} type={currentMedia.type} />
         </motion.div>
       </AnimatePresence>
 
-      {/* Overlay */}
+      {/* Changed animate={{ opacity: 1 }} so title stays visible on hover */}
       <motion.div
-        animate={{ opacity: isActive ? 1 : 0 }}
+        animate={{ opacity: 1 }} 
+        transition={{ duration: 0.2 }}
         style={{
           position: "absolute",
           inset: 0,
@@ -161,66 +161,44 @@ function DesignerTile({
           alignItems: "flex-end",
           justifyContent: "space-between",
           padding: "16px",
-          background: "linear-gradient(to top, rgba(0,0,0,0.7), transparent)",
+          background: "linear-gradient(to top, rgba(0,0,0,0.6), transparent)",
+          zIndex: 10,
+          pointerEvents: "none" // Ensures overlay doesn't block the link click
         }}
       >
         <span style={{ color: "#fff", fontSize: "13px" }}>
-          {designer.name}
+          {currentMedia.name}
         </span>
-
         {!isMobile && isFeatured && (
           <span style={{ color: "#fff" }}>→</span>
         )}
       </motion.div>
-
-      {/* Mobile preview icon */}
-      {/* {isMobile && (
-        <div
-          style={{
-            position: "absolute",
-            bottom: "12px",
-            right: "12px",
-            width: "36px",
-            height: "36px",
-            borderRadius: "50%",
-            background: "rgba(0,0,0,0.6)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          👁
-        </div>
-      )} */}
-    </div>
+    </a>
   );
 }
 
 // ─── Data ─────────────────────────
 const designers: Designer[] = [
-  { id: 1, name: "Rahul Mehta", role: "", media: [{ src: img1 }, { src: img2 }] },
-  { id: 2, name: "Priya Nair", role: "", media: [{ src: img2 }, { src: img4 }] },
-  { id: 3, name: "Arjun Sharma", role: "", media: [{ src: video1, type: "video" }] },
-  { id: 4, name: "Meera Iyer", role: "", media: [{ src: img4 }, { src: img5 }] },
-  { id: 5, name: "Kabir Das", role: "", media: [{ src: img5 }, { src: img2 }] },
-  { id: 6, name: "Ananya Roy", role: "", media: [{ src: img1 }, { src: img3 }] },
-  { id: 7, name: "Dev Patel", role: "", media: [{ src: img2 }, { src: img5 }] },
-  { id: 8, name: "Ananya Roy", role: "", media: [{ src: img1 }, { src: img3 }] },
-  { id: 9, name: "Dev Patel", role: "", media: [{ src: img2 }, { src: img5 }] },
+  { id: 1, media: [{ src: img1, name: "Rahul Mehta", link: "/rahul" }, { src: img2, name: "Concept Art", link: "/concept" }] },
+  { id: 2, media: [{ src: img2, name: "Priya Nair", link: "/priya" }, { src: img4, name: "Loft Studio", link: "/loft" }] },
+  { id: 3, media: [{ src: video1, type: "video", name: "Arjun Sharma", link: "/arjun-showreel" }] },
+  { id: 4, media: [{ src: img4, name: "Meera Iyer", link: "/meera" }, { src: img5, name: "Textiles", link: "/textiles" }] },
+  { id: 5, media: [{ src: img5, name: "Kabir Das", link: "/kabir" }, { src: img2, name: "Abstracts", link: "/abstracts" }] },
+  { id: 6, media: [{ src: img1, name: "Ananya Roy", link: "/ananya" }, { src: img3, name: "Editorials", link: "/editorials" }] },
+  { id: 7, media: [{ src: img2, name: "Dev Patel", link: "/dev" }, { src: img5, name: "Branding", link: "/branding" }] },
+  { id: 8, media: [{ src: img1, name: "Sana Khan", link: "/sana" }, { src: img3, name: "Exhibition", link: "/exhibition" }] },
+  { id: 9, media: [{ src: img2, name: "Vikram Seth", link: "/vikram" }, { src: img5, name: "Digital Art", link: "/digital" }] },
 ];
 
-// ─── Main ─────────────────────────
+// ─── Main Component ─────────────────────────
 export default function FeaturedDesigners() {
   const [isMobile, setIsMobile] = useState(false);
-  const sliderRef = useRef<HTMLDivElement>(null);
-  const [isHovered, setIsHovered] = useState(false)
+  const [isHovered, setIsHovered] = useState(false);
 
   const baseSlots = designers;
   const loopedSlots = [...baseSlots, ...baseSlots, ...baseSlots];
-
   const [activeIndex, setActiveIndex] = useState(baseSlots.length);
 
-  // detect screen
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 1024);
     check();
@@ -228,40 +206,22 @@ export default function FeaturedDesigners() {
     return () => window.removeEventListener("resize", check);
   }, []);
 
-  // auto scroll
   useEffect(() => {
     if (!isMobile) return;
-
     const interval = setInterval(() => {
       setActiveIndex((prev) => prev + 1);
     }, 5000);
-
     return () => clearInterval(interval);
   }, [isMobile]);
 
-  // center active tile
-useEffect(() => {
-  if (!isMobile) return;
-
-  const interval = setInterval(() => {
-    setActiveIndex((prev) => prev + 1);
-  }, 5000);
-
-  return () => clearInterval(interval);
-}, [isMobile]);
-
-useEffect(() => {
-  if (!isMobile) return;
-
-  if (activeIndex >= baseSlots.length * 2) {
-    setTimeout(() => {
-      setActiveIndex(baseSlots.length);
-    }, 500);
-  }
-}, [activeIndex, isMobile, baseSlots.length]);
+  useEffect(() => {
+    if (!isMobile) return;
+    if (activeIndex >= baseSlots.length * 2) {
+      setTimeout(() => setActiveIndex(baseSlots.length), 500);
+    }
+  }, [activeIndex, isMobile, baseSlots.length]);
 
   return (
-
     <div  
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -273,13 +233,10 @@ useEffect(() => {
         sticky={false}
         isSectionHovered={isHovered} 
         className=' !border-0'
-      >
-      </SectionHeading>
+      />
 
       <Section className="!py-0 !pb-8">
         <Container>
-    
-          {/* DESKTOP */}
           {!isMobile && (
             <div
               style={{
@@ -301,7 +258,6 @@ useEffect(() => {
             </div>
           )}
   
-          {/* MOBILE */}
           {isMobile && (
             <div
               style={{
@@ -336,8 +292,8 @@ useEffect(() => {
               </div>
             </div>
           )}
-      </Container>
-    </Section>
-  </div>
+        </Container>
+      </Section>
+    </div>
   );
 }

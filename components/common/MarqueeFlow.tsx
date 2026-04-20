@@ -5,6 +5,7 @@ import React, { useEffect, useState, useRef, useMemo } from "react";
 interface MarqueeFlowProps<T> {
   items: T[];
   renderItem: (item: T, index: number, isExpanded: boolean) => React.ReactNode;
+  overlayImage?: string; // New Prop
   gap?: number;
   speed?: number;
   mobileCount?: number;
@@ -15,6 +16,7 @@ interface MarqueeFlowProps<T> {
 export default function MarqueeFlow<T>({
   items,
   renderItem,
+  overlayImage,
   gap = 16,
   speed = 80,
   mobileCount = 1,
@@ -169,46 +171,69 @@ export default function MarqueeFlow<T>({
     };
   }, [items.length, activeGap, speed]);
 
-  return (
+return (
+  <div
+    ref={containerRef}
+    className="w-full overflow-hidden px-0"
+    style={{
+      clipPath: "inset(0)",
+      overflowX: "hidden",
+      overflowY: "visible",
+    }}
+  >
     <div
-      ref={containerRef}
-      className="w-full overflow-hidden px-0"
+      ref={trackRef}
+      className="flex"
       style={{
-        clipPath: "inset(0)",
-        overflowX: "hidden",
-        overflowY: "visible",
+        gap: `${activeGap}px`,
+        willChange: "transform",
+        backfaceVisibility: "hidden",
+        perspective: 1000,
       }}
     >
-      <div
-        ref={trackRef}
-        className="flex"
-        style={{
-          gap: `${activeGap}px`,
-          willChange: "transform",
-          backfaceVisibility: "hidden",
-          perspective: 1000,
-        }}
-      >
-        {repeated.map((item, i) => {
-          const realIndex = i % items.length;
-          const isExpanded = realIndex === expandedIndex;
+      {repeated.map((item, i) => {
+        const realIndex = i % items.length;
+        const isExpanded = realIndex === expandedIndex;
 
-          return (
-            <div
-              key={`${i}-${realIndex}`}
-              className="flex-shrink-0 flex items-end overflow-visible"
-              style={{
-                width: `${itemWidth}px`,
-                transition: isExpanded 
-                  ? "all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)" 
-                  : "all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
-              }}
-            >
-              {renderItem(item, realIndex, isExpanded)}
-            </div>
-          );
-        })}
-      </div>
+        return (
+          <div
+            key={`${i}-${realIndex}`}
+            /* Added 'group' to track hover state 
+               Added 'relative' so the overlay anchors to this div
+            */
+            className="flex-shrink-0 flex items-end overflow-visible group relative"
+            style={{
+              width: `${itemWidth}px`,
+              transition: isExpanded 
+                ? "all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)" 
+                : "all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+            }}
+          >
+            {/* 1. The main content provided via props */}
+            {renderItem(item, realIndex, isExpanded)}
+
+            {/* 2. The Dynamic Overlay Image */}
+            {overlayImage && (
+              <div 
+                className={`
+                  absolute inset-0 z-10 
+                  pointer-events-none 
+                  transition-opacity duration-500 ease-in-out
+                  group-hover:opacity-0 
+                  flex items-center justify-center
+                `}
+              >
+                <img 
+                  src={overlayImage} 
+                  alt="overlay" 
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            )}
+          </div>
+        );
+      })}
     </div>
-  );
+  </div>
+);
 }

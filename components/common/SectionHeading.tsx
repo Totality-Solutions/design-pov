@@ -11,7 +11,7 @@ interface SectionHeadingProps {
   sticky?: boolean;
   stickyTop?: string;
   bgColor?: string;
-  textColor?: string;      // New: Prop for dynamic text color (e.g., "text-white")
+  textColor?: string;
   className?: string;
 }
 
@@ -24,21 +24,17 @@ export default function SectionHeading({
   sticky = false,
   stickyTop = "top-0",
   bgColor = "bg-white",
-  textColor = "text-black", // Defaulting to black
+  textColor = "text-pov-black", // Updated to your variable
   className = "",
 }: SectionHeadingProps) {
   
-  /**
-   * Helper to ensure the small dot matches the text color when not hovered.
-   * If you pass 'text-white', the dot becomes 'bg-white'.
-   */
   const dotBaseColor = textColor.replace("text-", "bg-");
 
   return (
     <div
       className={`
         w-full flex flex-col md:flex-row items-start md:items-center justify-between border-b
-        px-6 md:px-[40px] py-6 z-40 transition-colors duration-300 
+        px-6 md:px-10 py-[30px] z-40 transition-colors duration-300 
         ${sticky ? `sticky ${stickyTop}` : "relative"}
         ${bgColor}
         ${className}
@@ -50,25 +46,27 @@ export default function SectionHeading({
         <div className="relative w-[33px] h-[33px] flex items-center justify-center mt-[-4px] md:mt-[-3px]">
           <div
             className={`
-              absolute w-[14px] h-[14px] bg-[var(--primary-red)] rounded-full blur-[10px] 
+              absolute w-[14px] h-[14px] bg-primary-red rounded-full blur-[10px] 
               transition-all duration-300
               ${isSectionHovered ? "animate-pulse-glow opacity-80" : "opacity-0"}
             `}
           />
-          {/* Static Center: Toggles between Red (hover) and the dynamic Text Color (base) */}
           <div className={`relative w-[7px] h-[7px] rounded-full z-10 transition-colors duration-300
-              ${isSectionHovered ? "bg-[var(--primary-red)]" : dotBaseColor}  
+              ${isSectionHovered ? "bg-primary-red" : dotBaseColor}  
             `} />
         </div>
 
         {/* DYNAMIC TITLE GROUP */}
-        <div className={`flex flex-col ${textColor}`}>
-          <div className="font-['Montserrat'] text-[20px] md:text-[22px] leading-[1.2]">
+        <div className={`flex flex-col font-display ${textColor}`}>
+          {/* Using text-h3 responsive scale: 28px (Deskt) / 22px (Tab) / 18px (Mob) */}
+          <div className="text-h3-mobile md:text-h3-tab leading-[1.2]">
             <span className="font-medium">{titleMain}</span>
-            <span className="font-bold">{titleBold}</span>
+            <span className="font-bold space-x-1"> {titleBold}</span>
           </div>
+          
+          {/* Using text-small responsive scale: 14px / 12px / 10px */}
           {subTitle && (
-            <span className="text-[14px] opacity-50 font-['Montserrat'] mt-1">
+            <span className="text-small-mobile md:text-small-tab lg:text-small opacity-50 mt-1">
               {subTitle}
             </span>
           )}
@@ -84,6 +82,3 @@ export default function SectionHeading({
     </div>
   );
 }
-
-
-
