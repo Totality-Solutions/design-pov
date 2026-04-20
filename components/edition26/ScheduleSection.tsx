@@ -8,17 +8,17 @@ const SCHEDULE_DATA = {
   "15": {
     digit: "1",
     description: "The Circle created a live space for open, unfiltered dialogue - bringing together voices shaping India’s cultural landscape.",
-    image: "/images/day1.jpg"
+    image: "/temp/home/theme/WEBSITE_THEME BANNER_2.jpg.jpeg"
   },
   "16": {
     digit: "2",
     description: "Architectural blueprints of tomorrow: where structural integrity meets the fluid needs of a modern society.",
-    image: "/images/day2.jpg"
+    image: "/temp/home/theme/WEBSITE_THEME BANNER_3.jpg.jpeg"
   },
   "17": {
     digit: "3",
     description: "Defining the bridge between brand identity and physical experience design through immersive installations.",
-    image: "/images/day3.jpg"
+    image: "/temp/home/theme/WEBSITE_THEME BANNER_4.jpg.jpeg"
   }
 };
 
@@ -158,7 +158,7 @@ const ScheduleSection = () => {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 src={SCHEDULE_DATA[activeDate].image}
-                className="w-full h-full object-cover grayscale"
+                className="w-full h-full object-cover "
               />
             </AnimatePresence>
           </div>
