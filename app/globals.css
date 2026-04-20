@@ -4,14 +4,16 @@
 @tailwind utilities;
 
 /* ─── CSS VARIABLES ──────────────────────────────────────── */
+@import "tailwindcss";
+
 :root {
   /* Consolidated Font Variable */
-  --font-family: 'Montserrat';
+  --font-family: 'Montserrat', sans-serif;
 
   /* Original Color Variables */
   --primary-blue: #0000B3;
   --primary-red: #E02914;
-  --color-black: #0A0A0A;
+  --color-black: #000000;
   --color-white: #fff;
 
   /* Original Transition Variables */
@@ -24,38 +26,36 @@
   --tracking-cta: 0.5px;
 
   /* =========================
-      DESKTOP SIZES (Min-width: 1024px)
+      DESKTOP SIZES
   ========================= */
-  --text-hero: 95px;
-  --text-h1: 56px;
-  --text-h2: 40px;
-  --text-h3: 28px;
-  --text-body: 18px;
-  --text-small: 14px;
+  --size-hero: 95px;
+  --size-h1: 56px;
+  --size-h2: 40px;
+  --size-h3: 28px;
+  --size-body: 18px;
+  --size-small: 14px;
 
   /* =========================
-      TABLET SIZES (Min-width: 768px)
+      TABLET SIZES
   ========================= */
-  --tab-text-hero: 64px;
-  --tab-text-h1: 42px;
-  --tab-text-h2: 32px;
-  --tab-text-h3: 22px;
-  --tab-text-body: 16px;
-  --tab-text-small: 12px;
+  --size-tab-hero: 64px;
+  --size-tab-h1: 42px;
+  --size-tab-h2: 32px;
+  --size-tab-h3: 22px;
+  --size-tab-body: 16px;
+  --size-tab-small: 12px;
 
   /* =========================
       MOBILE SIZES
   ========================= */
-  --mobile-text-hero: 42px;
-  --mobile-text-h1: 30px;
-  --mobile-text-h2: 24px;
-  --mobile-text-h3: 18px;
-  --mobile-text-body: 15px;
-  --mobile-text-small: 10px;
+  --size-mob-hero: 42px;
+  --size-mob-h1: 30px;
+  --size-mob-h2: 24px;
+  --size-mob-h3: 18px;
+  --size-mob-body: 15px;
+  --size-mob-small: 10px;
 
-
-  /* footer */
-    /* Column & Flare Sizes */
+      /* Column & Flare Sizes */
   --footer-col-width: 260px;
   --base-flare-width: 1017px;
   
@@ -69,41 +69,50 @@
 
 @theme inline {
   /* Font */
-  --font-family: var(--font-family);
+  --font-display: var(--font-family);
 
-  /* Original Colors mapped to Theme */
+  /* Colors */
   --color-primary-blue: var(--primary-blue);
   --color-primary-red: var(--primary-red);
-  --color-black: var(--color-black);
-  --color-white: var(--color-white);
+  --color-pov-black: var(--color-black);
+  --color-pov-white: var(--color-white);
 
-  /* Desktop Mappings */
-  --text-hero: var(--text-hero);
-  --text-h1: var(--text-h1);
-  --text-h3: var(--text-h3);
-  --text-body: var(--text-body);
-  --text-small: var(--text-small);
+  /* Desktop Typography Utilities */
+  --text-hero: var(--size-hero);
+  --text-h1: var(--size-h1);
+  --text-h2: var(--size-h2);
+  --text-h3: var(--size-h3);
+  --text-body: var(--size-body);
+  --text-small: var(--size-small);
 
-  /* Tablet Mappings */
-  --text-hero-tab: var(--tab-text-hero);
-  --text-h1-tab: var(--tab-text-h1);
-  --text-h2-tab: var(--tab-text-h2);
-  --text-h3-tab: var(--tab-text-h3);
-  --text-body-tab: var(--tab-text-body);
-  --text-small-tab: var(--tab-text-small);
+  /* Tablet Typography Utilities (text-h3-tab, etc.) */
+  --text-hero-tab: var(--size-tab-hero);
+  --text-h1-tab: var(--size-tab-h1);
+  --text-h2-tab: var(--size-tab-h2);
+  --text-h3-tab: var(--size-tab-h3);
+  --text-body-tab: var(--size-tab-body);
+  --text-small-tab: var(--size-tab-small);
 
-  /* Mobile Mappings */
-  --text-hero-mobile: var(--mobile-text-hero);
-  --text-h1-mobile: var(--mobile-text-h1);
-  --text-h2-mobile: var(--mobile-text-h2);
-  --text-h3-mobile: var(--mobile-text-h3);
-  --text-body-mobile: var(--mobile-text-body);
-  --text-small-mobile: var(--mobile-text-small);
+  /* Mobile Typography Utilities (text-h3-mobile, etc.) */
+  --text-hero-mobile: var(--size-mob-hero);
+  --text-h1-mobile: var(--size-mob-h1);
+  --text-h2-mobile: var(--size-mob-h2);
+  --text-h3-mobile: var(--size-mob-h3);
+  --text-body-mobile: var(--size-mob-body);
+  --text-small-mobile: var(--size-mob-small);
 
   /* Letter Spacing */
   --tracking-h1: var(--tracking-h1);
   --tracking-h2: var(--tracking-h2);
   --tracking-cta: var(--tracking-cta);
+
+  /* Spacing */
+  --spacing-section: var(--spacing-section);
+  --spacing-footer-col: var(--footer-col-width);
+  --spacing-flare-base: var(--base-flare-width);
+  
+  /* Transitions */
+  --transition-timing-function-pov: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 

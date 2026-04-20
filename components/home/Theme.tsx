@@ -76,8 +76,8 @@ const Theme = () => {
         <div className="grid grid-cols-1 lg:grid-cols-[3fr_7fr] w-full h-full md:py-12 py-0 gap-10 md:gap-4">
 
           <div className="w-full h-full flex flex-col justify-end gap-4 px-3 lg:px-14">
-            <h1 className="text-display-2xl font-semibold uppercase">2026 THEME</h1>
-            <p className="text-lg">
+            <h1 className="text-h2-mobile md:text-h2-tab lg:text-h2 font-semibold uppercase">2026 THEME</h1>
+            <p className="text-body-tab">
               Lorem ipsum dolor sit amet consectetur.
               psum dolor sit amet consectetur.
             </p>
@@ -95,6 +95,7 @@ const Theme = () => {
               bottomKey1Right="50px"
               bottomKey2Right="15px"
               href="#tickets"
+              size='md'
               />
           </div>
           <div className="w-full h-full" style={{ overflow: 'hidden' }}>
