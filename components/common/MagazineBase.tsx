@@ -17,12 +17,17 @@ export default function MagazineBase({ activeBlog: initialBlog, isInnerPage = fa
     return () => { if (sectionRef.current) observer.unobserve(sectionRef.current); };
   }, []);
 
-  const otherBlogs = blogs.filter((b) => b.id !== activeBlog.id);
-  const sidebarItems: SidebarItem[] = [];
-  otherBlogs.forEach((blog, index) => {
-    sidebarItems.push(blog);
-    if (advertisements[index]) sidebarItems.push(advertisements[index]);
-  });
+const otherBlogs = blogs
+  .filter((b) => b.id !== activeBlog.id)
+  .sort((a, b) => b.id - a.id); // latest first
+
+const visibleBlogs = isInnerPage ? otherBlogs : otherBlogs.slice(0, 2);
+
+const sidebarItems: SidebarItem[] = [];
+visibleBlogs.forEach((blog, index) => {
+  sidebarItems.push(blog);
+  if (advertisements[index]) sidebarItems.push(advertisements[index]);
+});
 
   return (
     <div ref={sectionRef as any} className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-10 lg:gap-12 relative bg-white">
@@ -81,7 +86,13 @@ export default function MagazineBase({ activeBlog: initialBlog, isInnerPage = fa
                   {block.type === "image" && (
                     <div className="flex flex-col gap-2 py-2">
                       <div className="relative w-full h-auto">
-                        <img src={block.value} alt="Mag Detail" className="w-full h-auto object-contain bg-neutral-100" />
+                        <Image
+                          src={block.value}
+                          alt="Mag Detail"
+                          width={1200}
+                          height={800}
+                          className="w-full h-auto object-contain bg-neutral-100"
+                        />
                       </div>
                       {block.caption && <span className="text-xs italic text-black/40">{block.caption}</span>}
                     </div>
