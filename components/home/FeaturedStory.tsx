@@ -1,5 +1,3 @@
-
-
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
@@ -10,8 +8,8 @@ import Section from "../common/Section";
 import { Container } from "../common/Container";
 import SectionHeading from "../common/SectionHeading";
 
-// Import External Data
-import { slides } from "../../data/slidesData";
+// shared blogs data import kar rahe hain
+import { Blog, blogs } from "@/data/magazineData";
 
 export default function MarqueeCarousel() {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -44,18 +42,9 @@ export default function MarqueeCarousel() {
   );
 
   const next = useCallback(() => {
-    const nextIdx = (activeIndex + 1) % slides.length;
-    setDirection("down");
-    setPrevIndex(activeIndex);
-    setIsAnimating(true);
-    setActiveIndex(nextIdx);
-    setImgKey((k) => k + 1);
-    setTextKey((k) => k + 1);
-    setTimeout(() => {
-      setIsAnimating(false);
-      setPrevIndex(null);
-    }, 800);
-  }, [activeIndex]);
+    const nextIdx = (activeIndex + 1) % blogs.length;
+    goTo(nextIdx, "down");
+  }, [activeIndex, goTo]);
 
   useEffect(() => {
     autoRef.current = setTimeout(next, 4000);
@@ -64,6 +53,7 @@ export default function MarqueeCarousel() {
     };
   }, [next]);
 
+  // Scroll active thumbnail into view
   useEffect(() => {
     const container = carouselRef.current;
     const el = container?.querySelector(`[data-idx="${activeIndex}"]`) as HTMLElement;
@@ -97,7 +87,7 @@ export default function MarqueeCarousel() {
     }
   }, [activeIndex]);
 
-  const current = slides[activeIndex];
+  const current = blogs[activeIndex];
 
   return (
     <Container
@@ -121,7 +111,7 @@ export default function MarqueeCarousel() {
                 {prevIndex !== null && (
                   <Image
                     className={`hero-img z1 ${direction === "down" ? "exit-down" : "exit-up"}`}
-                    src={slides[prevIndex].main}
+                    src={blogs[prevIndex].image}
                     alt=""
                     priority
                   />
@@ -129,7 +119,7 @@ export default function MarqueeCarousel() {
                 <Image
                   key={imgKey}
                   className={`hero-img z2 ${direction === "down" ? "enter-down" : "enter-up"}`}
-                  src={current.main}
+                  src={current.image}
                   alt={current.title}
                   priority
                 />
@@ -138,7 +128,7 @@ export default function MarqueeCarousel() {
 
             {/* ── CENTER (Thumbnails) ── */}
             <div className="thumb-strip" ref={carouselRef}>
-              {slides.map((s, i) => (
+              {blogs.map((s, i) => (
                 <div
                   key={s.id}
                   data-idx={i}
@@ -172,16 +162,21 @@ export default function MarqueeCarousel() {
               </div>
 
               <div className="clip">
-                <div key={`big-${textKey}`} onClick={next} className="text-big rtl s4">
+                {/* Wrapped in anchor for navigation */}
+                <a 
+                  href={`/magazine/${current.slug}`}
+                  key={`big-${textKey}`} 
+                  className="text-big rtl s4 block group"
+                >
                   {current.title}
                   <Image
                     src="/icons/arrow-top-right.svg"
                     alt="arrow"
-                    className="text-arrow"
+                    className="text-arrow inline-block ml-2 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"
                     width={24}
                     height={24}
                   />
-                </div>
+                </a>
               </div>
             </div>
           </div>
