@@ -20,14 +20,15 @@ const ClientLogo = () => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-    <div className="overflow-hidden ">
-      <SectionHeading 
-        titleMain="Brands_" 
-        titleBold="2026" 
-        sticky={false}
-        isSectionHovered={isHovered} 
-      >
-      </SectionHeading>
+    <div className="overflow-hidden flex items-center gap-2 md:gap-4">
+      <div className="shrink-0 whitespace-nowrap">
+  <SectionHeading 
+    titleMain="Brands" 
+    titleBold="2026" 
+    sticky={false}
+    isSectionHovered={isHovered} 
+  />
+</div>
       <div className="marquee-track py-6">
         {[...Client, ...Client].map((logo, i) => (
           <img

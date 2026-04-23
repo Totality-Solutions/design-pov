@@ -33,33 +33,16 @@ const ThisIsUs: React.FC = () => {
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
     >
-      {/* HEADER */}
-      {/* <div className="w-full h-[60px] bg-white px-6 md:px-[70px] pt-8 flex items-center justify-between shrink-0">
-        <div className="flex items-center gap-2.5">
-          <div className="relative w-[33.33px] h-[33.33px] flex items-center justify-center">
-            <div className="absolute w-[13.33px] h-[13.33px] bg-[#E02914] opacity-20 rounded-full blur-[6.67px]" />
-            <div className="w-[6.67px] h-[6.67px] bg-[#E02914] rounded-full" />
-          </div>
-          <h2 className="text-[18px] md:text-[22px] leading-none text-black">
-            <span className="font-medium">ThisIsUs_</span>
-            <span className="font-bold">POV</span>
-          </h2>
-        </div>
-        <div className="hidden md:flex gap-[100px]">
-          <span className="opacity-60 text-sm md:text-lg font-medium tracking-tight uppercase">POV_Insights</span>
-          <span className="opacity-60 text-lg font-medium tracking-tight uppercase">Volume_01</span>
-        </div>
-      </div> */}
 
       <SectionHeading 
-        titleMain="This_Is_Us_" 
+        titleMain="This Is Us " 
         titleBold="POV" 
         sticky={false}
         isSectionHovered={isHovered} 
       >
         <div className="hidden md:flex gap-[100px]">
-          <span className="opacity-60 text-[16px] lg:text-lg font-medium">POV_Insights</span>
-          <span className="opacity-60 text-[16px] lg:text-lg font-medium">Volume_01</span>
+          <span className="opacity-60 text-[16px] lg:text-lg font-medium">POV Insights</span>
+          <span className="opacity-60 text-[16px] lg:text-lg font-medium">Volume 01</span>
         </div>
       </SectionHeading>
 

@@ -72,7 +72,7 @@ const PartnersSection: React.FC = () => {
     >
 
       <SectionHeading 
-        titleMain="Partners_" 
+        titleMain="Partners " 
         titleBold="2026" 
         sticky={false}
         bgColor = "black"

@@ -67,7 +67,7 @@ const ScheduleSection = () => {
     >
 
       <SectionHeading 
-        titleMain="Circle_Schedule_" 
+        titleMain="Circle Schedule " 
         titleBold="2026" 
         sticky={false}
         bgColor = "black"

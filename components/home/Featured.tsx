@@ -151,28 +151,32 @@ function DesignerTile({
       </AnimatePresence>
 
       {/* Changed animate={{ opacity: 1 }} so title stays visible on hover */}
-      <motion.div
-        animate={{ opacity: 1 }} 
-        transition={{ duration: 0.2 }}
-        style={{
-          position: "absolute",
-          inset: 0,
-          display: "flex",
-          alignItems: "flex-end",
-          justifyContent: "space-between",
-          padding: "16px",
-          background: "linear-gradient(to top, rgba(0,0,0,0.6), transparent)",
-          zIndex: 10,
-          pointerEvents: "none" // Ensures overlay doesn't block the link click
-        }}
-      >
-        <span style={{ color: "#fff", fontSize: "13px" }}>
-          {currentMedia.name}
-        </span>
-        {!isMobile && isFeatured && (
-          <span style={{ color: "#fff" }}>→</span>
-        )}
-      </motion.div>
+      {currentMedia.type !== "video" && (
+  <motion.div
+    animate={{ opacity: 1 }}
+    transition={{ duration: 0.2 }}
+    style={{
+      position: "absolute",
+      inset: 0,
+      display: "flex",
+      alignItems: "flex-end",
+      justifyContent: "space-between",
+      padding: "16px",
+      background:
+        "linear-gradient(to top, rgba(0,0,0,0.6), transparent)",
+      zIndex: 10,
+      pointerEvents: "none",
+    }}
+  >
+    <span style={{ color: "#fff", fontSize: "13px" }}>
+      {currentMedia.name}
+    </span>
+
+    {!isMobile && isFeatured && (
+      <span style={{ color: "#fff" }}>→</span>
+    )}
+  </motion.div>
+)}
     </a>
   );
 }
@@ -228,7 +232,7 @@ export default function FeaturedDesigners() {
       className="pt-4"
     >
       <SectionHeading
-        titleMain="Featured_" 
+        titleMain="Featured " 
         titleBold="Designers" 
         sticky={false}
         isSectionHovered={isHovered} 

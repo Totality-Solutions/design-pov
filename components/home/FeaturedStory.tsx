@@ -91,16 +91,15 @@ export default function MarqueeCarousel() {
 
   return (
     <Container
-      className="border-y border-gray-300"
+      className=""
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       <SectionHeading
-        titleMain="Featured_"
+        titleMain="Featured "
         titleBold="Story"
         sticky={false}
         isSectionHovered={isHovered}
-        className=" !border-t-0"
       />
       <Section className="!py-0 !pb-6 md:!pb-0 ">
         <div className="mc-root">
@@ -162,20 +161,18 @@ export default function MarqueeCarousel() {
               </div>
 
               <div className="clip">
-                {/* Wrapped in anchor for navigation */}
-                <a 
-                  href={`/magazine/${current.slug}`}
-                  key={`big-${textKey}`} 
-                  className="text-big rtl s4 block group"
+                <h2
+                  key={`big-${textKey}`}
+                  className="text-big rtl s4 block"
                 >
                   {current.title}
-                  <Image
-                    src="/icons/arrow-top-right.svg"
-                    alt="arrow"
-                    className="text-arrow inline-block ml-2 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"
-                    width={24}
-                    height={24}
-                  />
+                </h2>
+                  <a
+                  href={`/magazine/${current.slug}`}
+                  key={`read-${textKey}`}
+                  className="mt-2 rtl s4 inline-block text-sm md:text-base font-medium text-black border-b border-black hover:text-[var(--primary-blue)] hover:border-[var(--primary-blue)] transition-colors duration-300"
+                >
+                  Read More
                 </a>
               </div>
             </div>

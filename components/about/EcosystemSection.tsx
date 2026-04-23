@@ -23,23 +23,8 @@ const EcosystemSection = () => {
       onMouseLeave={() => setIsHovered(false)} 
       className="w-full bg-white py-16"
     >
-      {/* <div className="w-full h-[60px] bg-white px-6 md:px-[70px] py-12 flex items-center border-b justify-between shrink-0">
-        <div className="flex items-center gap-2.5">
-          <div className="relative w-[33.33px] h-[33.33px] flex items-center justify-center">
-            <div className="absolute w-[13.33px] h-[13.33px] bg-[#E02914] opacity-20 rounded-full blur-[6.67px]" />
-            <div className="w-[6.67px] h-[6.67px] bg-[#E02914] rounded-full" />
-          </div>
-          <h2 className="text-[18px] md:text-[22px] leading-none text-black">
-            <span className="font-medium">Press_</span>
-            <span className="font-bold">Mentions</span>
-          </h2>
-        </div>
-        <div className="hidden md:flex gap-[100px]">
-          <span className="opacity-60 text-sm md:text-lg font-medium tracking-tight uppercase">Lorem Ipsum</span>
-        </div>
-      </div> */}
       <SectionHeading 
-        titleMain="Press_" 
+        titleMain="Press" 
         titleBold="Mentions" 
         sticky={false}
         isSectionHovered={isHovered} 

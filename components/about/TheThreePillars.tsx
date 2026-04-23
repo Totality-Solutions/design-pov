@@ -78,7 +78,7 @@ const TheThreePillars: React.FC = () => {
 
       {/* 1. FLEXIBLE SECTION HEADER */}
       <SectionHeading 
-        titleMain="The_Three_" 
+        titleMain="The Three " 
         titleBold="Pillars" 
         sticky={true}
         stickyTop="top-0"

@@ -4,7 +4,7 @@ import React from 'react';
 import type { NextPage } from 'next';
 import { useState } from 'react';
 import ClientLogo from "../home/ClientLogo"; // Tera component yahan se import ho raha hai
-import SectionHeading from '../common/SectionHeading';
+// import SectionHeading from '../common/SectionHeading';
 
 const BrandsSection: NextPage = () => {
   const [isHovered, setIsHovered] = useState(false);

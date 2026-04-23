@@ -1,101 +1,109 @@
-// "use client";
-
-// import { Container } from "../common/Container";
-// import CTABtn from "../common/CTABtn";
-
-// export default function Hero() {
-//   return (
-//     <Container className="w-full overflow-hidden lg:max-w-none">
-
-//       {/* ── VIDEO CONTAINER ── */}
-//       <div className="relative w-full h-[35vh] sm:h-[50vh] md:h-[90vh] lg:h-[50vh] ">
-//         <video
-//           src="/video/home.mp4"
-//           autoPlay
-//           muted
-//           loop
-//           playsInline
-//           className="absolute inset-0 w-full h-full md:object-cover object-contain"
-//         />
-
-//         {/* DARK OVERLAY */}
-//         <div className="absolute inset-0 bg-black/30" />
-
-//         {/* DESKTOP CTA BUTTON — hidden on mobile */}
-//         <div className="hidden sm:block absolute z-10 mb-8 mr-8 bottom-0 right-0">
-//           <CTABtn
-//             label="Apply as Designer"
-//             iconType="arrow"
-//             btnBg="var(--primary-blue)"
-//             btnHoverBg="var(--primary-blue)"
-//             textColor="var(--color-white)"
-//             borderColor="var(--color-white)"
-//             borderHoverColor="var(--color-white)"
-//             lineColor="var(--primary-blue)"
-//             lineHoverColor="var(--primary-blue)"
-//             bottomKey1Width="40px"
-//             bottomKey2Width="12px"
-//             bottomKey1Right="50px"
-//             bottomKey2Right="15px"
-//             href="#tickets"
-//           />
-//         </div>
-//       </div>
-
-//       {/* MOBILE CTA BUTTON — visible only on small screens */}
-//       <div className="block sm:hidden w-full px-4 py-6 flex justify-center">
-//         <CTABtn
-//           label="Apply Now"
-//           iconType="arrow"
-//           btnBg="var(--primary-white)"
-//           btnHoverBg="var(--primary-blue)"
-//           textColor="var(--primary-blue)"
-//           borderColor="var(--primary-blue)"
-//           borderHoverColor="var(--primary-blue)"
-//           lineColor="var(--primary-blue)"
-//           lineHoverColor="var(--primary-blue)"
-//           bottomKey1Width="30px"
-//           bottomKey2Width="10px"
-//           bottomKey1Right="10px"
-//           bottomKey2Right="5px"
-//           href="#tickets"
-//         />
-//       </div>
-//     </Container>
-//   );
-// }
-
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { Container } from "../common/Container";
 import CTABtn from "../common/CTABtn";
 import Image from "next/image";
 
 export default function Hero() {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
+
   const [isPlaying, setIsPlaying] = useState(true);
   const [isMuted, setIsMuted] = useState(true);
+  const [manuallyPaused, setManuallyPaused] = useState(false);
 
+  // Manual Play/Pause
   const togglePlay = () => {
-    if (videoRef.current) {
-      if (isPlaying) videoRef.current.pause();
-      else videoRef.current.play();
-      setIsPlaying(!isPlaying);
+    if (!videoRef.current) return;
+
+    const video = videoRef.current;
+
+    if (isPlaying) {
+      video.pause();
+      setIsPlaying(false);
+      setManuallyPaused(true);
+    } else {
+      video.play().catch(() => {});
+      setIsPlaying(true);
+      setManuallyPaused(false);
     }
   };
 
+  // Manual Mute/Unmute
   const toggleMute = () => {
-    if (videoRef.current) {
-      videoRef.current.muted = !isMuted;
-      setIsMuted(!isMuted);
-    }
+    if (!videoRef.current) return;
+
+    const video = videoRef.current;
+
+    video.muted = !isMuted;
+    setIsMuted(!isMuted);
   };
+
+  // Auto play/pause based on viewport visibility
+  useEffect(() => {
+    if (!sectionRef.current || !videoRef.current) return;
+
+    const video = videoRef.current;
+
+    // Initial state → autoplay + muted
+    video.muted = true;
+
+    video
+      .play()
+      .then(() => {
+        setIsPlaying(true);
+        setIsMuted(true);
+      })
+      .catch(() => {});
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!videoRef.current) return;
+
+        const currentVideo = videoRef.current;
+
+        if (entry.isIntersecting) {
+          // Resume only if user hasn't manually paused
+          if (!manuallyPaused) {
+            currentVideo.muted = true;
+            currentVideo.play().catch(() => {});
+            setIsPlaying(true);
+            setIsMuted(true);
+          }
+        } else {
+          // Pause when out of viewport
+          currentVideo.pause();
+          currentVideo.muted = true;
+          setIsMuted(true);
+        }
+      },
+      {
+        threshold: 0.01,
+      }
+    );
+
+    observer.observe(sectionRef.current);
+
+    return () => observer.disconnect();
+  }, [manuallyPaused]);
 
   return (
-    <Container className="w-full overflow-hidden lg:max-w-none px-0 pt-20">
-      {/* Added 'group' class here to detect hover */}
-      <div className="relative group w-full h-[35vh] sm:h-[50vh] md:h-[90vh] lg:h-[100vh]">
+    <Container className="w-full overflow-hidden lg:max-w-none px-0">
+      <div
+        ref={sectionRef}
+        className="
+          relative 
+          group 
+          w-full
+          aspect-[5/3]
+          sm:aspect-[21/8]
+          md:aspect-[16/7]
+          2xl:aspect-[2560/1440]
+          overflow-hidden
+        "
+      >
+        {/* Video */}
         <video
           ref={videoRef}
           src="/video/POV AD.mp4"
@@ -106,39 +114,49 @@ export default function Hero() {
           className="absolute inset-0 w-full h-full object-cover"
         />
 
-        {/* ── VIDEO CONTROLS ── */}
-        {/* Added 'opacity-0 group-hover:opacity-100' for the hover effect */}
+        {/* Video Controls */}
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           <div className="flex items-center gap-3 bg-white backdrop-blur-md px-5 py-2 rounded-full border border-zinc-300">
-            {/* Play/Pause Button */}
-            <button 
+            
+            {/* Play/Pause */}
+            <button
               onClick={togglePlay}
-              className="hover:scale-110 transition-transform active:scale-95"
+              className="hover:scale-110 transition-transform hover:cursor-pointer"
             >
-              <Image 
-                src={isPlaying ? "/icons/play.svg" : "/icons/pause.svg" } 
-                alt="Toggle Play" 
-                width={24} height={24} 
+              <Image
+                src={
+                  isPlaying
+                    ? "/icons/play.svg"
+                    : "/icons/pause.svg"
+                }
+                alt="Toggle Play"
+                width={40}
+                height={40}
               />
             </button>
 
             <div className="w-[1px] h-4 bg-gray-300" />
 
-            {/* Mute/Unmute Button */}
-            <button 
+            {/* Mute */}
+            <button
               onClick={toggleMute}
-              className="hover:scale-110 transition-transform active:scale-95"
+              className="hover:scale-110 transition-transform hover:cursor-pointer"
             >
-              <Image 
-                src={isMuted ? "/icons/volume-mute.svg" : "/icons/volume-high.svg"} 
-                alt="Toggle Mute" 
-                width={24} height={24} 
+              <Image
+                src={
+                  isMuted
+                    ? "/icons/volume-mute.svg"
+                    : "/icons/volume-high.svg"
+                }
+                alt="Toggle Mute"
+                width={40}
+                height={40}
               />
             </button>
           </div>
         </div>
 
-        {/* DESKTOP CTA BUTTON */}
+        {/* Desktop CTA */}
         <div className="hidden sm:block absolute z-10 mb-8 mr-5 bottom-0 right-0">
           <CTABtn
             label="Apply Now"
@@ -159,7 +177,7 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* MOBILE CTA BUTTON */}
+      {/* Mobile CTA */}
       <div className="block sm:hidden w-full px-4 py-6 flex justify-center">
         <CTABtn
           label="Apply Now"

@@ -66,7 +66,7 @@ const Core2026: NextPage = () => {
       onMouseLeave={() => setIsHovered(false)}
     >
       <SectionHeading
-        titleMain="Core_" 
+        titleMain="Core " 
         titleBold="2026" 
         sticky={false}
         isSectionHovered={isHovered} 
