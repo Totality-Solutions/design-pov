@@ -34,7 +34,7 @@ export default function SectionHeading({
   return (
     <div
       className={`
-        ${hasChildren ? "w-full" : "w-auto"}
+        w-full
         flex flex-col md:flex-row
         items-start md:items-center
         ${hasChildren ? "justify-between" : "justify-start"}

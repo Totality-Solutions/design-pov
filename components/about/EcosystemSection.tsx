@@ -21,7 +21,7 @@ const EcosystemSection = () => {
     <section 
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)} 
-      className="w-full bg-white py-16"
+      className="w-full bg-white py-8"
     >
       <SectionHeading 
         titleMain="Press" 
@@ -32,7 +32,7 @@ const EcosystemSection = () => {
         {/* <p className="text-sm opacity-60">View all our work</p>
         <CTABtn /> */}
       </SectionHeading>
-      <div className="w-full overflow-hidden h-[220px] sm:h-[260px] md:h-[320px] lg:h-[320px] flex items-end">
+      <div className="w-full overflow-hidden h-[220px] sm:h-[260px] md:h-[280px] lg:h-[300px] flex items-end">
         <MarqueeFlow
           items={ITEMS}
           gap={5}

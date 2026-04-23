@@ -81,13 +81,11 @@ const TheThreePillars: React.FC = () => {
         titleMain="The Three " 
         titleBold="Pillars" 
         sticky={true}
-        stickyTop="top-0"
+        stickyTop="top-20"
         isSectionHovered={isHovered} 
-        className='z-[9999]'
       >
         {/* Right side content: Passing multiple elements as children */}
         <div className="hidden md:flex gap-[60px] lg:gap-[100px]">
-          <span className="opacity-60 text-[16px] lg:text-lg font-medium">Design POV</span>
           <span className="opacity-60 text-[16px] lg:text-lg font-medium">Vol. 01</span>
         </div>
         
@@ -195,8 +193,8 @@ const TheThreePillars: React.FC = () => {
       {/* 3. FULL WIDTH CTA STRIP */}
       <div className="w-full z-10 bg-white border-t border-[#DFDFDF]">
         <CTAStrip
-          title="Where Design Meets Dialogue"
-          ctaLabel="Apply"
+          title="Post Show Report"
+          ctaLabel="Download"
           ctaHref="#"
           hoverBgColor="#000000"
           textColor='var(--primary-red)'

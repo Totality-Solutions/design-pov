@@ -88,7 +88,7 @@ export default function Navbar() {
       >
         <Container>
           <div className="flex justify-between items-center px-6 lg:px-10 py-5">
-            
+
             {/* Logo */}
             <div className="flex-shrink-0">
               <Link href="/">
@@ -102,29 +102,24 @@ export default function Navbar() {
               </Link>
             </div>
 
-            {/* Desktop Nav Links */}
-            <div className="hidden lg:flex items-center gap-10 flex-1 ml-12">
-              {NAV_LABELS.map((label) => (
-                <a
-                  key={label}
-                  href={NAV_DATA[label].mainHref}
-                  onMouseEnter={() => setActiveMenu(label)}
-                  className="text-black text-[16px] font-medium whitespace-nowrap hover:text-blue-500 transition-colors"
-                >
-                  {label}
-                </a>
-              ))}
-            </div>
+            {/* Right Side → Links + Button */}
+            <div className="hidden lg:flex items-center gap-10">
 
-            {/* Right Actions */}
-            <div className="hidden lg:flex items-center gap-6">
-              <a
-                href="#tickets"
-                className="text-black font-semibold whitespace-nowrap"
-              >
-                Tickets ₹1500
-              </a>
-
+              {/* Nav Links */}
+              <div className="flex items-center gap-10">
+                {NAV_LABELS.map((label) => (
+                  <a
+                    key={label}
+                    href={NAV_DATA[label].mainHref}
+                    onMouseEnter={() => setActiveMenu(label)}
+                    className="text-black text-[16px] font-medium whitespace-nowrap hover:text-blue-500 transition-colors"
+                  >
+                    {label}
+                  </a>
+                ))}
+              </div>
+              
+              {/* CTA Button */}
               <CTABtn
                 label="Buy Tickets"
                 iconType="arrow"
@@ -142,7 +137,7 @@ export default function Navbar() {
                 href="#tickets"
               />
             </div>
-
+              
             {/* Mobile Menu Button */}
             <button
               className="lg:hidden p-2"
@@ -165,7 +160,7 @@ export default function Navbar() {
           DESKTOP SUBMENU
       ========================== */}
       <div
-        className={`hidden lg:block bg-white shadow-xl transition-all duration-300 overflow-hidden z-[1100] ${
+        className={`hidden lg:block bg-white transition-all duration-300 overflow-hidden z-[1100] ${
           activeMenu ? "h-[450px]" : "h-0"
         } ${
           isSticky
@@ -178,44 +173,44 @@ export default function Navbar() {
       >
         <Container className="h-full">
           {activeMenu && (
-            <div className="flex h-full py-10 gap-16 text-black">
               
-              {/* Video */}
-              <div className="flex-[1.2] relative overflow-hidden bg-black">
-                {isDesktop && (
-                  <video
-                    src={NAV_DATA[activeMenu].video}
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    className="w-full h-full object-cover opacity-80"
-                  />
-                )}
+              <div className="flex h-full px-10 py-10 gap-16 text-black">
 
-                <div className="absolute bottom-8 left-8 text-white">
-                  <h2 className="text-2xl font-bold">{activeMenu}</h2>
-                  <p className="text-sm opacity-70">
-                    Explore the perspective
-                  </p>
+                {/* Video → 70% */}
+                <div className="w-[60%] h-[320px] relative overflow-hidden bg-black">
+                  {isDesktop && (
+                    <video
+                      src={NAV_DATA[activeMenu].video}
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      className="w-full h-full object-cover opacity-80"
+                    />
+                  )}
+
+                  <div className="absolute bottom-8 left-8 text-white">
+                    <h2 className="text-2xl font-bold">{activeMenu}</h2>
+                    <p className="text-sm opacity-70">
+                      Explore the perspective
+                    </p>
+                  </div>
                 </div>
-              </div>
 
-              {/* Links */}
-              <div className="flex-[1.5] flex gap-10">
-                <div className="w-[1px] bg-gray-100 h-full" />
-
-                <div className="flex-1">
-                  <h3 className="text-lg font-bold mb-6">
-                    {NAV_DATA[activeMenu].col1Title}
-                  </h3>
+                {/* Links → 30% */}
+                <div className="w-[40%] flex flex-col justify-start">
+                  {NAV_DATA[activeMenu].col1Title && (
+                    <h3 className="text-lg font-bold mb-6">
+                      {NAV_DATA[activeMenu].col1Title}
+                    </h3>
+                  )}
 
                   <div className="flex flex-col gap-4">
-                    {NAV_DATA[activeMenu].col1Links.map((link) => (
+                    {NAV_DATA[activeMenu].col1Links?.map((link) => (
                       <a
                         key={link.label}
                         href={link.href}
-                        className="text-gray-500 hover:text-black transition-colors"
+                        className="hover:text-gray-500 text-black font-normal transition-colors"
                       >
                         {link.label}
                       </a>
@@ -223,27 +218,10 @@ export default function Navbar() {
                   </div>
                 </div>
 
-                <div className="w-[1px] bg-gray-100 h-full" />
-
-                <div className="flex-1">
-                  <h3 className="text-lg font-bold mb-6">
-                    {NAV_DATA[activeMenu].col2Title}
-                  </h3>
-
-                  <div className="flex flex-col gap-4">
-                    {NAV_DATA[activeMenu].col2Links.map((link) => (
-                      <a
-                        key={link.label}
-                        href={link.href}
-                        className="text-gray-500 hover:text-black transition-colors"
-                      >
-                        {link.label}
-                      </a>
-                    ))}
-                  </div>
-                </div>
               </div>
-            </div>
+
+
+
           )}
         </Container>
       </div>
