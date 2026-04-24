@@ -8,45 +8,33 @@ import { FiPlus, FiMinus } from "react-icons/fi";
 import CTABtn from "../common/CTABtn";
 
 const modules = [
+ {
+    name: "Circle",
+    description: "A collaborative space for unfiltered dialogue, bringing together diverse voices to shape the cultural and creative landscape.",
+  },
   {
     name: "Core",
-    images: [
-      '/temp/home/theme/WEBSITE_THEME BANNER_1.jpg.jpeg',
-      '/temp/home/theme/WEBSITE_THEME BANNER_4.jpg.jpeg',
-      '/temp/home/theme/WEBSITE_THEME BANNER_2.jpg.jpeg',
-    ],
+    description: "The architectural foundation of our vision, where structural integrity meets the fluid needs of modern society through innovative design.",
   },
   {
-    name: "Circle",
-    images: [
-      '/temp/home/theme/WEBSITE_THEME BANNER_2.jpg.jpeg',
-      '/temp/home/theme/WEBSITE_THEME BANNER_3.jpg.jpeg',
-      '/temp/home/theme/WEBSITE_THEME BANNER_1.jpg.jpeg',
-    ],
+    name: "Object",
+    description: "Exploring the boundary between art and utility through a curated collection of physical artifacts that redefine spaces.",
   },
   {
-    name: "Objects",
-    images: [
-      '/temp/home/theme/WEBSITE_THEME BANNER_1.jpg.jpeg',
-      '/temp/home/theme/WEBSITE_THEME BANNER_4.jpg.jpeg',
-      '/temp/home/theme/WEBSITE_THEME BANNER_2.jpg.jpeg',
-    ],
+    name: "Elevate",
+    description: "A dedicated platform designed to amplify emerging talent and high-concept projects within the global design community.",
   },
   {
-    name: "Brands",
-    images: [
-      '/temp/home/theme/WEBSITE_THEME BANNER_2.jpg.jpeg',
-      '/temp/home/theme/WEBSITE_THEME BANNER_3.jpg.jpeg',
-      '/temp/home/theme/WEBSITE_THEME BANNER_1.jpg.jpeg',
-    ],
+    name: "Brand Participations",
+    description: "Bridging the gap between corporate identity and immersive physical experience design through spatial storytelling.",
   },
   {
-    name: "Sponsorship",
-    images: [
-      '/temp/home/theme/WEBSITE_THEME BANNER_1.jpg.jpeg',
-      '/temp/home/theme/WEBSITE_THEME BANNER_4.jpg.jpeg',
-      '/temp/home/theme/WEBSITE_THEME BANNER_2.jpg.jpeg',
-    ],
+    name: "Sponsorships",
+    description: "Empowering the creative economy by providing brands with high-impact platforms to integrate with global design movements.",
+  },
+  {
+    name: "Media Enquiry",
+    description: "For press kits, interview requests, and media collaborations, reach out to our communications team for official insights.",
   },
 ];
 
@@ -69,7 +57,7 @@ export default function ParticipationSection() {
       />
 
       {/* ==========================================================
-          MOBILE & TABLET VIEW (Accordion style)
+          MOBILE & TABLET VIEW
       ========================================================== */}
       <div className="md:hidden flex flex-col">
         {modules.map((item, index) => {
@@ -81,7 +69,6 @@ export default function ParticipationSection() {
               className="border-b border-neutral-100 overflow-hidden"
               onClick={() => setActive(isActive ? null : item.name)}
             >
-              {/* Header Bar */}
               <div className={`flex justify-between items-center py-6 px-4 transition-colors duration-300 ${isActive ? 'bg-black text-white' : 'bg-white text-black'}`}>
                 <span className="text-lg font-medium tracking-tight uppercase">
                   {item.name}
@@ -91,7 +78,6 @@ export default function ParticipationSection() {
                 </span>
               </div>
 
-              {/* Collapsible Content */}
               <motion.div
                 initial={false}
                 animate={{
@@ -101,18 +87,12 @@ export default function ParticipationSection() {
                 transition={{ duration: 0.4, ease: [0.32, 0, 0.67, 1] }}
                 className="bg-black overflow-hidden"
               >
-                {/* Image Grid Block */}
-                <div className="px-4 pt-4">
-                  <div className="grid grid-cols-2 gap-2 h-64">
-                    <div className="flex flex-col gap-2">
-                       <img src={item.images[0]} className="h-[calc(50%-4px)] w-full object-cover" alt="" />
-                       <img src={item.images[1]} className="h-[calc(50%-4px)] w-full object-cover" alt="" />
-                    </div>
-                    <img src={item.images[2]} className="h-full w-full object-cover" alt="" />
-                  </div>
+                <div className="px-6 py-4">
+                  <p className="text-white text-[15px] font-normal leading-relaxed opacity-80">
+                    {item.description}
+                  </p>
                 </div>
 
-                {/* Separate Button Block (Clearly below the images) */}
                 <div className="px-4 py-8 flex justify-start">
                   <CTABtn
                     label="Apply Now"
@@ -138,9 +118,10 @@ export default function ParticipationSection() {
       </div>
 
       {/* ==========================================================
-          DESKTOP VIEW (Original Side-by-Side)
+          DESKTOP VIEW (Images Removed, Text Added)
       ========================================================== */}
       <div className="hidden md:grid grid-cols-[70%_30%]">
+        {/* Left Column */}
         <div className="flex flex-col">
           {modules.map((item, index) => (
             <div
@@ -159,37 +140,30 @@ export default function ParticipationSection() {
           ))}
         </div>
 
+        {/* Right Column (Purely Text-based now) */}
         <div className={`relative overflow-hidden transition-colors ${active ? "bg-black" : "bg-white"}`}>
-          <div className="absolute inset-0 grid grid-cols-2">
-            <div className="relative h-full flex flex-col">
-              <div className="relative flex-1">
-                {modules.map((mod, i) => (
-                  <img
-                    key={i + "-top"}
-                    src={mod.images[0]}
-                    className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${active === mod.name ? "opacity-100" : "opacity-0"}`}
-                  />
-                ))}
-              </div>
-              <div className="relative flex-1">
-                {modules.map((mod, i) => (
-                  <img
-                    key={i + "-bottom"}
-                    src={mod.images[1]}
-                    className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${active === mod.name ? "opacity-100" : "opacity-0"}`}
-                  />
-                ))}
-              </div>
-            </div>
-            <div className="relative">
+          <div className="absolute inset-0 flex items-center justify-center p-10">
+            <AnimatePresence mode="wait">
               {modules.map((mod, i) => (
-                <img
-                  key={i + "-right"}
-                  src={mod.images[2]}
-                  className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${active === mod.name ? "opacity-100" : "opacity-0"}`}
-                />
+                active === mod.name && (
+                  <motion.div
+                    key={mod.name}
+                    initial={{ opacity: 0, x: 10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -10 }}
+                    transition={{ duration: 0.3 }}
+                    className="text-left"
+                  >
+                    <h4 className="text-white text-3xl font-medium tracking-tight mb-2">
+                      {mod.name}
+                    </h4>
+                    <p className="text-white text-base lg:text-lg font-normal leading-relaxed">
+                      {mod.description}
+                    </p>
+                  </motion.div>
+                )
               ))}
-            </div>
+            </AnimatePresence>
           </div>
         </div>
       </div>

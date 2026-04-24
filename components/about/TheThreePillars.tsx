@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
-import CTAStrip from '@/components/common/CTAStrip';
 import CTABtn from '../common/CTABtn';
 import SectionHeading from '../common/SectionHeading';
 
@@ -46,9 +45,10 @@ const PILLAR_DATA: Pillar[] = [
 
 const TheThreePillars: React.FC = () => {
   const [activePillar, setActivePillar] = useState<number>(0);
-  const [isHovered, setIsHovered] = useState(false); // Track hover for the dot animation
+  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
+    // Intersection Observer for Desktop Sidebar updates
     if (window.innerWidth < 768) return;
 
     const elements = document.querySelectorAll('.pillar-image-trigger');
@@ -74,29 +74,23 @@ const TheThreePillars: React.FC = () => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-
-
-      {/* 1. FLEXIBLE SECTION HEADER */}
+      {/* 1. SECTION HEADER */}
       <SectionHeading 
         titleMain="The Three " 
         titleBold="Pillars" 
         sticky={true}
-        stickyTop="top-20"
+        stickyTop="top-0 md:top-20" // Adjusted for mobile sticky header
         isSectionHovered={isHovered} 
       >
-        {/* Right side content: Passing multiple elements as children */}
         <div className="hidden md:flex gap-[60px] lg:gap-[100px]">
           <span className="opacity-60 text-[16px] lg:text-lg font-medium">Vol. 01</span>
         </div>
-        
-        {/* You could even add a CTA here if needed */}
-        {/* <CTABtn label="Contact" href="/contact" ... /> */}
       </SectionHeading>
 
       {/* 2. MAIN CONTENT AREA */}
       <div className="relative flex flex-col md:flex-row items-start">
         
-        {/* DESKTOP ONLY SIDEBAR */}
+        {/* DESKTOP SIDEBAR - Hidden on Mobile */}
         <div className="hidden md:flex w-[388px] sticky top-[90px] h-[calc(100vh-90px)] pl-[70px] pt-[60px] pb-[60px] flex-col justify-end border-r border-[#DFDFDF] bg-white overflow-hidden">
           <AnimatePresence mode="wait">
             <motion.div
@@ -135,13 +129,21 @@ const TheThreePillars: React.FC = () => {
           </AnimatePresence>
         </div>
 
-        {/* MOBILE + RIGHT COLUMN SCROLLING AREA */}
+        {/* SCROLLING CONTENT - Stacks on Mobile */}
         <div className="flex-1 w-full bg-white md:bg-[#FAFAFA]">
           {PILLAR_DATA.map((pillar, index) => (
             <div 
               key={pillar.id}
               data-index={index}
-              className="pillar-image-trigger w-full flex flex-col border-b border-[#DFDFDF] last:border-b-0"
+              /**
+               * STACKING LOGIC:
+               * 'sticky top-0' makes the card stick to the top of the screen on mobile.
+               * 'md:relative' disables stacking on desktop for your sidebar logic.
+               * 'bg-white' ensures the previous card is hidden as the new one covers it.
+               */
+              className="pillar-image-trigger w-full flex flex-col border-b border-[#DFDFDF] last:border-b-0 
+                         sticky top-20 lg:relative bg-white md:bg-transparent shadow-[0_-10px_20px_rgba(0,0,0,0.05)] md:shadow-none"
+              style={{ zIndex: index + 1 }}
             >
               {/* MOBILE ONLY TEXT */}
               <div className="md:hidden flex flex-col p-8 gap-6 bg-white">
@@ -175,31 +177,19 @@ const TheThreePillars: React.FC = () => {
 
               {/* IMAGE CONTAINER */}
               <div className="p-6 md:p-[40px] flex items-center justify-center">
-                <div className="w-full h-[35vh] md:h-[85vh] relative transition-all duration-1000 ease-in-out">
+                <div className="w-full h-[45vh] md:h-[85vh] relative transition-all duration-1000 ease-in-out">
                   <Image 
                     src={pillar.image} 
                     alt={pillar.title} 
                     fill
                     unoptimized
-                    className="object-cover"
+                    className="object-cover rounded-xl md:rounded-none"
                   />
                 </div>
               </div>
             </div>
           ))}
         </div>
-      </div>
-
-      {/* 3. FULL WIDTH CTA STRIP */}
-      <div className="w-full z-10 bg-white border-t border-[#DFDFDF]">
-        <CTAStrip
-          title="Post Show Report"
-          ctaLabel="Download"
-          ctaHref="#"
-          hoverBgColor="#000000"
-          textColor='var(--primary-red)'
-          hoverTextColor='var(--color-white)'
-        />
       </div>
     </section>
   );

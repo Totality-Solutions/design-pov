@@ -64,10 +64,10 @@ const DesignHero: React.FC<{}> = () => {
   }, []);
 
   return (
-    <section className="relative w-full h-full bg-white px-6 md:px-12 lg:px-20 pt-24 pb-10 flex flex-col font-display overflow-hidden">
+    <section className="relative w-full h-full bg-white px-6 md:px-12 lg:px-20 md:pt-24 pt-12 pb-5 md:pb-10 flex flex-col font-display overflow-hidden">
       
       {/* 1. HEADER */}
-      <div className="relative h-[120px] md:h-[120px] mb-12 md:mb-0">
+      <div className="relative h-[120px] md:h-[120px] mb-6 md:mb-0">
         {SLIDES.map((slide, index) => (
           <h1
             key={slide.bgText}
@@ -91,7 +91,7 @@ const DesignHero: React.FC<{}> = () => {
       <div className="flex flex-col lg:flex-row lg:justify-between lg:items-end gap-10 lg:gap-0 mb-0 md:mb-16">
         
         {/* LIST SECTION */}
-        <div className="flex flex-col gap-3 md:gap-4 mb-12 md:mb-0">
+        <div className="flex flex-col gap-3 md:gap-4 mb-6 md:mb-0">
           {SLIDES.slice(1).map((item, index) => {
             const itemIndex = index + 1;
             const isActive = currentIndex === itemIndex;

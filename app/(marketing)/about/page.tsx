@@ -15,6 +15,16 @@ export default function AboutPage() {
     <div>
         <DesignHero />
         <TheThreePillars />
+        <div className="w-full z-10 bg-white border-t border-[#DFDFDF]">
+        <CTAStrip
+          title="Post Show Report"
+          ctaLabel="Download"
+          ctaHref="#"
+          hoverBgColor="#000000"
+          textColor='var(--primary-red)'
+          hoverTextColor='var(--color-white)'
+        />
+        </div>
         <ThisIsUsSection />
         <Ecosystem />
         <div className="w-full z-10 bg-white">

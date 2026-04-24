@@ -97,17 +97,6 @@ function PillarCard({ pillar }: { pillar: typeof ecosystemPillars[0] }) {
         />
       </div>
 
-      {/* 2. ICON */}
-      <div className="relative w-10 h-10 flex items-center justify-center mb-4">
-        <Image 
-          src={pillar.iconSrc}
-          alt={`${pillar.title} Icon`}
-          width={32}
-          height={32}
-          className="relative z-10"
-        />
-      </div>
-
       {/* 3. DESCRIPTION */}
       <div className="flex flex-col gap-2">
         <p className="text-body-mobile md:text-body-tab lg:text-body max-w-[260px] opacity-80 leading-snug">

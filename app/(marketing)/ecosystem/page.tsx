@@ -1,6 +1,7 @@
 import CTAStrip from '@/components/common/CTAStrip'
 import EcosystemHero from '@/components/ecosystem/EcosystemHero'
 import EcosystemPillars from '@/components/ecosystem/EcosystemPillars'
+import ParticipationForm from '@/components/ecosystem/ParticipationForm'
 import StrategicSection from '@/components/ecosystem/StrategicSection'
 
 export default function EcosystemPage() {
@@ -9,7 +10,8 @@ export default function EcosystemPage() {
       <EcosystemHero />
       <StrategicSection />
       <EcosystemPillars />
-            <div className="w-full z-10 bg-white">
+      <ParticipationForm />
+      <div className="w-full z-10 bg-white">
         <CTAStrip
           title="Where Design Meets Dialogue"
           ctaLabel="Apply"
