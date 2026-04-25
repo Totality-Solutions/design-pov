@@ -66,7 +66,7 @@ const ScheduleSection = () => {
       {/* 1. CONSTANT BACKGROUND IMAGE LAYER */}
       <div className="absolute inset-0 z-0">
         <Image
-          src="/temp/theme/11.png" // Your constant image path
+          src="/temp/about/1.png" // Your constant image path
           alt="Background"
           fill
           className="object-cover"
@@ -95,7 +95,7 @@ const ScheduleSection = () => {
         </SectionHeading>
 
         {/* 3. PRIMARY CONTAINER (Solid Black Background) */}
-        <div className="relative w-full flex flex-col lg:flex-row items-stretch border-t border-b border-white/20 px-[20px] lg:px-[60px] overflow-hidden min-h-[350px] bg-black">
+        <div className="relative w-full flex flex-col lg:flex-row items-stretch px-[20px] lg:px-[60px] overflow-hidden min-h-[350px] bg-black">
           
           {/* LEFT COLUMN */}
           <div className="w-full lg:w-[15%] flex flex-row lg:flex-col justify-between lg:justify-center py-6 lg:py-0 border-b lg:border-b-0 lg:border-r border-white/20 z-10">

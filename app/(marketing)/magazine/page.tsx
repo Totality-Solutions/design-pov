@@ -17,8 +17,7 @@ export default function MagazinePage() {
   return (
     <main>
       <MagazineHero />
-      <MagazineNav />
-      <PressSection />'
+      <PressSection />
       <AprilIssueSection />
       <FeaturedBlogSection />
       <InterviewsSection />
