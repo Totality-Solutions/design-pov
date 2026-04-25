@@ -66,11 +66,12 @@ const Core2026: NextPage = () => {
       onMouseLeave={() => setIsHovered(false)}
     >
       <SectionHeading
-        titleMain="Core_" 
+        titleMain="Core " 
         titleBold="2026" 
         sticky={false}
         isSectionHovered={isHovered} 
-      />
+      >
+      </SectionHeading>
     
       <main className="w-full max-w-[1420px] pt-[30px] lg:pt-[50px] px-6 lg:px-[50px] pb-20">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 lg:gap-[50px]">

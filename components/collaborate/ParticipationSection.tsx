@@ -61,7 +61,7 @@ export default function ParticipationSection() {
     >
 
       <SectionHeading
-        titleMain="Featured_"
+        titleMain="Featured "
         titleBold="Story"
         sticky={false}
         isSectionHovered={isHovered}

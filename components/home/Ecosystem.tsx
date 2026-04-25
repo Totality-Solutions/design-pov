@@ -18,9 +18,9 @@ import bgImage5 from '@/public/temp/home/ecosystem/N1.jpg'
 interface EcosystemItem {
   id: string
   label: string
-  tag: string
+  tag?: string
   title: string
-  description: string
+  description?: string[]
   stats: { value: string; unit: string }[]
   cta: string
   bgImage?: string
@@ -29,42 +29,20 @@ interface EcosystemItem {
 const ECOSYSTEM: EcosystemItem[] = [
   {
     id: 'core',
-    label: 'CORE',
+    label: 'THE CORE',
     tag: 'THE FOUNDATION TRACK',
     bgImage: bgImage1.src,
-    title: 'CORE',
-    description: 'The backbone of Design POV India...',
+    title: 'THE CORE',
+    description: [
+      "At the heart of Design POV are 16 design studios—each invited to interpret the theme through a fully realised spatial narrative.",
+      "These are not booths, they are environments.",
+      "Each space is built in collaboration with leading brands and fabricators, resulting in distinct, immersive experiences that challenge how design is typically presented.",
+    ],
     stats: [
       { value: '40', unit: 'MEMBERS' },
       { value: '12', unit: 'MONTHS' },
     ],
-    cta: 'APPLY TO CORE',
-  },
-  {
-    id: 'elevate',
-    label: 'ELEVATE',
-    tag: 'THE MENTORSHIP TRACK',
-    bgImage: bgImage2.src,
-    title: 'ELEVATE',
-    description: '12 emerging designers paired...',
-    stats: [
-      { value: '12', unit: 'PAIRS' },
-      { value: '3', unit: 'MONTHS' },
-    ],
-    cta: 'APPLY AS DESIGNER',
-  },
-  {
-    id: 'edit',
-    label: 'EDIT',
-    tag: 'THE PUBLICATION TRACK',
-    bgImage: bgImage3.src,
-    title: 'EDIT',
-    description: 'A bi-annual publication...',
-    stats: [
-      { value: '2', unit: 'ISSUES/YR' },
-      { value: '500', unit: 'COPIES' },
-    ],
-    cta: 'CONTRIBUTE',
+    cta: 'Apply to Core',
   },
   {
     id: 'circle',
@@ -72,25 +50,51 @@ const ECOSYSTEM: EcosystemItem[] = [
     tag: 'THE COMMUNITY TRACK',
     bgImage: bgImage4.src,
     title: 'CIRCLE',
-    description: 'An intimate membership...',
+    description: ["A live space for open dialogue and powerful discourse. Curated with the same intent as the show: to question, reflect, and reconsider, these discussions brought together the voices shaping India’s cultural landscape. Unfiltered and unscripted, the platform dove deep into the ideas shaping how we live, build, and collaborate."],
     stats: [
       { value: '200', unit: 'MEMBERS' },
       { value: '12', unit: 'EVENTS/YR' },
     ],
-    cta: 'JOIN CIRCLE',
+    cta: 'Join Circle',
   },
   {
-    id: 'journal',
-    label: 'JOURNAL',
+    id: 'objects',
+    label: 'OBJECTS',
+    tag: 'THE PUBLICATION TRACK',
+    bgImage: bgImage3.src,
+    title: 'OBJECTS',
+    description: ["A curated initiative where select architects, designers, product designers, and artists are invited to conceive and fabricate one original object in response to the edition's theme. Stripping away the noise to create something pure - a perspective in the form of a physical object."],
+    stats: [
+      { value: '2', unit: 'ISSUES/YR' },
+      { value: '500', unit: 'COPIES' },
+    ],
+    cta: 'Contribute',
+  },
+  {
+    id: 'elevate',
+    label: 'ELEVATE',
+    tag: 'THE MENTORSHIP TRACK',
+    bgImage: bgImage2.src,
+    title: 'ELEVATE',
+    description: ["An initiative for brand moments worth remembering. Exclusively available for the POV ecosystem, it's designed to help you create strategic visibility that goes beyond the show floor."],
+    stats: [
+      { value: '12', unit: 'PAIRS' },
+      { value: '3', unit: 'MONTHS' },
+    ],
+    cta: 'Apply as Designer',
+  },
+  {
+    id: 'magazine',
+    label: 'MAGAZINE',
     tag: 'THE ARCHIVE TRACK',
     bgImage: bgImage5.src,
-    title: 'JOURNAL',
-    description: 'A living digital archive...',
+    title: 'MAGAZINE',
+    description: ["A curation of stories from those who consume and create design - from the Indian sub-continent and beyond."],
     stats: [
       { value: '100+', unit: 'ESSAYS' },
       { value: 'OPEN', unit: 'ACCESS' },
     ],
-    cta: 'READ JOURNAL',
+    cta: 'Read Magazine',
   },
 ]
 
@@ -104,13 +108,12 @@ const EcosystemSection = () => {
       onMouseLeave={() => setIsHovered(false)}
     >
       <SectionHeading
-        titleMain="Five_Pathways_"
-        titleBold="Ecosystem"
+        titleBold="POV ECOSYSTEM"
         sticky={false}
         isSectionHovered={isHovered}
       />
 
-      <Section className="!py-8">
+      <Section className="!py-0 lg:!pb-8 !px-0 lg:!px-14">
         <Container>
           {/* ───────── DESKTOP (Accordion) ───────── */}
           <div
@@ -233,7 +236,7 @@ const EcosystemSection = () => {
                         }}
                       >
                         {/* Top: Tag */}
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        {/* <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                           <span
                             style={{
                               width: '8px',
@@ -245,7 +248,7 @@ const EcosystemSection = () => {
                           <span style={{ fontSize: '11px', letterSpacing: '0.1em', color: '#fff' }}>
                             {item.tag}
                           </span>
-                        </div>
+                        </div> */}
 
                         {/* Middle: Text */}
                         <div>
@@ -258,27 +261,37 @@ const EcosystemSection = () => {
                               color: '#f0f0f0',
                               margin: '0 0 20px',
                               lineHeight: 1,
+                              marginBottom:'32px'
                             }}
                           >
                             {item.title}
                           </motion.h3>
-                          <motion.p
-                            initial={{ y: 12, opacity: 0 }}
-                            animate={{ y: 0, opacity: 1 }}
-                            style={{
-                              fontSize: '15px',
-                              lineHeight: 1.4,
-                              color: '#ffffff75',
-                              maxWidth: '420px',
-                            }}
-                          >
-                            {item.description}
-                          </motion.p>
+                          <div style={{ maxWidth: '520px' }}>
+                            {item.description?.map((para, index) => (
+                              <motion.p
+                                key={index}
+                                initial={{ y: 12, opacity: 0 }}
+                                animate={{ y: 0, opacity: 1 }}
+                                transition={{
+                                  duration: 0.4,
+                                  delay: index * 0.1,
+                                }}
+                                style={{
+                                  fontSize: '16px',
+                                  lineHeight: 1.6,
+                                  color: '#ffffff95',
+                                  marginBottom: '12px',
+                                }}
+                              >
+                                {para}
+                              </motion.p>
+                            ))}
+                          </div>
                         </div>
 
                         {/* Bottom: Stats & CTA */}
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                          <div style={{ display: 'flex', gap: '40px' }}>
+                          {/* <div style={{ display: 'flex', gap: '40px' }}>
                             {item.stats.map((stat, i) => (
                               <div key={i}>
                                 <div style={{ fontSize: '24px', fontWeight: 500, color: '#fff' }}>
@@ -289,10 +302,10 @@ const EcosystemSection = () => {
                                 </div>
                               </div>
                             ))}
-                          </div>
+                          </div> */}
                           <CTABtn
                             label={item.cta}
-                            className="text-xs"
+                            className="text-tab-body"
                             iconType="arrow"
                             btnBg="var(--primary-blue)"
                             textColor="#fff"
@@ -343,24 +356,34 @@ const EcosystemSection = () => {
                     </div>
                   ) : (
                     <div className="p-10 relative z-10">
-                       <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
+                       {/* <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
                         <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--primary-blue)' }} />
                         <span style={{ fontSize: '11px', color: '#fff' }}>{item.tag}</span>
-                      </div>
+                      </div> */}
                       <h3 className="text-4xl font-semibold text-[#f0f0f0] mb-4">{item.title}</h3>
-                      <p className="text-sm text-[#ffffff75] mb-8 leading-relaxed">{item.description}</p>
+                      <div className="mb-8">
+                        {item.description?.map((para, index) => (
+                          <p
+                            key={index}
+                            className="text-sm text-[#ffffff75] leading-relaxed mb-3"
+                          >
+                            {para}
+                          </p>
+                        ))}
+                      </div>
                       
-                      <div className="flex gap-8 mb-8">
+                      {/* <div className="flex gap-8 mb-8">
                         {item.stats.map((stat, i) => (
                           <div key={i}>
                             <div className="text-xl text-white font-medium">{stat.value}</div>
                             <div className="text-[10px] text-[#ffffff75]">{stat.unit}</div>
                           </div>
                         ))}
-                      </div>
+                      </div> */}
 
                       <CTABtn
                         label={item.cta}
+                        className='text-mob-body'
                         iconType="arrow"
                         btnBg="var(--color-black)"
                         borderColor="#fff"

@@ -14,15 +14,20 @@ const SLIDES: Slide[] = [
   { bgText: "WHAT MAKES US DIFFERENT", label: "What Makes Us Different" },
 ];
 
-const typingSpeed = 80;
-const deletingSpeed = 40;
-const pauseTime = 1200;
+// COMMENTED: Typewriter animation configs no longer needed
+// const typingSpeed = 80;
+// const deletingSpeed = 40;
+// const pauseTime = 1200;
 
 const DesignHero: React.FC<{}> = () => {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
-  const [displayText, setDisplayText] = useState<string>("");
-  const [isDeleting, setIsDeleting] = useState<boolean>(false);
 
+  // COMMENTED: Typewriter states no longer needed
+  // const [displayText, setDisplayText] = useState<string>("");
+  // const [isDeleting, setIsDeleting] = useState<boolean>(false);
+
+  // COMMENTED: Typewriter logic removed
+  /*
   useEffect(() => {
     const currentText = SLIDES[currentIndex].bgText;
     let timeout: ReturnType<typeof setTimeout>;
@@ -47,20 +52,42 @@ const DesignHero: React.FC<{}> = () => {
     }
     return () => clearTimeout(timeout);
   }, [displayText, isDeleting, currentIndex]);
+  */
+
+  // NEW: Simple auto slide transition
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % SLIDES.length);
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <section className="relative w-full h-full bg-white px-6 md:px-12 lg:px-20 pt-24 pb-10 flex flex-col font-display overflow-hidden">
       
-      {/* 1. TYPEWRITER HEADER */}
-      {/* Mobile: Light gray/Smaller | Desktop: Black-opacity/Huge */}
+      {/* 1. HEADER */}
       <div className="relative h-[120px] md:h-[120px] mb-12 md:mb-0">
+        {SLIDES.map((slide, index) => (
+          <h1
+            key={slide.bgText}
+            className={`absolute top-0 left-0 text-[#E5E5E5] lg:text-black/10 text-[40px] md:text-5xl lg:text-[65px] font-bold uppercase leading-none tracking-tighter whitespace-wrap transition-opacity duration-700 ${
+              currentIndex === index ? "opacity-100" : "opacity-0"
+            }`}
+          >
+            {slide.bgText}
+          </h1>
+        ))}
+
+        {/* COMMENTED OLD TYPEWRITER TEXT */}
+        {/*
         <h1 className="absolute top-0 left-0 text-[#E5E5E5] lg:text-black/10 text-[40px] md:text-5xl lg:text-[65px] font-bold uppercase leading-none tracking-tighter whitespace-wrap">
           {displayText}
         </h1>
+        */}
       </div>
 
       {/* 2. CONTENT WRAPPER */}
-      {/* Desktop: Horizontal (lg:flex-row) | Mobile: Vertical (flex-col) */}
       <div className="flex flex-col lg:flex-row lg:justify-between lg:items-end gap-10 lg:gap-0 mb-0 md:mb-16">
         
         {/* LIST SECTION */}
@@ -74,14 +101,18 @@ const DesignHero: React.FC<{}> = () => {
                 key={item.label}
                 onClick={() => {
                   setCurrentIndex(itemIndex);
-                  setDisplayText("");
-                  setIsDeleting(false);
+
+                  // COMMENTED: old typewriter reset
+                  // setDisplayText("");
+                  // setIsDeleting(false);
                 }}
                 onMouseEnter={() => {
-                  if (window.innerWidth >= 1024) { // Only hover on desktop
+                  if (window.innerWidth >= 1024) {
                     setCurrentIndex(itemIndex);
-                    setDisplayText("");
-                    setIsDeleting(false);
+
+                    // COMMENTED: old typewriter reset
+                    // setDisplayText("");
+                    // setIsDeleting(false);
                   }
                 }}
                 className={`flex items-center cursor-pointer transition-opacity duration-300 ${
@@ -108,10 +139,9 @@ const DesignHero: React.FC<{}> = () => {
       </div>
 
       {/* 3. HERO IMAGE */}
-      {/* Fixed aspect-video to keep it cinematic across all devices */}
       <div className="group w-full aspect-[4/3] md:aspect-[16/7] overflow-hidden bg-gray-100 mt-12 md:mt-0 rounded-sm">
         <img
-          src="/temp/about/1.png" 
+          src="/temp/about/1.png"
           alt="Design POV"
           className="w-full h-full object-cover transition-transform duration-[2000ms] group-hover:scale-105"
         />

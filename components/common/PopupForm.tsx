@@ -25,7 +25,7 @@ export default function PopupForm({ isOpen, onClose }: PopupFormProps) {
       />
 
       {/* MODAL CONTAINER */}
-      <div className="relative w-full max-w-[1100px] min-h-[500px] md:min-h-[600px] bg-white grid grid-cols-1 md:grid-cols-2 overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-300">
+      <div className="relative w-full max-w-[1100px] min-h-[500px] md:min-h-[600px] bg-white grid grid-cols-1 lg:grid-cols-2 overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-300">
         
         {/* CLOSE BUTTON */}
         <button 
@@ -36,7 +36,7 @@ export default function PopupForm({ isOpen, onClose }: PopupFormProps) {
         </button>
 
         {/* LEFT COLUMN: BRANDING & LOGO */}
-        <div className="relative bg-red-600 p-8 md:p-12 flex flex-col items-center min-h-[200px] md:min-h-full">
+        <div className="hidden lg:block relative bg-red-600 p-8 md:p-12 flex flex-col items-center min-h-[200px] md:min-h-full">
           
           {/* Logo - Vertically & Horizontally Centered */}
           <div className="flex-grow flex items-center justify-center">

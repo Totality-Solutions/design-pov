@@ -7,10 +7,10 @@ export type SubLink = {
 export type SubmenuContent = {
   mainHref: string; // Added: The link for the main header item itself
   video: string;
-  col1Title: string;
-  col1Links: SubLink[];
-  col2Title: string;
-  col2Links: SubLink[];
+  col1Title?: string;
+  col1Links?: SubLink[];
+  col2Title?: string;
+  col2Links?: SubLink[];
 };
 
 // --- Navigation Data ---
@@ -31,7 +31,17 @@ export const NAV_DATA: Record<string, SubmenuContent> = {
       { label: "Report", href: "/impact/report" }
     ],
   },
-  "26 Edition": {
+  Ecosystem: {
+    mainHref: "/ecosystem",
+    video: "/video4.mp4",
+    col1Links: [
+      { label: "Circle", href: "/ecosystem/hub" }, 
+      { label: "Elevate", href: "/ecosystem/blogs" }, 
+      { label: "Objects", href: "/ecosystem/directory" },
+      { label: "Afterhours", href: "/ecosystem/directory" }
+    ],
+  },
+  "2026 Edition": {
     mainHref: "/edition",
     video: "/video1.mp4",
     col1Title: "Theme",
@@ -79,22 +89,7 @@ export const NAV_DATA: Record<string, SubmenuContent> = {
       { label: "Work With Us", href: "/magazine/jobs" }
     ],
   },
-  Ecosystem: {
-    mainHref: "/ecosystem",
-    video: "/video4.mp4",
-    col1Title: "Network",
-    col1Links: [
-      { label: "Design Hub", href: "/ecosystem/hub" }, 
-      { label: "Blogs", href: "/ecosystem/blogs" }, 
-      { label: "Directory", href: "/ecosystem/directory" }
-    ],
-    col2Title: "Resources",
-    col2Links: [
-      { label: "Tools", href: "/ecosystem/tools" }, 
-      { label: "Case Studies", href: "/ecosystem/cases" }, 
-      { label: "Forum", href: "/ecosystem/forum" }
-    ],
-  },
+  
 };
 
 export const NAV_LABELS = Object.keys(NAV_DATA);

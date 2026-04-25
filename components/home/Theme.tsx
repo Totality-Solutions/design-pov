@@ -78,8 +78,7 @@ const Theme = () => {
           <div className="w-full h-full flex flex-col justify-end gap-4 px-3 lg:px-14">
             <h1 className="text-h2-mobile md:text-h2-tab lg:text-h2 font-semibold uppercase">2026 THEME</h1>
             <p className="text-body-tab">
-              Lorem ipsum dolor sit amet consectetur.
-              psum dolor sit amet consectetur.
+              A sharper focus on how spaces are experienced - through texture, sound, atmosphere, and memory.
             </p>
             <CTABtn
               label="2026 THEME"
