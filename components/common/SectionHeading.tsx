@@ -114,9 +114,9 @@ export default function SectionHeading({
       )}
 
       {/* Bottom Border for Sticky Version */}
-      {sticky && (
+      {/* {sticky && (
         <div className="absolute bottom-0 left-0 w-full h-[1px] bg-black/5" />
-      )}
+      )} */}
     </div>
   );
 }

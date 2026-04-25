@@ -35,7 +35,6 @@ const AprilIssueSection = () => {
       <SectionHeading
         titleMain="The "
         titleBold="April Issue"
-        subTitle="Discover the latest issue"
         isSectionHovered={isHovered}
       >
       <CTABtn

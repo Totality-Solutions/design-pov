@@ -6,15 +6,15 @@ export default function EcosystemHero() {
   return (
     <section className="w-full h-fit bg-pov-white border-b border-pov-black/40">
       {/* TEXT SECTION: Clean horizontal layout with border */}
-      <div className="w-full border-b-2 border-pov-black px-6 md:px-14 lg:pt-80">
+      <div className="w-full border-b-2 border-pov-black px-6 md:px-14 lg:pt-60">
         <h1 className="text-h1-mobile md:text-h1-tab lg:text-h1 tracking-tight font-semibold">
-          Lorem Ipsum is simply dummy text of the lore
+          Design POV extends beyond a 
         </h1>
       </div>
     
       <div className="w-full border-b-2 border-pov-black px-6 md:px-14 lg:pt-2">
         <p className="text-h1-mobile md:text-h1-tab lg:text-h1 tracking-tight font-semibold">
-          and typesetting industry.
+          singular format.
         </p>
       </div>
 

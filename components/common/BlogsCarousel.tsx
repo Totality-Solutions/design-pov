@@ -86,7 +86,7 @@ export default function BlogsCarousel({ filter }: CarouselProps) {
             ))
           ) : (
             /* FALLBACK UI */
-            <div className="w-full py-20 flex flex-col items-center justify-center border border-dashed border-gray-200 rounded-lg">
+            <div className="w-full py-36 flex flex-col items-center justify-center border border-dashed border-gray-200 rounded-lg">
               <p className="font-['Montserrat'] text-gray-400 text-lg uppercase tracking-widest">
                 No articles found in {filter}
               </p>

@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
+import CTAStrip from '@/components/common/CTAStrip';
 import CTABtn from '../common/CTABtn';
 import SectionHeading from '../common/SectionHeading';
 
@@ -22,50 +23,61 @@ interface Pillar {
 const PILLAR_DATA: Pillar[] = [
   {
     id: "arch",
-    title: "ARCHITECTS",
-    description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+    title: "Architect Firms (The Core):",
+    description: "Shape the vision: translating ideas into immersive, narrative-led environments.",
     image: Img1,
-    buttonLabel: "Default"
+    buttonLabel: "Explore"
   },
   {
     id: "brand",
-    title: "BRANDS",
-    description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+    title: "Home & Lifestyle Brands:",
+    description: "Enable the narrative: bringing material, product, and innovation into context.",
     image: Img2,
-    buttonLabel: "Default"
+    buttonLabel: "Explore"
   },
   {
     id: "build",
-    title: "BUILD PARTNERS",
-    description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+    title: "Build Partners:",
+    description: "Realise the vision: transforming concepts into precise, tangible spaces.",
     image: Img3,
-    buttonLabel: "Default"
+    buttonLabel: "Explore"
   }
 ];
 
 const TheThreePillars: React.FC = () => {
   const [activePillar, setActivePillar] = useState<number>(0);
   const [isHovered, setIsHovered] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    // Intersection Observer for Desktop Sidebar updates
-    if (window.innerWidth < 768) return;
+    // 1. Handle Screen Resize for Sticky Logic
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    handleResize();
+    window.addEventListener('resize', handleResize);
 
-    const elements = document.querySelectorAll('.pillar-image-trigger');
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const index = parseInt(entry.target.getAttribute('data-index') || '0');
-            setActivePillar(index);
-          }
-        });
-      },
-      { threshold: 0.6, rootMargin: "-10% 0px -10% 0px" }
-    );
+    // 2. Intersection Observer for Desktop Sidebar updates
+    if (window.innerWidth >= 768) {
+      const elements = document.querySelectorAll('.pillar-image-trigger');
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const index = parseInt(entry.target.getAttribute('data-index') || '0');
+              setActivePillar(index);
+            }
+          });
+        },
+        { threshold: 0.6, rootMargin: "-10% 0px -10% 0px" }
+      );
 
-    elements.forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
+      elements.forEach((el) => observer.observe(el));
+      return () => {
+        observer.disconnect();
+        window.removeEventListener('resize', handleResize);
+      };
+    }
+
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   return (
@@ -74,12 +86,12 @@ const TheThreePillars: React.FC = () => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* 1. SECTION HEADER */}
+      {/* 1. SECTION HEADER - Sticky ONLY on Desktop */}
       <SectionHeading 
-        titleMain="The Three " 
+        titleMain="Our " 
         titleBold="Pillars" 
-        sticky={true}
-        stickyTop="top-0 md:top-20" // Adjusted for mobile sticky header
+        sticky={!isMobile} 
+        stickyTop="top-20"
         isSectionHovered={isHovered} 
       >
         <div className="hidden md:flex gap-[60px] lg:gap-[100px]">
@@ -88,10 +100,10 @@ const TheThreePillars: React.FC = () => {
       </SectionHeading>
 
       {/* 2. MAIN CONTENT AREA */}
-      <div className="relative flex flex-col md:flex-row items-start">
+      <div className="relative flex flex-col md:flex-row items-start w-full">
         
-        {/* DESKTOP SIDEBAR - Hidden on Mobile */}
-        <div className="hidden md:flex w-[388px] sticky top-[90px] h-[calc(100vh-90px)] pl-[70px] pt-[60px] pb-[60px] flex-col justify-end border-r border-[#DFDFDF] bg-white overflow-hidden">
+        {/* DESKTOP SIDEBAR - Sticky Tracking */}
+        <div className="hidden md:flex w-[388px] sticky top-0 h-screen pl-[70px] flex-col justify-end pb-20 border-r border-[#DFDFDF] bg-white">
           <AnimatePresence mode="wait">
             <motion.div
               key={activePillar}
@@ -129,24 +141,16 @@ const TheThreePillars: React.FC = () => {
           </AnimatePresence>
         </div>
 
-        {/* SCROLLING CONTENT - Stacks on Mobile */}
+        {/* SCROLLING CONTENT Area */}
         <div className="flex-1 w-full bg-white md:bg-[#FAFAFA]">
           {PILLAR_DATA.map((pillar, index) => (
             <div 
               key={pillar.id}
               data-index={index}
-              /**
-               * STACKING LOGIC:
-               * 'sticky top-0' makes the card stick to the top of the screen on mobile.
-               * 'md:relative' disables stacking on desktop for your sidebar logic.
-               * 'bg-white' ensures the previous card is hidden as the new one covers it.
-               */
-              className="pillar-image-trigger w-full flex flex-col border-b border-[#DFDFDF] last:border-b-0 
-                         sticky top-20 lg:relative bg-white md:bg-transparent shadow-[0_-10px_20px_rgba(0,0,0,0.05)] md:shadow-none"
-              style={{ zIndex: index + 1 }}
+              className="pillar-image-trigger w-full flex flex-col border-b border-[#DFDFDF] last:border-b-0 relative"
             >
-              {/* MOBILE ONLY TEXT */}
-              <div className="md:hidden flex flex-col p-8 gap-6 bg-white">
+              {/* MOBILE ONLY TEXT - Standard Flow */}
+              <div className="md:hidden flex flex-col p-8 gap-6 bg-white border-b border-[#DFDFDF]">
                 <div className="flex flex-col gap-3">
                   <h3 className="text-[20px] font-bold text-black tracking-tight uppercase">
                     {pillar.title}
@@ -156,33 +160,18 @@ const TheThreePillars: React.FC = () => {
                   </p>
                 </div>
                 <div>
-                  <CTABtn
-                    label={pillar.buttonLabel}
-                    iconType="arrow"
-                    btnBg="var(--color-white)"
-                    btnHoverBg="var(--primary-blue)"
-                    textColor="var(--color-black)"
-                    borderColor="var(--color-black)"
-                    borderHoverColor="transparent"
-                    lineColor="var(--color-white)"
-                    lineHoverColor="var(--primary-blue)"
-                    bottomKey1Width="40px"
-                    bottomKey2Width="12px"
-                    bottomKey1Right="50px"
-                    bottomKey2Right="15px"
-                    href="#tickets"
-                  />
+                  <CTABtn label={pillar.buttonLabel} href="#tickets" />
                 </div>
               </div>
 
               {/* IMAGE CONTAINER */}
               <div className="p-6 md:p-[40px] flex items-center justify-center">
-                <div className="w-full h-[45vh] md:h-[85vh] relative transition-all duration-1000 ease-in-out">
+                <div className="w-full h-[40vh] md:h-[75vh] relative">
                   <Image 
                     src={pillar.image} 
                     alt={pillar.title} 
                     fill
-                    unoptimized
+                    priority={index === 0}
                     className="object-cover rounded-xl md:rounded-none"
                   />
                 </div>
@@ -190,6 +179,18 @@ const TheThreePillars: React.FC = () => {
             </div>
           ))}
         </div>
+      </div>
+
+      {/* 3. FULL WIDTH CTA STRIP */}
+      <div className="w-full relative z-20 bg-white border-t border-[#DFDFDF]">
+        <CTAStrip
+          ctaLabel="Download"
+          title="Post Show Report"
+          ctaHref="#"
+          hoverBgColor="#000000"
+          textColor='var(--primary-red)'
+          hoverTextColor='var(--color-white)'
+        />
       </div>
     </section>
   );

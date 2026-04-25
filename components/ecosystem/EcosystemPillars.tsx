@@ -5,16 +5,16 @@ import Image from 'next/image'
 const ecosystemPillars = [
   {
     id: 1,
-    title: "Circle",
-    description: "Results in transformative design experiences.",
+    title: "The Core",
+    description: "Sixteen design studios create immersive environments where ideas take spatial form.",
     videoSrc: "/video/POV AD.mp4", // Video path here
     imageSrc: "/temp/ecosystem/1.png", // Fallback/Poster image
     iconSrc: "/icons/scanner.svg"
   },
   {
     id: 2,
-    title: "Elevate",
-    description: "Aligning product strategy with user intent.",
+    title: "Circle",
+    description: "A live forum for dialogue—bringing together voices shaping how we think, build, and live.",
     videoSrc: "/video/POV AD.mp4",
     imageSrc: "/temp/ecosystem/2.png",
     iconSrc: "/icons/scanner.svg"
@@ -22,15 +22,15 @@ const ecosystemPillars = [
   {
     id: 3,
     title: "Objects",
-    description: "Building resilient digital product systems.",
+    description: "A collection of original, one-of-one pieces—each a distilled expression of perspective.",
     videoSrc: "/video/POV AD.mp4",
     imageSrc: "/temp/ecosystem/3.png",
     iconSrc: "/icons/scanner.svg"
   },
   {
     id: 4,
-    title: "After-hours",
-    description: "Exploring creative boundaries post-delivery.",
+    title: "Elevate",
+    description: "Curated extensions that create meaningful brand moments beyond the show floor.",
     videoSrc: "/video/POV AD.mp4",
     imageSrc: "/temp/ecosystem/4.png",
     iconSrc: "/icons/scanner.svg"

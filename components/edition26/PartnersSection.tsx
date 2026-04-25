@@ -107,13 +107,13 @@ const PartnersSection: React.FC = () => {
 
       {/* 3. PARTNER LOGO GRID */}
       <div className="w-full bg-white">
-        <div className="grid grid-cols-3 md:grid-cols-6 border-t border-[#EEEEEE]">
+        <div className="grid grid-cols-3 md:grid-cols-6 border-t border-[#EEEEEE] ">
           {gridCells.map((_, index) => {
             const partner = filtered[index];
             return (
               <div
                 key={index}
-                className="aspect-square flex items-center justify-center p-4 md:p-8 border-r border-b border-[#EEEEEE] transition-colors duration-300 hover:bg-gray-50/50"
+                className="aspect-square flex items-center justify-center p-4 md:p-8 border-b mx-4 border-pov-black/30 transition-colors duration-300 hover:bg-gray-50/50"
               >
                 {partner ? (
                   <img 

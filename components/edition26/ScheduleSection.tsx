@@ -53,7 +53,7 @@ const ScheduleSection = () => {
 
   return (
     <section 
-      className="w-full relative min-h-screen lg:min-h-[500px] flex flex-col font-display overflow-hidden bg-black"
+      className="w-full relative min-h-[500px] flex flex-col font-display overflow-hidden bg-black"
       onMouseEnter={() => {
         setIsAutoPlaying(false);
         setIsHovered(true);
@@ -89,7 +89,7 @@ const ScheduleSection = () => {
           isSectionHovered={isHovered} 
         >
           <div className="hidden md:flex gap-[100px]">
-            <span className="opacity-60 text-[16px] lg:text-lg font-medium text-white">POV_Insights</span>
+            {/* <span className="opacity-60 text-[16px] lg:text-lg font-medium text-white">POV_Insights</span> */}
             <span className="opacity-60 text-[16px] lg:text-lg font-medium text-white">Volume_01</span>
           </div>
         </SectionHeading>

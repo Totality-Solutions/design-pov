@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
+import Link from "next/link"; // Import Link
 import SectionHeading from "./SectionHeading";
 
 interface PressItem {
@@ -10,6 +11,7 @@ interface PressItem {
   author: string;
   date: string;
   image: string;
+  slug: string; 
 }
 
 interface PressGridProps {
@@ -17,6 +19,7 @@ interface PressGridProps {
   titleMain: string;
   titleBold?: string;
   rightLabel?: string;
+  basePath?: string; // Optional: e.g., "/magazine"
 }
 
 export default function PressGrid({
@@ -38,8 +41,6 @@ export default function PressGrid({
         titleMain={titleMain}
         titleBold={titleBold}
         isSectionHovered={isHovered}
-        sticky={true}
-        stickyTop="top-0"
       >
         {rightLabel && (
           <div className="hidden md:flex">
@@ -54,7 +55,13 @@ export default function PressGrid({
       <div className="px-6 md:px-[70px] py-12">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-6">
           {data.map((item, index) => (
-            <div key={index} className="group cursor-pointer">
+            <Link 
+              key={index} 
+              href={item.slug} 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group cursor-pointer block"
+            >
               {/* Image Container */}
               <div className="relative aspect-[16/9] w-full overflow-hidden bg-gray-100 mb-6">
                 <Image
@@ -79,7 +86,7 @@ export default function PressGrid({
                   <span>{item.date}</span>
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>
