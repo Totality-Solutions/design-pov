@@ -37,18 +37,18 @@ const themeData = [
     tablet: { top: '66.5%', left: '62%' },
     mobile: { top: '68%', left: '50%' } 
   },
-  { 
-    id: 6, w: 200, h: 180, img: "/temp/theme/6.png",
-    desktop: { top: '80%', left: '5%' },
-    tablet: { top: '81%', left: '10%' },
-    mobile: { top: '82%', left: '15%' } 
-  },
-  { 
-    id: 7, w: 220, h: 330, img: "/temp/theme/7.png",
-    desktop: { top: '85%', left: '60%' },
-    tablet: { top: '86%', left: '57%' },
-    mobile: { top: '87%', left: '55%' } 
-  },
+  // { 
+  //   id: 6, w: 200, h: 180, img: "/temp/theme/6.png",
+  //   desktop: { top: '80%', left: '5%' },
+  //   tablet: { top: '81%', left: '10%' },
+  //   mobile: { top: '82%', left: '15%' } 
+  // },
+  // { 
+  //   id: 7, w: 220, h: 330, img: "/temp/theme/7.png",
+  //   desktop: { top: '85%', left: '60%' },
+  //   tablet: { top: '86%', left: '57%' },
+  //   mobile: { top: '87%', left: '55%' } 
+  // },
 ];
 
 const Theme2026: NextPage = () => {
@@ -162,7 +162,7 @@ const Theme2026: NextPage = () => {
               key={item.id}
               onMouseEnter={() => setIsOverCard(true)}
               onMouseLeave={() => setIsOverCard(false)}
-              className="absolute overflow-hidden group shadow-lg rounded-sm bg-white"
+              className="absolute overflow-hidden group shadow-lg  bg-white"
               style={{ 
                 width: item.w * responsiveScale, 
                 height: item.h * responsiveScale, 

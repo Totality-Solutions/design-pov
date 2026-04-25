@@ -1,33 +1,29 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 
-interface NavItem {
-  label: string;
-  href: string;
+interface NavProps {
+  activeCategory: string;
+  setActiveCategory: (val: string) => void;
 }
 
-const navItems: NavItem[] = [
-  { label: "Magazine", href: "/magazine" },
-  { label: "Sponsors", href: "/magazine/sponsors" },
-  { label: "Partners", href: "/magazine/partners" },
-  { label: "Archives", href: "/magazine/archives" },
-  { label: "Submit", href: "/magazine/submit" },
-  { label: "Team", href: "/magazine/team" },
-  { label: "Contact", href: "/magazine/contact" },
+const navItems = [
+  { label: "Magazine" },
+  { label: "Sponsors" },
+  { label: "Partners" },
+  { label: "Archives" },
+  { label: "Team" },
+  { label: "Contact" },
+  { label: "Submit" },
 ];
 
-export default function MagazineNav() {
-  const pathname = usePathname();
+export default function MagazineNav({ activeCategory, setActiveCategory }: NavProps) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [sliderStyle, setSliderStyle] = useState({ left: 0, width: 0 });
-  const navRef = useRef<HTMLDivElement>(null);
-  const itemRefs = useRef<(HTMLAnchorElement | null)[]>([]);
+  const itemRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
-  // Function to update the red line position
   const updateSlider = (index: number | null) => {
+    // We only update the position if the index is valid and not the first item (Magazine)
     if (index !== null && index !== 0 && itemRefs.current[index]) {
       const element = itemRefs.current[index];
       if (element) {
@@ -37,24 +33,31 @@ export default function MagazineNav() {
         });
       }
     } else {
-      // Hide or reset if hovering "Magazine" or nothing
+      // If index is null or "Magazine", we reset width to 0 to hide it effectively
       setSliderStyle((prev) => ({ ...prev, width: 0 }));
     }
   };
 
+  // Effect to update slider position when activeCategory changes 
+  // (This keeps the position data ready, but opacity handles visibility)
   useEffect(() => {
-    // Optional: Reset slider to active item on mount/route change
-    const activeIdx = navItems.findIndex(item => item.href === pathname);
-    if (activeIdx > 0) updateSlider(activeIdx);
-  }, [pathname]);
+    const activeIdx = navItems.findIndex(item => item.label === activeCategory);
+    updateSlider(activeIdx);
+  }, [activeCategory]);
 
   return (
     <nav 
-      className="w-full h-full bg-white border-b border-[#DDDDDD] flex items-center justify-start overflow-x-auto no-scrollbar"
+      className="w-full h-full bg-white border border-[#DDDDDD] flex items-center justify-start overflow-x-auto no-scrollbar"
       style={{ paddingLeft: "60px", paddingRight: "60px" }}
-      ref={navRef}
     >
-      <div className="relative flex items-center gap-[10px] min-w-max" onMouseLeave={() => setHoveredIndex(null)}>
+      <div 
+        className="relative flex items-center gap-[10px] min-w-max" 
+        onMouseLeave={() => {
+          setHoveredIndex(null);
+          // Optional: also call updateSlider(null) if you want it to shrink immediately
+          updateSlider(null); 
+        }}
+      >
         
         {/* ✅ THE SLIDING RED UNDERLINE */}
         <div 
@@ -62,40 +65,34 @@ export default function MagazineNav() {
           style={{
             left: `${sliderStyle.left}px`,
             width: `${sliderStyle.width}px`,
-            opacity: hoveredIndex !== null && hoveredIndex !== 0 ? 1 : 0
+            // CHANGE: Underline is ONLY visible if hoveredIndex is not null and not the first item
+            opacity: (hoveredIndex !== null && hoveredIndex !== 0) ? 1 : 0
           }}
         />
 
         {navItems.map((item, index) => {
-          const isActive = pathname === item.href;
+          const isActive = activeCategory === item.label;
           const isFirst = index === 0;
           const isHovered = hoveredIndex === index;
 
           return (
-            <Link
-              key={item.href}
-              href={item.href}
+            <button
+              key={item.label}
               ref={(el) => { itemRefs.current[index] = el; }}
               onMouseEnter={() => {
                 setHoveredIndex(index);
                 updateSlider(index);
               }}
+              onClick={() => setActiveCategory(item.label)}
               className={`
                 relative flex items-center justify-center transition-colors duration-300
-                font-['Montserrat'] text-[18px] leading-[24px]
-                ${isFirst ? "py-[12px] pr-[28px] border-r border-[#DDDDDD] font-normal" : "px-[30px] py-[20px] font-normal"}
-                
-                /* ✅ TEXT RED LOGIC */
-                ${isFirst 
-                  ? "text-black opacity-100" 
-                  : (isHovered || isActive) 
-                    ? "text-[#E02914] opacity-100" 
-                    : "text-black opacity-50"
-                }
+                font-['Montserrat'] text-[16px] leading-[24px] outline-none cursor-pointer
+                ${isFirst ? "py-[15px] pr-[28px] border-r border-[#DDDDDD] font-normal" : "px-[30px] py-[15px] font-normal"}
+                ${isFirst ? "text-black opacity-100" : (isHovered || isActive) ? "text-[#E02914] opacity-100" : "text-black opacity-50"}
               `}
             >
               {item.label}
-            </Link>
+            </button>
           );
         })}
       </div>

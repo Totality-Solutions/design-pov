@@ -81,7 +81,7 @@ export default function Navbar() {
       ========================== */}
       <header
         id="main-navbar"
-        className={`w-full bg-white border-gray-100 border-b border-gray-100 z-[1200] transition-all duration-100 ${
+        className={`w-full bg-white border-gray-100 border-b border-gray-100 z-[1200] ${
           isSticky
             ? "fixed top-0 left-0 w-full"
             : "relative w-full"

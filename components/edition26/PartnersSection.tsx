@@ -72,8 +72,7 @@ const PartnersSection: React.FC = () => {
     >
 
       <SectionHeading 
-        titleMain="Partners " 
-        titleBold="2026" 
+        titleMain="POV PARTNERS" 
         sticky={false}
         bgColor = "black"
         isSectionHovered={isHovered} 

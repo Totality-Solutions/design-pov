@@ -85,7 +85,7 @@ export default function SectionHeading({
         <div className={`flex flex-col font-display ${textColor}`}>
           
           {/* Main Title */}
-          <div className="text-h3-mobile md:text-h3-tab leading-[1.2]">
+          <div className="text-h3-mobile md:text-h3-tab leading-[1.2] uppercase">
             <span className="font-bold">{titleMain}</span>
             <span className="font-bold"> {titleBold}</span>
           </div>

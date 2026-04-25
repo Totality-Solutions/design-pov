@@ -1,45 +1,23 @@
 "use client";
 
-import React from "react";
-import PressGrid from "@/components/common/PressGrid";
-
-const PRESS_DATA = [
-  {
-    category: "Architecture",
-    title: "Lorem Ipsum is simply dummy text of the printing",
-    author: "Design POV",
-    date: "26 feb, 2026",
-    image: "/temp/press-1.jpg",
-  },
-  {
-    category: "Interiors",
-    title: "Lorem Ipsum is simply dummy text of the printing",
-    author: "Design POV",
-    date: "26 feb, 2026",
-    image: "/temp/press-2.jpg",
-  },
-  {
-    category: "Materials",
-    title: "Lorem Ipsum is simply dummy text of the printing",
-    author: "Design POV",
-    date: "26 feb, 2026",
-    image: "/temp/press-3.jpg",
-  },
-  {
-    category: "Installations",
-    title: "Lorem Ipsum is simply dummy text of the printing",
-    author: "Design POV",
-    date: "26 feb, 2026",
-    image: "/temp/press-4.jpg",
-  },
-];
+import React, { useState } from "react";
+import SectionHeading from "../common/SectionHeading";
+import BlogsCarousel from "../common/BlogsCarousel";
+import MagazineNav from "./MagazineNav";
 
 export default function PressSection() {
+  // Default to "Magazine" which shows all
+  const [activeCategory, setActiveCategory] = useState("Magazine");
+
   return (
-    <PressGrid
-      data={PRESS_DATA}
-      titleMain="Latest"
-      rightLabel="Manisha AR"
-    />
+    <div >
+      {/* Pass state to Nav */}
+      <MagazineNav 
+        activeCategory={activeCategory} 
+        setActiveCategory={setActiveCategory} 
+      />
+      {/* Pass filter to Carousel */}
+      <BlogsCarousel filter={activeCategory} />
+    </div>
   );
 }
