@@ -96,10 +96,10 @@ export default function Hero() {
           relative 
           group 
           w-full
-          aspect-[5/3]
-          sm:aspect-[21/8]
-          md:aspect-[16/7]
-          2xl:aspect-[2560/1440]
+          aspect-5/3
+          sm:aspect-21/8
+          md:aspect-16/6
+          2xl:aspect-2560/1150
           overflow-hidden
         "
       >
@@ -111,7 +111,7 @@ export default function Hero() {
           muted
           loop
           playsInline
-          className="absolute inset-0 w-full h-full object-cover"
+          className="absolute inset-0 w-full h-full object-contain"
         />
 
         {/* Video Controls */}
