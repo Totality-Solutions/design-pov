@@ -50,12 +50,10 @@ const TheThreePillars: React.FC = () => {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    // 1. Handle Screen Resize for Sticky Logic
     const handleResize = () => setIsMobile(window.innerWidth < 768);
     handleResize();
     window.addEventListener('resize', handleResize);
 
-    // 2. Intersection Observer for Desktop Sidebar updates
     if (window.innerWidth >= 768) {
       const elements = document.querySelectorAll('.pillar-image-trigger');
       const observer = new IntersectionObserver(
@@ -86,12 +84,12 @@ const TheThreePillars: React.FC = () => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* 1. SECTION HEADER - Sticky ONLY on Desktop */}
+      {/* 1. SECTION HEADER */}
       <SectionHeading 
         titleMain="Our " 
         titleBold="Pillars" 
         sticky={!isMobile} 
-        stickyTop="top-20"
+        stickyTop="md:top-20"
         isSectionHovered={isHovered} 
       >
         <div className="hidden md:flex gap-[60px] lg:gap-[100px]">
@@ -99,11 +97,10 @@ const TheThreePillars: React.FC = () => {
         </div>
       </SectionHeading>
 
-      {/* 2. MAIN CONTENT AREA */}
       <div className="relative flex flex-col md:flex-row items-start w-full">
         
-        {/* DESKTOP SIDEBAR - Sticky Tracking */}
-        <div className="hidden md:flex w-[388px] sticky top-0 h-screen pl-[70px] flex-col justify-end pb-20 border-r border-[#DFDFDF] bg-white">
+        {/* DESKTOP SIDEBAR - Unchanged */}
+        <div className="hidden lg:flex w-[388px] sticky top-0 h-screen pl-[70px] flex-col justify-end pb-20 border-r border-[#DFDFDF] bg-white">
           <AnimatePresence mode="wait">
             <motion.div
               key={activePillar}
@@ -141,18 +138,26 @@ const TheThreePillars: React.FC = () => {
           </AnimatePresence>
         </div>
 
-        {/* SCROLLING CONTENT Area */}
+        {/* SCROLLING CONTENT Area with Mobile Stacking */}
         <div className="flex-1 w-full bg-white md:bg-[#FAFAFA]">
           {PILLAR_DATA.map((pillar, index) => (
             <div 
               key={pillar.id}
               data-index={index}
-              className="pillar-image-trigger w-full flex flex-col border-b border-[#DFDFDF] last:border-b-0 relative"
+              /* STACKING LOGIC: 
+                 - sticky top-0: makes the card stick to top
+                 - bg-white: hides the card underneath
+                 - shadow: adds depth to the stack
+                 - z-index: ensures the last card is at bottom, or you can manually set it
+              */
+              className="pillar-image-trigger w-full flex flex-col md:border-b border-[#DFDFDF] last:border-b-0 relative 
+                         sticky top-0 md:relative bg-white"
+              style={{ zIndex: index + 1 }}
             >
-              {/* MOBILE ONLY TEXT - Standard Flow */}
-              <div className="md:hidden flex flex-col p-8 gap-6 bg-white border-b border-[#DFDFDF]">
+              {/* MOBILE ONLY TEXT */}
+              <div className="lg:hidden flex flex-col p-8 gap-6 bg-white border-b border-[#DFDFDF] shadow-[0_-10px_20px_rgba(0,0,0,0.05)]">
                 <div className="flex flex-col gap-3">
-                  <h3 className="text-[20px] font-bold text-black tracking-tight uppercase">
+                  <h3 className="text-[20px] font-bold text-black tracking-tight uppercase leading-tight">
                     {pillar.title}
                   </h3>
                   <p className="text-[15px] font-normal text-black opacity-70 leading-[1.4]">
@@ -165,14 +170,14 @@ const TheThreePillars: React.FC = () => {
               </div>
 
               {/* IMAGE CONTAINER */}
-              <div className="p-6 md:p-[40px] flex items-center justify-center">
-                <div className="w-full h-[40vh] md:h-[75vh] aspect-[3/2] relative">
+              <div className="p-6 md:p-[40px] flex items-center justify-center bg-white md:bg-transparent">
+                <div className="w-full h-[45vh] md:h-[75vh] aspect-[3/2] relative overflow-hidden rounded-sm md:rounded-none">
                   <Image 
                     src={pillar.image} 
                     alt={pillar.title} 
                     fill
                     priority={index === 0}
-                    className="object-cover "
+                    className="object-cover"
                   />
                 </div>
               </div>
@@ -182,7 +187,7 @@ const TheThreePillars: React.FC = () => {
       </div>
 
       {/* 3. FULL WIDTH CTA STRIP */}
-      <div className="w-full relative z-20 bg-white border-t border-[#DFDFDF]">
+      <div className="w-full relative z-[50] bg-white border-t border-[#DFDFDF]">
         <CTAStrip
           ctaLabel="Download"
           title="Post Show Report"

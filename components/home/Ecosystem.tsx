@@ -13,7 +13,7 @@ import bgImage1 from '@/public/temp/home/ecosystem/N1.jpg'
 import bgImage2 from '@/public/temp/home/ecosystem/N-3.jpg'
 import bgImage3 from '@/public/temp/home/ecosystem/N1.jpg'
 import bgImage4 from '@/public/temp/home/ecosystem/N-2.jpg'
-import bgImage5 from '@/public/temp/home/ecosystem/N1.jpg'
+import bgImage5 from '@/public/temp/home/blogs/blog-2.jpg'
 
 interface EcosystemItem {
   id: string

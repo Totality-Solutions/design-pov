@@ -5,11 +5,22 @@ import Image, { StaticImageData } from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 
 // Assets
-import img1 from "@/public/temp/featured/1.png";
-import img2 from "@/public/temp/featured/2.png";
-import img3 from "@/public/temp/featured/3.png";
-import img4 from "@/public/temp/featured/1.png";
-import img5 from "@/public/temp/featured/3.png";
+import img1 from "@/public/temp/home/core/ADND.jpg";
+import img2 from "@/public/temp/home/core/ALARA STUDIO.jpg";
+import img3 from "@/public/temp/home/core/Abin.jpg";
+import img4 from "@/public/temp/home/core/BALDIWALA EDGE.jpg";
+import img5 from "@/public/temp/home/core/CITYSPACE.png";
+import img6 from "@/public/temp/home/core/DESIGN HEX.jpg";
+import img7 from "@/public/temp/home/core/DSP DESIGN.jpg";
+import img8 from "@/public/temp/home/core/JANNAT VASI.jpg";
+import img9 from "@/public/temp/home/core/NA ARCHITECT.jpg";
+import img10 from "@/public/temp/home/core/POONAM AKASH.jpg";
+import img11 from "@/public/temp/home/core/SANJAY PURI.jpg";
+import img12  from "@/public/temp/home/core/SAV.jpg";
+import img13  from "@/public/temp/home/core/SHROFFLEON.jpg";
+import img14  from "@/public/temp/home/core/SPARC DESIGN.jpg";
+import img15  from "@/public/temp/home/core/STUDIO ARCHOHM.jpg";
+import img16  from "@/public/temp/home/core/TALATI & PARTNER.jpg";
 const video1 = "/temp/featured/4.mp4";
 
 // Components
@@ -183,15 +194,15 @@ function DesignerTile({
 
 // ─── Data ─────────────────────────
 const designers: Designer[] = [
-  { id: 1, media: [{ src: img1, name: "Rahul Mehta", link: "/rahul" }, { src: img2, name: "Concept Art", link: "/concept" }] },
-  { id: 2, media: [{ src: img2, name: "Priya Nair", link: "/priya" }, { src: img4, name: "Loft Studio", link: "/loft" }] },
+  { id: 1, media: [{ src: img1, name: "ADND", link: "/rahul" }, { src: img2, name: "ALARA STUDIO", link: "/concept" }] },
+  { id: 2, media: [{ src: img3, name: "ABIN", link: "/priya" }, { src: img4, name: "BALDIWALA EDGE", link: "/loft" }] },
   { id: 3, media: [{ src: video1, type: "video", name: "Arjun Sharma", link: "/arjun-showreel" }] },
-  { id: 4, media: [{ src: img4, name: "Meera Iyer", link: "/meera" }, { src: img5, name: "Textiles", link: "/textiles" }] },
-  { id: 5, media: [{ src: img5, name: "Kabir Das", link: "/kabir" }, { src: img2, name: "Abstracts", link: "/abstracts" }] },
-  { id: 6, media: [{ src: img1, name: "Ananya Roy", link: "/ananya" }, { src: img3, name: "Editorials", link: "/editorials" }] },
-  { id: 7, media: [{ src: img2, name: "Dev Patel", link: "/dev" }, { src: img5, name: "Branding", link: "/branding" }] },
-  { id: 8, media: [{ src: img1, name: "Sana Khan", link: "/sana" }, { src: img3, name: "Exhibition", link: "/exhibition" }] },
-  { id: 9, media: [{ src: img2, name: "Vikram Seth", link: "/vikram" }, { src: img5, name: "Digital Art", link: "/digital" }] },
+  { id: 4, media: [{ src: img5, name: "CITYSPACE", link: "/meera" }, { src: img6, name: "DESIGN HEX", link: "/textiles" }] },
+  { id: 5, media: [{ src: img7, name: "DSP DESIGN", link: "/kabir" }, { src: img8, name: "JANNAT VASI", link: "/abstracts" }] },
+  { id: 6, media: [{ src: img9, name: "NA ARCHITECT", link: "/ananya" }, { src: img10, name: "POONAM AKASH", link: "/editorials" }] },
+  { id: 7, media: [{ src: img11, name: "SANJAY PURI", link: "/dev" }, { src: img12, name: "SAV", link: "/branding" }] },
+  { id: 8, media: [{ src: img13, name: "SHROFFLEON", link: "/sana" }, { src: img14, name: "SPARC DESIGN", link: "/exhibition" }] },
+  { id: 9, media: [{ src: img15, name: "STUDIO ARCHOHM", link: "/vikram" }, { src: img16, name: "TALATI & PARTNER", link: "/digital" }] },
 ];
 
 // ─── Main Component ─────────────────────────
