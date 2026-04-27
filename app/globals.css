@@ -199,6 +199,15 @@ a {
   gap: 44px;
 }
 
+/* Stroke text fallback */
+.stroke-text {
+  -webkit-text-stroke: 1px black;
+}
+
+.dark .stroke-text {
+  -webkit-text-stroke: 1px white;
+}
+
 .bottomLink {
   font-size: var(--font-size-lg);
   font-weight: 400;

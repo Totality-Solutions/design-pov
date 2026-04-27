@@ -10,6 +10,7 @@ import ClientLogo from "@/components/home/ClientLogo";
 import FeaturedStory from "@/components/home/FeaturedStory";
 import CTAStrip from "@/components/common/CTAStrip";
 import PopupForm from "@/components/common/PopupForm"; // 1. Import the Form
+import ScrollMaskText from "@/components/home/ScrollRevealText";
 
 export default function HomePage() {
   // 2. Define the state to control the popup
@@ -18,6 +19,7 @@ export default function HomePage() {
   return (
     <>
       <Hero />
+      <ScrollMaskText/>
       <WhatPOV />
       <Theme />
       <Ecosystem />
