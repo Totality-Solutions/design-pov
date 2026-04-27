@@ -49,6 +49,7 @@ export default function Navbar() {
     };
   }, []);
 
+  
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? "hidden" : "unset";
   }, [mobileOpen]);

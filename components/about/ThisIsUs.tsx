@@ -1,13 +1,56 @@
 "use client";
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Maximize2, Volume2, VolumeX, Play, Pause } from 'lucide-react';
 import SectionHeading from '../common/SectionHeading';
 
 const ThisIsUs: React.FC = () => {
   const [isMuted, setIsMuted] = useState(true);
   const [isPlaying, setIsPlaying] = useState(true);
+  const [spacerHeight, setSpacerHeight] = useState(0);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const textRef = useRef<HTMLParagraphElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
+
+  useEffect(() => {
+    const calculateSpacer = () => {
+      if (!textRef.current || !containerRef.current) return;
+
+      const viewportWidth = window.innerWidth;
+      
+      // Mobile: no spacer, video below text
+      if (viewportWidth < 768) {
+        setSpacerHeight(0);
+        return;
+      }
+
+      // Get text metrics
+      const computedStyle = window.getComputedStyle(textRef.current);
+      const fontSize = parseFloat(computedStyle.fontSize);
+      const lineHeight = parseFloat(computedStyle.lineHeight);
+      
+      // Calculate actual line height
+      const actualLineHeight = lineHeight || fontSize * 1.6;
+      
+      // Desktop: wrap at 6th-7th line = 6.5 lines
+      const targetLines = 6.5;
+      const calculatedHeight = Math.ceil(actualLineHeight * targetLines);
+      
+      setSpacerHeight(calculatedHeight);
+    };
+
+    // Initial calculation with delay to ensure DOM is ready
+    const timer = setTimeout(calculateSpacer, 100);
+
+    // Recalculate on resize
+    const handleResize = () => calculateSpacer();
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   const togglePlay = () => {
     if (videoRef.current) {
