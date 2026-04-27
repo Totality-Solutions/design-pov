@@ -1,3 +1,5 @@
+
+
 "use client";
 
 import { useEffect, useState } from "react";
@@ -20,26 +22,22 @@ export default function Navbar() {
     const checkScreenSize = () => {
       const isLg = window.innerWidth >= 1024;
       setIsDesktop(isLg);
-
-      if (isLg) {
-        setMobileOpen(false);
-      }
+      if (isLg) setMobileOpen(false);
     };
 
     const handleScroll = () => {
-  const adSection = document.getElementById("ad-section");
-
-  if (!adSection) return;
-
-  const adBottom = adSection.getBoundingClientRect().bottom;
-
-  // Stick only when entire ad section is above viewport
-  setIsSticky(adBottom <= 0);
-};
+      const adSection = document.getElementById("ad-section");
+      if (!adSection) {
+        setIsSticky(window.scrollY > 0);
+        return;
+      }
+      const adBottom = adSection.getBoundingClientRect().bottom;
+      // Fixed logic to prevent navbar shaking
+      setIsSticky(adBottom <= 0);
+    };
 
     checkScreenSize();
     handleScroll();
-
     window.addEventListener("resize", checkScreenSize);
     window.addEventListener("scroll", handleScroll);
 
@@ -49,16 +47,12 @@ export default function Navbar() {
     };
   }, []);
 
-  
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? "hidden" : "unset";
   }, [mobileOpen]);
 
   return (
-    <nav
-      onMouseLeave={() => setActiveMenu(null)}
-      className="relative w-full z-[1000]"
-    >
+    <nav onMouseLeave={() => setActiveMenu(null)} className="relative w-full z-[1000]">
       {/* =========================
           TOP ADVERTISEMENT SECTION
       ========================== */}
@@ -68,7 +62,6 @@ export default function Navbar() {
             <div className="text-[11px] text-gray-400 mb-2 uppercase tracking-wider">
               Advertisement
             </div>
-
             <div className="w-full h-[280px] border border-gray-200 bg-gray-50 flex items-center justify-center text-gray-300">
               Banner Space
             </div>
@@ -81,81 +74,77 @@ export default function Navbar() {
       ========================== */}
       <header
         id="main-navbar"
-        className={`w-full bg-white border-gray-100 border-b border-gray-100 z-[1200] ${
-          isSticky
-            ? "fixed top-0 left-0 w-full"
-            : "relative w-full"
+        className={`w-full bg-white border-b border-gray-100 transition-all duration-300 ${
+          isSticky ? "fixed top-0 left-0  z-[2100]" : "relative z-[2100]"
         }`}
       >
         <Container>
           <div className="flex justify-between items-center px-6 lg:px-10 py-5">
-
-            {/* Logo */}
-            <div className="flex-shrink-0">
-              <Link href="/">
+            
+            {/* Logo: Z-index 2101 ensures it is above the menu overlay (2000) */}
+            <div className="flex-shrink-0 relative z-[2101]">
+              <Link href="/" onClick={() => setMobileOpen(false)}>
                 <Image
                   src={Logo}
                   alt="Design POV"
                   width={220}
                   height={40}
-                  className="object-contain"
+                  className="object-contain w-[180px] lg:w-[220px]"
                 />
               </Link>
             </div>
 
-            {/* Right Side → Links + Button */}
+            {/* Desktop Navigation */}
             <div className="hidden lg:flex items-center gap-10">
-
-              {/* Nav Links */}
               <div className="flex items-center gap-10">
                 {NAV_LABELS.map((label) => (
-                  <a
+                  <Link
                     key={label}
                     href={NAV_DATA[label].mainHref}
                     onMouseEnter={() => setActiveMenu(label)}
                     className="text-black text-[16px] font-medium whitespace-nowrap hover:text-blue-500 transition-colors"
                   >
                     {label}
-                  </a>
+                  </Link>
                 ))}
               </div>
-              
-              {/* CTA Button */}
               <CTABtn
                 label="Buy Tickets"
                 iconType="arrow"
                 btnBg="black"
                 btnHoverBg="var(--primary-blue)"
                 textColor="white"
-                borderColor="transparent"
-                borderHoverColor="var(--primary-blue)"
-                lineColor="transparent"
-                lineHoverColor="var(--primary-blue)"
-                bottomKey1Width="40px"
-                bottomKey2Width="12px"
-                bottomKey1Right="50px"
-                bottomKey2Right="15px"
                 href="#tickets"
               />
             </div>
-              
-            {/* Mobile Menu Button */}
+
+            {/* Hamburger / Cross Button: Z-index 2101 */}
             <button
-              className="lg:hidden p-2"
+              className="lg:hidden p-2 relative z-[2101] flex flex-col justify-center items-center w-8 h-8 group"
               onClick={() => setMobileOpen(!mobileOpen)}
             >
-              <div className="relative w-6 h-[14px]">
-                <span className="absolute top-0 w-full h-[2px] bg-black" />
-                <span className="absolute top-[6px] w-full h-[2px] bg-black" />
-                <span className="absolute bottom-0 w-full h-[2px] bg-black" />
-              </div>
+              <span 
+                className={`block w-6 h-[2px] bg-black transition-all duration-300 ease-in-out ${
+                  mobileOpen ? "rotate-45 translate-y-[2px]" : "-translate-y-1"
+                }`} 
+              />
+              <span 
+                className={`block w-6 h-[2px] bg-black transition-all duration-300 ease-in-out ${
+                  mobileOpen ? "opacity-0" : "opacity-100"
+                }`} 
+              />
+              <span 
+                className={`block w-6 h-[2px] bg-black transition-all duration-300 ease-in-out ${
+                  mobileOpen ? "-rotate-45 -translate-y-[2px]" : "translate-y-1"
+                }`} 
+              />
             </button>
           </div>
         </Container>
       </header>
 
-      {/* Spacer when navbar becomes fixed */}
-      {isSticky && <div className="h-[88px]" />}
+      {/* Spacer to prevent shaking when header becomes fixed */}
+      {isSticky && <div className="h-[80px] lg:h-[88px] w-full" />}
 
       {/* =========================
           DESKTOP SUBMENU
@@ -163,111 +152,93 @@ export default function Navbar() {
       <div
         className={`hidden lg:block bg-white transition-all duration-300 overflow-hidden z-[1100] ${
           activeMenu ? "h-[450px]" : "h-0"
-        } ${
-          isSticky
-            ? "fixed left-0 right-0"
-            : "absolute left-0 right-0"
-        }`}
-        style={{
-          top: isSticky ? "80px" : "100%",
-        }}
+        } ${isSticky ? "fixed left-0 right-0" : "absolute left-0 right-0"}`}
+        style={{ top: isSticky ? "80px" : "100%" }}
       >
         <Container className="h-full">
           {activeMenu && (
-              
-              <div className="flex h-full px-10 py-10 gap-16 text-black">
-
-                {/* Video → 70% */}
-                <div className="w-[60%] h-[320px] relative overflow-hidden bg-black">
-                  {isDesktop && (
-                    <video
-                      src={NAV_DATA[activeMenu].video}
-                      autoPlay
-                      muted
-                      loop
-                      playsInline
-                      className="w-full h-full object-cover opacity-80"
-                    />
-                  )}
-
-                  <div className="absolute bottom-8 left-8 text-white">
-                    <h2 className="text-2xl font-bold">{activeMenu}</h2>
-                    <p className="text-sm opacity-70">
-                      Explore the perspective
-                    </p>
-                  </div>
-                </div>
-
-                {/* Links → 30% */}
-                <div className="w-[40%] flex flex-col justify-start">
-                  {NAV_DATA[activeMenu].col1Title && (
-                    <h3 className="text-lg font-bold mb-6">
-                      {NAV_DATA[activeMenu].col1Title}
-                    </h3>
-                  )}
-
-                  <div className="flex flex-col gap-4">
-                    {NAV_DATA[activeMenu].col1Links?.map((link) => (
-                      <a
-                        key={link.label}
-                        href={link.href}
-                        className="hover:text-gray-500 text-black font-normal transition-colors"
-                      >
-                        {link.label}
-                      </a>
-                    ))}
-                  </div>
-                </div>
-
+            <div className="flex h-full px-10 py-10 gap-16 text-black">
+              <div className="w-[60%] h-[320px] relative overflow-hidden bg-black">
+                {isDesktop && (
+                  <video
+                    src={NAV_DATA[activeMenu].video}
+                    autoPlay muted loop playsInline
+                    className="w-full h-full object-cover opacity-80"
+                  />
+                )}
               </div>
-
-
-
+              <div className="w-[40%] flex flex-col justify-start">
+                <h3 className="text-lg font-bold mb-6">{NAV_DATA[activeMenu].col1Title}</h3>
+                <div className="flex flex-col gap-4">
+                  {NAV_DATA[activeMenu].col1Links?.map((link) => (
+                    <Link key={link.label} href={link.href} className="hover:text-blue-500 transition-colors">
+                      {link.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
           )}
         </Container>
       </div>
 
       {/* =========================
-          MOBILE MENU
+          MOBILE MENU OVERLAY
       ========================== */}
       <div
-        className={`fixed inset-0 bg-white z-[1500] transition-transform duration-500 lg:hidden ${
+        className={`fixed inset-0 bg-white z-[2000] transition-transform duration-500 ease-in-out lg:hidden ${
           mobileOpen ? "translate-y-0" : "-translate-y-full"
         }`}
       >
+        {/* Added padding top to ensure content doesn't sit under the header */}
         <div className="pt-24 h-full flex flex-col">
           <div className="flex-1 overflow-y-auto">
             {NAV_LABELS.map((label) => (
               <div key={label} className="border-b border-gray-100">
-                <button
-                  className="w-full px-8 py-6 text-left text-lg"
-                  onClick={() =>
-                    setActiveMenu(
-                      activeMenu === label ? null : label
-                    )
-                  }
-                >
-                  {label}
-                </button>
+                <div className="flex items-center justify-between pr-4">
+                  <Link
+                    href={NAV_DATA[label].mainHref}
+                    className="flex-1 px-8 py-6 text-left text-lg font-medium text-black"
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    {label}
+                  </Link>
+                  <button
+                    className="p-4"
+                    onClick={() => setActiveMenu(activeMenu === label ? null : label)}
+                  >
+                    <svg
+                      className={`w-6 h-6 transition-transform duration-300 ${activeMenu === label ? "rotate-180" : ""}`}
+                      fill="none" stroke="black" viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                </div>
+
+                <div className={`bg-gray-50 overflow-hidden transition-all duration-300 ${activeMenu === label ? "max-h-screen" : "max-h-0"}`}>
+                  {NAV_DATA[label].col1Links?.map((link) => (
+                    <Link
+                      key={link.label}
+                      href={link.href}
+                      className="block px-12 py-4 text-sm text-gray-700 border-b border-gray-100"
+                      onClick={() => setMobileOpen(false)}
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                </div>
               </div>
             ))}
           </div>
 
-          <div className="p-10 border-t">
+          <div className="p-10 border-t bg-white">
             <CTABtn
               label="Buy Tickets"
               iconType="arrow"
               btnBg="black"
               btnHoverBg="#0000B3"
               textColor="white"
-              borderColor="white"
-              borderHoverColor="#0000B3"
-              lineColor="white"
-              lineHoverColor="white"
-              bottomKey1Width="40px"
-              bottomKey2Width="12px"
-              bottomKey1Right="50px"
-              bottomKey2Right="15px"
               href="#tickets"
             />
           </div>
