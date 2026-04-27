@@ -166,13 +166,13 @@ const TheThreePillars: React.FC = () => {
 
               {/* IMAGE CONTAINER */}
               <div className="p-6 md:p-[40px] flex items-center justify-center">
-                <div className="w-full h-[40vh] md:h-[75vh] relative">
+                <div className="w-full h-[40vh] md:h-[75vh] aspect-[3/2] relative">
                   <Image 
                     src={pillar.image} 
                     alt={pillar.title} 
                     fill
                     priority={index === 0}
-                    className="object-cover rounded-xl md:rounded-none"
+                    className="object-cover "
                   />
                 </div>
               </div>

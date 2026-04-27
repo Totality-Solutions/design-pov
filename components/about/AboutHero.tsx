@@ -107,7 +107,7 @@ const DesignHero: React.FC<{}> = () => {
       </div>
 
       {/* 3. HERO IMAGE */}
-      <div className="group w-full aspect-[4/3] md:aspect-[16/5] overflow-hidden bg-gray-100 mt-12 md:mt-0 rounded-sm">
+      <div className="group w-full aspect-[16/6] overflow-hidden bg-gray-100 mt-12 md:mt-0 ">
         <img
           src="/temp/about/1.png"
           alt="Design POV"
