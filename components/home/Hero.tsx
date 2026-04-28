@@ -89,7 +89,7 @@ export default function Hero() {
   }, [manuallyPaused]);
 
   return (
-    <Container className="w-full overflow-hidden lg:max-w-none px-0">
+    <Container className="w-full overflow-hidden lg:max-w-none px-0 ">
       <div
         ref={sectionRef}
         className="
@@ -98,7 +98,7 @@ export default function Hero() {
           w-full
           aspect-5/3
           sm:aspect-21/8
-          md:aspect-16/6
+          md:aspect-16/7
           2xl:aspect-2560/1150
           overflow-hidden
         "
@@ -106,12 +106,12 @@ export default function Hero() {
         {/* Video */}
         <video
           ref={videoRef}
-          src="/video/POV AD.mp4"
+          src="/video/POV ad 1.mp4"
           autoPlay
           muted
           loop
           playsInline
-          className="absolute inset-0 w-full h-full object-contain"
+          className="absolute inset-0 w-full h-full object-cover"
         />
 
         {/* Video Controls */}
@@ -157,7 +157,7 @@ export default function Hero() {
         </div>
 
         {/* Desktop CTA */}
-        <div className="hidden sm:block absolute z-10 mb-8 mr-5 bottom-0 right-0">
+        {/* <div className="hidden sm:block absolute z-10 mb-8 mr-5 bottom-0 right-0">
           <CTABtn
             label="Apply Now"
             iconType="arrow"
@@ -174,16 +174,16 @@ export default function Hero() {
             bottomKey2Right="15px"
             href="#tickets"
           />
-        </div>
+        </div> */}
       </div>
 
       {/* Mobile CTA */}
-      <div className="block sm:hidden w-full px-4 py-6 flex justify-center">
+      {/* <div className="block sm:hidden w-full px-4 py-6 flex justify-center">
         <CTABtn
           label="Apply Now"
           href="#tickets"
         />
-      </div>
+      </div> */}
     </Container>
   );
 }

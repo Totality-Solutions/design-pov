@@ -8,8 +8,8 @@ import CTABtn from '../common/CTABtn';
 import SectionHeading from '../common/SectionHeading';
 
 // Assets
-import Img1 from '@/public/temp/about/1.png'
-import Img2 from '@/public/temp/about/2.png'
+import Img1 from '@/public/temp/about/1600-x-1200.-1.png'
+import Img2 from '@/public/temp/about/1600-x-1200.png'
 import Img3 from '@/public/temp/about/3.png'
 
 interface Pillar {

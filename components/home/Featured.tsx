@@ -258,7 +258,7 @@ export default function FeaturedDesigners() {
                 display: "grid",
                 gridTemplateColumns: "1fr 1fr 1.8fr 1fr 1fr",
                 gridTemplateRows: "290px 290px",
-                gap: "4px",
+                gap: "1px",
               }}
             >
               {baseSlots.map((d, i) => (
