@@ -74,7 +74,7 @@ export default function MagazineBase({ activeBlog: initialBlog, isInnerPage = fa
             <span>{activeBlog.author}</span>
           </div>
 
-          <h2 className={`${isInnerPage ? 'text-3xl md:text-5xl lg:text-3xl' : 'text-xl md:text-3xl'} font-semibold text-black leading-tight tracking-tight`}>
+          <h2 className={`${isInnerPage ? 'text-3xl md:text-3xl lg:text-3xl' : 'text-xl md:text-3xl'} font-medium text-black leading-tight tracking-tight`}>
             {activeBlog.title}
           </h2>
 
@@ -86,7 +86,7 @@ export default function MagazineBase({ activeBlog: initialBlog, isInnerPage = fa
                     <div className="flex flex-col gap-4">
                       {/* 1. Check if the title exists and render it */}
                       {block.title && (
-                        <h3 className="text-2xl md:text-4xl font-bold text-black mt-6 tracking-tight">
+                        <h3 className="text-2xl md:text-2xl font-medium text-black mt-6 tracking-tight capitalize">
                           {block.title}
                         </h3>
                       )}
