@@ -17,21 +17,21 @@ export default function MagazineBase({ activeBlog: initialBlog, isInnerPage = fa
     return () => { if (sectionRef.current) observer.unobserve(sectionRef.current); };
   }, []);
 
-const otherBlogs = blogs
-  .filter((b) => b.id !== activeBlog.id)
-  .sort((a, b) => b.id - a.id); // latest first
+  const otherBlogs = blogs
+    .filter((b) => b.id !== activeBlog.id)
+    .sort((a, b) => b.id - a.id); // latest first
 
-const visibleBlogs = isInnerPage ? otherBlogs.slice(0, 2) : otherBlogs.slice(0, 2);
+  const visibleBlogs = isInnerPage ? otherBlogs.slice(0, 2) : otherBlogs.slice(0, 2);
 
-const sidebarItems: SidebarItem[] = [];
-visibleBlogs.forEach((blog, index) => {
-  sidebarItems.push(blog);
-  if (advertisements[index]) sidebarItems.push(advertisements[index]);
-});
+  const sidebarItems: SidebarItem[] = [];
+  visibleBlogs.forEach((blog, index) => {
+    sidebarItems.push(blog);
+    if (advertisements[index]) sidebarItems.push(advertisements[index]);
+  });
 
   return (
     <div ref={sectionRef as any} className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-10 lg:gap-12 relative bg-white">
-      
+
       {/* MOBILE TRIGGER */}
       <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className={`lg:hidden fixed top-1/2 -translate-y-1/2 z-[110] bg-black text-white w-10 h-12 flex items-center justify-center rounded-l-md shadow-2xl transition-all duration-500 ${isSidebarOpen ? "right-[85%] sm:right-[350px]" : "right-0"} ${isVisible ? "opacity-100" : "opacity-0"}`}>
         <FiChevronLeft size={24} className={isSidebarOpen ? "rotate-180" : ""} />
@@ -39,9 +39,9 @@ visibleBlogs.forEach((blog, index) => {
 
       {/* LEFT COLUMN */}
       <div className="flex flex-col h-full border border-neutral-100 bg-white">
-        
+
         {/* SCROLLING PART START */}
-          {isInnerPage ? (
+        {isInnerPage ? (
           // ✅ INNER PAGE (NO STICKY)
           <div className="relative w-full h-[60vh] md:h-[80vh]">
             <Image
@@ -55,16 +55,16 @@ visibleBlogs.forEach((blog, index) => {
         ) : (
           // ✅ OUTER PAGE (STICKY IMAGE)
           <div className="sticky top-0 h-full w-full overflow-hidden z-0">
-            <Image 
-              src={activeBlog.image} 
-              alt={activeBlog.title} 
-              fill 
-              priority 
-              className="object-cover" 
+            <Image
+              src={activeBlog.image}
+              alt={activeBlog.title}
+              fill
+              priority
+              className="object-cover"
             />
           </div>
         )}
-   
+
         {/* SCROLLING PART END */}
 
         <div className="relative z-10 bg-white p-4 md:p-8 flex flex-col gap-6">
@@ -73,16 +73,30 @@ visibleBlogs.forEach((blog, index) => {
             <div className="w-[1px] h-4 bg-black/20" />
             <span>{activeBlog.author}</span>
           </div>
-          
-          <h2 className={`${isInnerPage ? 'text-3xl md:text-5xl lg:text-6xl' : 'text-xl md:text-3xl'} font-semibold text-black leading-tight tracking-tight`}>
+
+          <h2 className={`${isInnerPage ? 'text-3xl md:text-5xl lg:text-3xl' : 'text-xl md:text-3xl'} font-semibold text-black leading-tight tracking-tight`}>
             {activeBlog.title}
           </h2>
-          
+
           <div className="flex flex-col gap-8">
             {isInnerPage ? (
               activeBlog.detailedContent.map((block, i) => (
                 <React.Fragment key={i}>
-                  {block.type === "text" && <p className="text-black/60 text-lg leading-relaxed">{block.value}</p>}
+                  {block.type === "text" && (
+                    <div className="flex flex-col gap-4">
+                      {/* 1. Check if the title exists and render it */}
+                      {block.title && (
+                        <h3 className="text-2xl md:text-4xl font-bold text-black mt-6 tracking-tight">
+                          {block.title}
+                        </h3>
+                      )}
+                      {/* 2. Render the paragraph text */}
+                      <p className="text-black/60 text-lg leading-relaxed">
+                        {block.value}
+                      </p>
+                    </div>
+                  )}
+
                   {block.type === "image" && (
                     <div className="flex flex-col gap-2 py-2">
                       <div className="relative w-full h-auto">
@@ -94,10 +108,17 @@ visibleBlogs.forEach((blog, index) => {
                           className="w-full h-auto object-contain bg-neutral-100"
                         />
                       </div>
-                      {block.caption && <span className="text-xs italic text-black/40">{block.caption}</span>}
+                      {block.caption && (
+                        <span className="text-xs italic text-black/40">{block.caption}</span>
+                      )}
                     </div>
                   )}
-                  {block.type === "quote" && <blockquote className="border-y border-black/10 py-8 italic text-2xl font-medium">"{block.value}"</blockquote>}
+
+                  {block.type === "quote" && (
+                    <blockquote className="border-y border-black/10 py-8 italic text-2xl font-medium">
+                      "{block.value}"
+                    </blockquote>
+                  )}
                 </React.Fragment>
               ))
             ) : (
