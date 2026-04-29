@@ -87,7 +87,7 @@ const MasonryGrid = forwardRef<HTMLDivElement, MasonryGridProps>(
 
             {/* 06 VIDEO EXAMPLE */}
             <div className="row-span-2">
-              <Cell type="video" src="/video/home.mp4" />
+              <Cell type="video" src="/temp/home/theme/WEBSITE.mp4" />
             </div>
 
             {/* 07 IMAGE */}

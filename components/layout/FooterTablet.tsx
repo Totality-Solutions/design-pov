@@ -23,12 +23,14 @@ const FooterTablet = ({ navLinks }: Props) => {
     updateWidth();
     window.addEventListener("resize", updateWidth);
 
-    // Har 5 second mein flares ko random position par move karega
+    // Moves the flares automatically every 3 seconds
     const interval = setInterval(() => {
-      const targetX = Math.random() * elementWidth;
-      // Framer motion's animate function used via useMotionValue
-      mouseX.set(targetX); 
-    }, 5000);
+      if (elementWidth > 0) {
+        // Generate a value between 0 and elementWidth to simulate movement
+        const targetX = Math.random() * elementWidth;
+        mouseX.set(targetX);
+      }
+    }, 3000); // 3 seconds interval
 
     return () => {
       window.removeEventListener("resize", updateWidth);
@@ -47,16 +49,21 @@ const FooterTablet = ({ navLinks }: Props) => {
       {/* LAYER 1: AUTO-MOVING FLARES */}
       <div className="absolute inset-0 z-10 pointer-events-none opacity-40">
         <div className="flex h-full justify-end" style={{ gap: "20px" }}>
-          {[0, 1, 2].map((i) => (
-            <div key={i} className="relative h-full w-[150px] sm:w-[200px] overflow-hidden">
-              <MagneticFollowFlare
-                index={i}
-                mouseX={mouseX}
-                imageSrc={Object.values(navLinks)[i % 3].img}
-                parentWidth={elementWidth}
-              />
-            </div>
-          ))}
+          {[0, 1, 2].map((i) => {
+            const linkValues = Object.values(navLinks) as { img: string }[];
+            const currentImg = linkValues[i % linkValues.length]?.img || "";
+
+            return (
+              <div key={i} className="relative h-full w-[150px] sm:w-[200px] overflow-hidden">
+                <MagneticFollowFlare
+                  index={i}
+                  mouseX={mouseX}
+                  imageSrc={currentImg}
+                  parentWidth={elementWidth}
+                />
+              </div>
+            );
+          })}
         </div>
       </div>
 
@@ -119,31 +126,35 @@ const FooterTablet = ({ navLinks }: Props) => {
   );
 };
 
-/* Internal Flare Component for Tablet/Mobile */
 const MagneticFollowFlare = ({ index, mouseX, imageSrc, parentWidth }: any) => {
-  const baseWidth = 600; // Smaller flares for mobile
+  const baseWidth = 600; 
   const baseCenter = -baseWidth / 4;
   
-  // Smooth moving spring
-  const smoothX = useSpring(mouseX, { stiffness: 20, damping: 30 });
+  // Adjusted spring for a slower, more graceful automatic movement
+  const smoothX = useSpring(mouseX, { stiffness: 10, damping: 20 });
   
-  // Movement range is limited for mobile screens
   const xTransform = useTransform(
     smoothX,
-    [0, parentWidth],
-    [baseCenter - 50, baseCenter + 50]
+    [0, parentWidth || 1000],
+    [baseCenter - 100, baseCenter + 100] // Slightly wider range for automatic motion
   );
 
   return (
     <motion.div
       className="absolute h-full flex items-center justify-center"
-      style={{ width: `${baseWidth}px`, x: xTransform, top: 0, left: "-50%" }}
+      style={{ 
+        width: `${baseWidth}px`, 
+        x: xTransform, 
+        top: 0, 
+        left: "-50%",
+        opacity: 0.6 
+      }}
     >
       <motion.img
         src={imageSrc}
         alt="flare"
-        className="w-full h-auto object-contain opacity-60"
-        style={{ filter: "blur(10px)" }}
+        className="w-full h-auto object-contain"
+        style={{ filter: "blur(15px)" }} // Slightly more blur for a soft background feel
       />
     </motion.div>
   );

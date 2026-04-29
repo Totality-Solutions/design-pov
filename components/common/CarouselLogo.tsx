@@ -1,5 +1,3 @@
-
-
 "use client";
 
 import Image from "next/image";
@@ -27,54 +25,59 @@ export default function LogoCarousel({
   opacity = 80,
 }: LogoCarouselProps) {
   const trackRef = useRef<HTMLDivElement>(null);
-  const items = [...logos, ...logos];
+
+  // 1. Triple the logos to ensure there is always a buffer for large screens
+  const items = [...logos, ...logos, ...logos];
 
   useEffect(() => {
     const track = trackRef.current;
     if (!track) return;
-    const fullWidth = track.scrollWidth;
-    const singleWidth = fullWidth / 2;
-    const duration = singleWidth / pxPerSecond;
-    track.style.setProperty("--marquee-duration", `${duration}s`);
-  }, [logos, pxPerSecond]);
+
+    const updateAnimation = () => {
+      const fullWidth = track.scrollWidth;
+      // Because we tripled the array, one full loop is exactly 1/3 of the total width
+      const singleSetWidth = fullWidth / 3;
+      const duration = singleSetWidth / pxPerSecond;
+
+      track.style.setProperty("--marquee-duration", `${duration}s`);
+      track.style.setProperty("--marquee-distance", `-${singleSetWidth}px`);
+    };
+
+    updateAnimation();
+    window.addEventListener("resize", updateAnimation);
+    return () => window.removeEventListener("resize", updateAnimation);
+  }, [logos.length, pxPerSecond]);
 
   return (
-    <div className="w-full max-w-[100vw] overflow-hidden">
+    <div className="w-full overflow-hidden select-none">
       <div
         ref={trackRef}
-        className="flex justify-center items-center w-max whitespace-nowrap animate-logo-scroll"
+        className="flex items-center w-max animate-logo-scroll"
         style={{ 
-          gap: `${gap}px`,
-          backfaceVisibility: "hidden", // Fixes flickering on Android
+          gap: `${gap}px`, 
+          paddingRight: `${gap}px`, // Essential: matches spacing at the loop point
+          willChange: "transform" 
         }}
       >
         {items.map((logo, i) => (
-          <Image
-            key={i}
-            src={logo.src}
-            alt={logo.alt}
-            width={height}
-            height={height}
-            // Apply invert directly here. 
-            // If the section is always black, use 'invert' to make dark logos white.
-            className="object-contain shrink-0 invert-0 brightness-200 transition-all duration-300"
-            style={{ 
-              opacity: opacity / 100,
-              minWidth: `${height}px` // Prevents image collapsing on mobile Chrome
-            }}
-          />
+          <div key={i} className="shrink-0 flex items-center justify-center" style={{ height: `${height}px` }}>
+            <Image
+              src={logo.src}
+              alt={logo.alt}
+              height={height}
+              width={height * 3} // Sufficient width for aspect ratio
+              className="object-contain w-auto h-full"
+              style={{ opacity: opacity / 100 }}
+              unoptimized // Recommended for cloudfront external images to avoid Next.js cache spikes
+            />
+          </div>
         ))}
       </div>
 
       <style jsx>{`
         @keyframes logo-scroll {
-          from {
-            transform: translate3d(0, 0, 0);
-          }
-          to {
-            /* translate3d is much smoother on Android/Chrome than translateX */
-            transform: translate3d(-50%, 0, 0);
-          }
+          from { transform: translate3d(0, 0, 0); }
+          to { transform: translate3d(var(--marquee-distance, -33.33%), 0, 0); }
         }
         .animate-logo-scroll {
           animation: logo-scroll var(--marquee-duration, 20s) linear infinite;

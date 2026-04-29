@@ -1,32 +1,45 @@
 "use client";
 
 import React from "react";
-import Section from "../common/Section";
 import { Container } from "../common/Container";
+import CTABtn from "../common/CTABtn";
 
 export default function ScrollMaskText() {
-
-
   return (
-    <Container className="w-full flex items-center justify-center px-6 pt-10">
-      <h1 className="text-3xl font-semibold leading-tight capitalize text-center max-w-6xl text-[#000]">
-        A platform where architects, brands, artists, and thinkers come
-        together to shape environments that go beyond the {" "}
+    <section className="w-full bg-black py-12 mt-12">
+      <Container className="flex flex-col lg:flex-row items-center justify-between gap-8 px-3 md:px-10">
         
-        {/* Masked word */}
-        <span
-          className="bg-clip-text text-[3rem] text-transparent font-extrabold"
-          style={{
-            backgroundImage:
-              "url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee')",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-          }}
-        >
-          visual
-        </span>
-        .
-      </h1>
-    </Container>
+        {/* Left Text */}
+        <div className="max-w-4xl">
+          <h2 className="text-xl md:text-2xl font-medium text-white duration-300"
+            style={{ fontFamily: 'Montserrat' }}>
+            A platform where architects, brands, artists, and thinkers come
+            together to shape environments that go beyond the{" "}
+            <span className="text-primary-red font-semibold">visual.</span>
+          </h2>
+        </div>
+
+        {/* Right CTA */}
+        <div className="flex-shrink-0">
+          <CTABtn
+            label="Apply Now"
+            iconType="arrow"
+            btnBg="var(--primary-blue)"
+            btnHoverBg="var(--primary-blue)"
+            textColor="var(--color-white)"
+            borderColor="var(--primary-blue)"
+            borderHoverColor="var(--primary-blue)"
+            lineColor="transparent"
+            lineHoverColor="transparent"
+            bottomKey1Width="40px"
+            bottomKey2Width="12px"
+            bottomKey1Right="50px"
+            bottomKey2Right="15px"
+            href="#tickets"
+          />
+        </div>
+        
+      </Container>
+    </section>
   );
 }
