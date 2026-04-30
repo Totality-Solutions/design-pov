@@ -20,30 +20,18 @@ const projects = [
   { id: 10, title: "Design Studio", img: "/temp/theme/6.png", url: "#" },
 ];
 
-const HoverCard = ({ project, index, isIntroActive, highlightedIndices, isDesktop }: any) => {
+const HoverCard = ({ project, isDesktop }: any) => {
   const [isBlinking, setIsBlinking] = useState(false);
-  const isHighlighted = highlightedIndices.includes(index);
 
   const handleHover = () => {
-    if (!isDesktop || isIntroActive || isBlinking) return;
+    if (!isDesktop || isBlinking) return;
     setIsBlinking(true);
     setTimeout(() => setIsBlinking(false), 450);
   };
 
   const getAnimationState = () => {
-    // 1. Mobile logic
     if (!isDesktop) return { filter: "grayscale(0%)", opacity: 1, scale: 1 };
 
-    // 2. Intro Animation Logic (Strobe)
-    if (isIntroActive) {
-      return {
-        filter: isHighlighted ? "grayscale(0%)" : "grayscale(100%)",
-        opacity: isHighlighted ? 1 : 0.1,
-        scale: isHighlighted ? 1.05 : 1,
-      };
-    }
-
-    // 3. Hover Blink Logic (Post-Intro)
     if (isBlinking) {
       return {
         filter: ["grayscale(0%)", "grayscale(100%)", "grayscale(0%)", "grayscale(100%)", "grayscale(0%)"],
@@ -51,7 +39,6 @@ const HoverCard = ({ project, index, isIntroActive, highlightedIndices, isDeskto
       };
     }
 
-    // 4. Default Rest State (Full Color)
     return { filter: "grayscale(0%)", opacity: 1, scale: 1 };
   };
 
@@ -59,21 +46,19 @@ const HoverCard = ({ project, index, isIntroActive, highlightedIndices, isDeskto
     <Link href={project.url} passHref>
       <motion.div
         onMouseEnter={handleHover}
-        initial={isDesktop ? { opacity: 0.1, filter: "grayscale(100%)" } : false}
         animate={getAnimationState()}
         transition={{
-          duration: isIntroActive ? 0.15 : 0.4, // Faster strobe duration
+          duration: 0.4,
           times: isBlinking ? [0, 0.25, 0.5, 0.75, 1] : undefined,
           ease: "linear",
         }}
-        className="group relative flex flex-col items-center bg-white overflow-hidden"
+        className="group relative flex flex-col items-center bg-white overflow-hidden cursor-pointer"
       >
         <div className="relative w-full aspect-[177/159] overflow-hidden bg-[#F5F5F5]">
           <Image
             src={project.img}
             alt={project.title}
             fill
-            sizes="(max-width: 768px) 100vw, 20vw"
             className="object-cover transition-transform duration-700 lg:group-hover:scale-110"
           />
         </div>
@@ -90,8 +75,6 @@ const HoverCard = ({ project, index, isIntroActive, highlightedIndices, isDeskto
 };
 
 const Core2026: NextPage = () => {
-  const [highlightedIndices, setHighlightedIndices] = useState<number[]>([]);
-  const [isIntroActive, setIsIntroActive] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -101,26 +84,6 @@ const Core2026: NextPage = () => {
     window.addEventListener('resize', checkScreen);
     return () => window.removeEventListener('resize', checkScreen);
   }, []);
-
-  // Strobe Logic
-  useEffect(() => {
-    if (!isIntroActive || !isDesktop) return;
-
-    const interval = setInterval(() => {
-      // Pick 2-3 random indices
-      const randomCount = Math.floor(Math.random() * 2) + 2; 
-      const newIndices = Array.from({ length: randomCount }, () =>
-        Math.floor(Math.random() * projects.length)
-      );
-      setHighlightedIndices(newIndices);
-
-      // Brief pause where they are highlighted
-      const timeout = setTimeout(() => setHighlightedIndices([]), 300);
-      return () => clearTimeout(timeout);
-    }, 500); // Overall speed of the "strobe" effect
-
-    return () => clearInterval(interval);
-  }, [isIntroActive, isDesktop]);
 
   return (
     <section
@@ -136,32 +99,15 @@ const Core2026: NextPage = () => {
       />
 
       <main className="w-full max-w-[1420px] pt-[20px] px-6 lg:px-[50px] pb-20">
-        <motion.div
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 lg:gap-[50px]"
-          // Trigger logic
-          onViewportEnter={() => {
-            if (isDesktop && !isIntroActive) {
-              setIsIntroActive(true);
-              // After 4 seconds, end the strobe and let cards settle into full color
-              setTimeout(() => {
-                setIsIntroActive(false);
-                setHighlightedIndices([]);
-              }, 4000);
-            }
-          }}
-          viewport={{ once: true, amount: 0.1 }}
-        >
-          {projects.map((project, i) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 lg:gap-[50px]">
+          {projects.map((project) => (
             <HoverCard
               key={project.id}
               project={project}
-              index={i}
-              isIntroActive={isIntroActive}
-              highlightedIndices={highlightedIndices}
               isDesktop={isDesktop}
             />
           ))}
-        </motion.div>
+        </div>
       </main>
     </section>
   );

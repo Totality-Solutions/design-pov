@@ -6,7 +6,7 @@ export default function EcosystemHero() {
   return (
     <section className="w-full h-fit bg-pov-white border-b border-pov-black/40">
       {/* TEXT SECTION: Clean horizontal layout with border */}
-      <div className="w-full border-b-2 border-pov-black px-6 md:px-14 lg:pt-60">
+      <div className="w-full border-b-2 border-pov-black px-6 md:px-14 lg:pt-40">
         <h1 className="text-h1-mobile md:text-h1-tab lg:text-h1 tracking-tight font-semibold">
           Design POV extends beyond a 
         </h1>
@@ -24,7 +24,7 @@ export default function EcosystemHero() {
         {/* Main Video/Image Asset (No background visuals) */}
         <div className="relative z-10 w-full h-full bg-black overflow-hidden">
           <MediaRenderer 
-            src="/video/home.mp4" 
+            src="/temp/ecosystem/POV.mp4" 
             alt="Ecosystem Highlight"
             className="w-full h-full object-cover"
           />
