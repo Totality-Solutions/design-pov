@@ -38,7 +38,7 @@ export default function SectionHeading({
         flex flex-col md:flex-row
         items-start md:items-center
         ${hasChildren ? "justify-between" : "justify-start"}
-        px-3 md:px-10
+        px-6 md:px-10
         py-4 md:py-[30px]
         z-40
         transition-colors duration-300

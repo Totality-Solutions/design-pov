@@ -11,6 +11,7 @@ import FeaturedStory from "@/components/home/FeaturedStory";
 import CTAStrip from "@/components/common/CTAStrip";
 import PopupForm from "@/components/common/PopupForm"; // 1. Import the Form
 import ScrollMaskText from "@/components/home/ScrollRevealText";
+import HomeSponsors from "@/components/home/HomeSponsors";
 
 export default function HomePage() {
   // 2. Define the state to control the popup
@@ -24,6 +25,7 @@ export default function HomePage() {
       <Theme />
       <Ecosystem />
       <FeaturedDesigners />
+      <HomeSponsors />
       <FeaturedStory />
       
       <div className="w-full z-10 bg-white border-b">

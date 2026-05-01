@@ -13,7 +13,7 @@ const ContactHeader = () => {
               Tablet: --text-h1-tab
               Desktop: --text-h1 
           */}
-          <h2 className="font-semibold text-[var(--color-pov-black)] leading-tight px-3 md:px-10
+          <h2 className="font-semibold text-[var(--color-pov-black)] leading-tight px-6 md:px-10
             text-[length:var(--text-h1-mobile)] 
             md:text-[length:var(--text-h1-tab)] 
             lg:text-[length:var(--text-h1)] 
@@ -24,7 +24,7 @@ const ContactHeader = () => {
         </div>
 
         {/* Description Container */}
-        <div className="max-w-3xl mt-12 md:mt-20 px-3 md:px-10">
+        <div className="max-w-3xl mt-12 md:mt-20 px-6 md:px-10">
           {/* Subheading using --text-h3 variants */}
           <h3 className="font-semibold mb-3 text-[var(--color-pov-black)]
             text-[length:var(--text-h3-mobile)]

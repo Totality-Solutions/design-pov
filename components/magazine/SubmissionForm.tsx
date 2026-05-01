@@ -45,7 +45,7 @@ export default function MagazineSubmissionForm() {
       onMouseLeave={() => setIsHovered(false)}
     >
 
-      <form ref={formRef} className="flex flex-col px-3 md:px-10 items-start">
+      <form ref={formRef} className="flex flex-col px-6 md:px-10 items-start">
         
         {/* FORM FIELDS AREA */}
         <div className="flex-1 w-full space-y-10 py-12">
