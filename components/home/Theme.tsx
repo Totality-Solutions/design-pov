@@ -93,7 +93,7 @@ const Theme = () => {
               bottomKey2Width="12px"
               bottomKey1Right="50px"
               bottomKey2Right="15px"
-              href="#tickets"
+              href="/edition/theme"
               size='md'
               />
           </div>

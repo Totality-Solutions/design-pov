@@ -6,7 +6,9 @@ export type SubLink = {
 
 export type SubmenuContent = {
   mainHref: string; // Added: The link for the main header item itself
-  video: string;
+  video?: string;
+  image?: string;
+  filetype?: string;
   col1Title?: string;
   col1Links?: SubLink[];
   col2Title?: string;
@@ -17,13 +19,8 @@ export type SubmenuContent = {
 export const NAV_DATA: Record<string, SubmenuContent> = {
   About: {
     mainHref: "/about",
-    video: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_30MB.mp4",
-    col1Title: "Company",
-    col1Links: [
-      { label: "Our Story", href: "/about/story" }, 
-      { label: "Mission", href: "/about/mission" }, 
-      { label: "Team", href: "/about/team" }
-    ],
+    col1Title: "",
+    col1Links: [],
     col2Title: "Impact",
     col2Links: [
       { label: "Sustainability", href: "/impact/sustainability" }, 
@@ -33,7 +30,8 @@ export const NAV_DATA: Record<string, SubmenuContent> = {
   },
   Ecosystem: {
     mainHref: "/ecosystem",
-    video: "/video4.mp4",
+    image: "/temp/home/theme/WEBSITE_THEME BANNER_1.jpg.jpeg",
+    filetype: "image",
     col1Links: [
       { label: "Circle", href: "/ecosystem/hub" }, 
       { label: "Elevate", href: "/ecosystem/blogs" }, 
@@ -43,23 +41,19 @@ export const NAV_DATA: Record<string, SubmenuContent> = {
   },
   "2026 Edition": {
     mainHref: "/edition",
-    video: "/video1.mp4",
-    col1Title: "Theme",
+    image: "/ponindex.png",
+    filetype: "image",
+    col1Title: "",
     col1Links: [
-      { label: "Theme", href: "/edition-26/theme" }, 
-      { label: "Brands", href: "/edition-26/brands" }, 
-      { label: "Core", href: "/edition-26/core" }
-    ],
-    col2Title: "Details",
-    col2Links: [
-      { label: "Schedule", href: "/edition-26/schedule" }, 
-      { label: "Art", href: "/edition-26/art" }, 
-      { label: "Speakers", href: "/edition-26/speakers" }
+      { label: "Theme", href: "/edition/theme" }, 
+      { label: "Brands", href: "/edition/brands" }, 
+      { label: "Core", href: "/edition/core" },
+      { label: "Schedule", href: "/edition/schedule" },
+      { label: "Art", href: "/edition/art" },
     ],
   },
   Collaborate: {
     mainHref: "/collaborate",
-    video: "/video2.mp4",
     col1Title: "Partnerships",
     col1Links: [
       { label: "Brands", href: "/collaborate/brands" }, 
@@ -75,7 +69,6 @@ export const NAV_DATA: Record<string, SubmenuContent> = {
   },
   Magazine: {
     mainHref: "/magazine",
-    video: "/video3.mp4",
     col1Title: "Content",
     col1Links: [
       { label: "Latest Issue", href: "/magazine/latest" }, 

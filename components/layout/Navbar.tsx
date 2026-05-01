@@ -254,7 +254,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 // 1. Import usePathname to detect current route
@@ -358,7 +357,7 @@ export default function Navbar() {
                     <Link
                       key={label}
                       href={NAV_DATA[label].mainHref}
-                      onMouseEnter={() => setActiveMenu(label)}
+                      onMouseEnter={() => setActiveMenu(label === "2026 Edition" || label === "Ecosystem" ? label : null)}
                       className={`relative text-[16px] font-medium whitespace-nowrap transition-colors py-1 group ${
                         isActive ? "text-[#0000B3]" : "text-black hover:text-[#0000B3]"
                       }`}
@@ -414,33 +413,72 @@ export default function Navbar() {
           DESKTOP SUBMENU
       ========================== */}
       <div
-        className={`hidden lg:block bg-white transition-all duration-300 overflow-hidden z-[1100] ${
-          activeMenu ? "h-[450px]" : "h-0"
+        className={`hidden lg:block bg-white transition-all duration-300 overflow-hidden z-1100 ${
+          activeMenu ? "h-fit" : "h-0"
         } ${isSticky ? "fixed left-0 right-0" : "absolute left-0 right-0"}`}
         style={{ top: isSticky ? "80px" : "100%" }}
       >
         <Container className="h-full">
           {activeMenu && (
-            <div className="flex h-full px-10 py-10 gap-16 text-black">
+            <div className="flex h-fit px-10 py-10 gap-16 text-black">
               <div className="w-[60%] h-[320px] relative overflow-hidden bg-black">
-                {isDesktop && (
+                {isDesktop && NAV_DATA[activeMenu].filetype === "video" ? (
                   <video
                     src={NAV_DATA[activeMenu].video}
                     autoPlay muted loop playsInline
                     className="w-full h-full object-cover opacity-80"
                   />
-                )}
+                ) : NAV_DATA[activeMenu].filetype === "image" ? (
+                  <img
+                    src={NAV_DATA[activeMenu].image}
+                    alt={activeMenu}
+                    className="w-full h-full object-contain opacity-100"
+                  />
+                ) : null}
               </div>
-              <div className="w-[40%] flex flex-col justify-start">
-                <h3 className="text-lg font-bold mb-6">{NAV_DATA[activeMenu].col1Title}</h3>
-                <div className="flex flex-col gap-4">
-                  {NAV_DATA[activeMenu].col1Links?.map((link) => (
-                    <Link key={link.label} href={link.href} className="hover:text-blue-500 transition-colors">
-                      {link.label}
-                    </Link>
-                  ))}
+
+              {/* Two-column layout for 2026 Edition and Ecosystem */}
+              {(activeMenu === "2026 Edition" || activeMenu === "Ecosystem") ? (
+                <div className="w-[40%] flex gap-12 justify-start">
+                  <div className="flex flex-col justify-start">
+                    {NAV_DATA[activeMenu].col1Title && (
+                      <h3 className="text-lg font-bold mb-6">{NAV_DATA[activeMenu].col1Title}</h3>
+                    )}
+                    <div className="flex flex-col gap-4">
+                      {NAV_DATA[activeMenu].col1Links?.map((link) => (
+                        <Link key={link.label} href={link.href} className="hover:text-blue-500 transition-colors">
+                          {link.label}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                  {NAV_DATA[activeMenu].col2Links && NAV_DATA[activeMenu].col2Links!.length > 0 && (
+                    <div className="flex flex-col justify-start">
+                      {NAV_DATA[activeMenu].col2Title && (
+                        <h3 className="text-lg font-bold mb-6">{NAV_DATA[activeMenu].col2Title}</h3>
+                      )}
+                      <div className="flex flex-col gap-4">
+                        {NAV_DATA[activeMenu].col2Links?.map((link) => (
+                          <Link key={link.label} href={link.href} className="hover:text-blue-500 transition-colors">
+                            {link.label}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
-              </div>
+              ) : (
+                <div className="w-[40%] flex flex-col justify-start">
+                  <h3 className="text-lg font-bold mb-6">{NAV_DATA[activeMenu].col1Title}</h3>
+                  <div className="flex flex-col gap-4">
+                    {NAV_DATA[activeMenu].col1Links?.map((link) => (
+                      <Link key={link.label} href={link.href} className="hover:text-blue-500 transition-colors">
+                        {link.label}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </Container>

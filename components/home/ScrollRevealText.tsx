@@ -22,7 +22,7 @@ export default function ScrollMaskText() {
         {/* Right CTA */}
         <div className="flex-shrink-0">
           <CTABtn
-            label="Apply Now"
+            label="Explore the Show"
             iconType="arrow"
             btnBg="var(--primary-blue)"
             btnHoverBg="var(--primary-blue)"
@@ -35,7 +35,7 @@ export default function ScrollMaskText() {
             bottomKey2Width="12px"
             bottomKey1Right="50px"
             bottomKey2Right="15px"
-            href="#tickets"
+            href="/edition"
           />
         </div>
         

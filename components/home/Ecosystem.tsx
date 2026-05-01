@@ -24,6 +24,7 @@ interface EcosystemItem {
   stats: { value: string; unit: string }[]
   cta: string
   bgImage?: string
+  href?: string
 }
 
 const ECOSYSTEM: EcosystemItem[] = [
@@ -43,6 +44,7 @@ const ECOSYSTEM: EcosystemItem[] = [
       { value: '12', unit: 'MONTHS' },
     ],
     cta: 'Apply to Core',
+    href: '/edition/core',
   },
   {
     id: 'circle',
@@ -56,6 +58,7 @@ const ECOSYSTEM: EcosystemItem[] = [
       { value: '12', unit: 'EVENTS/YR' },
     ],
     cta: 'Join Circle',
+    href: '/edition/circle',
   },
   {
     id: 'objects',
@@ -69,6 +72,7 @@ const ECOSYSTEM: EcosystemItem[] = [
       { value: '500', unit: 'COPIES' },
     ],
     cta: 'Contribute',
+    href: '/edition/objects',
   },
   {
     id: 'elevate',
@@ -82,6 +86,7 @@ const ECOSYSTEM: EcosystemItem[] = [
       { value: '3', unit: 'MONTHS' },
     ],
     cta: 'Apply as Designer',
+    href: '/edition/elevate',
   },
   {
     id: 'magazine',
@@ -95,6 +100,7 @@ const ECOSYSTEM: EcosystemItem[] = [
       { value: 'OPEN', unit: 'ACCESS' },
     ],
     cta: 'Read Magazine',
+    href: '/edition/magazine',
   },
 ]
 
@@ -310,7 +316,7 @@ const EcosystemSection = () => {
                             btnBg="var(--primary-blue)"
                             textColor="#fff"
                             borderColor="var(--primary-blue)"
-                            href="#apply"
+                            href={item.href}
                           />
                         </div>
                       </motion.div>
