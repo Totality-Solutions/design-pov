@@ -1,10 +1,13 @@
+import { Suspense } from "react";
 import CTAStrip from "@/components/common/CTAStrip";
-import  {CoreShowcase}  from "@/components/core/CoreShowcase";
+import { CoreShowcase } from "@/components/core/CoreShowcase";
 
-export default function Home() {
+export default function CorePage() {
   return (
     <main>
-      <CoreShowcase />
+      <Suspense>
+        <CoreShowcase />
+      </Suspense>
       <div className="w-full z-10 bg-white">
         <CTAStrip
           title="Where Design Meets Dialogue"

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import Image, { StaticImageData } from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -80,47 +80,21 @@ function DesignerTile({
   isMobile,
   isActiveSlide,
 }: any) {
-  const [isActive, setIsActive] = useState(true);
   const [mediaIndex, setMediaIndex] = useState(0);
-  const intervalRef = useRef<any>(null);
+  const [paused, setPaused] = useState(false);
 
-  const startCycling = () => {
-    setIsActive(true);
-    if (intervalRef.current) clearInterval(intervalRef.current);
-    intervalRef.current = setInterval(() => {
-      setMediaIndex((p: number) => (p + 1) % designer.media.length);
+  const shouldCycle = isMobile ? !isActiveSlide : !paused;
+
+  useEffect(() => {
+    if (!shouldCycle) return;
+    const id = setInterval(() => {
+      setMediaIndex(p => (p + 1) % designer.media.length);
     }, 700);
-  };
+    return () => clearInterval(id);
+  }, [shouldCycle, designer.media.length]);
 
-  const stopCycling = () => {
-    setIsActive(false);
-    if (intervalRef.current) clearInterval(intervalRef.current);
-  };
-
-  useEffect(() => {
-    if (!isMobile) startCycling();
-    return () => clearInterval(intervalRef.current);
-  }, [isMobile]);
-
-  const handleMouseEnter = () => {
-    if (isMobile) return;
-    stopCycling();
-  };
-
-  const handleMouseLeave = () => {
-    if (isMobile) return;
-    startCycling();
-  };
-
-  useEffect(() => {
-    if (!isMobile) return;
-    if (isActiveSlide) {
-      stopCycling();
-    } else {
-      startCycling();
-    }
-    return () => clearInterval(intervalRef.current);
-  }, [isActiveSlide, isMobile, designer.media.length]);
+  const handleMouseEnter = () => { if (!isMobile) setPaused(true); };
+  const handleMouseLeave = () => { if (!isMobile) setPaused(false); };
 
   const currentMedia = designer.media[mediaIndex];
 
@@ -194,15 +168,15 @@ function DesignerTile({
 
 // ─── Data ─────────────────────────
 const designers: Designer[] = [
-  { id: 1, media: [{ src: img1, name: "ADND", link: "/rahul" }, { src: img2, name: "ALARA STUDIO", link: "/concept" }] },
-  { id: 2, media: [{ src: img3, name: "ABIN", link: "/priya" }, { src: img4, name: "BALDIWALA EDGE", link: "/loft" }] },
-  { id: 3, media: [{ src: video1, type: "video", name: "Arjun Sharma", link: "/arjun-showreel" }] },
-  { id: 4, media: [{ src: img5, name: "CITYSPACE", link: "/meera" }, { src: img6, name: "DESIGN HEX", link: "/textiles" }] },
-  { id: 5, media: [{ src: img7, name: "DSP DESIGN", link: "/kabir" }, { src: img8, name: "JANNAT VASI", link: "/abstracts" }] },
-  { id: 6, media: [{ src: img9, name: "NA ARCHITECT", link: "/ananya" }, { src: img10, name: "POONAM AKASH", link: "/editorials" }] },
-  { id: 7, media: [{ src: img11, name: "SANJAY PURI", link: "/dev" }, { src: img12, name: "SAV", link: "/branding" }] },
-  { id: 8, media: [{ src: img13, name: "SHROFFLEON", link: "/sana" }, { src: img14, name: "SPARC DESIGN", link: "/exhibition" }] },
-  { id: 9, media: [{ src: img15, name: "STUDIO ARCHOHM", link: "/vikram" }, { src: img16, name: "TALATI & PARTNER", link: "/digital" }] },
+  { id: 1, media: [{ src: img1, name: "ADND", link: "/edition/core?designer=01" }, { src: img2, name: "ALARA STUDIO", link: "/edition/core?designer=02" }] },
+  { id: 2, media: [{ src: img3, name: "ABIN", link: "/edition/core?designer=03" }, { src: img4, name: "BALDIWALA EDGE", link: "/edition/core?designer=04" }] },
+  { id: 3, media: [{ src: video1, type: "video", name: "Arjun Sharma", link: "/edition/core" }] },
+  { id: 4, media: [{ src: img5, name: "CITYSPACE", link: "/edition/core?designer=05" }, { src: img6, name: "DESIGN HEX", link: "/edition/core?designer=06" }] },
+  { id: 5, media: [{ src: img7, name: "DSP DESIGN", link: "/edition/core?designer=07" }, { src: img8, name: "JANNAT VASI", link: "/edition/core?designer=08" }] },
+  { id: 6, media: [{ src: img9, name: "NA ARCHITECT", link: "/edition/core?designer=09" }, { src: img10, name: "POONAM AKASH", link: "/edition/core?designer=10" }] },
+  { id: 7, media: [{ src: img11, name: "SANJAY PURI", link: "/edition/core?designer=11" }, { src: img12, name: "SAV", link: "/edition/core?designer=12" }] },
+  { id: 8, media: [{ src: img13, name: "SHROFFLEON", link: "/edition/core?designer=13" }, { src: img14, name: "SPARC DESIGN", link: "/edition/core?designer=14" }] },
+  { id: 9, media: [{ src: img15, name: "STUDIO ARCHOHM", link: "/edition/core?designer=15" }, { src: img16, name: "TALATI & PARTNER", link: "/edition/core?designer=16" }] },
 ];
 
 // ─── Main Component ─────────────────────────

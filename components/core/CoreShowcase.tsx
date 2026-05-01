@@ -2,8 +2,9 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
+import { useSearchParams } from 'next/navigation';
 import { motion, useScroll, useTransform, useMotionValueEvent } from 'framer-motion';
-import { ShowcaseModal } from './ShowcaseModal'; 
+import { ShowcaseModal } from './ShowcaseModal';
 import { coreData, CoreItem } from "@/data/coreData";
 
 const StatusDot = ({ isActive }: { isActive: boolean }) => (
@@ -21,6 +22,15 @@ export const CoreShowcase = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [selectedDesigner, setSelectedDesigner] = useState<CoreItem | null>(null);
   const [isMobile, setIsMobile] = useState(false);
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const designerId = searchParams.get('designer');
+    if (designerId) {
+      const item = coreData.find(d => d.id === designerId);
+      if (item) setSelectedDesigner(item);
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 1024);

@@ -24,7 +24,7 @@ const ecosystemPillars = [
     title: "Objects",
     description: "A collection of original, one-of-one pieces—each a distilled expression of perspective.",
     // videoSrc: "/video/POV AD.mp4",
-    imageSrc: "/temp/home/ecosystem/N.jpg",
+    imageSrc: "/temp/home/ecosystem/OBJECT.jpeg",
     logoSrc: "/icons/object.png"
   },
   {

@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { Globe, Instagram, X, ChevronLeft, ChevronRight } from "lucide-react";
+import { Globe, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { CoreItem } from "@/data/coreData";
 
 interface ShowcaseModalProps {
@@ -132,48 +132,52 @@ export const ShowcaseModal = ({
                 </button>
               </div>
 
-              {/* SCROLLABLE BODY: Description and Socials */}
+              {/* SCROLLABLE BODY: Description */}
               <div
                 ref={scrollContainerRef}
-                className="flex-grow overflow-y-auto px-8 md:px-12 pb-12 custom-scrollbar"
+                className="flex-grow overflow-y-auto px-8 md:px-12 pb-6 custom-scrollbar"
               >
                 <div className="text-sm md:text-base text-zinc-700 leading-relaxed space-y-4">
                   {data.description.split('\n').map((para, idx) => (
                     <p key={idx}>{para}</p>
                   ))}
                 </div>
+              </div>
 
-                {/* Social Links at the bottom of scroll */}
-                <div className="flex items-center gap-6 pt-10 mt-10 border-t border-zinc-100">
-                  {data.website && (
-                    <a
-                      href={data.website === "#" ? undefined : data.website}
-                      target={data.website === "#" ? undefined : "_blank"}
-                      rel="noopener noreferrer"
-                      onClick={(e) => data.website === "#" && e.preventDefault()}
-                      className={`flex items-center gap-2 transition-colors ${
-                        data.website === "#" ? "text-zinc-300 cursor-not-allowed" : "text-black hover:text-primary-red"
-                      }`}
-                      title={data.website === "#" ? "Website coming soon" : "Visit Website"}
-                    >
-                      <Globe size={22} />
-                    </a>
-                  )}
-                  {data.instagram && (
-                    <a
-                      href={data.instagram === "#" ? undefined : data.instagram}
-                      target={data.instagram === "#" ? undefined : "_blank"}
-                      rel="noopener noreferrer"
-                      onClick={(e) => data.instagram === "#" && e.preventDefault()}
-                      className={`flex items-center gap-2 transition-colors ${
-                        data.instagram === "#" ? "text-zinc-300 cursor-not-allowed" : "text-black hover:text-primary-red"
-                      }`}
-                      title={data.instagram === "#" ? "Instagram coming soon" : "Follow on Instagram"}
-                    >
-                      <Instagram size={22} />
-                    </a>
-                  )}
-                </div>
+              {/* STICKY FOOTER: Social Links */}
+              <div className="flex items-center gap-6 px-8 md:px-12 py-4 border-t border-zinc-100 bg-white">
+                {data.website && (
+                  <a
+                    href={data.website === "#" ? undefined : data.website}
+                    target={data.website === "#" ? undefined : "_blank"}
+                    rel="noopener noreferrer"
+                    onClick={(e) => data.website === "#" && e.preventDefault()}
+                    className={`flex items-center gap-2 transition-colors ${
+                      data.website === "#" ? "text-zinc-300 cursor-not-allowed" : "text-black hover:text-primary-red"
+                    }`}
+                    title={data.website === "#" ? "Website coming soon" : "Visit Website"}
+                  >
+                    <Globe size={22} />
+                  </a>
+                )}
+                {data.instagram && (
+                  <a
+                    href={data.instagram === "#" ? undefined : data.instagram}
+                    target={data.instagram === "#" ? undefined : "_blank"}
+                    rel="noopener noreferrer"
+                    onClick={(e) => data.instagram === "#" && e.preventDefault()}
+                    className={`flex items-center gap-2 transition-colors ${
+                      data.instagram === "#" ? "text-zinc-300 cursor-not-allowed" : "text-black hover:text-primary-red"
+                    }`}
+                    title={data.instagram === "#" ? "Instagram coming soon" : "Follow on Instagram"}
+                  >
+                    <svg width={22} height={22} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                      <circle cx="12" cy="12" r="4"/>
+                      <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/>
+                    </svg>
+                  </a>
+                )}
               </div>
             </div>
           </motion.div>

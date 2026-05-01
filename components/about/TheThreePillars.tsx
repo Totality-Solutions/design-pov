@@ -92,9 +92,9 @@ const TheThreePillars: React.FC = () => {
         stickyTop="md:top-20"
         isSectionHovered={isHovered} 
       >
-        <div className="hidden md:flex gap-[60px] lg:gap-[100px]">
+        {/* <div className="hidden md:flex gap-[60px] lg:gap-[100px]">
           <span className="opacity-60 text-[16px] lg:text-lg font-medium">Vol. 01</span>
-        </div>
+        </div> */}
       </SectionHeading>
 
       <div className="relative flex flex-col md:flex-row items-start w-full">
