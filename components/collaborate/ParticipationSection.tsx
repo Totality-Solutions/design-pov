@@ -65,7 +65,7 @@ export default function ParticipationSection() {
             >
               {/* 1. Project Name with Redirect and Underline */}
               <a 
-                href={`/${item.name.toLowerCase().replace(/\s+/g, '-')}`}
+                href={`/edition/${item.name.toLowerCase().replace(/\s+/g, '-')}`}
                 className="relative text-lg md:text-xl font-medium px-14 cursor-pointer w-fit
                   after:content-[''] 
                   after:absolute 
