@@ -10,7 +10,7 @@ const ContactFormSection = () => {
   return (
     <section className="w-full bg-white py-12 font-['Montserrat']">
       <div className="max-w-[1440px] mx-auto">
-        <div className="w-full bg-[#DEDEDE]/20 flex flex-col lg:flex-row justify-between items-start py-6 px-3 md:px-10 gap-12">
+        <div className="w-full bg-[#DEDEDE]/20 flex flex-col lg:flex-row justify-between items-start py-6 px-6 md:px-10 gap-12">
           
           {/* Left: Info Column */}
           <div className="flex flex-col gap-12 w-full lg:w-1/3 mt-10">
@@ -56,11 +56,11 @@ const InfoItem = ({ label, value }: { label: string; value: string }) => (
 
 const Input = ({ label, placeholder, type = "text" }: any) => (
   <div className="flex flex-col gap-1 w-full">
-    <label className="px-3 text-base font-medium text-[#010101]">{label}</label>
+    <label className="px-6 text-base font-medium text-[#010101]">{label}</label>
     <input 
       type={type} 
       placeholder={placeholder}
-      className="w-full px-3 py-1 bg-transparent border-b border-[#D9D9D9] text-sm focus:outline-none focus:border-[#0000B3] placeholder:text-black/30 font-medium"
+      className="w-full px-6 py-1 bg-transparent border-b border-[#D9D9D9] text-sm focus:outline-none focus:border-[#0000B3] placeholder:text-black/30 font-medium"
     />
   </div>
 );

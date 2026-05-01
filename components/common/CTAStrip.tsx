@@ -110,7 +110,7 @@ const CTAStrip = ({
       )}
 
       {/* --- CONTENT LAYER --- */}
-      <div className="relative z-10 px-3 md:px-10 py-6 flex flex-row md:items-center justify-start md:justify-between gap-8">
+      <div className="relative z-10 px-6 md:px-10 py-6 flex flex-row md:items-center justify-start md:justify-between gap-8">
         
         <div className="flex-1 max-w-[300px]">
           <h2

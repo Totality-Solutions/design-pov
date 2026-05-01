@@ -18,7 +18,7 @@ export default function MagazineMediaForm() {
         isSectionHovered={isHovered}
       />
       
-      <div className="px-3 md:px-10">
+      <div className="px-6 md:px-10">
         {/* 
           Using the common FormInner component.
           The category is explicitly set to "Media Partner" for backend tracking.

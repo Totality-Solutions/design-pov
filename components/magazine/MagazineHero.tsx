@@ -9,19 +9,19 @@ export default function MagazineHero() {
   return (
     <section className="w-full h-fit bg-pov-white border-b border-pov-black/40">
       {/* TEXT SECTION: Clean horizontal layout with border */}
-      <div className="w-full border-b-2 border-pov-black px-3 md:px-10 lg:pt-20">
+      <div className="w-full border-b-2 border-pov-black px-6 md:px-10 lg:pt-20">
         <h1 className="text-h2-mobile md:text-h2-tab lg:text-h2 tracking-tight font-semibold">
           Lorem Ipsum is simply dummy text of the lore
         </h1>
       </div>
     
-      <div className="w-full border-b-2 border-pov-black px-3 md:px-10 lg:pt-2">
+      <div className="w-full border-b-2 border-pov-black px-6 md:px-10 lg:pt-2">
         <p className="text-h2-mobile md:text-h2-tab lg:text-h2 tracking-tight font-semibold">
           and typesetting industry.
         </p>
       </div>
 
-      <div className="grid grid-cols-4 items-center justify-center w-full px-3 md:px-10 py-10">
+      <div className="grid grid-cols-4 items-center justify-center w-full px-6 md:px-10 py-10">
         {/* 75% Column */}
         <div className="col-span-3">
           <p className="text-body-mobile md:text-body-tab lg:text-body tracking-tight font-semibold">

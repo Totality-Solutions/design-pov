@@ -1,158 +1,178 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Globe, Instagram, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import React, { useState, useEffect, useRef } from "react";
+import Image from "next/image";
+import { motion, AnimatePresence } from "framer-motion";
+import { Globe, Instagram, X, ChevronLeft, ChevronRight } from "lucide-react";
+import { CoreItem } from "@/data/coreData";
 
 interface ShowcaseModalProps {
   isOpen: boolean;
   onClose: () => void;
-  data: {
-    name: string;
-    description: string;
-    images: string[];
-    websiteUrl: string;
-    instagramUrl: string;
-  } | null;
+  data: CoreItem | null;
 }
 
-export const ShowcaseModal = ({ isOpen, onClose, data }: ShowcaseModalProps) => {
+export const ShowcaseModal = ({
+  isOpen,
+  onClose,
+  data,
+}: ShowcaseModalProps) => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-  // 1. Prevent Background Scrolling
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     }
-    // Cleanup on unmount
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     };
   }, [isOpen]);
 
-  // 2. Auto-moving Carousel Logic
+  useEffect(() => {
+    if (data) {
+      setCurrentSlide(0);
+      if (scrollContainerRef.current) {
+        scrollContainerRef.current.scrollTop = 0;
+      }
+    }
+  }, [data]);
+
   useEffect(() => {
     if (!isOpen || !data) return;
-
     const interval = setInterval(() => {
-      nextSlide();
-    }, 3000); // Changes image every 3 seconds
-
+      const totalImages = data.additionalImages.length + 1;
+      setCurrentSlide((prev) => (prev + 1) % totalImages);
+    }, 4000);
     return () => clearInterval(interval);
-  }, [isOpen, currentSlide, data]);
+  }, [isOpen, data]);
 
-  if (!data) return null;
+  if (!isOpen || !data) return null;
 
-  const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % data.images.length);
-  const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + data.images.length) % data.images.length);
+  const images = [data.src, ...data.additionalImages];
+  const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % images.length);
+  const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + images.length) % images.length);
 
   return (
-    <AnimatePresence>
+    <AnimatePresence mode="wait">
       {isOpen && (
         <div className="fixed inset-0 z-[1300] flex items-center justify-center p-4">
-          {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
           />
 
-          {/* Modal Container */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            className="relative w-full max-w-[1200px] h-[700px] md:h-[min(600px,90vh)] bg-white flex flex-col md:flex-row overflow-hidden shadow-2xl"
+            key={data.label}
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            className="relative w-full max-w-[1200px] h-[80vh] md:h-[600px] bg-white flex flex-col md:flex-row overflow-hidden shadow-2xl rounded-sm"
           >
-            {/* Close Button */}
-            <button onClick={onClose} className="absolute top-8 right-8 text-black hover:text-primary-red transition-color">
-              <X size={28} />
-            </button>
-
-            {/* LEFT COLUMN: Carousel */}
-            <div className="relative w-full md:w-1/2 h-1/2 md:h-full bg-zinc-100 overflow-hidden">
+            {/* LEFT: Carousel */}
+            <div className="relative w-full md:w-1/2 h-[300px] md:h-full bg-zinc-100 overflow-hidden">
               <motion.div
                 animate={{ x: `-${currentSlide * 100}%` }}
                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
                 className="flex h-full"
               >
-                {data.images.map((img, i) => (
+                {images.map((img, i) => (
                   <div key={i} className="relative w-full h-full flex-shrink-0">
                     <Image
                       src={img}
-                      alt={`${data.name} slide ${i}`}
+                      alt={`${data.label} slide ${i}`}
                       fill
+                      priority={i === 0}
                       className="object-cover"
                     />
                   </div>
                 ))}
               </motion.div>
 
-              {/* Navigation Arrows */}
               <div className="absolute inset-0 flex items-center justify-between px-4 pointer-events-none">
-                <button 
-                  onClick={prevSlide}
-                  className="pointer-events-auto p-2 text-white/50 hover:text-white transition-colors"
-                >
-                  <ChevronLeft size={32} strokeWidth={1} />
+                <button onClick={prevSlide} className="pointer-events-auto p-2 text-white/70 hover:text-white transition-opacity">
+                  <ChevronLeft size={36} strokeWidth={1.5} />
                 </button>
-                <button 
-                  onClick={nextSlide}
-                  className="pointer-events-auto p-2 text-white/50 hover:text-white transition-colors"
-                >
-                  <ChevronRight size={32} strokeWidth={1} />
+                <button onClick={nextSlide} className="pointer-events-auto p-2 text-white/70 hover:text-white transition-opacity">
+                  <ChevronRight size={36} strokeWidth={1.5} />
                 </button>
               </div>
 
-              {/* Pagination Dashes */}
-              <div className="absolute bottom-6 left-0 w-full flex justify-center gap-1 z-10">
-                {data.images.map((_, i) => (
+              <div className="absolute bottom-6 left-0 w-full flex justify-center gap-2">
+                {images.map((_, i) => (
                   <button
                     key={i}
                     onClick={() => setCurrentSlide(i)}
-                    aria-label={`Go to slide ${i + 1}`}
-                    aria-current={currentSlide === i}
-                    className={`h-[6px] transition-all rounded-full duration-300 ease-in-out ${
-                      currentSlide === i 
-                        ? "w-1.5 bg-primary-red opacity-100" 
-                        : "w-1.5 bg-black"
+                    className={`h-[6px] transition-all duration-300 rounded-full ${
+                      currentSlide === i ? "w-6 bg-white" : "w-2 bg-white/50"
                     }`}
                   />
                 ))}
               </div>
             </div>
 
-            {/* RIGHT COLUMN: Content */}
-            <div className="w-full md:w-1/2 h-1/2 md:h-full p-8 md:p-12 flex flex-col justify-between bg-white">
-              <div className="space-y-6">
-                <h2 className="text-2xl md:text-3xl font-semibold leading-tight my-6">
-                  {data.name}
+            {/* RIGHT: Content Section */}
+            <div className="w-full md:w-1/2 flex flex-col h-full bg-white relative">
+              
+              {/* STICKY HEADER: Title and Close Button */}
+              <div className="flex items-start justify-between px-8 md:px-12 pb-4 py-2 md:py-6 bg-white z-20">
+                <h2 className="text-2xl md:text-4xl font-semibold leading-tight text-black pr-8">
+                  {data.label}
                 </h2>
-                <p className="text-sm md:text-base leading-relaxed text-black font-normal max-w-md">
-                  {data.description}
-                </p>
-                <div className="flex items-center gap-4 mt-4">
-                  <a 
-                    href={data.websiteUrl} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="text-black hover:text-primary-red transition-colors duration-300"
-                  >
-                    <Globe size={24} strokeWidth={1.5} />
-                  </a>
-                  <a 
-                    href={data.instagramUrl} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="text-black hover:text-primary-red transition-colors duration-300"
-                  >
-                    <Instagram size={24} strokeWidth={1.5} />
-                  </a>
+                <button
+                  onClick={onClose}
+                  className="text-black hover:text-primary-red transition-colors pt-1"
+                >
+                  <X size={28} />
+                </button>
+              </div>
+
+              {/* SCROLLABLE BODY: Description and Socials */}
+              <div
+                ref={scrollContainerRef}
+                className="flex-grow overflow-y-auto px-8 md:px-12 pb-12 custom-scrollbar"
+              >
+                <div className="text-sm md:text-base text-zinc-700 leading-relaxed space-y-4">
+                  {data.description.split('\n').map((para, idx) => (
+                    <p key={idx}>{para}</p>
+                  ))}
+                </div>
+
+                {/* Social Links at the bottom of scroll */}
+                <div className="flex items-center gap-6 pt-10 mt-10 border-t border-zinc-100">
+                  {data.website && (
+                    <a
+                      href={data.website === "#" ? undefined : data.website}
+                      target={data.website === "#" ? undefined : "_blank"}
+                      rel="noopener noreferrer"
+                      onClick={(e) => data.website === "#" && e.preventDefault()}
+                      className={`flex items-center gap-2 transition-colors ${
+                        data.website === "#" ? "text-zinc-300 cursor-not-allowed" : "text-black hover:text-primary-red"
+                      }`}
+                      title={data.website === "#" ? "Website coming soon" : "Visit Website"}
+                    >
+                      <Globe size={22} />
+                    </a>
+                  )}
+                  {data.instagram && (
+                    <a
+                      href={data.instagram === "#" ? undefined : data.instagram}
+                      target={data.instagram === "#" ? undefined : "_blank"}
+                      rel="noopener noreferrer"
+                      onClick={(e) => data.instagram === "#" && e.preventDefault()}
+                      className={`flex items-center gap-2 transition-colors ${
+                        data.instagram === "#" ? "text-zinc-300 cursor-not-allowed" : "text-black hover:text-primary-red"
+                      }`}
+                      title={data.instagram === "#" ? "Instagram coming soon" : "Follow on Instagram"}
+                    >
+                      <Instagram size={22} />
+                    </a>
+                  )}
                 </div>
               </div>
             </div>

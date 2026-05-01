@@ -154,7 +154,7 @@ export default function MagazineBase({ activeBlog: initialBlog, isInnerPage = fa
               </div>
             ) : (
               <div key={item.id} className="flex flex-col h-fit">
-                <div className="py-1 px-3 bg-neutral-100 mb-0.5"><span className="text-[10px] text-black/40 uppercase font-bold tracking-widest">Advertisement</span></div>
+                <div className="py-1 px-6 bg-neutral-100 mb-0.5"><span className="text-[10px] text-black/40 uppercase font-bold tracking-widest">Advertisement</span></div>
                 <div className={`relative group overflow-hidden bg-gray-100 ${item.aspect} w-full flex flex-col justify-end`}>
                   <Image src={item.image} alt="Ad" fill className="object-cover transition-transform duration-700 group-hover:scale-105" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-black/40 z-10 opacity-80" />

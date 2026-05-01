@@ -62,7 +62,7 @@
 //       />
 
 //       {/* Wrap everything in a form tag and attach the ref */}
-//       <form ref={formRef} className="flex flex-col lg:flex-row gap-12 px-3 md:px-10 items-start">
+//       <form ref={formRef} className="flex flex-col lg:flex-row gap-12 px-6 md:px-10 items-start">
         
 //         {/* LEFT SIDE: FORM FIELDS */}
 //         <div className="flex-1 w-full space-y-10 pt-20">
@@ -259,7 +259,7 @@ export default function ParticipationForm() {
         isSectionHovered={isHovered} 
       />
 
-      <form ref={formRef} className="flex flex-col lg:flex-row gap-12 px-3 md:px-10 items-start">
+      <form ref={formRef} className="flex flex-col lg:flex-row gap-12 px-6 md:px-10 items-start">
         
         <div className="flex-1 w-full space-y-10 pt-20">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6 mb-6">
