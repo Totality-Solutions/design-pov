@@ -100,7 +100,7 @@ const ScheduleSection = () => {
           {/* LEFT COLUMN */}
           <div className="w-full lg:w-[15%] flex flex-row lg:flex-col justify-between lg:justify-center py-6 lg:py-0 border-b lg:border-b-0 lg:border-r border-white/20 z-10">
             <div className="text-white">
-              <h3 className="text-[32px] lg:text-[42px] font-bold leading-[0.8] tracking-tighter flex items-baseline">
+              <h3 className="text-h2-mobile md:text-h2-tab lg:text-h2 font-bold leading-[0.8] tracking-tighter flex items-baseline">
                 <span>DAY&nbsp;0</span>
                 <AnimatePresence mode="wait">
                   <motion.span key={activeDate} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
