@@ -25,7 +25,7 @@ export default function AboutPage() {
           hoverBgColor="#000000"
           textColor='var(--primary-red)'
           hoverTextColor='var(--color-white)'
-          floatingImage="/temp/ctastrip/strip-1.png"
+          floatingImage="/temp/ctastrip/2.png"
         />
         </div>
     </div>

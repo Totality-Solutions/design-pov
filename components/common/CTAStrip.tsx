@@ -9,7 +9,7 @@ type CTAProps = {
   subtitle?: string;
   ctaLabel: string;
   ctaHref?: string;
-  onClick?: () => void; // Added onClick Prop
+  onClick?: () => void;
 
   // Background Props (Normal)
   bgColor?: string;
@@ -43,8 +43,8 @@ const CTAStrip = ({
   textColor = "#000000",
   hoverTextColor,
   floatingImage,
-  floatingImageWidth = 150,
-  floatingImageHeight = 140,
+  floatingImageWidth = 200, 
+  floatingImageHeight = 160,
   className = "",
 }: CTAProps) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -52,9 +52,7 @@ const CTAStrip = ({
 
   useEffect(() => {
     const handleResize = () => {
-      const isSmallScreen = window.innerWidth < 1024;
-      setIsTouchDevice(isSmallScreen);
-      // Ensure hover is false by default on mobile/tab
+      setIsTouchDevice(window.innerWidth < 1024);
       setIsHovered(false);
     };
 
@@ -71,87 +69,115 @@ const CTAStrip = ({
     if (!isTouchDevice) setIsHovered(false);
   };
 
+  const handleMobileAction = () => {
+    if (onClick) {
+      onClick();
+    } else if (ctaHref) {
+      window.location.href = ctaHref;
+    }
+  };
+
   const currentBg = isHovered && hoverBgColor ? hoverBgColor : bgColor;
   const currentText = isHovered && hoverTextColor ? hoverTextColor : textColor;
+
+  const aspectRatio = floatingImageWidth / floatingImageHeight;
 
   return (
     <section
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      className={`relative w-full overflow-visible transition-all duration-500 ease-in-out ${className}`}
+      className={`relative w-full overflow-visible transition-colors duration-500 ease-in-out ${className}`}
       style={{ backgroundColor: currentBg }}
     >
-      {/* --- BACKGROUND MEDIA --- */}
-      {bgImage && (
+      {/* --- 1. BACKGROUND MEDIA LAYER --- */}
+      {(bgImage || bgVideo) && (
         <div 
           className={`absolute inset-0 z-0 transition-opacity duration-500 ${
             isHovered && hoverBgColor ? 'opacity-0' : 'opacity-100'
           }`}
         >
-          <Image src={bgImage} alt="" fill className="object-cover" />
-        </div>
-      )}
-      
-      {bgVideo && (
-        <div 
-          className={`absolute inset-0 z-0 transition-opacity duration-500 ${
-            isHovered && hoverBgColor ? 'opacity-0' : 'opacity-100'
-          }`}
-        >
-          <video 
-            src={bgVideo} 
-            autoPlay 
-            loop 
-            muted 
-            playsInline 
-            className="w-full h-full object-cover" 
-          />
+          {bgImage && <Image src={bgImage} alt="" fill className="object-cover" />}
+          {bgVideo && (
+            <video 
+              src={bgVideo} 
+              autoPlay 
+              loop 
+              muted 
+              playsInline 
+              className="w-full h-full object-cover" 
+            />
+          )}
         </div>
       )}
 
-      {/* --- CONTENT LAYER --- */}
-      <div className="relative z-10 px-6 md:px-10 py-6 flex flex-row md:items-center justify-start md:justify-between gap-8">
+      {/* --- 2. FLOATING IMAGE (Hidden on Mobile/Tab, Visible on Desktop) --- */}
+      {floatingImage && (
+        <button 
+          onClick={isTouchDevice ? handleMobileAction : undefined}
+          // Changed: Added 'hidden lg:block' so it only appears on desktop
+          className={`absolute z-20 transition-all duration-700 ease-out origin-bottom outline-none
+            hidden lg:block
+            ${isTouchDevice ? "pointer-events-auto cursor-pointer" : "pointer-events-none"}
+            lg:w-[var(--desktop-width)]
+          `}
+          style={{ 
+            "--desktop-width": `${floatingImageWidth}px`,
+            aspectRatio: aspectRatio, 
+            right: "20%", 
+            bottom: "0px", 
+            transform: isHovered 
+              ? "translateY(-20px) rotate(-10deg) " 
+              : "translateY(0) rotate(0deg) scale(1)",
+            filter: isHovered 
+              ? "drop-shadow(0px 25px 35px rgba(0,0,0,0.25))" 
+              : "drop-shadow(0px 5px 10px rgba(0,0,0,0.1))"
+          } as React.CSSProperties}
+        >
+          <Image 
+            src={floatingImage} 
+            alt="3D decorative element" 
+            fill 
+            className="object-contain object-bottom" 
+            priority
+          />
+        </button>
+      )}
+
+      {/* --- 3. CONTENT LAYER --- */}
+      <div className="relative z-10 px-6 md:px-10 py-8 flex flex-row md:items-center justify-between gap-8">
         
-        <div className="flex-1 max-w-[300px]">
+        <div className="flex-1 max-w-[200px] md:max-w-[300px] ">
           <h2
-            className="text-xl md:text-2xl font-semibold transition-colors tracking-tight duration-300"
-            style={{ color: currentText, fontFamily: 'Montserrat' }}
+            className={`text-lg md:text-xl lg:text-2xl font-semibold transition-colors tracking-tight duration-300`}
+            style={{ color: currentText, fontFamily: 'Montserrat, sans-serif' }}
           >
             {title}
           </h2>
         </div>
 
-        <div className="flex items-center gap-6 md:gap-12 relative h-full">
-          {floatingImage && (
-            <div 
-              className={`absolute right-[110%] bottom-[-20%] z-20 transition-all duration-700 ease-out pointer-events-none 
-                ${isHovered ? "scale-110 -rotate-12" : "scale-100 translate-y-0 rotate-3"}`}
-              style={{ width: floatingImageWidth, height: floatingImageHeight }}
-            >
-              <Image src={floatingImage} alt="3D element" fill className="object-contain" />
-            </div>
-          )}
-
-          <div className="shrink-0 relative z-30">
-            <CTABtn
-              label={ctaLabel}
-              href={onClick ? undefined : ctaHref} // Use href only if onClick is missing
-              onClick={onClick}
-              iconType="arrow"
-              btnBg="var(--color-white)"
-              btnHoverBg="var(--primary-blue)"
-              textColor="var(--color-black)"
-              borderColor="var(--color-black)"
-              borderHoverColor="transparent"
-              lineColor="var(--color-white)"
-              lineHoverColor="var(--primary-blue)"
-              bottomKey1Width="40px"
-              bottomKey2Width="12px"
-              bottomKey1Right="50px"
-              bottomKey2Right="15px"
-              forceHover={isHovered}
-            />
-          </div>
+        {/* 
+            CTA Button: 
+            Now always visible (block) regardless of the image presence.
+        */}
+        <div className="shrink-0 relative z-30 block">
+          <CTABtn
+            label={ctaLabel}
+            href={onClick ? undefined : ctaHref}
+            onClick={onClick}
+            iconType="arrow"
+            btnBg="var(--color-white)"
+            btnHoverBg="var(--primary-blue)"
+            textColor="var(--color-black)"
+            borderColor="var(--color-black)"
+            borderHoverColor="transparent"
+            lineColor="var(--color-white)"
+            lineHoverColor="var(--primary-blue)"
+            bottomKey1Width="40px"
+            bottomKey2Width="12px"
+            bottomKey1Right="50px"
+            bottomKey2Right="15px"
+            forceHover={isHovered}
+          />
         </div>
       </div>
     </section>

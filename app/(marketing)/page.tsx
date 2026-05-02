@@ -37,6 +37,9 @@ export default function HomePage() {
           hoverBgColor="#000000"
           textColor='var(--primary-red)'
           hoverTextColor='var(--color-white)'
+          floatingImage="/temp/ctastrip/2.png"
+          floatingImageHeight={160}
+          floatingImageWidth={225}
         />
       </div>
 
