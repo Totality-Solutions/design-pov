@@ -111,7 +111,7 @@ const WhatPOV = () => {
         className="relative h-[200vh] w-full"
       >
         {/* We keep this sticky the ENTIRE time so it doesn't disappear */}
-        <div className="sticky top-20 h-screen flex flex-col justify-between pt-20 overflow-hidden">
+        <div className="sticky top-10 pt-20 h-fit flex flex-col justify-center gap-12 overflow-hidden">
           
           {/* 🔹 TEXT REVEAL SECTION */}
           <div className="flex items-center justify-center px-6 md:px-0">
