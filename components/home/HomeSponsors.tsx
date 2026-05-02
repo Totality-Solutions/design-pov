@@ -22,7 +22,7 @@ const HomeSponsors: React.FC = () => {
     >
       {/* 1. HEADING */}
       <SectionHeading 
-        titleMain="POV SPONSORS" 
+        titleMain="POV PARTNERS" 
         sticky={false}
         bgColor="black"
         isSectionHovered={isHovered} 

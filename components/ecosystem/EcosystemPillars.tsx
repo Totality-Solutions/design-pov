@@ -92,7 +92,7 @@ function PillarCard({ pillar }: { pillar: typeof ecosystemPillars[0] }) {
                 src={pillar.logoSrc || "/icons/scanner.png"} 
                 alt={`${pillar.title} logo`}
                 fill
-                className="object-contain invert brightness-0" // Adjust based on logo color
+                className="object-contain" // Adjust based on logo color
               />
            </div>
         </div>

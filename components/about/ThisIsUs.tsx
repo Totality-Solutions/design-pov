@@ -71,9 +71,7 @@ const ThisIsUs: React.FC = () => {
 
   // 1. TOP END-TO-END PARAGRAPHS
   const introParagraphs = [
-    "There is a moment at every industry event that no one programmes, yet everyone attends.",
-    "It happens in the margins—between panels, outside exhibition halls, over hurried coffees. Conversations loosen. Opinions sharpen. Real exchanges unfold. Ideas, unfiltered by format, find their voice.",
-    "For Asif Sataar and Gagan Bhatia, that moment wasn’t incidental. It was the point."
+    "There is a moment at every industry event that no one programmes, yet everyone attends. It happens in the margins—between panels, outside exhibition halls, over hurried coffees. Conversations loosen. Opinions sharpen. Real exchanges unfold. Ideas, unfiltered by format, find their voice. For Asif Sataar and Gagan Bhatia, that moment wasn’t incidental. It was the point."
   ];
 
   return (
@@ -89,7 +87,7 @@ const ThisIsUs: React.FC = () => {
       >
         <div className="hidden md:flex gap-[100px]">
           {/* <span className="opacity-60 text-[16px] lg:text-lg font-medium">POV Insights</span> */}
-          <span className="opacity-60 text-[16px] lg:text-lg font-medium">Volume 01</span>
+          {/* <span className="opacity-60 text-[16px] lg:text-lg font-medium">Volume 01</span> */}
         </div>
       </SectionHeading>
 
@@ -97,7 +95,7 @@ const ThisIsUs: React.FC = () => {
         
         {/* TOP SECTION: END-TO-END CONTENT */}
         <div className="w-full ">
-          <div className="space-y-4 max-w-[1440px]">
+          <div className="space-y-4 w-full">
             {introParagraphs.map((para, idx) => (
               <p key={idx} className="text-black text-[18px] md:text-[22px] font-medium leading-[1.4] tracking-tight">
                 {para}

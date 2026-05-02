@@ -4,17 +4,20 @@ import React, { useState, useEffect, useRef } from 'react';
 import SectionHeading from '../common/SectionHeading';
 
 const CATEGORIES = [
-  "Sponsors",
+  "Partners",
+  "Brands",
+  "Brand Collaborators",
   "Build Partners",
-  "Art Curation",
-  "Space Scenting",
-  "Operations",
-  "Media",
-  "Strategy"
+  "Gifting Partners",
+  "Media Partners",
+  "Degital Media Partner",
+  "Ticketing Partners",
+  "Sensory Collaborator",
+  "Key execution Partner"
 ];
 
 const PartnersSection: React.FC = () => {
-  const [activeTab, setActiveTab] = useState("Sponsors");
+  const [activeTab, setActiveTab] = useState("Partners");
   const [isMobile, setIsMobile] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
@@ -37,28 +40,43 @@ const PartnersSection: React.FC = () => {
   }, []);
 
   const partners = [
-    { id: 1, category: "Sponsors", logo: "/logos/logo1.svg" },
-    { id: 2, category: "Sponsors", logo: "/logos/logo2.svg" },
+    // Partners
+    { id: 1, category: "Partners", logo: "/temp/edition/sponsors/2.png" },
+    { id: 2, category: "Partners", logo: "/temp/edition/sponsors/4.png" },
+    { id: 7, category: "Partners", logo: "/temp/edition/sponsors/1.png" },
+    { id: 9, category: "Partners", logo: "/temp/edition/sponsors/3.png" },
+    // Brands
+    ...Array.from({ length: 48 }, (_, i) => ({ id: 100 + i, category: "Brands", logo: `/temp/edition/brands/${i + 1}.png` })),
+    // Brand Collaborators
+    { id: 30, category: "Brand Collaborators", logo: "/logos/logo-placeholder.svg" },
+    // Build Partners
     { id: 3, category: "Build Partners", logo: "/logos/logo3.svg" },
-    { id: 4, category: "Art Curation", logo: "/logos/logo4.svg" },
-    { id: 5, category: "Space Scenting", logo: "/logos/logo5.svg" },
-    { id: 6, category: "Operations", logo: "/logos/logo6.svg" },
-    { id: 7, category: "Sponsors", logo: "/logos/logo7.svg" },
     { id: 8, category: "Build Partners", logo: "/logos/logo8.svg" },
-    { id: 9, category: "Sponsors", logo: "/logos/logo9.svg" },
     { id: 10, category: "Build Partners", logo: "/logos/logo10.svg" },
-    { id: 11, category: "Sponsors", logo: "/logos/logo11.svg" },
-    { id: 12, category: "Sponsors", logo: "/logos/logo12.svg" },
     { id: 13, category: "Build Partners", logo: "/logos/logo13.svg" },
-    { id: 14, category: "Sponsors", logo: "/logos/logo14.svg" },
     { id: 15, category: "Build Partners", logo: "/logos/logo15.svg" },
-    { id: 16, category: "Sponsors", logo: "/logos/logo16.svg" },
     { id: 17, category: "Build Partners", logo: "/logos/logo17.svg" },
+    // Gifting Partners
+    { id: 40, category: "Gifting Partners", logo: "/temp/edition/gifting-partners/1.png" },
+    { id: 40, category: "Gifting Partners", logo: "/temp/edition/gifting-partners/2.png" },
+    { id: 40, category: "Gifting Partners", logo: "/temp/edition/gifting-partners/4.png" },
+    // Media Partners
+    { id: 50, category: "Media Partners", logo: "/temp/edition/media-partners/1.png" },
+    { id: 50, category: "Media Partners", logo: "/temp/edition/media-partners/2.png" },
+    { id: 50, category: "Media Partners", logo: "/temp/edition/media-partners/3.png" },
+    // Degital Media Partner
+    { id: 60, category: "Degital Media Partner", logo: "/temp/edition/media-partners/4.png" },
+    // Ticketing Partners
+    { id: 70, category: "Ticketing Partners", logo: "/temp/edition/ticketing-partners/1.png" },
+    // Sensory Collaborator
+    { id: 5, category: "Sensory Collaborator", logo: "/temp/edition/sensory/12.png" },
+    // Key execution Partner
+    { id: 6, category: "Key execution Partner", logo: "/temp/edition/key-execution/1.jpg" },
   ];
   
   const filtered = partners.filter(p => p.category === activeTab);
   
-  const columns = isMobile ? 3 : 6;
+  const columns = isMobile ? 3 : 1;
   const remainder = filtered.length % columns;
   const paddingNeeded = remainder === 0 ? 0 : columns - remainder;
   const displayCount = filtered.length === 0 ? columns : filtered.length + paddingNeeded;

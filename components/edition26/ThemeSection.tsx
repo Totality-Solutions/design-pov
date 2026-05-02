@@ -8,31 +8,31 @@ import { motion, useSpring, AnimatePresence } from 'framer-motion';
 // 1. Data Set with Mobile (Fixed), Tablet (New), and Desktop (Fixed)
 const themeData = [
   { 
-    id: 1, w: 220, h: 280, img: "/temp/theme/2.png",
+    id: 1, w: 220, h: 280, img: "/temp/home/theme/WEBSITE_THEME BANNER_1.jpg.jpeg",
     desktop: { top: '5%', left: '5%' },
     tablet: { top: '5.5%', left: '10%' }, // In-between
     mobile: { top: '6%', left: '16%' } 
   },
   { 
-    id: 2, w: 320, h: 320, img: "/temp/theme/2.png",
+    id: 2, w: 320, h: 320, img: "/temp/home/theme/WEBSITE_THEME BANNER_2.jpg.jpeg",
     desktop: { top: '10%', left: '70%' },
     tablet: { top: '14%', left: '62%' },
     mobile: { top: '18%', left: '50%' } 
   },
   { 
-    id: 3, w: 320, h: 200, img: "/temp/theme/3.png",
+    id: 3, w: 320, h: 200, img: "/temp/home/theme/WEBSITE_THEME BANNER_3.jpg.jpeg",
     desktop: { top: '35%', left: '40%' },
     tablet: { top: '35.5%', left: '35%' },
     mobile: { top: '36%', left: '30%' } 
   },
   { 
-    id: 4, w: 200, h: 260, img: "/temp/theme/4.png",
+    id: 4, w: 200, h: 260, img: "/temp/home/theme/WEBSITE_THEME BANNER_4.jpg.jpeg",
     desktop: { top: '55%', left: '15%' },
     tablet: { top: '54%', left: '15%' },
     mobile: { top: '53%', left: '15%' } 
   },
   { 
-    id: 5, w: 280, h: 350, img: "/temp/theme/6.png",
+    id: 5, w: 280, h: 350, img: "/temp/home/theme/WEBSITE_THEME BANNER_2.jpg.jpeg",
     desktop: { top: '65%', left: '75%' },
     tablet: { top: '66.5%', left: '62%' },
     mobile: { top: '68%', left: '50%' } 
