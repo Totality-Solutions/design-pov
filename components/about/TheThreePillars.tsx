@@ -39,7 +39,7 @@ const PILLAR_DATA: Pillar[] = [
     id: "build",
     title: "Build Partners:",
     description: "Realise the vision: transforming concepts into precise, tangible spaces.",
-    image: Img3,
+    image: "",
     buttonLabel: "Explore"
   }
 ];
