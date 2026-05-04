@@ -22,19 +22,19 @@ const BrandsHero = () => {
         {/* Top Headline Line */}
         <div className="w-full px-6 md:px-10 py-3 md:py-5 border-b border-black">
           <h1 className="text-h1-mobile md:text-[40px] leading-tight md:leading-[48px] font-semibold font-montserrat text-[#010101]">
-            Where Culture Meets Crowds
+            A collective of brands shaping how design is experienced—through 
           </h1>
         </div>
 
         {/* Bottom Headline Line */}
         <div className="w-full px-6 md:px-10 py-3 md:py-5 border-b border-black">
           <h1 className="text-h1-mobile md:text-[40px] leading-tight md:leading-[48px] font-semibold font-montserrat text-[#010101]">
-            And Brands Come Alive.
+            material, innovation, and collaboration.
           </h1>
         </div>
 
         {/* 3. Sub-text & Action Row */}
-        <div className="w-full px-6 md:px-10 py-4 md:py-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        {/* <div className="w-full px-6 md:px-10 py-4 md:py-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           <p className="text-h3-mobile md:text-h3 font-medium font-montserrat text-black opacity-70">
             Trusted by the Brands That Shape Culture
           </p>
@@ -44,7 +44,7 @@ const BrandsHero = () => {
               Apply
             </span>
           </button>
-        </div>
+        </div> */}
       </div>
     </section>
   );

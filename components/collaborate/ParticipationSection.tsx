@@ -14,7 +14,7 @@ const modules = [
   { name: "Object", description: "Exploring the boundary between art and utility through a curated collection of physical artifacts that redefine spaces." },
   { name: "Elevate", description: "A dedicated platform designed to amplify emerging talent and high-concept projects within the global design community." },
   { name: "Brand Participations", description: "Bridging the gap between corporate identity and immersive physical experience design through spatial storytelling." },
-  { name: "Sponsorships", description: "Empowering the creative economy by providing brands with high-impact platforms to integrate with global design movements." },
+  { name: "Partnership", description: "Empowering the creative economy by providing brands with high-impact platforms to integrate with global design movements." },
   { name: "Media Enquiry", description: "For press kits, interview requests, and media collaborations, reach out to our communications team for official insights." },
 ];
 

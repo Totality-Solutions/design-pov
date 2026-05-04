@@ -29,10 +29,10 @@ const ScheduleParagraph: React.FC<ScheduleParagraphProps> = ({
             <h2 className="text-3xl md:text-4xl font-bold font-[Montserrat] text-black">
               {title}
             </h2>
-            <ArrowUpRight className="w-5 h-5 mb-4 stroke-[1.5] text-black" />
+            {/* <ArrowUpRight className="w-5 h-5 mb-4 stroke-[1.5] text-black" /> */}
           </div>
 
-          <CTABtn
+          {/* <CTABtn
             label={ctaLabel}
             btnBg="transparent"
             btnHoverBg="var(--primary-blue)"
@@ -46,7 +46,7 @@ const ScheduleParagraph: React.FC<ScheduleParagraphProps> = ({
             bottomKey1Right="50px"
             bottomKey2Right="15px"
             href={ctaHref}
-          />
+          /> */}
         </div>
 
         {/* Content */}

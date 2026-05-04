@@ -77,15 +77,15 @@ const ApplySection = () => {
       <div className="w-full flex flex-col md:flex-row min-h-[350px]">
         <ApplyCard
           isInitiallyDark={true}
-          title="Become a Sponsor"
-          description="Put your brand in front of thousands of engaged, culture-driven audiences. From stage naming rights to exclusive activations — we build sponsorships that actually work."
-          buttonText="Apply as a Sponsor"
+          title="Become a Partner"
+          description=" Align with a platform shaping design culture and create meaningful visibility through considered partnerships."
+          buttonText="Apply as a Partner"
         />
 
         <ApplyCard
           isInitiallyDark={false}
           title="Join as a Participant"
-          description="Artists, performers, creators, vendors, and collectives — if you create culture, you belong on our platform."
+          description="Collaborate within the ecosystem to present your work in context - where it’s experienced, not just seen."
           buttonText="Apply as a Participant"
         />
       </div>
