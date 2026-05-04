@@ -123,7 +123,7 @@ const CTAStrip = ({
           style={{ 
             "--desktop-width": `${floatingImageWidth}px`,
             aspectRatio: aspectRatio, 
-            right: "20%", 
+            right: "25%", 
             bottom: "0px", 
             transform: isHovered 
               ? "translateY(-20px) rotate(-10deg) " 
@@ -146,7 +146,7 @@ const CTAStrip = ({
       {/* --- 3. CONTENT LAYER --- */}
       <div className="relative z-10 px-6 md:px-10 py-8 flex flex-row md:items-center justify-between gap-8">
         
-        <div className="flex-1 max-w-[200px] md:max-w-[300px] ">
+        <div className="flex-1 max-w-[200px] md:max-w-[350px] ">
           <h2
             className={`text-lg md:text-xl lg:text-2xl font-semibold transition-colors tracking-tight duration-300`}
             style={{ color: currentText, fontFamily: 'Montserrat, sans-serif' }}

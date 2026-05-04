@@ -93,7 +93,7 @@ const Core2026: NextPage = () => {
     >
       <SectionHeading
         titleMain="Core "
-        titleBold="Collection"
+        titleBold="Collective"
         sticky={false}
         isSectionHovered={isHovered}
       />

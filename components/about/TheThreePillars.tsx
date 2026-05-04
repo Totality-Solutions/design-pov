@@ -187,14 +187,14 @@ const TheThreePillars: React.FC = () => {
       </div>
 
       {/* 3. FULL WIDTH CTA STRIP */}
-      <div className="w-full relative z-[50] bg-white border-t border-[#DFDFDF]">
+      <div className="w-full z-10 bg-white border-t border-b border-[#DFDFDF]">
         <CTAStrip
-          ctaLabel="Download"
-          title="Post Show Report"
-          ctaHref="#"
+          title="Become a part of a design led platform like no other."
+          ctaLabel="Apply Now"
+          ctaHref="/collaborate"
           hoverBgColor="#000000"
-          textColor='var(--primary-red)'
-          hoverTextColor='var(--color-white)'
+          textColor="var(--primary-red)"
+          hoverTextColor="var(--color-white)"
         />
       </div>
     </section>

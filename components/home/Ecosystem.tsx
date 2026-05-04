@@ -43,7 +43,7 @@ const ECOSYSTEM: EcosystemItem[] = [
       { value: '40', unit: 'MEMBERS' },
       { value: '12', unit: 'MONTHS' },
     ],
-    cta: 'Apply to Core',
+    cta: 'Explore',
     href: '/edition/core',
   },
   {
@@ -57,7 +57,7 @@ const ECOSYSTEM: EcosystemItem[] = [
       { value: '200', unit: 'MEMBERS' },
       { value: '12', unit: 'EVENTS/YR' },
     ],
-    cta: 'Join Circle',
+    cta: 'Explore',
     href: '/edition/circle',
   },
   {
@@ -71,7 +71,7 @@ const ECOSYSTEM: EcosystemItem[] = [
       { value: '2', unit: 'ISSUES/YR' },
       { value: '500', unit: 'COPIES' },
     ],
-    cta: 'Contribute',
+    cta: 'Explore',
     href: '/edition/objects',
   },
   {
@@ -85,7 +85,7 @@ const ECOSYSTEM: EcosystemItem[] = [
       { value: '12', unit: 'PAIRS' },
       { value: '3', unit: 'MONTHS' },
     ],
-    cta: 'Apply as Designer',
+    cta: 'Explore',
     href: '/edition/elevate',
   },
   {
@@ -99,7 +99,7 @@ const ECOSYSTEM: EcosystemItem[] = [
       { value: '100+', unit: 'ESSAYS' },
       { value: 'OPEN', unit: 'ACCESS' },
     ],
-    cta: 'Read Magazine',
+    cta: 'Explore',
     href: '/edition/magazine',
   },
 ]
@@ -405,16 +405,7 @@ const EcosystemSection = () => {
         </Container>
       </Section>
 
-      <div className="w-full z-10 bg-white border-t border-b border-[#DFDFDF]">
-        <CTAStrip
-          title="Where Design Meets Dialogue"
-          ctaLabel="Apply"
-          ctaHref="#"
-          hoverBgColor="#000000"
-          textColor="var(--primary-red)"
-          hoverTextColor="var(--color-white)"
-        />
-      </div>
+      
     </div>
   )
 }
