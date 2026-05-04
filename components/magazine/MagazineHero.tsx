@@ -4,23 +4,20 @@ import React from "react";
 import Image from "next/image";
 import { MediaRenderer } from "../common/MediaRenderer";
 import CTABtn from "../common/CTABtn";
+import { UnderlineText } from "../common/Underlinetext";
 
 export default function MagazineHero() {
   return (
     <section className="w-full h-fit bg-pov-white border-b border-pov-black/40">
       {/* TEXT SECTION: Clean horizontal layout with border */}
-      <div className="w-full border-b-2 border-pov-black px-6 md:px-10 lg:pt-20">
-        <h1 className="text-h2-mobile md:text-h2-tab lg:text-h2 tracking-tight font-semibold">
-          A curation of stories from those who consume and create design - 
-        </h1>
-      </div>
-    
-      <div className="w-full border-b-2 border-pov-black px-6 md:px-10 lg:pt-2">
-        <p className="text-h2-mobile md:text-h2-tab lg:text-h2 tracking-tight font-semibold">
-          from the Indian sub-continent and beyond.
-        </p>
-      </div>
 
+    <div className="w-full border-pov-black lg:pt-20">
+      <UnderlineText lineHeight={72} className="text-h2-mobile md:text-h2-tab lg:text-h2 tracking-tight font-semibold">
+        A curation of stories from those who consume and create design - from the Indian sub-continent and beyond.
+      </UnderlineText>
+      
+
+</div>
       <div className="grid grid-cols-4 items-center justify-center w-full px-6 md:px-10 py-10">
         {/* 75% Column */}
         <div className="col-span-3">
