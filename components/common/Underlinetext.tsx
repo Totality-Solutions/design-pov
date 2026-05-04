@@ -22,8 +22,8 @@ export function UnderlineText({
   lineHeight = 52,
   mobileLineHeight = 42,
   lineColor = '#000',
-  lineThickness = 5,
-  marginWidth = 70,
+  lineThickness = 3,
+  marginWidth = 30,
   mobileMarginWidth = 50,
   className = '',
 }: UnderlineTextProps & {
