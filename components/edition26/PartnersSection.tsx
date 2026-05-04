@@ -5,12 +5,12 @@ import SectionHeading from '../common/SectionHeading';
 
 const CATEGORIES = [
   "Partners",
-  "Brands",
-  "Brand Collaborators",
+  // "Brands",
+  // "Brand Collaborators",
   "Build Partners",
   "Gifting Partners",
   "Media Partners",
-  "Degital Media Partner",
+  "Degital Media Partners",
   "Ticketing Partners",
   "Sensory Collaborator",
   "Key execution Partner"
@@ -64,8 +64,8 @@ const PartnersSection: React.FC = () => {
     { id: 50, category: "Media Partners", logo: "/temp/edition/media-partners/1.png" },
     { id: 50, category: "Media Partners", logo: "/temp/edition/media-partners/2.png" },
     { id: 50, category: "Media Partners", logo: "/temp/edition/media-partners/3.png" },
-    // Degital Media Partner
-    { id: 60, category: "Degital Media Partner", logo: "/temp/edition/media-partners/4.png" },
+    // Degital Media Partners
+    { id: 60, category: "Degital Media Partners", logo: "/temp/edition/media-partners/4.png" },
     // Ticketing Partners
     { id: 70, category: "Ticketing Partners", logo: "/temp/edition/ticketing-partners/1.png" },
     // Sensory Collaborator
