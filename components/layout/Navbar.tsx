@@ -374,9 +374,9 @@ export default function Navbar() {
               <CTABtn
                 label="Buy Tickets"
                 iconType="arrow"
-                btnBg="black"
+                btnBg="transparent"
                 btnHoverBg="var(--primary-blue)"
-                textColor="white"
+                textColor="black"
                 href="#tickets"
               />
             </div>

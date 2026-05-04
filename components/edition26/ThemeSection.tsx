@@ -116,7 +116,7 @@ const Theme2026: NextPage = () => {
             THEME 2026
           </h2>
           <p className="font-['Montserrat'] text-[16px] md:text-[20px] lg:text-[24px] font-medium text-black/80 mt-2 select-none">
-            The New Language of Space
+            Sense & Sensibility
           </p>
         </div>
       </div>

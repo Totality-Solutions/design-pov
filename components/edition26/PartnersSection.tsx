@@ -124,7 +124,7 @@ const PartnersSection: React.FC = () => {
       </div>
 
       {/* 3. PARTNER LOGO GRID */}
-      <div className="w-full bg-white">
+      <div className="w-full bg-white pb-12">
         <div className="grid grid-cols-3 md:grid-cols-6 border-t border-[#EEEEEE] ">
           {gridCells.map((_, index) => {
             const partner = filtered[index];
