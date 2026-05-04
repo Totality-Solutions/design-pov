@@ -1,6 +1,6 @@
 "use client";
 
-import React, { forwardRef } from "react";
+import { forwardRef, useRef, useEffect } from "react";
 import { motion, MotionValue } from "framer-motion";
 import Image from "next/image";
 
@@ -24,11 +24,28 @@ function Cell({
   src?: any;
   alt?: string;
 }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (type !== "video" || !videoRef.current) return;
+    const video = videoRef.current;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) video.play().catch(() => {});
+        else video.pause();
+      },
+      { threshold: 0.1 }
+    );
+    observer.observe(video);
+    return () => observer.disconnect();
+  }, [type]);
+
   if (type === "video" && src) {
     return (
       <video
+        ref={videoRef}
         src={src}
-        autoPlay
+        preload="none"
         muted
         loop
         playsInline

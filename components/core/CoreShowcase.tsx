@@ -51,7 +51,10 @@ export const CoreShowcase = () => {
 
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
     if (!isMobile) {
-      const index = Math.round(latest * (coreData.length - 1));
+      const index = Math.min(
+        Math.round(latest * (coreData.length - 1)),
+        coreData.length - 1
+      );
       if (index !== activeIndex) setActiveIndex(index);
     }
   });
@@ -108,10 +111,10 @@ export const CoreShowcase = () => {
                         src={item.src}
                         alt={item.label}
                         fill
+                        sizes="(max-width: 1024px) 100vw, 450px"
                         className={`object-contain transition-all duration-700 ${
                           isActive ? 'scale-100 opacity-100' : 'scale-90 opacity-30'
                         }`}
-                        priority
                       />
                     </div>
                     

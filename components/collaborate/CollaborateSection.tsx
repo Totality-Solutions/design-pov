@@ -63,9 +63,9 @@ const CollaborateSection = () => {
 
   // ✅ Disable scroll when lightbox open
   useEffect(() => {
-    document.body.style.overflow = lightboxOpen ? "hidden" : "auto";
+    document.body.style.overflow = lightboxOpen ? "hidden" : "";
     return () => {
-      document.body.style.overflow = "auto";
+      document.body.style.overflow = "";
     };
   }, [lightboxOpen]);
 

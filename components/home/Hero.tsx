@@ -107,6 +107,7 @@ export default function Hero() {
         <video
           ref={videoRef}
           src="/video/POV ad 1.mp4"
+          preload="metadata"
           autoPlay
           muted
           loop

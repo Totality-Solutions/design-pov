@@ -39,7 +39,7 @@ const PILLAR_DATA: Pillar[] = [
     id: "build",
     title: "Build Partners:",
     description: "Realise the vision: transforming concepts into precise, tangible spaces.",
-    image: "",
+    image: Img3,
     buttonLabel: "Explore"
   }
 ];
@@ -170,17 +170,19 @@ const TheThreePillars: React.FC = () => {
               </div>
 
               {/* IMAGE CONTAINER */}
-              <div className="p-6 md:p-[40px] flex items-center justify-center bg-white md:bg-transparent">
-                <div className="w-full h-[45vh] md:h-[75vh] aspect-[3/2] relative overflow-hidden rounded-sm md:rounded-none">
-                  <Image 
-                    src={pillar.image} 
-                    alt={pillar.title} 
-                    fill
-                    priority={index === 0}
-                    className="object-cover"
-                  />
+              {pillar.image && (
+                <div className="p-6 md:p-[40px] flex items-center justify-center bg-white md:bg-transparent">
+                  <div className="w-full h-[45vh] md:h-[75vh] aspect-[3/2] relative overflow-hidden rounded-sm md:rounded-none">
+                    <Image
+                      src={pillar.image}
+                      alt={pillar.title}
+                      fill
+                      priority={index === 0}
+                      className="object-cover"
+                    />
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           ))}
         </div>

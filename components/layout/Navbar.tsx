@@ -48,7 +48,7 @@
 //   }, []);
 
 //   useEffect(() => {
-//     document.body.style.overflow = mobileOpen ? "hidden" : "unset";
+//     document.body.style.overflow = mobileOpen ? "hidden" : "";
 //   }, [mobileOpen]);
 
 //   return (
@@ -300,7 +300,7 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
-    document.body.style.overflow = mobileOpen ? "hidden" : "unset";
+    document.body.style.overflow = mobileOpen ? "hidden" : "";
   }, [mobileOpen]);
 
   return (

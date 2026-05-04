@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import { useRef, useEffect } from 'react'
 import Image from 'next/image'
 
 interface MediaRendererProps {
@@ -9,13 +9,32 @@ interface MediaRendererProps {
 }
 
 export const MediaRenderer = ({ src, alt = "", className = "" }: MediaRendererProps) => {
-  const isVideo = src.match(/\.(mp4|webm|ogg)$/i);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const isVideo = /\.(mp4|webm|ogg)$/i.test(src);
+
+  useEffect(() => {
+    if (!isVideo || !videoRef.current) return;
+    const video = videoRef.current;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          video.play().catch(() => {});
+        } else {
+          video.pause();
+        }
+      },
+      { threshold: 0.1 }
+    );
+    observer.observe(video);
+    return () => observer.disconnect();
+  }, [isVideo]);
 
   if (isVideo) {
     return (
       <video
+        ref={videoRef}
         src={src}
-        autoPlay
+        preload="none"
         loop
         muted
         playsInline
@@ -29,6 +48,7 @@ export const MediaRenderer = ({ src, alt = "", className = "" }: MediaRendererPr
       src={src}
       alt={alt}
       fill
+      sizes="(max-width: 768px) 100vw, 50vw"
       className={`object-cover ${className}`}
     />
   );

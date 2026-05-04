@@ -568,18 +568,27 @@ a {
 /* Client Logos Marquee */
 .marquee-track {
   display: flex;
-  gap: 3rem;
   width: max-content;
-  animation: marquee 5s linear infinite;
+  flex-shrink: 0;
+  animation: marquee 40s linear infinite;
   will-change: transform;
+}
+
+/* Each set of logos — gap between items + padding-right creates a trailing gap
+   so the second group starts with the same spacing as all other logos.
+   JS measures firstGroupRef.offsetWidth and sets --marquee-shift for pixel-perfect loop. */
+.marquee-group {
+  display: flex;
+  gap: 3rem;
+  padding-right: 3rem;
 }
 
 @keyframes marquee {
   from {
-    transform: translate3d(0, 0, 0);
+    transform: translateX(0px);
   }
   to {
-    transform: translate3d(-50%, 0, 0);
+    transform: translateX(calc(-1 * var(--marquee-shift, 50%)));
   }
 }
 
