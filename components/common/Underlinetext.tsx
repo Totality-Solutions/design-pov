@@ -56,12 +56,12 @@ export function UnderlineText({
         backgroundSize: `100% ${currentLineHeight}px`,
         backgroundPosition: '0 0',
         lineHeight: `${currentLineHeight}px`,
-        paddingLeft: `${currentMarginWidth + 10}px`,
-        paddingRight: isMobile ? '0.5rem' : '1rem',
+        paddingLeft: isMobile ? '24px' : `${currentMarginWidth + 10}px`,
+        paddingRight: isMobile ? '24px' : '1.5rem',
       }}
     >
       {/* Red margin line */}
-      <div
+      {/* <div
         style={{
           position: 'absolute',
         //   left: `${currentMarginWidth}px`,
@@ -70,7 +70,7 @@ export function UnderlineText({
           width: '2px',
         //   backgroundColor: marginLineColor,
         }}
-      />
+      /> */}
       {children}
     </div>
   );
