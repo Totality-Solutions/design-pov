@@ -46,7 +46,7 @@ const ScheduleParagraph: React.FC<ScheduleParagraphProps> = ({
             bottomKey2Right="15px"
             href={ctaHref}
           /> */}
-        </div>
+       
 
         {/* Content */}
         <div className="grid lg:grid-cols-[1fr_0.6fr] gap-6 lg:gap-8 text-black text-base md:text-md lg:text-lg leading-relaxed font-[Montserrat]">
