@@ -221,7 +221,7 @@ const Footer = () => {
             {/* Legal Row */}
             <div className="w-full pointer-events-auto">
               <div className="w-full border-t border-white/80 mb-6" />
-              <div className="flex justify-between items-center text-white text-[11px] lg:text-[12px] uppercase tracking-widest font-medium">
+              <div className="flex justify-between items-center text-white text-[12px] lg:text-[14px]  font-medium">
                 <p>© 2026 Design POV India. All rights reserved.</p>
                 <div className="flex gap-20">
                   <p className="cursor-pointer hover:text-neutral-400 transition">Privacy Policy</p>
@@ -284,7 +284,7 @@ const MagneticFollowFlare = ({ index, mouseX, imageSrc, colWidth, baseFlareWidth
 const FooterTextColumn = ({ title, items }: any) => (
   <div className="flex flex-col pl-4" style={{ width: "var(--footer-col-width)"}}>
     <div className="flex flex-col gap-[32px]">
-      <h3 className="text-white text-[14px] font-medium tracking-[0.15em] uppercase">
+      <h3 className="text-white text-[16px] font-medium tracking-[0.05em]">
         {title}
       </h3>
       <ul className="flex flex-col gap-5">

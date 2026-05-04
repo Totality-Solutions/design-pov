@@ -8,10 +8,10 @@ const ClientLogo = () => {
   // const IGNORED_IDS = [41, 27, 40, 50, 18, 21, 53, 20];
   const [isHovered, setIsHovered] = useState(false)
 
-  const Client = Array.from({ length: 48 }, (_, i) => i + 1)
+  const Client = Array.from({ length: 10 }, (_, i) => i + 1)
     // .filter((id) => !IGNORED_IDS.includes(id))
     .map((id) => ({
-      src: `/temp/edition/brands/${id}.png`,
+      src: `/temp/clientlogo/${id}.png`,
       alt: `Client Logo ${id}`,
     }));
 

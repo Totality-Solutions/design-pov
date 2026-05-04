@@ -10,35 +10,35 @@ const ecosystemPillars = [
     title: "The Core",
     description: "Sixteen design studios create immersive environments where ideas take spatial form.",
     imageSrc: "/temp/home/ecosystem/N1.jpg",
-    logoSrc: "/icons/core.png"
+    logoSrc: "/temp/ecosystem/icons/core.png"
   },
   {
     id: 2,
     title: "Circle",
     description: "A live forum for dialogue—bringing together voices shaping how we think, build, and live.",
     imageSrc: "/temp/home/ecosystem/N-3.jpg",
-    logoSrc: "/icons/circle.png"
+    logoSrc: "/temp/ecosystem/icons/circle.png"
   },
   {
     id: 3,
     title: "Objects",
     description: "A collection of original, one-of-one pieces—each a distilled expression of perspective.",
     imageSrc: "/temp/home/ecosystem/OBJECT.jpeg",
-    logoSrc: "/icons/object.png"
+    logoSrc: "/temp/ecosystem/icons/objects.png"
   },
   {
     id: 4,
     title: "Elevate",
     description: "Curated extensions that create meaningful brand moments beyond the show floor.",
     imageSrc: "/temp/home/ecosystem/N-2.jpg",
-    logoSrc: "/icons/elevate.png"
+    logoSrc: "/temp/ecosystem/icons/elevate.png"
   },
   {
     id: 5,
     title: "Afterhours",
     description: "Where the industry unwinds—a late-night program of music, culture, and networking.",
     imageSrc: "/temp/home/ecosystem/N-4.jpg",
-    logoSrc: "/icons/afterhours.png"
+    logoSrc: "/temp/ecosystem/icons/afterhours.png"
   }
 ];
 
@@ -112,7 +112,7 @@ function PillarCard({ pillar }: { pillar: (typeof ecosystemPillars)[0] }) {
               src={pillar.logoSrc || "/icons/scanner.png"}
               alt={`${pillar.title} logo`}
               fill
-              className="object-contain invert brightness-0"
+              className="object-contain"
             />
           </div>
         </div>
