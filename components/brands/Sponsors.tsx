@@ -3,11 +3,11 @@ import BrandLogo from './BrandLogo';
 
 export default function Sponsors() {
   const sponsorData = [
-    { src: 'https://placehold.co/200x100', name: 'Muse Create' },
-    { src: 'https://placehold.co/200x100', name: 'Adobe' },
-    { src: 'https://placehold.co/200x100', name: 'Chanel' },
-    { src: 'https://placehold.co/200x100', name: 'Amazon' },
+    { src: '/temp/edition/sponsors/2.png', name: 'Muse Create' },
+    { src: '/temp/edition/sponsors/4.png', name: 'Adobe' },
+    { src: '/temp/edition/sponsors/1.png', name: 'Chanel' },
+    { src: '/temp/edition/sponsors/3.png', name: 'Amazon' },
   ];
 
-  return <BrandLogo title="Sponsors" logos={sponsorData} />;
+  return <BrandLogo title="PARTNERS" logos={sponsorData} />;
 }

@@ -2,9 +2,8 @@ import React from 'react';
 import BrandLogo from './BrandLogo';
 
 export default function Brands() {
-  // Example with 14 brands to trigger pagination
-  const brandsData = Array.from({ length: 28 }, (_, i) => ({
-    src: 'https://placehold.co/200x100',
+  const brandsData = Array.from({ length: 48 }, (_, i) => ({
+    src: `/temp/edition/brands/${i + 1}.png`,
     name: `Brand ${i + 1}`
   }));
 
