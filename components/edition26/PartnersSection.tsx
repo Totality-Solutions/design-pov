@@ -4,13 +4,16 @@ import React, { useState, useEffect, useRef } from 'react';
 import SectionHeading from '../common/SectionHeading';
 
 const CATEGORIES = [
-  "Sponsors",
+  "Partners",
+  // "Brands",
+  // "Brand Collaborators",
   "Build Partners",
-  "Art Curation",
-  "Space Scenting",
-  "Operations",
-  "Media",
-  "Strategy"
+  "Gifting Partners",
+  "Media Partners",
+  "Degital Media Partners",
+  "Ticketing Partners",
+  "Sensory Collaborator",
+  "Key execution Partner"
 ];
 
 const PartnersSection: React.FC = () => {
@@ -54,6 +57,22 @@ const PartnersSection: React.FC = () => {
     { id: 15, category: "Build Partners", logo: "/logos/logo15.svg" },
     { id: 16, category: "Sponsors", logo: "/logos/logo16.svg" },
     { id: 17, category: "Build Partners", logo: "/logos/logo17.svg" },
+    // Gifting Partners
+    { id: 40, category: "Gifting Partners", logo: "/temp/edition/gifting-partners/1.png" },
+    { id: 40, category: "Gifting Partners", logo: "/temp/edition/gifting-partners/2.png" },
+    { id: 40, category: "Gifting Partners", logo: "/temp/edition/gifting-partners/4.png" },
+    // Media Partners
+    { id: 50, category: "Media Partners", logo: "/temp/edition/media-partners/1.png" },
+    { id: 50, category: "Media Partners", logo: "/temp/edition/media-partners/2.png" },
+    { id: 50, category: "Media Partners", logo: "/temp/edition/media-partners/3.png" },
+    // Degital Media Partners
+    { id: 60, category: "Degital Media Partners", logo: "/temp/edition/media-partners/4.png" },
+    // Ticketing Partners
+    { id: 70, category: "Ticketing Partners", logo: "/temp/edition/ticketing-partners/1.png" },
+    // Sensory Collaborator
+    { id: 5, category: "Sensory Collaborator", logo: "/temp/edition/sensory/12.png" },
+    // Key execution Partner
+    { id: 6, category: "Key execution Partner", logo: "/temp/edition/key-execution/1.jpg" },
   ];
   
   const filtered = partners.filter(p => p.category === activeTab);
