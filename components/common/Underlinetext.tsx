@@ -21,14 +21,12 @@ export function UnderlineText({
    children,
   lineHeight = 52,
   mobileLineHeight = 42,
-  lineColor = '#ccc',
-  marginLineColor = '#d32f2f',
+  lineColor = '#000',
   lineThickness = 5,
   marginWidth = 70,
   mobileMarginWidth = 50,
   className = '',
 }: UnderlineTextProps & {
-  marginLineColor?: string;
   marginWidth?: number;
   mobileMarginWidth?: number;
 }) {
@@ -76,7 +74,7 @@ export function UnderlineText({
           top: 0,
           bottom: 0,
           width: '2px',
-          backgroundColor: marginLineColor,
+        //   backgroundColor: marginLineColor,
         }}
       />
       {children}
