@@ -1,5 +1,5 @@
-"use Client"
-import React, { useEffect, useState } from 'react';
+"use client"
+import React, {  useEffect, useState } from 'react';
 
 interface UnderlineTextProps {
   children: string;
@@ -10,13 +10,7 @@ interface UnderlineTextProps {
   mobileLineHeight?: number;
 }
 
-/**
- * Simple notebook-style lined text
- * 
- * <UnderlineText lineHeight={32}>
- *   Your text here
- * </UnderlineText>
- */
+
 export function UnderlineText({
    children,
   lineHeight = 52,

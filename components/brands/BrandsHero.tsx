@@ -1,5 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
+import { UnderlineText } from '../common/Underlinetext';
 
 const BrandsHero = () => {
   return (
@@ -20,18 +21,11 @@ const BrandsHero = () => {
       {/* 2. Headline Sections */}
       <div className="w-full flex flex-col mt-6">
         {/* Top Headline Line */}
-        <div className="w-full px-6 md:px-10 py-3 md:py-5 border-b border-black">
-          <h1 className="text-h1-mobile md:text-[40px] leading-tight md:leading-[48px] font-semibold font-montserrat text-[#010101]">
+        <UnderlineText lineHeight={72} className="text-h2-mobile md:text-h2-tab lg:text-h2 tracking-tight font-semibold">
             A collective of brands shaping how design is experienced—through 
-          </h1>
-        </div>
-
-        {/* Bottom Headline Line */}
-        <div className="w-full px-6 md:px-10 py-3 md:py-5 border-b border-black">
-          <h1 className="text-h1-mobile md:text-[40px] leading-tight md:leading-[48px] font-semibold font-montserrat text-[#010101]">
             material, innovation, and collaboration.
-          </h1>
-        </div>
+              </UnderlineText>
+
 
         {/* 3. Sub-text & Action Row */}
         {/* <div className="w-full px-6 md:px-10 py-4 md:py-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">

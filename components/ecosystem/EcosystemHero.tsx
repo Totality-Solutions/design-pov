@@ -1,22 +1,19 @@
 'use client'
 import React from 'react'
 import { MediaRenderer } from '@/components/common/MediaRenderer'
+import { UnderlineText } from '../common/Underlinetext'
 
 export default function EcosystemHero() {
   return (
     <section className="w-full h-fit bg-pov-white border-b border-pov-black/40">
       {/* TEXT SECTION: Clean horizontal layout with border */}
-      <div className="w-full border-b-2 border-pov-black px-6 md:px-10 lg:pt-40">
-        <h1 className="text-h1-mobile md:text-h1-tab lg:text-h1 tracking-tight font-semibold">
-          Design POV extends beyond a 
-        </h1>
-      </div>
-    
-      <div className="w-full border-b-2 border-pov-black px-6 md:px-10 lg:pt-2">
-        <p className="text-h1-mobile md:text-h1-tab lg:text-h1 tracking-tight font-semibold">
+
+      <UnderlineText lineHeight={72} className="text-h2-mobile md:text-h2-tab lg:text-h2 tracking-tight font-semibold">
+          Design POV extends beyond a
+      </UnderlineText>
+      <UnderlineText lineHeight={72} className="text-h2-mobile md:text-h2-tab lg:text-h2 tracking-tight font-semibold">
           singular format.
-        </p>
-      </div>
+      </UnderlineText>
 
       {/* MEDIA SECTION: Responsive container for Image or Video */}
       <div className="relative w-full aspect-video overflow-hidden flex items-center justify-center py-4">
