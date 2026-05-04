@@ -37,7 +37,7 @@ const AprilIssueSection = () => {
         titleBold="April Issue"
         isSectionHovered={isHovered}
       >
-      <CTABtn
+      {/* <CTABtn
         label="View Issues"
         btnBg="transparent"
         btnHoverBg="var(--primary-blue)"
@@ -51,7 +51,7 @@ const AprilIssueSection = () => {
         bottomKey1Right="50px"
         bottomKey2Right="15px"                      
         href="#tickets"
-      />
+      /> */}
       </SectionHeading>
 
       <div className="px-6 md:px-[60px] mt-12">

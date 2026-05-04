@@ -8,6 +8,7 @@ import InterviewsSection from "@/components/magazine/InterviewSection";
 import FeaturedBlogSection from "@/components/magazine/FeaturedBlogSection";
 import CTAStrip from "@/components/common/CTAStrip";
 import MagazineMediaForm from "@/components/magazine/MagazineMediaForm";
+import HomeSponsors from "@/components/home/HomeSponsors";
 
 export const metadata: Metadata = {
   title: "Magazine",
@@ -24,16 +25,19 @@ export default function MagazinePage() {
       <FeaturedBlogSection />
       <InterviewsSection />
       <MagazineMediaForm />
-      <div className="w-full z-10 bg-white">
-        <CTAStrip
-          title="Post Show Report"
-          ctaLabel="Download"
-          ctaHref="#"
-          hoverBgColor="#000000"
-          textColor='var(--primary-red)'
-          hoverTextColor='var(--color-white)'
-        />
+      <div id="ad-section" className="hidden lg:flex flex-col bg-white">
+        <div className="flex justify-center px-10 py-8">
+          <div className="w-full max-w-[1100px]">
+            <div className="text-[11px] text-gray-400 mb-2 uppercase tracking-wider">
+              Advertisement
+            </div>
+            <div className="w-full h-[280px] border border-gray-200 bg-gray-50 flex items-center justify-center text-gray-300">
+              Banner Space
+            </div>
+          </div>
         </div>
+      </div>
+      <HomeSponsors />
     </main>
   );
 }

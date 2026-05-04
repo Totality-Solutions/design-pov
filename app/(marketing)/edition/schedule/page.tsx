@@ -17,11 +17,11 @@ const SchedulePage = () => {
         title="Event Schedule"
         ctaLabel="Download Schedule"
         ctaHref="/assets/event-schedule.pdf"
-        description1="Join us for an immersive journey through the latest in aviation technology and design. Our schedule is meticulously crafted to provide deep insights into the future of flight, featuring keynote speakers from across the globe."
-        description2="The event is spread across multiple halls. Please ensure you check the venue details for each session. We recommend arriving 15 minutes early for popular workshops."
+        description1="A curated programme of conversations and gatherings, from panel discussions and fireside chats to invite-only moments, designed to extend the experience beyond the spaces."
+        description2="Each session brings together distinct perspectives shaping how we think about design, culture, and collaboration."
       />
       <DynamicScheduleGrid />
-      <div className="w-full z-10 bg-white border-b">
+      {/* <div className="w-full z-10 bg-white border-b">
         <CTAStrip
           title="Where Design Meets Dialogue"
           ctaLabel="Apply"
@@ -31,7 +31,7 @@ const SchedulePage = () => {
           textColor='var(--primary-red)'
           hoverTextColor='var(--color-white)'
         />
-      </div>
+      </div> */}
       <PopupForm 
         isOpen={isFormOpen} 
         onClose={() => setIsFormOpen(false)} 

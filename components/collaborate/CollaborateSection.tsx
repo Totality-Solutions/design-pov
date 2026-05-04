@@ -82,10 +82,10 @@ const CollaborateSection = () => {
               <h2 className="text-3xl md:text-4xl font-bold font-[Montserrat]">
                 Collaborate
               </h2>
-              <ArrowUpRight className="w-5 h-5 mb-4 stroke-[1.5]" />
+              {/* <ArrowUpRight className="w-5 h-5 mb-4 stroke-[1.5]" /> */}
             </div>
 
-            <CTABtn
+            {/* <CTABtn
               label="View Opportunities"
               btnBg="transparent"
               btnHoverBg="var(--primary-blue)"
@@ -99,21 +99,20 @@ const CollaborateSection = () => {
               bottomKey1Right="50px"
               bottomKey2Right="15px"
               href="#tickets"
-            />
+            /> */}
           </div>
 
           {/* Content */}
-          <div className="grid md:grid-cols-[1fr_0.6fr] gap-8 text-black text-base md:text-lg leading-relaxed font-[Montserrat]">
+          <div className="grid md:grid-cols-[1fr_0.2fr] gap-8 text-black text-base md:text-lg leading-relaxed font-[Montserrat]">
             <p>
-              Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-              Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-              Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-              Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+              From immersive spaces to conversations, objects, and extensions beyond the show - Design POV is an ecosystem shaped by many voices.
+If you’d like to be part of it, we’d like to hear from you.
+
             </p>
-            <p>
+            {/* <p>
               It has survived not only five centuries, but also the leap into electronic typesetting.
               It has survived not only five centuries, but also the leap into electronic typesetting.
-            </p>
+            </p> */}
           </div>
         </div>
       </section>

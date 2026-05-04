@@ -55,6 +55,7 @@ export const ShowcaseModal = ({
   const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % images.length);
   const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + images.length) % images.length);
 
+  console.log(data)
   return (
     <AnimatePresence mode="wait">
       {isOpen && (
@@ -145,39 +146,42 @@ export const ShowcaseModal = ({
               </div>
 
               {/* STICKY FOOTER: Social Links */}
-              <div className="flex items-center gap-6 px-8 md:px-12 py-4 border-t border-zinc-100 bg-white">
-                {data.website && (
-                  <a
-                    href={data.website === "#" ? undefined : data.website}
-                    target={data.website === "#" ? undefined : "_blank"}
-                    rel="noopener noreferrer"
-                    onClick={(e) => data.website === "#" && e.preventDefault()}
-                    className={`flex items-center gap-2 transition-colors ${
-                      data.website === "#" ? "text-zinc-300 cursor-not-allowed" : "text-black hover:text-primary-red"
-                    }`}
-                    title={data.website === "#" ? "Website coming soon" : "Visit Website"}
-                  >
-                    <Globe size={22} />
-                  </a>
-                )}
-                {data.instagram && (
-                  <a
-                    href={data.instagram === "#" ? undefined : data.instagram}
-                    target={data.instagram === "#" ? undefined : "_blank"}
-                    rel="noopener noreferrer"
-                    onClick={(e) => data.instagram === "#" && e.preventDefault()}
-                    className={`flex items-center gap-2 transition-colors ${
-                      data.instagram === "#" ? "text-zinc-300 cursor-not-allowed" : "text-black hover:text-primary-red"
-                    }`}
-                    title={data.instagram === "#" ? "Instagram coming soon" : "Follow on Instagram"}
-                  >
-                    <svg width={22} height={22} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
-                      <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-                      <circle cx="12" cy="12" r="4"/>
-                      <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/>
-                    </svg>
-                  </a>
-                )}
+              <div className="flex justify-between items-center gap-6 px-8 md:pl-12 py-4 border-t border-zinc-100 bg-white">
+                <div className="flex items-center gap-4">
+                  {data.website && (
+                    <a
+                      href={data.website === "#" ? undefined : data.website}
+                      target={data.website === "#" ? undefined : "_blank"}
+                      rel="noopener noreferrer"
+                      onClick={(e) => data.website === "#" && e.preventDefault()}
+                      className={`border border-black/20 w-9 h-9 flex items-center justify-center text-[11px] font-bold ${
+                        data.website === "#" ? "text-zinc-300 cursor-not-allowed" : "text-black hover:text-primary-red"
+                      }`}
+                      title={data.website === "#" ? "Website coming soon" : "Visit Website"}
+                    >
+                      WB
+                    </a>
+                  )}
+
+                  {data.instagram && (
+                    <a
+                      href={data.instagram === "#" ? undefined : data.instagram}
+                      target={data.instagram === "#" ? undefined : "_blank"}
+                      rel="noopener noreferrer"
+                      onClick={(e) => data.instagram === "#" && e.preventDefault()}
+                      className={`border border-black/20 w-9 h-9 flex items-center justify-center text-[11px] font-bold ${
+                        data.instagram === "#" ? "text-zinc-300 cursor-not-allowed" : "text-black hover:text-primary-red"
+                      }`}
+                      title={data.instagram === "#" ? "Instagram coming soon" : "Follow on Instagram"}
+                    >
+                      IG
+                    </a>
+                  )}
+
+                </div>
+                <a href={data.website} target="_blank">
+                  <Image src={data?.logo } alt="Design POV Logo" width={100} height={100} />
+                </a>
               </div>
             </div>
           </motion.div>

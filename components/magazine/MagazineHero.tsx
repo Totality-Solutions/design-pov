@@ -11,13 +11,13 @@ export default function MagazineHero() {
       {/* TEXT SECTION: Clean horizontal layout with border */}
       <div className="w-full border-b-2 border-pov-black px-6 md:px-10 lg:pt-20">
         <h1 className="text-h2-mobile md:text-h2-tab lg:text-h2 tracking-tight font-semibold">
-          Lorem Ipsum is simply dummy text of the lore
+          A curation of stories from those who consume and create design - 
         </h1>
       </div>
     
       <div className="w-full border-b-2 border-pov-black px-6 md:px-10 lg:pt-2">
         <p className="text-h2-mobile md:text-h2-tab lg:text-h2 tracking-tight font-semibold">
-          and typesetting industry.
+          from the Indian sub-continent and beyond.
         </p>
       </div>
 
@@ -25,12 +25,12 @@ export default function MagazineHero() {
         {/* 75% Column */}
         <div className="col-span-3">
           <p className="text-body-mobile md:text-body-tab lg:text-body tracking-tight font-semibold">
-            Explore studios, brands, objects, and ideas - connected through one evolving ecosystem
+            An editorial platform capturing the voices and narratives shaping design today.
           </p>
         </div>
         
         {/* 25% Column */}
-        <div className="col-span-1 flex items-center justify-end"> {/* justify-end looks better for the smaller column */}
+        {/* <div className="col-span-1 flex items-center justify-end"> 
           <CTABtn
             label="View Issues"
             btnBg="var(--primary-blue)"
@@ -42,7 +42,7 @@ export default function MagazineHero() {
             lineHoverColor="transparent"
             href="#tickets"
           />
-        </div>
+        </div> */}
       </div>
 
       {/* MEDIA SECTION: Responsive container for Image or Video */}

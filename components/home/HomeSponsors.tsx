@@ -8,10 +8,10 @@ const HomeSponsors: React.FC = () => {
 
   // The 4 logos you want to display
   const partners = [
-    { id: 1, logo: "/logos/logo1.svg" },
-    { id: 2, logo: "/logos/logo2.svg" },
-    { id: 3, logo: "/logos/logo3.svg" },
-    { id: 4, logo: "/logos/logo4.svg" },
+     { id: 1, logo: "/temp/edition/sponsors/2.png" },
+    { id: 2, logo: "/temp/edition/sponsors/4.png" },
+    { id: 7, logo: "/temp/edition/sponsors/1.png" },
+    { id: 9, logo: "/temp/edition/sponsors/3.png" },
   ];
 
   return (

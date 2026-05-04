@@ -97,9 +97,11 @@ const Core2026: NextPage = () => {
         sticky={false}
         isSectionHovered={isHovered}
       />
-
-      <main className="w-full max-w-[1420px] pt-[20px] px-6 lg:px-[50px] pb-20">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 lg:gap-[50px]">
+      <div className="w-full h-[90vh]">
+        <video src="/video/home.mp4" autoPlay loop muted className="w-full h-full bg-cover object-cover" />
+      </div>
+      {/* <main className="w-full max-w-[1420px] pt-[20px] px-6 lg:px-[50px] pb-20">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-[50px]">
           {projects.map((project) => (
             <HoverCard
               key={project.id}
@@ -108,7 +110,7 @@ const Core2026: NextPage = () => {
             />
           ))}
         </div>
-      </main>
+      </main> */}
     </section>
   );
 };

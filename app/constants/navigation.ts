@@ -49,7 +49,7 @@ export const NAV_DATA: Record<string, SubmenuContent> = {
       { label: "Brands", href: "/edition/brands" }, 
       { label: "Core", href: "/edition/core" },
       { label: "Schedule", href: "/edition/schedule" },
-      { label: "Art", href: "/edition/art" },
+      // { label: "Art", href: "/edition/art" },
     ],
   },
   Collaborate: {
