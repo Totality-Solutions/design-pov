@@ -446,7 +446,7 @@ export default function Navbar() {
                     )}
                     <div className="flex flex-col gap-4">
                       {NAV_DATA[activeMenu].col1Links?.map((link) => (
-                        <Link key={link.label} href={link.href} className="hover:text-blue-500 transition-colors">
+                        <Link key={link.label} href={link.href} className="hover:text-primary-blue font-normal transition-colors">
                           {link.label}
                         </Link>
                       ))}

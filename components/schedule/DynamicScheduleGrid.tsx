@@ -381,7 +381,7 @@ const DynamicScheduleGrid = () => {
         <AnimatePresence mode="wait">
           <motion.div key={activeDate} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
             {currentData.events.map((event) => (
-              <div key={event.id} className="grid grid-row lg:grid-cols-[0.6fr_0.6fr_1.2fr] min-w-[full] lg:min-w-[900px] lg:border lg:border-gray-100 group">
+              <div key={event.id} className="grid grid-row lg:grid-cols-[0.6fr_0.6fr_1.2fr] min-w-[full] lg:min-w-[900px] py-10 border-b border-black/20 lg:border lg:border-gray-100 group">
                 <div className="px-6 py-3 lg:p-12 flex flex-col gap-6 lg:border lg:border-gray-100">
                   <span className="text-5xl font-semibold tracking-tighter">{event.id}</span>
                   <div>
@@ -411,12 +411,12 @@ const DynamicScheduleGrid = () => {
                   </div>
                   <div className="mt-0 lg:mt-8 mb-4 lg:mb-0">
                     <div className='mb-2'>
-                      <span className="text-[14px] font-medium tracking-widest text-zinc-400 block mb-1 font-['Montserrat']">Speaker</span>
+                      <span className="text-[14px] font-medium text-zinc-400 block mb-1 font-['Montserrat']">Speaker</span>
                       <p className="text-sm font-medium">{event.speakers.join("  |  ")}</p>
                     </div>
                     {event.moderator && (
                       <div>
-                        <span className="text-[14px] font-medium tracking-widest text-zinc-400 block mb-1 font-['Montserrat']">Moderator</span>
+                        <span className="text-[14px] font-medium text-zinc-400 block mb-1 font-['Montserrat']">Moderator</span>
                         <p className="text-sm font-medium">{event.moderator}</p>
                       </div>
                     )}

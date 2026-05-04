@@ -82,8 +82,7 @@ const ThisIsUs: React.FC = () => {
       onMouseLeave={() => setIsHovered(false)}
     >
       <SectionHeading 
-        titleMain="This Is Us " 
-        titleBold="POV" 
+        titleMain="This Is Us" 
         sticky={false}
         isSectionHovered={isHovered} 
       >

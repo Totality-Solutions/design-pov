@@ -81,7 +81,7 @@ const DesignHero: React.FC<{}> = () => {
                 }`}
               >
                 <span className="text-xl mr-3 font-light">—</span>
-                <p className="text-black text-[18px] lg:text-[16px] font-medium lg:font-semibold lg:uppercase tracking-tight lg:tracking-widest">
+                <p className="text-black text-[18px] font-medium lg:font-semibold tracking-tight">
                   {item.label}
                 </p>
               </div>
