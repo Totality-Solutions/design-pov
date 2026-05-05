@@ -41,7 +41,7 @@ const DesignHero: React.FC<{}> = () => {
   }, [isPaused]);
 
   return (
-    <section className="relative w-full h-full bg-white px-6 md:px-10  md:pt-24 pt-12 pb-5 md:pb-10 flex flex-col font-display overflow-hidden">
+    <section className="relative w-full h-full bg-white px-6 md:px-10  md:pt-24 pt-12 pb-10 flex flex-col font-display overflow-hidden">
       
       {/* 1. HEADER - Background text now matches the 3 labels exactly */}
       <div className="relative h-[120px] md:h-[120px] mb-6 md:mb-0">

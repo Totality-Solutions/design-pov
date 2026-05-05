@@ -239,140 +239,56 @@ const DynamicScheduleGrid = () => {
     <section className="w-full bg-white flex flex-col font-display overflow-hidden">
       
       {/* --- UPPER BLACK HEADER SECTION --- */}
-      <div className="bg-black text-white w-full flex flex-col lg:flex-row border-b border-white/10 min-h-[400px]">
-
-        {/* DAY INDICATOR & MOBILE DATE SELECTOR */}
-        <div className="w-full lg:w-[20%] p-6 lg:p-10 flex flex-row lg:flex-col justify-between lg:justify-center items-center lg:items-start border-b lg:border-b-0 lg:border-r border-white/20 lg:border-white/50 relative overflow-hidden">
-          <div className="text-left z-10">
-            <h2 className="text-[30px] lg:text-h2 font-bold leading-[1] lg:leading-[0.8] tracking-tighter flex items-baseline font-['Montserrat']">
-              <span>DAY&nbsp;0</span>
-              <AnimatePresence mode="wait">
-                <motion.span
-                  key={activeDate}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.3, ease: "easeOut" }}
-                >
-                  {currentData.dayDigit.slice(-1)} 
-                </motion.span>
-              </AnimatePresence>
-            </h2>
-            <p className="text-[18px] lg:text-xl uppercase font-medium lg:font-light lg:mt-2 font-['Montserrat']">
-              Schedule
-            </p>
-          </div>
-
-          {/* MOBILE/TAB DATE SELECTOR (Synced with Desktop style) */}
-          <div className="flex lg:hidden items-center gap-6 z-10">
-            <div className="flex items-center gap-2">
-              {DATES.map((date) => (
-                <div key={date} className="relative flex items-center justify-center w-6 h-6">
+      <div className="w-full bg-black">
+        <div className="grid grid-cols-3 w-full border-b border-white/20">
+          {DATES.map((date, index) => {
+            const isActive = activeDate === date;
+            return (
+              <button
+                key={date}
+                onClick={() => setActiveDate(date)}
+                className={`relative flex flex-col items-center justify-center py-4 lg:py-8 transition-all duration-300 font-['Montserrat'] ${
+                  isActive ? "text-white" : "text-white/40 hover:text-white/70"
+                }`}
+              >
+                {/* Day Label */}
+                <span className="text-[16px] lg:text-h2 font-bold uppercase">
+                  Day 0{index + 1}
+                </span>
+              
+                {/* Subtitle Date - Visible only when active */}
+                <div className="h-[20px] lg:h-[24px]"> {/* Fixed height container prevents layout jump */}
                   <AnimatePresence>
-                    {activeDate === date && (
-                      <>
-                        {/* The "White Line" following the active date vertically */}
-                        <motion.div 
-                          layoutId="vLineMobile" 
-                          className="absolute w-[2px] bg-white/60 h-[100vh] pointer-events-none" 
-                          style={{ top: '-100vh' }} 
-                        />
-                        {/* The Active Square */}
-                        <motion.div 
-                          layoutId="activeBoxMobile" 
-                          className="absolute inset-0 bg-white"
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          exit={{ opacity: 0 }}
-                        />
-                      </>
+                    {isActive && (
+                      <motion.span
+                        initial={{ opacity: 0, y: -5 }}
+                        animate={{ opacity: 0.5, y: 0 }}
+                        exit={{ opacity: 0, y: -5 }}
+                        className="text-[12px] lg:text-[16px] font-medium block"
+                      >
+                        May {date}, 2026
+                      </motion.span>
                     )}
                   </AnimatePresence>
-                  <button 
-                    onClick={() => setActiveDate(date)}
-                    className={`relative z-10 text-lg font-bold transition-colors ${activeDate === date ? "text-black" : "text-white/40"}`}
-                  >
-                    {date}
-                  </button>
                 </div>
-              ))}
-            </div>
-            <div className="flex flex-col leading-none border-l border-white/20 pl-4">
-              <span className="text-[14px] font-bold uppercase font-['Montserrat'] tracking-widest">May</span>
-              <span className="text-[14px] font-medium uppercase font-['Montserrat'] text-white/40">2026</span>
-            </div>
-          </div>
-        </div>
-            
-        {/* QUICK LISTS */}
-        <div className="flex-1 p-6 lg:p-10 flex flex-col gap-10">
-          <AnimatePresence mode="wait">
-            <motion.div key={activeDate} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-8 lg:space-y-12">
-              {/* At Circle */}
-              <div className='mb-6 lg:mb-12'>
-                <h4 className="text-[18px] lg:text-xl font-bold mb-4 lg:mb-2 text-white/90 font-['Montserrat']">At Circle :</h4>
-                <ul className="space-y-4 max-w-2xl">
-                  {currentData.atCircle.map((item, i) => (
-                    <li key={i} className="flex justify-between items-center group">
-                      <div className="flex items-center gap-3 lg:gap-4">
-                        <div className="w-1.5 h-1.5 bg-white rounded-full transition-transform group-hover:scale-150" />
-                        <span className="text-[16px] lg:text-lg font-regular opacity-80 group-hover:opacity-100 font-['Montserrat']">{item.title}</span>
-                      </div>
-                      <span className="text-[14px] lg:text-body-tab font-regular opacity-70 group-hover:opacity-100 hover:border-b hover:border-white transition-colors cursor-pointer font-['Montserrat']">
-                        {item.status}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-                
-              <div className="w-full h-[1px] bg-white/20 lg:hidden " />
-                
-              {/* At Workshop */}
-              <div className="mt-6 lg:mt-12">
-                <h4 className="text-[18px] lg:text-xl font-bold mb-4 lg:mb-2 text-white/90 font-['Montserrat']">At G15 - Workshop :</h4>
-                <ul className="space-y-4 max-w-2xl">
-                  {currentData.atWorkshop.map((item, i) => (
-                    <li key={i} className="flex justify-between items-center group">
-                      <div className="flex items-center gap-3">
-                        <div className="w-1.5 h-1.5 bg-white rounded-full" />
-                        <span className="text-[16px] lg:text-lg font-regular opacity-80 group-hover:opacity-100 font-['Montserrat']">{item.title}</span>
-                      </div>
-                      <span className="text-[14px] lg:text-body-tab font-regular opacity-70 group-hover:opacity-100 hover:border-b hover:border-white transition-colors cursor-pointer font-['Montserrat']">
-                        {item.status}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </motion.div>
-          </AnimatePresence>
-        </div>
-                
-        {/* DESKTOP DATE SELECTOR (Hidden on Mobile/Tab) - UNTOUCHED */}
-        <div className="hidden lg:flex w-full lg:w-[25%] p-10 items-center justify-end gap-6 relative">
-          <div className="flex items-center gap-3">
-            {DATES.map((date) => (
-              <div key={date} className="relative group flex items-center justify-center w-10 h-10" onMouseEnter={() => setActiveDate(date)}>
-                {activeDate === date && (
-                  <>
-                    <motion.div layoutId="vLine" className="absolute w-[1px] bg-white h-[200vh] pointer-events-none" style={{ top: '-100vh' }} />
-                    <motion.div layoutId="activeBox" className="absolute inset-0 bg-white" />
-                  </>
+                  
+                {/* Active Indicator Line */}
+                {isActive && (
+                  <motion.div
+                    layoutId="activeTabUnderline"
+                    className="absolute bottom-0 left-0 right-0 h-[1px] lg:h-[2px] bg-white"
+                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                  />
                 )}
-                <button className={`relative z-10 text-lg font-bold transition-colors ${activeDate === date ? "text-black" : "text-white/40 hover:text-white"}`}>
-                  {date}
-                </button>
-              </div>
-            ))}
-          </div>
-          <span className="text-lg font-bold tracking-tighter self-center ml-2 font-['Montserrat']">MAY-26</span>
+              </button>
+            );
+          })}
         </div>
       </div>
 
       {/* --- LOWER WHITE DETAIL GRID (Untouched) --- */}
-      <div className="w-full overflow-x-auto">
-        <div className="grid grid-row lg:grid-cols-[0.6fr_0.6fr_1.2fr] min-w-[full] lg:min-w-[900px] border border-gray-100 bg-gray-50/30">
+      <div className="w-full mx-auto max-w-[1440px] overflow-x-auto">
+        <div className="grid grid-row lg:grid-cols-[0.6fr_0.6fr_1.2fr] min-w-[full] lg:min-w-[900px] border border-gray-100 bg-gray-50/30 ">
           <div className="p-6 px-12 text-body font-medium text-black border border-gray-100">Event Name</div>
           <div className="hidden lg:flex p-6 px-12 text-body font-medium text-black border border-gray-100">Image</div>
           <div className="hidden lg:flex p-6 px-12 text-body font-medium text-black border border-gray-100">Information</div>
@@ -381,7 +297,7 @@ const DynamicScheduleGrid = () => {
         <AnimatePresence mode="wait">
           <motion.div key={activeDate} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
             {currentData.events.map((event) => (
-              <div key={event.id} className="grid grid-row lg:grid-cols-[0.6fr_0.6fr_1.2fr] min-w-[full] lg:min-w-[900px] py-10 border-b border-black/20 lg:border lg:border-gray-100 group">
+              <div key={event.id} className="grid grid-row lg:grid-cols-[0.6fr_0.6fr_1.2fr] min-w-[full] lg:min-w-[900px] lg:py-0 py-10 border-b border-black/20 lg:border lg:border-gray-100 group">
                 <div className="px-6 py-3 lg:p-12 flex flex-col gap-6 lg:border lg:border-gray-100">
                   <span className="text-5xl font-semibold tracking-tighter">{event.id}</span>
                   <div>

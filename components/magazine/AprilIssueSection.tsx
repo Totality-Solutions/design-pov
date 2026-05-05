@@ -54,7 +54,7 @@ const AprilIssueSection = () => {
       /> */}
       </SectionHeading>
 
-      <div className="px-6 md:px-[60px] mt-12">
+      <div className="px-6 md:px-[60px] mt-6">
         <div className="grid grid-cols-1 lg:grid-cols-[80%_1fr] gap-6 items-stretch">
           
           {/* LEFT 80% SIDE: Main Articles */}
@@ -76,7 +76,7 @@ const AprilIssueSection = () => {
                     {/* TEXT CONTENT BLOCK */}
                     <div className="absolute bottom-0 left-0 w-full p-6 flex flex-col gap-1 z-10 transition-transform duration-500 ease-out group-hover:-translate-y-2">
                       
-                      <span className="text-[12px] text-white/60 uppercase tracking-wider font-medium mb-1">
+                      <span className="text-[12px] text-white/60 font-medium mb-1">
                         {item.category}
                       </span>
 

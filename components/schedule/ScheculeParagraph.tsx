@@ -21,7 +21,7 @@ const ScheduleParagraph: React.FC<ScheduleParagraphProps> = ({
 }) => {
   return (
     <section className="w-full bg-white py-6 md:py-10 lg:pt-24 lg:pb-16 px-6 lg:px-12 lg:px-16">
-      <div className="max-w-7xl mx-auto flex flex-col gap-5 lg:gap-10">
+      <div className="max-w-[1440] mx-auto flex flex-col gap-5 lg:gap-10">
         
         {/* Header */}
           <div className="flex items-center ">

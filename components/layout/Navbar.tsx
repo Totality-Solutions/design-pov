@@ -331,7 +331,7 @@ export default function Navbar() {
         }`}
       >
         <Container>
-          <div className="flex justify-between items-center px-6 lg:px-10 py-5">
+          <div className="flex justify-between items-center max-w-[1440px] mx-auto px-6 lg:px-10 py-5">
             
             {/* Logo */}
             <div className="flex-shrink-0 relative z-[2101]">

@@ -89,7 +89,7 @@ const TheThreePillars: React.FC = () => {
         titleMain="Our " 
         titleBold="Pillars" 
         sticky={!isMobile} 
-        stickyTop="md:top-20"
+        stickyTop="lg:top-20"
         isSectionHovered={isHovered} 
       >
         {/* <div className="hidden md:flex gap-[60px] lg:gap-[100px]">
@@ -139,7 +139,7 @@ const TheThreePillars: React.FC = () => {
         </div>
 
         {/* SCROLLING CONTENT Area with Mobile Stacking */}
-        <div className="flex-1 w-full bg-white md:bg-[#FAFAFA]">
+        <div className="flex-1 w-full bg-white lg:bg-[#FAFAFA]">
           {PILLAR_DATA.map((pillar, index) => (
             <div 
               key={pillar.id}
@@ -151,11 +151,11 @@ const TheThreePillars: React.FC = () => {
                  - z-index: ensures the last card is at bottom, or you can manually set it
               */
               className="pillar-image-trigger w-full flex flex-col md:border-b border-[#DFDFDF] last:border-b-0 relative 
-                         sticky top-0 md:relative bg-white"
+                         sticky top-20 lg:relative bg-white"
               style={{ zIndex: index + 1 }}
             >
               {/* MOBILE ONLY TEXT */}
-              <div className="lg:hidden flex flex-col p-8 gap-6 bg-white border-b border-[#DFDFDF] shadow-[0_-10px_20px_rgba(0,0,0,0.05)]">
+              <div className="lg:hidden flex flex-col py-4 pb-8 px-8 gap-6 bg-white border-b border-[#DFDFDF]">
                 <div className="flex flex-col gap-3">
                   <h3 className="text-[20px] font-bold text-black tracking-tight uppercase leading-tight">
                     {pillar.title}

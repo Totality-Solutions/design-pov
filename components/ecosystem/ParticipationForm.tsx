@@ -284,8 +284,8 @@ export default function ParticipationForm() {
 
           {/* RADIO SELECTION */}
           <div className="space-y-10 mb-6">
-            <label className="text-[15px] text-black/50 font-medium block">Select One :</label>
-            <div className="flex flex-wrap gap-x-8 gap-y-6">
+            <label className="text-[15px] text-black/50 font-medium block mb-4 lg:mb-0">Select One :</label>
+            <div className="flex flex-col lg:flex-wrap gap-x-8 lg:gap-y-6">
               {options.map((opt) => (
                   <label key={opt} className="flex items-center py-2 gap-3 cursor-pointer group">
                     <div className="relative flex items-center justify-center">
@@ -309,7 +309,7 @@ export default function ParticipationForm() {
           {/* FILE UPLOAD */}
           <div className="space-y-4">
             <label className="text-[15px] text-black/50 font-medium block">Upload your file :</label>
-            <div className="flex flex-col md:flex-row md:items-center gap-6">
+            <div className="flex flex-col md:flex-row md:items-center lg:gap-6">
               {!fileName ? (
                 <label className="cursor-pointer border border-black/20 px-8 py-2 my-2 rounded-sm flex items-center gap-3 hover:bg-gray-50 transition-colors w-fit">
                   <span className="text-[15px] text-black/60">Upload file</span>
@@ -325,6 +325,42 @@ export default function ParticipationForm() {
               <p className="text-[11px] text-black/30">Documents: Max 10 MB each | Images: Max 5 MB each</p>
             </div>
           </div>
+
+          <div className="w-full flex flex-col items-start relative mt-6 pb-8">
+            <div onClick={handleSubmit} className={`cursor-pointer ${loading ? 'opacity-50 pointer-events-none' : ''}`}>
+              <CTABtn
+                label={loading ? "Sending..." : "Submit"}
+                iconType="arrow"
+                btnBg="transparent"
+                btnHoverBg="var(--primary-blue)"
+                textColor="black"
+                borderColor="black"
+                borderHoverColor="transparent"
+                lineColor="transparent"
+                lineHoverColor="var(--primary-blue)"
+                bottomKey1Width="40px"
+                bottomKey2Width="12px"
+                bottomKey1Right="50px"
+                bottomKey2Right="15px"
+                href="javascript:void(0)"
+              />
+            </div>
+        
+            {/* SUCCESS MESSAGE */}
+            {success && (
+              <p className="absolute bottom-0 right-0 text-green-600 text-[13px] font-medium animate-in fade-in slide-in-from-top-1 duration-300 whitespace-nowrap">
+                Your form has been submitted successfully!
+              </p>
+            )}
+
+            {/* ERROR MESSAGE */}
+            {error && (
+              <p className="absolute bottom-0 right-0 text-red-600 text-[11px] font-medium whitespace-nowrap">
+                {error}
+              </p>
+            )}
+          </div>
+
         </div>
 
         {/* RIGHT SIDE: IMAGE + SUBMIT BUTTON */}

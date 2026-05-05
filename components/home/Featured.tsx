@@ -214,7 +214,6 @@ export default function FeaturedDesigners() {
     <div  
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="pt-4"
     >
       <SectionHeading
         titleMain="Featured " 
@@ -224,7 +223,7 @@ export default function FeaturedDesigners() {
         className=' !border-0'
       />
 
-      <Section className="!py-0 !pb-8">
+      <Section className="!py-0 !pb-0">
         <Container>
           {!isMobile && (
             <div

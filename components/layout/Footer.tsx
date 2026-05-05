@@ -115,7 +115,7 @@ const Footer = () => {
 
         {/* MAIN CONTENT - Interaction Fix (pointer-events-auto for links) */}
         <div
-          className="relative z-20 w-full h-full flex flex-col justify-between mix-blend-difference pointer-events-none"
+          className="relative z-20 w-full h-full flex flex-col justify-between mix-blend-difference pointer-events-none max-w-[1440px] mx-auto"
           style={{
             paddingLeft: "var(--footer-px)",
             paddingTop: "70px", 
