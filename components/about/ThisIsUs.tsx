@@ -103,7 +103,7 @@ const ThisIsUs: React.FC = () => {
               </p>
             ))}
           </div>
-          <h2 className="text-[24px] md:text-h3 font-bold text-black uppercase tracking-tighter pt-16">
+          <h2 className="text-[20px] md:text-h4 font-bold text-black uppercase tracking-tighter pt-16">
             What was the real trigger behind Design POV?
           </h2>
         </div>

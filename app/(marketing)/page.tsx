@@ -14,41 +14,18 @@ import { createServerClient } from "@/lib/supabase/server";
 async function fetchHomePageData() {
   const supabase = createServerClient();
 
-  const { data, error } = await supabase
-    .from("pages")
-    .select(`
-      id,
-      title,
-      slug,
-      blocks (
-        id,
-        type,
-        data,
-        order_index,
-        block_media (
-          media (
-            id,
-            file_url,
-            file_type
-          )
-        ),
-        block_brands (
-          brands (
-            id,
-            name,
-            logo_url
-          )
-        )
-      )
-    `)
-    .eq("slug", "/")
-    .eq("is_published", true)
-    .order("order_index", { foreignTable: "blocks", ascending: true })
-    .single();
+const { data, error } = await supabase
+  .from('pages')
+  .select(`
+    *,
+    blocks (*)
+  `)
+  .eq('slug', '/')
+  .order('order_index', { foreignTable: 'blocks' })
+  .maybeSingle();
 
   return { data, error };
 }
-
 export default async function HomePage() {
   const { data, error } = await fetchHomePageData();
 
