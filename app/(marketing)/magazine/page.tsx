@@ -19,7 +19,7 @@ export const metadata: Metadata = {
 
 export default function MagazinePage() {
   return (
-    <main>
+    <>
       <MagazineHero />
       <PressSection />
       <AprilIssueSection />
@@ -39,6 +39,6 @@ export default function MagazinePage() {
         </div>
       </div>
       <HomeSponsors />
-    </main>
+   </>
   );
 }

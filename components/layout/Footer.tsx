@@ -70,7 +70,7 @@ const Footer = () => {
   }
 
   return (
-    <Container className="max-w-none !px-0">
+    <div className="!px-0">
       <motion.footer
         ref={containerRef}
         onMouseMove={handleMouseMove}
@@ -115,7 +115,7 @@ const Footer = () => {
 
         {/* MAIN CONTENT - Interaction Fix (pointer-events-auto for links) */}
         <div
-          className="relative z-20 w-full h-full flex flex-col justify-between mix-blend-difference pointer-events-none max-w-[1440px] mx-auto"
+          className="relative z-20 w-full h-full flex flex-col justify-between mix-blend-difference pointer-events-none"
           style={{
             paddingLeft: "var(--footer-px)",
             paddingTop: "70px", 
@@ -236,7 +236,7 @@ const Footer = () => {
         {/* Grain Overlay */}
         <div className="absolute inset-0 z-30 pointer-events-none opacity-[0.05] mix-blend-overlay bg-[url('https://res.cloudinary.com/dn7noog99/image/upload/v1711281898/noise_vms8cy.png')]" />
       </motion.footer>
-    </Container>
+    </div>
   );
 };
 

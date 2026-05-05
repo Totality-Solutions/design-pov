@@ -50,12 +50,15 @@ const PartnersSection: React.FC = () => {
     // Brand Collaborators
     { id: 30, category: "Brand Collaborators", logo: "/logos/logo-placeholder.svg" },
     // Build Partners
-    { id: 3, category: "Build Partners", logo: "/logos/logo3.svg" },
-    { id: 8, category: "Build Partners", logo: "/logos/logo8.svg" },
-    { id: 10, category: "Build Partners", logo: "/logos/logo10.svg" },
-    { id: 13, category: "Build Partners", logo: "/logos/logo13.svg" },
-    { id: 15, category: "Build Partners", logo: "/logos/logo15.svg" },
-    { id: 17, category: "Build Partners", logo: "/logos/logo17.svg" },
+    { id: 3, category: "Build Partners", logo: "/temp/edition/build-partners/1.png" },
+    { id: 8, category: "Build Partners", logo: "/temp/edition/build-partners/2.png" },
+    { id: 10, category: "Build Partners", logo: "/temp/edition/build-partners/3.png" },
+    { id: 13, category: "Build Partners", logo: "/temp/edition/build-partners/4.png" },
+    { id: 15, category: "Build Partners", logo: "/temp/edition/build-partners/5.png" },
+    { id: 17, category: "Build Partners", logo: "/temp/edition/build-partners/6.png" },
+    { id: 17, category: "Build Partners", logo: "/temp/edition/build-partners/7.png" },
+    { id: 17, category: "Build Partners", logo: "/temp/edition/build-partners/8.png" },
+    { id: 17, category: "Build Partners", logo: "/temp/edition/build-partners/9.png" },
     // Gifting Partners
     { id: 40, category: "Gifting Partners", logo: "/temp/edition/gifting-partners/1.png" },
     { id: 40, category: "Gifting Partners", logo: "/temp/edition/gifting-partners/2.png" },
@@ -137,7 +140,7 @@ const PartnersSection: React.FC = () => {
                   <img 
                     src={partner.logo} 
                     alt="Partner Logo" 
-                    className="max-w-[75%] max-h-[50%] object-contain grayscale brightness-0 opacity-80 hover:opacity-100 transition-all duration-500"
+                    className="max-w-[75%] max-h-[50%] object-contain transition-all duration-500"
                   />
                 ) : (
                   <div className="w-full h-full" />

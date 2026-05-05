@@ -46,9 +46,7 @@ export default function MagazineNav({ activeCategory, setActiveCategory }: NavPr
 
   return (
     <nav 
-      className="w-full h-full bg-white border border-[#DDDDDD] flex items-center justify-start overflow-x-auto no-scrollbar"
-      style={{ paddingLeft: "60px", paddingRight: "60px" }}
-    >
+      className="w-full h-full bg-white border border-[#DDDDDD] flex items-center justify-start overflow-x-auto no-scrollbar px-6 lg:px-10">
       <div 
         className="relative flex items-center gap-[10px] min-w-max" 
         onMouseLeave={() => {

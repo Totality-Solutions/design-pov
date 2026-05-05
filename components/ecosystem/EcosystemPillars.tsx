@@ -37,7 +37,7 @@ const ecosystemPillars = [
     id: 5,
     title: "Afterhours",
     description: "Where the industry unwinds—a late-night program of music, culture, and networking.",
-    imageSrc: "/temp/home/ecosystem/N-4.jpg",
+    imageSrc: "/temp/home/ecosystem/N-4.png",
     logoSrc: "/temp/ecosystem/icons/afterhours.png"
   }
 ];

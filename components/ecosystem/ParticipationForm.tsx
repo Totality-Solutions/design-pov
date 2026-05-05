@@ -285,7 +285,7 @@ export default function ParticipationForm() {
           {/* RADIO SELECTION */}
           <div className="space-y-10 mb-6">
             <label className="text-[15px] text-black/50 font-medium block mb-4 lg:mb-0">Select One :</label>
-            <div className="flex flex-col lg:flex-wrap gap-x-8 lg:gap-y-6">
+            <div className="flex flex-col lg:flex-row gap-x-8 lg:gap-y-6">
               {options.map((opt) => (
                   <label key={opt} className="flex items-center py-2 gap-3 cursor-pointer group">
                     <div className="relative flex items-center justify-center">
@@ -311,15 +311,15 @@ export default function ParticipationForm() {
             <label className="text-[15px] text-black/50 font-medium block">Upload your file :</label>
             <div className="flex flex-col md:flex-row md:items-center lg:gap-6">
               {!fileName ? (
-                <label className="cursor-pointer border border-black/20 px-8 py-2 my-2 rounded-sm flex items-center gap-3 hover:bg-gray-50 transition-colors w-fit">
+                <label className="cursor-pointer border border-black/20 px-8 py-2 my-2 flex items-center gap-3 hover:bg-gray-50 transition-colors w-fit">
                   <span className="text-[15px] text-black/60">Upload file</span>
                   <input type="file" className="hidden" onChange={handleFileChange} />
                 </label>
               ) : (
                 <div className="flex items-center gap-4 border border-black/10 p-2 pr-4 my-2 bg-gray-50 w-fit">
-                  <div className="bg-blue-800 text-white px-2 py-1 rounded-sm text-[10px] font-bold">DOC</div>
+                  <div className="bg-primary-blue text-white px-2 py-1 text-[10px] font-bold">DOC</div>
                   <span className="text-[15px] text-black">{fileName}</span>
-                  <button type="button" onClick={() => setFileName("")} className="text-red-500 text-[12px] ml-4 hover:underline">Remove</button>
+                  <button type="button" onClick={() => setFileName("")} className="text-primary-red text-[12px] ml-4 hover:underline">Remove</button>
                 </div>
               )}
               <p className="text-[11px] text-black/30">Documents: Max 10 MB each | Images: Max 5 MB each</p>

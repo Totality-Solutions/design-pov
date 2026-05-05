@@ -72,9 +72,9 @@ const CollaborateSection = () => {
   return (
     <>
       {/* ===== SECTION ===== */}
-      <section className="w-full bg-white pt-24 pb-16 px-6 md:px-10 lg:px-10">
+      <section className="w-full bg-white pt-6 lg:pt-24 lg:pb-16 px-6 md:px-10 lg:px-10">
 
-        <div className="flex flex-col gap-10">
+        <div className="flex flex-col gap-6 lg:gap-10">
 
           {/* Header */}
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
@@ -137,7 +137,7 @@ const CollaborateSection = () => {
               />
 
               {/* Overlay */}
-              <div className="absolute inset-0 bg-black/50 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition flex items-center justify-center">
+              {/* <div className="absolute inset-0 bg-black/50 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition flex items-center justify-center">
                 <button
                   onClick={() => {
                     setActiveIndex(i % images.length);
@@ -147,7 +147,7 @@ const CollaborateSection = () => {
                 >
                   <ArrowUpRight className="w-5 h-5 text-white" />
                 </button>
-              </div>
+              </div> */}
 
             </div>
           ))}

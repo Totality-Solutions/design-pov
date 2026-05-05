@@ -18,7 +18,7 @@ export default async function InnerMagazinePage({
   }
 
   return (
-    <main className="w-full bg-white px-6 md:px-14 py-24 lg:py-32">
+    <main className="w-full bg-white px-6 md:px-14 py-12">
       <MagazineBase activeBlog={post} isInnerPage={true} />
     </main>
   );

@@ -52,7 +52,7 @@ export default function PressGrid({
       </SectionHeading>
 
       {/* 2. GRID CONTENT */}
-      <div className="px-6 md:px-[70px] py-12">
+      <div className="px-6 md:px-[60px] pb-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-6">
           {data.map((item, index) => (
             <Link 

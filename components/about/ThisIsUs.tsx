@@ -2,6 +2,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Maximize2, Volume2, VolumeX, Play, Pause } from 'lucide-react';
 import SectionHeading from '../common/SectionHeading';
+import Image from 'next/image';
 
 const ThisIsUs: React.FC = () => {
   const [isMuted, setIsMuted] = useState(true);
@@ -121,8 +122,8 @@ const ThisIsUs: React.FC = () => {
 
           {/* CENTER VIDEO AREA */}
           <div className="flex flex-col gap-3">
-            <div className="relative group w-full h-auto overflow-hidden">
-              <video
+            <div className=" w-full h-full ">
+              {/* <video
                 src="/video/home.mp4"
                 ref={videoRef}
                 className="w-full h-auto object-cover"
@@ -130,10 +131,17 @@ const ThisIsUs: React.FC = () => {
                 loop
                 muted={isMuted}
                 playsInline
+              /> */}
+              <Image
+              src="/temp/about/asif-gagan.jpeg"
+              width={1000}
+              style={{ objectFit: "cover", objectPosition: "center" }}
+              height={200}
+              alt="Asif Gagan"
               />
 
               {/* VIDEO CONTROLS */}
-              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-end p-4 gap-4 z-10">
+              {/* <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-end p-4 gap-4 z-10">
                 <button onClick={togglePlay} className="text-white hover:scale-110 transition-transform">
                   {isPlaying ? <Pause size={20} /> : <Play size={20} />}
                 </button>
@@ -143,7 +151,7 @@ const ThisIsUs: React.FC = () => {
                 <button onClick={toggleFullScreen} className="text-white hover:scale-110 transition-transform">
                   <Maximize2 size={18} />
                 </button>
-              </div>
+              </div> */}
             </div>
           </div>
 

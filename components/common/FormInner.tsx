@@ -55,7 +55,7 @@ export default function FormInner({ category }: { category?: string }) {
         </div>
 
         {/* UPLOAD & SUBMIT ROW */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-end">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-12 items-end">
           
           {/* UPLOAD SECTION */}
           {!isElevate ? (
@@ -79,7 +79,7 @@ export default function FormInner({ category }: { category?: string }) {
           )}
 
           {/* SUBMIT SECTION */}
-          <div className="w-full flex flex-col items-end justify-end space-y-4">
+          <div className="w-full flex flex-col items-start justify-start lg:items-end lg:justify-end space-y-4">
             {/* SUCCESS MESSAGE: Dedicated height container prevents overlap */}
             <div className="h-6 flex items-center justify-end w-full">
               {isSubmitted && (

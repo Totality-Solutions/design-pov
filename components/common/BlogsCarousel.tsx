@@ -32,17 +32,17 @@ export default function BlogsCarousel({ filter }: CarouselProps) {
   };
 
   return (
-    <section className="w-full bg-white py-12 px-10">
+    <section className="w-full bg-white py-6 px-6 lg:px-10">
       {/* Container is relative so buttons can sit at the far edges */}
       <div className="relative flex items-center w-full">
         
         {/* LEFT BUTTON - Absolutely positioned to the left */}
         <button
           onClick={() => scroll("left")}
-          className="absolute left-[-40px] z-10 flex-shrink-0 w-10 h-10 items-center justify-center hidden md:flex hover:text-red-600 transition-colors duration-300 disabled:opacity-20"
+          className="absolute left-[-10] z-10 flex-shrink-0 w-6 h-6 lg:w-10 lg:h-10 lg:w-10 lg:h-10 lg:w-10 lg:h-10 bg-black text-white items-center justify-center flex hover:cursor-pointer transition-colors duration-300 disabled:opacity-20"
           disabled={filteredBlogs.length === 0}
         >
-          <FiChevronLeft size={24} />
+          <FiChevronLeft size={20} />
         </button>
 
         {/* CAROUSEL CONTENT */}
@@ -55,7 +55,7 @@ export default function BlogsCarousel({ filter }: CarouselProps) {
             filteredBlogs.map((item: Blog) => (
               <div
                 key={item.id}
-                className="flex-shrink-0 w-[85%] sm:w-[calc(50%-12px)] lg:w-[calc(25%-18px)] group cursor-pointer"
+                className="flex-shrink-0 w-full sm:w-[calc(50%-12px)] lg:w-[calc(25%-18px)] group cursor-pointer"
                 onClick={() => window.location.href = `/magazine/${item.slug}`}
               >
                 <div className="relative aspect-[4/3] w-full overflow-hidden bg-gray-100 mb-4">
@@ -94,13 +94,13 @@ export default function BlogsCarousel({ filter }: CarouselProps) {
           )}
         </div>
 
-        {/* RIGHT BUTTON - Absolutely positioned to the right */}
+        {/* RIGHT BUTTON - Absolutely positioned to the right */}'
         <button
           onClick={() => scroll("right")}
-          className="absolute right-[-40px] z-10 flex-shrink-0 w-10 h-10 items-center justify-center hidden md:flex hover:text-red-600 transition-colors duration-300 disabled:opacity-20"
+          className="absolute right-[-10] z-10 flex-shrink-0 w-6 h-6 lg:w-10 lg:h-10 lg:w-10 lg:h-10 lg:w-10 lg:h-10 bg-black text-white items-center justify-center flex hover:cursor-pointer transition-colors duration-300 disabled:opacity-20"
           disabled={filteredBlogs.length === 0}
         >
-          <FiChevronRight size={24} />
+          <FiChevronRight size={20} />
         </button>
       </div>
     </section>

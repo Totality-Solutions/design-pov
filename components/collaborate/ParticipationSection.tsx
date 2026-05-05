@@ -9,13 +9,13 @@ import CTABtn from "../common/CTABtn";
 import ParticipationPopup from "./ParticipationPopup";
 
 const modules = [
-  { name: "Circle", description: "A collaborative space for unfiltered dialogue, bringing together diverse voices to shape the cultural and creative landscape." },
-  { name: "Core", description: "The architectural foundation of our vision, where structural integrity meets the fluid needs of modern society through innovative design." },
-  { name: "Object", description: "Exploring the boundary between art and utility through a curated collection of physical artifacts that redefine spaces." },
-  { name: "Elevate", description: "A dedicated platform designed to amplify emerging talent and high-concept projects within the global design community." },
-  { name: "Brand Participations", description: "Bridging the gap between corporate identity and immersive physical experience design through spatial storytelling." },
-  { name: "Partnership", description: "Empowering the creative economy by providing brands with high-impact platforms to integrate with global design movements." },
-  { name: "Media Enquiry", description: "For press kits, interview requests, and media collaborations, reach out to our communications team for official insights." },
+  { name: "Circle", href: "/edition/circle", description: "A collaborative space for unfiltered dialogue, bringing together diverse voices to shape the cultural and creative landscape." },
+  { name: "Core", href: "/edition/core", description: "The architectural foundation of our vision, where structural integrity meets the fluid needs of modern society through innovative design." },
+  { name: "Object", href: "/edition/object", description: "Exploring the boundary between art and utility through a curated collection of physical artifacts that redefine spaces." },
+  { name: "Elevate", href: "/edition/elevate", description: "A dedicated platform designed to amplify emerging talent and high-concept projects within the global design community." },
+  { name: "Brand Participations", href: "/edition/brand-participations", description: "Bridging the gap between corporate identity and immersive physical experience design through spatial storytelling." },
+  { name: "Partnership", href: "/edition/partnership", description: "Empowering the creative economy by providing brands with high-impact platforms to integrate with global design movements." },
+  { name: "Media Enquiry", href: "/edition/media-enquiry", description: "For press kits, interview requests, and media collaborations, reach out to our communications team for official insights." },
 ];
 
 export default function ParticipationSection() {
@@ -31,18 +31,82 @@ export default function ParticipationSection() {
       <div className="md:hidden flex flex-col">
         {modules.map((item, index) => {
           const isActive = active === item.name;
+        
           return (
-            <div key={index} className="border-b border-neutral-100 overflow-hidden" onClick={() => setActive(isActive ? null : item.name)}>
-              <div className={`flex justify-between items-center py-6 px-4 transition-colors duration-300 ${isActive ? 'bg-black text-white' : 'bg-white text-black'}`}>
-                <span className="text-lg font-medium tracking-tight uppercase">{item.name}</span>
-                <span className="text-xl">{isActive ? <FiMinus /> : <FiPlus />}</span>
+            <div key={index} className="border-b border-neutral-100 overflow-hidden">
+              
+              {/* HEADER ROW */}
+              <div
+                className={`flex justify-between items-center py-6 px-4 transition-colors duration-300 ${
+                  isActive ? "bg-black text-white" : "bg-white text-black"
+                }`}
+              >
+                {/* ✅ TITLE → NAVIGATION */}
+                <a href={item.href} className="text-lg font-medium tracking-tight">
+                  {item.name}
+                </a>
+                              
+                {/* Animated Icon */}
+                <motion.button
+                  initial="initial"
+                  animate={isActive ? "hover" : "initial"}
+                  onClick={() => setActive(isActive ? null : item.name)}
+                  className="relative w-8 h-8 flex items-center justify-center"
+                >
+                  <motion.div
+                    className="relative w-4 h-4 flex items-center justify-center"
+                    variants={{ 
+                      initial: { rotate: 0 }, 
+                      hover: { rotate: 45 } 
+                    }}
+                    transition={{ duration: 0.3, ease: "easeInOut" }}
+                  >
+                    {/* Horizontal line (Always visible) */}
+                    <div className="absolute w-full h-[1.5px] bg-current" />
+                    
+                    {/* Vertical line (Appears to complete the X) */}
+                    <motion.div 
+                      className="absolute w-[1.5px] h-full bg-current" 
+                      variants={{ 
+                        initial: { opacity: 0 }, 
+                        hover: { opacity: 1 } 
+                      }}
+                      transition={{ duration: 0.2 }}
+                    />
+                  </motion.div>
+                </motion.button>
               </div>
-              <motion.div initial={false} animate={{ height: isActive ? "auto" : 0, opacity: isActive ? 1 : 0 }} className="bg-black overflow-hidden">
+              
+              {/* ACCORDION */}
+              <motion.div
+                initial={false}
+                animate={{
+                  height: isActive ? "auto" : 0,
+                  opacity: isActive ? 1 : 0,
+                }}
+                className="bg-black overflow-hidden"
+              >
                 <div className="px-6 py-4">
-                  <p className="text-white text-[15px] font-normal opacity-80">{item.description}</p>
+                  <p className="text-white text-[15px] opacity-80">
+                    {item.description}
+                  </p>
                 </div>
-                <div className="px-4 py-8" onClick={(e) => { e.stopPropagation(); setSelectedCategory(item.name); }}>
-                  <CTABtn label="Apply Now" iconType="arrow" btnBg="white" textColor="black" borderColor="white" href="javascript:void(0)" />
+              
+                <div
+                  className="px-4 py-8"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedCategory(item.name);
+                  }}
+                >
+                  <CTABtn
+                    label="Apply Now"
+                    iconType="arrow"
+                    btnBg="var(--primary-blue)"
+                    textColor="white"
+                    borderColor="var(--primary-blue)"
+                    href="javascript:void(0)"
+                  />
                 </div>
               </motion.div>
             </div>
