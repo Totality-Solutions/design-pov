@@ -6,12 +6,12 @@ import CTABtn from "../common/CTABtn";
 
 export default function ScrollMaskText() {
   return (
-    <section className="w-full pt-20">
+    <section className="w-full pt-5 lg:pt-20">
       <div className=" w-full  bg-black py-12 px-6 md:px-10">
         <Container className="flex flex-col lg:flex-row gap-8 items-center justify-between">
         {/* Left Text */}
         <div className="max-w-4xl">
-          <h2 className="text-xl md:text-2xl font-medium text-white duration-300"
+          <h2 className="text-body-mobile md:text-2xl font-medium text-white duration-300"
             style={{ fontFamily: 'Montserrat' }}>
             A platform where architects, brands, artists, and thinkers come
             together to shape environments that go beyond the{" "}

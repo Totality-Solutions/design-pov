@@ -289,9 +289,10 @@ const DynamicScheduleGrid = () => {
       {/* --- LOWER WHITE DETAIL GRID (Untouched) --- */}
       <div className="w-full mx-auto max-w-[1440px] overflow-x-auto">
         <div className="grid grid-row lg:grid-cols-[0.6fr_0.6fr_1.2fr] min-w-[full] lg:min-w-[900px] border border-gray-100 bg-gray-50/30 ">
-          <div className="p-6 px-12 text-body font-medium text-black border border-gray-100">Event Name</div>
+          <div className="hidden lg:flex p-6 px-12 text-body font-medium text-black border border-gray-100">Event Name</div>
           <div className="hidden lg:flex p-6 px-12 text-body font-medium text-black border border-gray-100">Image</div>
           <div className="hidden lg:flex p-6 px-12 text-body font-medium text-black border border-gray-100">Information</div>
+          <div className="flex lg:hidden p-6 px-6 text-body font-medium text-black border border-gray-100">Event Details</div>
         </div>
 
         <AnimatePresence mode="wait">

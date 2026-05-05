@@ -102,7 +102,7 @@
 //                     key={label}
 //                     href={NAV_DATA[label].mainHref}
 //                     onMouseEnter={() => setActiveMenu(label)}
-//                     className="text-black text-[16px] font-medium whitespace-nowrap hover:text-[#0000B3] transition-colors"
+//                     className="text-black text-[16px] font-medium whitespace-nowrap hover:text-primary-blue transition-colors"
 //                   >
 //                     {label}
 //                   </Link>
@@ -256,9 +256,12 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import {motion, AnimatePresence} from "framer-motion";
 // 1. Import usePathname to detect current route
 import { usePathname } from "next/navigation"; 
 import Logo from "@/public/logo/Logo.svg";
+import Menu from "@/components/icons/Menu.svg";
+import Close from "@/components/icons/Menu-close.svg";
 
 import CTABtn from "../common/CTABtn";
 import { Container } from "../common/Container";
@@ -330,8 +333,8 @@ export default function Navbar() {
           isSticky ? "fixed top-0 left-0  z-[2100]" : "relative z-[2100]"
         }`}
       >
-        <Container>
-          <div className="flex justify-between items-center max-w-[1440px] mx-auto px-6 lg:px-10 py-5">
+        
+          <div className="flex justify-between items-center px-6 lg:px-10 py-5">
             
             {/* Logo */}
             <div className="flex-shrink-0 relative z-[2101]">
@@ -359,12 +362,12 @@ export default function Navbar() {
                       href={NAV_DATA[label].mainHref}
                       onMouseEnter={() => setActiveMenu(label === "2026 Edition" || label === "Ecosystem" ? label : null)}
                       className={`relative text-[16px] font-medium whitespace-nowrap transition-colors py-1 group ${
-                        isActive ? "text-[#0000B3]" : "text-black hover:text-[#0000B3]"
+                        isActive ? "text-primary-blue" : "text-black hover:text-primary-blue"
                       }`}
                     >
                       {label}
                       {/* 4. Active Underline Span */}
-                      <span className={`absolute bottom-0 left-0 h-[2px] bg-[#0000B3] transition-all duration-300 ${
+                      <span className={`absolute bottom-0 left-0 h-[2px] bg-primary-blue transition-all duration-300 ${
                         isActive ? "w-full" : "w-0 group-hover:w-full"
                       }`} />
                     </Link>
@@ -383,27 +386,49 @@ export default function Navbar() {
 
             {/* Hamburger / Cross Button */}
             <button
-              className="lg:hidden p-2 relative z-[2101] flex flex-col justify-center items-center w-8 h-8 group"
+              className="lg:hidden p-2 relative z-[2101] flex items-center justify-center w-10 h-10"
               onClick={() => setMobileOpen(!mobileOpen)}
             >
-              <span 
-                className={`block w-6 h-[2px] bg-black transition-all duration-300 ease-in-out ${
-                  mobileOpen ? "rotate-45 translate-y-[2px]" : "-translate-y-1"
-                }`} 
-              />
-              <span 
-                className={`block w-6 h-[2px] bg-black transition-all duration-300 ease-in-out ${
-                  mobileOpen ? "opacity-0" : "opacity-100"
-                }`} 
-              />
-              <span 
-                className={`block w-6 h-[2px] bg-black transition-all duration-300 ease-in-out ${
-                  mobileOpen ? "-rotate-45 -translate-y-[2px]" : "translate-y-1"
-                }`} 
-              />
+              <div className="relative w-6 h-6">
+                <AnimatePresence mode="wait">
+                  {mobileOpen ? (
+                    <motion.div
+                      key="close"
+                      initial={{ opacity: 1, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 1, scale: 0.95 }}
+                      transition={{ duration: 0.2, ease: "easeInOut" }}
+                      className="absolute inset-0"
+                    >
+                      <Image
+                        src="/icons/Menu-close.svg"
+                        alt="close"
+                        fill
+                        className="object-contain"
+                      />
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      key="menu"
+                      initial={{ opacity: 1, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 1, scale: 0.95 }}
+                      transition={{ duration: 0.2, ease: "easeInOut" }}
+                      className="absolute inset-0"
+                    >
+                      <Image
+                        src="/icons/Menu.svg"
+                        alt="menu"
+                        fill
+                        className="object-contain"
+                      />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
             </button>
           </div>
-        </Container>
+       
       </header>
 
       {/* Spacer */}
@@ -503,37 +528,46 @@ export default function Navbar() {
                     <Link
                       href={NAV_DATA[label].mainHref}
                       className={`flex-1 px-8 py-6 text-left text-lg font-medium transition-colors ${
-                        isActive ? "text-[#0000B3]" : "text-black"
+                        isActive ? "text-primary-blue" : "text-black"
                       }`}
                       onClick={() => setMobileOpen(false)}
                     >
                       {label}
                     </Link>
-                    <button
-                      className="p-4"
-                      onClick={() => setActiveMenu(activeMenu === label ? null : label)}
-                    >
-                      <svg
-                        className={`w-6 h-6 transition-transform duration-300 ${activeMenu === label ? "rotate-180" : ""}`}
-                        fill="none" stroke={isActive ? "#0000B3" : "black"} viewBox="0 0 24 24"
+                    {(label === "2026 Edition" || label === "Ecosystem") && (
+                      <button
+                        className="p-4"
+                        onClick={() =>
+                          setActiveMenu(activeMenu === label ? null : label)
+                        }
                       >
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                      </svg>
-                    </button>
+                        <Image
+                          src="/icons/Menu-close.svg" // your custom icon
+                          alt="toggle"
+                          width={20}
+                          height={20}
+                          className={`transition-transform duration-200 ease-in-out ${
+                            activeMenu === label ? "scale-75" : "scale-150"
+                          }`}
+                        />
+                      </button>
+                    )}
                   </div>
 
-                  <div className={`bg-gray-50 overflow-hidden transition-all duration-300 ${activeMenu === label ? "max-h-screen" : "max-h-0"}`}>
+                  {(activeMenu === "2026 Edition" || activeMenu === "Ecosystem") && 
+                  <div className={` overflow-hidden transition-all duration-300 ${activeMenu === label ? "max-h-screen" : "max-h-0"}`}>
                     {NAV_DATA[label].col1Links?.map((link) => (
                       <Link
                         key={link.label}
                         href={link.href}
-                        className="block px-12 py-4 text-sm text-gray-700 border-b border-gray-100"
+                        className="block px-12 py-4 text-sm text-black font-normal border-b border-gray-100"
                         onClick={() => setMobileOpen(false)}
                       >
                         {link.label}
                       </Link>
                     ))}
                   </div>
+            }
                 </div>
               );
             })}
@@ -543,8 +577,7 @@ export default function Navbar() {
             <CTABtn
               label="Buy Tickets"
               iconType="arrow"
-              btnBg="black"
-              btnHoverBg="#0000B3"
+              btnBg="var(--primary-blue)"
               textColor="white"
               href="#tickets"
             />

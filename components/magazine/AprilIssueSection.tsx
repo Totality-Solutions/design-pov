@@ -27,7 +27,7 @@ const AprilIssueSection = () => {
 
   return (
     <section
-      className="w-full bg-white font-['Montserrat'] pb-12"
+      className="w-full bg-white font-['Montserrat'] pb-6"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >

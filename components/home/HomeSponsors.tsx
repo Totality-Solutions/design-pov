@@ -34,12 +34,12 @@ const HomeSponsors: React.FC = () => {
           {partners.map((partner) => (
             <div
               key={partner.id}
-              className="aspect-[2/1] flex items-center justify-center p-4 md:p-8 border-b mx-4 border-pov-black/30 transition-colors duration-300 hover:bg-gray-50/50"
+              className="aspect-[2/1] lg:aspect-[8/3] flex items-center justify-center p-4 lg:p-8 border-b mx-4 border-pov-black/30 transition-colors duration-300 hover:bg-gray-50/50"
             >
               <img 
                 src={partner.logo} 
                 alt="Partner Logo" 
-                className="max-w-[75%] max-h-[50%] object-contain grayscale brightness-0 opacity-80 hover:opacity-100 transition-all duration-500"
+                className="max-w-[75%] max-h-full object-cover hover:opacity-100 transition-all duration-500"
               />
             </div>
           ))}

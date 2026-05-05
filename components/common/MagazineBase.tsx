@@ -17,6 +17,18 @@ export default function MagazineBase({ activeBlog: initialBlog, isInnerPage = fa
     return () => { if (sectionRef.current) observer.unobserve(sectionRef.current); };
   }, []);
 
+  useEffect(() => {
+  if (isSidebarOpen) {
+    document.body.style.overflow = "hidden";
+  } else {
+    document.body.style.overflow = "auto";
+  }
+
+  return () => {
+    document.body.style.overflow = "auto";
+  };
+}, [isSidebarOpen]);
+
   const otherBlogs = blogs
     .filter((b) => b.id !== activeBlog.id)
     .sort((a, b) => b.id - a.id); // latest first
@@ -30,15 +42,15 @@ export default function MagazineBase({ activeBlog: initialBlog, isInnerPage = fa
   });
 
   return (
-    <div ref={sectionRef as any} className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-10 lg:gap-12 relative bg-white">
+    <div ref={sectionRef as any} className="grid grid-cols lg:grid-cols-[1fr_320px] gap-10 lg:gap-12 relative bg-white">
 
       {/* MOBILE TRIGGER */}
-      <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className={`lg:hidden fixed top-1/2 -translate-y-1/2 z-[110] bg-black text-white w-10 h-12 flex items-center justify-center rounded-l-md shadow-2xl transition-all duration-500 ${isSidebarOpen ? "right-[85%] sm:right-[350px]" : "right-0"} ${isVisible ? "opacity-100" : "opacity-0"}`}>
+      <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className={`lg:hidden fixed top-1/2 -translate-y-1/2 z-[110] bg-black text-white w-10 h-12 flex items-center justify-center  shadow-2xl transition-all duration-500 ${isSidebarOpen ? "right-[85%] sm:right-[350px]" : "right-0"} ${isVisible ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
         <FiChevronLeft size={24} className={isSidebarOpen ? "rotate-180" : ""} />
       </button>
 
       {/* LEFT COLUMN */}
-      <div className="flex flex-col h-full border border-neutral-100 bg-white">
+      <div className="flex flex-col h-full lg:border lg:border-neutral-100 bg-white">
 
         {/* SCROLLING PART START */}
         {isInnerPage ? (
@@ -54,7 +66,7 @@ export default function MagazineBase({ activeBlog: initialBlog, isInnerPage = fa
           </div>
         ) : (
           // ✅ OUTER PAGE (STICKY IMAGE)
-          <div className="sticky top-0 h-full w-full overflow-hidden z-0">
+          <div className="sticky top-20 lg:top-0 h-[50vh] lg:h-full w-full overflow-hidden z-0">
             <Image
               src={activeBlog.image}
               alt={activeBlog.title}
@@ -67,7 +79,7 @@ export default function MagazineBase({ activeBlog: initialBlog, isInnerPage = fa
 
         {/* SCROLLING PART END */}
 
-        <div className="relative z-10 bg-white p-4 md:p-8 flex flex-col gap-6">
+        <div className="relative z-10 bg-white py-6 px-4 md:p-8 flex flex-col gap-6">
           <div className="flex items-center gap-4 text-sm font-medium text-black/40 uppercase">
             <span>{activeBlog.date}</span>
             <div className="w-[1px] h-4 bg-black/20" />
@@ -142,7 +154,7 @@ export default function MagazineBase({ activeBlog: initialBlog, isInnerPage = fa
           <h4 className="text-xs font-bold uppercase border-b border-black pb-2 tracking-widest text-black/60">Up Next</h4>
           {sidebarItems.map((item) => (
             item.type === "blog" ? (
-              <div key={item.id} onClick={() => { setActiveBlog(item); setIsSidebarOpen(false); }} className={`flex flex-col gap-4 group cursor-pointer transition-all duration-300 ${activeBlog.id === item.id ? "opacity-40" : ""}`}>
+              <div key={item.id} onClick={() => { setActiveBlog(item); setIsSidebarOpen(false); }} className={`flex flex-col gap-4 group cursor-pointer transition-all duration-300 ${activeBlog.id === item.id ? "opacity-40" : "opacity-100"}`}>
                 <div className="relative aspect-[4/3] w-full overflow-hidden">
                   <Image src={item.image} alt={item.title} fill className="object-cover group-hover:scale-110 transition-transform duration-500" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-80" />
