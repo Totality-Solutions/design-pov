@@ -9,6 +9,7 @@ import FeaturedBlogSection from "@/components/magazine/FeaturedBlogSection";
 import CTAStrip from "@/components/common/CTAStrip";
 import MagazineMediaForm from "@/components/magazine/MagazineMediaForm";
 import HomeSponsors from "@/components/home/HomeSponsors";
+import Image from "next/image";
 
 export const metadata: Metadata = {
   title: "Magazine",
@@ -32,7 +33,7 @@ export default function MagazinePage() {
               Advertisement
             </div>
             <div className="w-full h-[280px] border border-gray-200 bg-gray-50 flex items-center justify-center text-gray-300">
-              Banner Space
+              <Image src="/temp/ads/1.png" alt="Ad" width={1900} height={100} className="w-full h-full object-contain" />
             </div>
           </div>
         </div>

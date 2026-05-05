@@ -11,14 +11,14 @@ const ISSUE_DATA = [
     title: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
     author: "Design POV",
     date: "26 feb, 2026",
-    image: "/temp/1.jpg",
+    image: "/temp/ads/april-issue1.png",
   },
   {
     category: "Architecture",
     title: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
     author: "Design POV",
     date: "26 feb, 2026",
-    image: "/temp/3.jpg",
+    image: "/temp/ads/april-issue2.png",
   },
 ];
 
@@ -76,25 +76,25 @@ const AprilIssueSection = () => {
                     {/* TEXT CONTENT BLOCK */}
                     <div className="absolute bottom-0 left-0 w-full p-6 flex flex-col gap-1 z-10 transition-transform duration-500 ease-out group-hover:-translate-y-2">
                       
-                      <span className="text-[12px] text-white/60 font-medium mb-1">
+                      {/* <span className="text-[12px] text-white/60 font-medium mb-1">
                         {item.category}
-                      </span>
+                      </span> */}
 
                       {/* TITLE: Truncated to 1 line, expands on hover */}
-                      <div className="grid grid-rows-[auto] transition-all duration-500 ease-in-out">
+                      {/* <div className="grid grid-rows-[auto] transition-all duration-500 ease-in-out">
                         <h3 className="text-[18px] font-semibold text-white leading-[1.3] transition-all duration-500 line-clamp-1 group-hover:line-clamp-none">
                           {item.title}
                         </h3>
-                      </div>
+                      </div> */}
 
                       {/* META INFO: Revealed on hover */}
-                      <div className="overflow-hidden max-h-0 group-hover:max-h-20 transition-all duration-700 ease-in-out opacity-0 group-hover:opacity-100">
+                      {/* <div className="overflow-hidden max-h-0 group-hover:max-h-20 transition-all duration-700 ease-in-out opacity-0 group-hover:opacity-100">
                         <div className="flex items-center gap-2 text-[11px] text-white/40 pt-2 border-t border-white/10 mt-2">
                           <span>by {item.author}</span>
                           <span className="opacity-30">|</span>
                           <span>{item.date}</span>
                         </div>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 </div>
@@ -114,7 +114,7 @@ const AprilIssueSection = () => {
             {/* AD IMAGE CONTAINER */}
             <div className="relative group overflow-hidden bg-gray-100 flex-grow flex flex-col justify-end min-h-[400px]">
               <Image
-                src="/temp/2.jpg"
+                src="/temp/ads/2.png"
                 alt="Advertisement"
                 fill
                 className="object-cover transition-transform duration-700 group-hover:scale-105"
@@ -124,19 +124,19 @@ const AprilIssueSection = () => {
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-black/90 opacity-90 z-10" />
 
               {/* CENTER HOVER BUTTON */}
-              <div className="absolute inset-0 flex items-center justify-center z-30 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              {/* <div className="absolute inset-0 flex items-center justify-center z-30 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 <button className="bg-white text-black px-7 py-3 text-[13px] font-medium shadow-lg hover:bg-gray-100 transition-colors">
                   Visit Ads
                 </button>
-              </div>
+              </div> */}
 
               {/* BOTTOM AD TEXT */}
-              <div className="relative z-20 p-8 text-center">
+              {/* <div className="relative z-20 p-8 text-center">
                 <p className="text-[11px] text-white/60 leading-relaxed uppercase tracking-widest">
                   Creative Direction by <br />
                   <span className="text-white font-semibold">Xianoo Khan [@ixianoo]</span>
                 </p>
-              </div>
+              </div> */}
             </div>
           </div>
 

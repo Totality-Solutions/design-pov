@@ -1172,6 +1172,6 @@ export const blogs: Blog[] = [
 ];
 
 export const advertisements: Ad[] = [
-  { type: "ad", id: "ad-1", image: "/temp/3.jpg", aspect: "aspect-[3/4]" },
-  { type: "ad", id: "ad-2", image: "/temp/2.jpg", aspect: "aspect-square" }
+  { type: "ad", id: "ad-1", image: "/temp/ads/3.png", aspect: "aspect-[3/4]" },
+  { type: "ad", id: "ad-2", image: "/temp/ads/4.png", aspect: "aspect-square" }
 ];

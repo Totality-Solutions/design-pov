@@ -311,11 +311,11 @@ export default function Navbar() {
       <div id="ad-section" className="hidden lg:flex flex-col bg-white">
         <div className="flex justify-center px-10 py-8">
           <div className="w-full max-w-[1100px]">
-            <div className="text-[11px] text-gray-400 mb-2 uppercase tracking-wider">
+            <div className="text-[11px] text-gray-400 mb-2  tracking-wider">
               Advertisement
             </div>
             <div className="w-full h-[280px] border border-gray-200 bg-gray-50 flex items-center justify-center text-gray-300">
-              Banner Space
+              <Image src="/temp/ads/1.png" alt="Ad" width={1900} height={100} className="w-full h-full object-contain" />
             </div>
           </div>
         </div>
