@@ -13,8 +13,8 @@ const DesignPovTicket = () => {
   };
 
   const navLinks = [
-    { label: 'My Schedule', href: '#' },
-    { label: 'Venue Map', href: '#' },
+    { label: 'My Schedule', href: '/edition/schedule' },
+    { label: 'Venue Map', href: 'https://povindex.designpovindia.com/map' },
   ];
 
   return (

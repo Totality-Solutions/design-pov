@@ -16,7 +16,10 @@ export default function BuildPartner() {
     { name: "Partners", src: "/temp/edition/sponsors/1.png" },
     { name: "Partners", src: "/temp/edition/sponsors/3.png" },
     // Brand Collaborators
-    { name: "Brand Collaborators", src: "/logos/logo-placeholder.svg" },
+    { name: "Brand Collaborators", src: "/temp/edition/brand-collaborate/1.png" },
+    { name: "Brand Collaborators", src: "/temp/edition/brand-collaborate/2.png" },
+    { name: "Brand Collaborators", src: "/temp/edition/brand-collaborate/3.png" },
+    { name: "Brand Collaborators", src: "/temp/edition/brand-collaborate/4.png" },
     // Build Partners
     { name: "Build Partners", src: "/temp/edition/build-partners/1.png" },
     { name: "Build Partners", src: "/temp/edition/build-partners/2.png" },
@@ -62,8 +65,8 @@ const KeyExecutionPartner = partners.filter(p => p.name === "Key execution Partn
       <BrandLogo title="MEDIA PARTNERS" logos={MediaPartners} />
       <BrandLogo title="DIGITAL MEDIA PARTNERS" logos={DigitalMediaPartners} />
       <BrandLogo title="TICKETING PARTNERS" logos={TicketingPartners} />
-      <BrandLogo title="SENSORY COLLABORATOR" logos={sponsorData} />
-      <BrandLogo title="KEY EXECUTION PARTNER" logos={sponsorData} />
+      <BrandLogo title="SENSORY COLLABORATOR" logos={SensoryCollaborator} />
+      <BrandLogo title="KEY EXECUTION PARTNER" logos={KeyExecutionPartner} />
     </div>
   );
 }
