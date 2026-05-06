@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { Container } from "../common/Container";
 import SectionHeading from "../common/SectionHeading";
+import Link from "next/link";
 
 const ClientLogo = () => {
   // const IGNORED_IDS = [41, 27, 40, 50, 18, 21, 53, 20];
@@ -29,6 +30,7 @@ const ClientLogo = () => {
     isSectionHovered={isHovered} 
   />
 </div>
+        <Link href="/edition/brands">
       <div className="marquee-track py-6">
         {[...Client, ...Client].map((logo, i) => (
           <img
@@ -40,6 +42,7 @@ const ClientLogo = () => {
           />
         ))}
       </div>
+        </Link>
     </div>
     </Container>
   );

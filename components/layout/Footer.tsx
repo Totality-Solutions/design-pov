@@ -11,6 +11,7 @@ import { ArrowUpRight } from "lucide-react";
 
 import FooterTablet from "./FooterTablet";
 import { Container } from "../common/Container";
+import Link from "next/link";
 
 const navLinks = {
   Partners: { items: ["Tickets", "Ecosystem"], img: "/image1.svg" },
@@ -224,9 +225,9 @@ const Footer = () => {
               <div className="flex justify-between items-center text-white text-[12px] lg:text-[14px]  font-medium">
                 <p>© 2026 Design POV India. All rights reserved.</p>
                 <div className="flex gap-20">
-                  <p className="cursor-pointer hover:text-neutral-400 transition">Privacy Policy</p>
-                  <p className="cursor-pointer hover:text-neutral-400 transition">Terms of Use</p>
-                  <p className="cursor-pointer hover:text-neutral-400 transition">Made by Design POV</p>
+                  <Link href="/legal/privacy-policy"><p className="cursor-pointer hover:text-neutral-400 transition">Privacy Policy</p></Link>
+                  <Link href="/legal/terms-of-use"><p className="cursor-pointer hover:text-neutral-400 transition">Terms of Use</p></Link>
+                  <p>Developed by Totality Solutions</p>
                 </div>
               </div>
             </div>

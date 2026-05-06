@@ -4,6 +4,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import SectionHeading from '../common/SectionHeading';
+import Link from 'next/link';
 
 const SCHEDULE_DATA = {
   "15": {
@@ -94,6 +95,7 @@ const ScheduleSection = () => {
         setIsHovered(false);
       }}
     >
+      <Link href="/edition/schedule"> 
       {/* 1. CONSTANT BACKGROUND IMAGE LAYER */}
       <div className="absolute inset-0 z-0">
         <Image
@@ -230,6 +232,8 @@ const ScheduleSection = () => {
           </div>
         </div>
       </div>
+      
+      </Link>
     </section>
   );
 };

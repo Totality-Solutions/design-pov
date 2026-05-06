@@ -4,11 +4,13 @@ import React, { forwardRef } from "react";
 import { motion, MotionValue } from "framer-motion";
 import Image from "next/image";
 
+
 // ✅ Import images locally (inside this file only)
 import img1 from "@/public/temp/home/theme/WEBSITE_THEME BANNER_1.jpg.jpeg";
 import img2 from "@/public/temp/home/theme/WEBSITE_THEME BANNER_2.jpg.jpeg";
 import img3 from "@/public/temp/home/theme/WEBSITE_THEME BANNER_3.jpg.jpeg";
 import img4 from "@/public/temp/home/theme/WEBSITE_THEME BANNER_4.jpg.jpeg";
+import Link  from "next/link";
 // import img5 from "@/public/temp/theme/5.png";
 // import img6 from "@/public/temp/theme/6.png";
 // import img7 from "@/public/temp/theme/4.png";
@@ -57,6 +59,7 @@ const MasonryGrid = forwardRef<HTMLDivElement, MasonryGridProps>(
   ({ y }, ref) => {
     return (
       <div ref={ref} className="w-full overflow-hidden h-full">
+        <Link href="/edition/theme" className="cursor-pointer">
         <motion.div style={{ y }}>
           <div className="h-full grid grid-cols-2 auto-rows-[300px] w-full">
 
@@ -113,6 +116,7 @@ const MasonryGrid = forwardRef<HTMLDivElement, MasonryGridProps>(
           </div>
 
         </motion.div>
+        </Link>
       </div>
     );
   }

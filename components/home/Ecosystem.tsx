@@ -58,7 +58,7 @@ const ECOSYSTEM: EcosystemItem[] = [
       { value: '12', unit: 'EVENTS/YR' },
     ],
     cta: 'Explore',
-    href: '/edition/circle',
+    href: '/ecosystem/circle',
   },
   {
     id: 'objects',
@@ -72,7 +72,7 @@ const ECOSYSTEM: EcosystemItem[] = [
       { value: '500', unit: 'COPIES' },
     ],
     cta: 'Explore',
-    href: '/edition/objects',
+    href: '/ecosystem/objects',
   },
   {
     id: 'elevate',
@@ -86,7 +86,7 @@ const ECOSYSTEM: EcosystemItem[] = [
       { value: '3', unit: 'MONTHS' },
     ],
     cta: 'Explore',
-    href: '/edition/elevate',
+    href: '/ecosystem/elevate',
   },
   {
     id: 'magazine',
@@ -100,7 +100,7 @@ const ECOSYSTEM: EcosystemItem[] = [
       { value: 'OPEN', unit: 'ACCESS' },
     ],
     cta: 'Explore',
-    href: '/edition/magazine',
+    href: '/magazine',
   },
 ]
 

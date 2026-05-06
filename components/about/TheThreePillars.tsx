@@ -18,6 +18,7 @@ interface Pillar {
   description: string;
   image: any;
   buttonLabel: string;
+  buttonHref?: string;
 }
 
 const PILLAR_DATA: Pillar[] = [
@@ -26,21 +27,24 @@ const PILLAR_DATA: Pillar[] = [
     title: "Architect Firms (The Core):",
     description: "Shape the vision: translating ideas into immersive, narrative-led environments.",
     image: Img1,
-    buttonLabel: "Explore"
+    buttonLabel: "Explore",
+    buttonHref:"/edition/core"
   },
   {
     id: "brand",
     title: "Home & Lifestyle Brands:",
     description: "Enable the narrative: bringing material, product, and innovation into context.",
     image: Img2,
-    buttonLabel: "Explore"
+    buttonLabel: "Explore",
+    buttonHref:"/edition/brands"
   },
   {
     id: "build",
     title: "Build Partners:",
     description: "Realise the vision: transforming concepts into precise, tangible spaces.",
     image: Img3,
-    buttonLabel: "Explore"
+    buttonLabel: "Explore",
+    buttonHref:"/edition/theme"
   }
 ];
 
@@ -118,6 +122,7 @@ const TheThreePillars: React.FC = () => {
                   {PILLAR_DATA[activePillar].description}
                 </p>
               </div>
+              
               <CTABtn
                 label={PILLAR_DATA[activePillar].buttonLabel}
                 iconType="arrow"
@@ -132,14 +137,14 @@ const TheThreePillars: React.FC = () => {
                 bottomKey2Width="12px"
                 bottomKey1Right="50px"
                 bottomKey2Right="15px"
-                href="#tickets"
+                href={PILLAR_DATA[activePillar].buttonHref}
               />
             </motion.div>
           </AnimatePresence>
         </div>
 
         {/* SCROLLING CONTENT Area with Mobile Stacking */}
-        <div className="flex-1 w-full bg-white lg:bg-[#FAFAFA]">
+        <div className="flex-1 w-full bg-white">
           {PILLAR_DATA.map((pillar, index) => (
             <div 
               key={pillar.id}

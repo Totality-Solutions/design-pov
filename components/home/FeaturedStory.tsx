@@ -10,6 +10,7 @@ import SectionHeading from "../common/SectionHeading";
 
 // shared blogs data import kar rahe hain
 import { Blog, blogs } from "@/data/magazineData";
+import Link from "next/link";
 
 export default function MarqueeCarousel() {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -105,6 +106,11 @@ export default function MarqueeCarousel() {
         <div className="mc-root">
           <div className="mc-wrap">
             {/* ── LEFT (Hero Image) ── */}
+                <Link
+                  href={`/magazine/${current.slug}`}
+                  key={`read-${textKey}`}
+                  className="inline-block"
+                >
             <div className="w-full h-full flex flex-col items-start justify-center gap-10">
               <div className="hero-frame">
                 {prevIndex !== null && (
@@ -124,6 +130,7 @@ export default function MarqueeCarousel() {
                 />
               </div>
             </div>
+                </Link>
 
             {/* ── CENTER (Thumbnails) ── */}
             <div className="thumb-strip" ref={carouselRef}>

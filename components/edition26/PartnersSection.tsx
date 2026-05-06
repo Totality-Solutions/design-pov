@@ -98,6 +98,11 @@ const PartnersSection: React.FC = () => {
         bgColor = "black"
         isSectionHovered={isHovered} 
       >
+        <div className="hidden md:flex">
+            <a href='/edition/brands' className="opacity-100 hover:cursor-pointer hover:underline hover:text-primary-red text-lg font-medium text-black">
+              View Brands
+            </a>
+          </div>
       </SectionHeading>
 
       {/* 2. TAB NAVIGATION (Responsive Spacing Fix) */}
