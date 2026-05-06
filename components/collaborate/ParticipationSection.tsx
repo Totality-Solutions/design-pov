@@ -9,13 +9,13 @@ import CTABtn from "../common/CTABtn";
 import ParticipationPopup from "./ParticipationPopup";
 
 const modules = [
-  { name: "Circle", href: "/edition/circle", description: "A collaborative space for unfiltered dialogue, bringing together diverse voices to shape the cultural and creative landscape." },
+  { name: "Circle", href: "/ecosystem/circle", description: "A collaborative space for unfiltered dialogue, bringing together diverse voices to shape the cultural and creative landscape." },
   { name: "Core", href: "/edition/core", description: "The architectural foundation of our vision, where structural integrity meets the fluid needs of modern society through innovative design." },
-  { name: "Object", href: "/edition/object", description: "Exploring the boundary between art and utility through a curated collection of physical artifacts that redefine spaces." },
-  { name: "Elevate", href: "/edition/elevate", description: "A dedicated platform designed to amplify emerging talent and high-concept projects within the global design community." },
-  { name: "Brand Participations", href: "/edition/brand-participations", description: "Bridging the gap between corporate identity and immersive physical experience design through spatial storytelling." },
-  { name: "Partnership", href: "/edition/partnership", description: "Empowering the creative economy by providing brands with high-impact platforms to integrate with global design movements." },
-  { name: "Media Enquiry", href: "/edition/media-enquiry", description: "For press kits, interview requests, and media collaborations, reach out to our communications team for official insights." },
+  { name: "Object", href: "/ecosystem/objects", description: "Exploring the boundary between art and utility through a curated collection of physical artifacts that redefine spaces." },
+  { name: "Elevate", href: "/ecosystem/elevate", description: "A dedicated platform designed to amplify emerging talent and high-concept projects within the global design community." },
+  { name: "Brand Participations", href: "/edition/brand", description: "Bridging the gap between corporate identity and immersive physical experience design through spatial storytelling." },
+  { name: "Partnership", href: "/edition/brand", description: "Empowering the creative economy by providing brands with high-impact platforms to integrate with global design movements." },
+  { name: "Media Enquiry", href: "/contact", description: "For press kits, interview requests, and media collaborations, reach out to our communications team for official insights." },
 ];
 
 export default function ParticipationSection() {
@@ -63,7 +63,7 @@ export default function ParticipationSection() {
                   >
                     {/* Horizontal line (Always visible) */}
                     <div className="absolute w-full h-[1.5px] bg-current" />
-                    
+
                     {/* Vertical line (Appears to complete the X) */}
                     <motion.div 
                       className="absolute w-[1.5px] h-full bg-current" 
@@ -129,7 +129,7 @@ export default function ParticipationSection() {
             >
               {/* 1. Project Name with Redirect and Underline */}
               <a 
-                href={`/edition/${item.name.toLowerCase().replace(/\s+/g, '-')}`}
+                href={item.href}
                 className="relative text-lg md:text-xl font-medium px-14 cursor-pointer w-fit
                   after:content-[''] 
                   after:absolute 

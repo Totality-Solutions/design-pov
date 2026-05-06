@@ -33,15 +33,15 @@ export const NAV_DATA: Record<string, SubmenuContent> = {
     image: "/temp/home/theme/WEBSITE_THEME BANNER_1.jpg.jpeg",
     filetype: "image",
     col1Links: [
-      { label: "Circle", href: "/ecosystem/hub" }, 
-      { label: "Elevate", href: "/ecosystem/blogs" }, 
-      { label: "Objects", href: "/ecosystem/directory" },
-      { label: "Afterhours", href: "/ecosystem/directory" }
+      { label: "Circle", href: "/ecosystem/circle" }, 
+      { label: "Elevate", href: "/ecosystem/elevate" }, 
+      { label: "Objects", href: "/ecosystem/objects" },
+      { label: "Afterhours", href: "/ecosystem/afterhours" }
     ],
   },
   "2026 Edition": {
     mainHref: "/edition",
-    image: "/ponindex.png",
+    image: "/qr/ticket-qr.svg",
     filetype: "image",
     col1Title: "",
     col1Links: [

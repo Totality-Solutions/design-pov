@@ -87,10 +87,10 @@ const ThisIsUs: React.FC = () => {
         sticky={false}
         isSectionHovered={isHovered} 
       >
-        <div className="hidden md:flex gap-[100px]">
-          {/* <span className="opacity-60 text-[16px] lg:text-lg font-medium">POV Insights</span> */}
+        {/* <div className="hidden lg::flex lg:gap-[100px]">
+           <span className="opacity-60 text-[16px] lg:text-lg font-medium">POV Insights</span>
           <span className="opacity-60 text-[16px] lg:text-lg font-medium">Volume 01</span>
-        </div>
+        </div>  */}
       </SectionHeading>
 
       <div className="flex-1 px-6 md:px-[70px] pt-6 flex flex-col ">
@@ -113,7 +113,7 @@ const ThisIsUs: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 pt-6 items-start">
 
           {/* LEFT CONTENT: Gagan Bhatia */}
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-2 lg:gap-4">
             <span className="text-primary-red font-semibold text-body tracking-wide">Gagan Bhatia</span>
             <p className="text-black text-[18px] md:text-body font-medium text-justify leading-[1.2] tracking-tightest  ">
               <span className='text-h3-mobile md:text-h3-tab text-black font-bold'>“ </span>It was actually quite simple. We were listening. Not inside exhibition halls, but outside them. The most meaningful conversations about design, about business, about ideas - were happening on the periphery. That’s where people were most honest, most open.<span className='text-h3-mobile md:text-h3-tab text-black font-bold'> ”</span>
@@ -156,7 +156,7 @@ const ThisIsUs: React.FC = () => {
           </div>
 
           {/* RIGHT CONTENT: Asif Sataar */}
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-2 lg:gap-4">
             <span className="text-primary-red font-semibold text-body tracking-wide">Asif Sataar</span>
             <p className="text-black text-[18px] md:text-body font-medium text-justify leading-[1.2] tracking-tight  ">
               <span className='text-h3-mobile md:text-h3-tab text-black font-bold'>“ </span>And it made us question the format itself. If the real value is happening outside, then what is the platform doing wrong? We’d been part of this world long enough to see networking become mechanical, almost performative. Commerce was front and centre, and design was getting lost somewhere along the way.<span className='text-h3-mobile md:text-h3-tab text-black font-bold'> ”</span>

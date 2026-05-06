@@ -326,7 +326,7 @@ export default function ParticipationForm() {
             </div>
           </div>
 
-          <div className="w-full flex flex-col items-start relative mt-6 pb-8">
+          <div className="lg:hidden w-full flex flex-col items-start relative mt-6 pb-8">
             <div onClick={handleSubmit} className={`cursor-pointer ${loading ? 'opacity-50 pointer-events-none' : ''}`}>
               <CTABtn
                 label={loading ? "Sending..." : "Submit"}

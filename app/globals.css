@@ -1076,3 +1076,10 @@ RIGHT: TEXT PANEL — slides RIGHT → LEFT
     --footer-pr-links: 0px;
   }
 }
+
+
+
+
+.italic-text-shadow {
+  text-shadow: 2px 2px 0px rgba(0,0,0,0.05);
+}

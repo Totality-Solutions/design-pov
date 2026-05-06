@@ -8,34 +8,34 @@ import { motion, useSpring, AnimatePresence } from 'framer-motion';
 // 1. Data Set with Mobile (Fixed), Tablet (New), and Desktop (Fixed)
 const themeData = [
   { 
-    id: 1, w: 220, h: 280, img: "/temp/home/theme/WEBSITE_THEME BANNER_1.jpg.jpeg",
-    desktop: { top: '5%', left: '5%' },
-    tablet: { top: '5.5%', left: '10%' }, // In-between
-    mobile: { top: '6%', left: '16%' } 
+    id: 1, w: 320, h: 260, img: "/temp/home/theme/WEBSITE_THEME BANNER_1.jpg.jpeg",
+    desktop: { top: '8%', left: '5%' },
+    tablet: { top: '5%', left: '10%' }, // In-between
+    mobile: { top: '7%', left: '16%' } 
   },
   { 
     id: 2, w: 320, h: 320, img: "/temp/home/theme/WEBSITE_THEME BANNER_2.jpg.jpeg",
-    desktop: { top: '10%', left: '70%' },
-    tablet: { top: '14%', left: '62%' },
-    mobile: { top: '18%', left: '50%' } 
+    desktop: { top: '26%', left: '70%' },
+    tablet: { top: '30%', left: '62%' },
+    mobile: { top: '32%', left: '50%' } 
   },
   { 
     id: 3, w: 320, h: 200, img: "/temp/home/theme/WEBSITE_THEME BANNER_3.jpg.jpeg",
-    desktop: { top: '35%', left: '40%' },
-    tablet: { top: '35.5%', left: '35%' },
-    mobile: { top: '36%', left: '30%' } 
+    desktop: { top: '50%', left: '40%' },
+    tablet: { top: '53%', left: '35%' },
+    mobile: { top: '53%', left: '30%' } 
   },
   { 
     id: 4, w: 200, h: 260, img: "/temp/home/theme/WEBSITE_THEME BANNER_4.jpg.jpeg",
-    desktop: { top: '55%', left: '15%' },
-    tablet: { top: '54%', left: '15%' },
-    mobile: { top: '53%', left: '15%' } 
+    desktop: { top: '69%', left: '15%' },
+    tablet: { top: '72%', left: '15%' },
+    mobile: { top: '68%', left: '15%' } 
   },
   { 
     id: 5, w: 280, h: 350, img: "/temp/home/theme/WEBSITE_THEME BANNER_2.jpg.jpeg",
-    desktop: { top: '65%', left: '75%' },
-    tablet: { top: '66.5%', left: '62%' },
-    mobile: { top: '68%', left: '50%' } 
+    desktop: { top: '78%', left: '75%' },
+    tablet: { top: '80%', left: '62%' },
+    mobile: { top: '82%', left: '50%' } 
   },
   // { 
   //   id: 6, w: 200, h: 180, img: "/temp/theme/6.png",
@@ -106,7 +106,7 @@ const Theme2026: NextPage = () => {
     <section 
       onMouseEnter={() => setIsInsideSection(true)}
       onMouseLeave={() => setIsInsideSection(false)}
-      className={`relative w-full bg-white h-[180vh] md:h-[260vh] lg:h-[350vh] overflow-visible ${device === 'desktop' ? 'cursor-none' : 'cursor-default'}`}
+      className={`relative w-full bg-white h-[180vh] md:h-[200vh] lg:h-[270vh] 2xl:h-[200vh] overflow-visible ${device === 'desktop' ? 'cursor-none' : 'cursor-default'}`}
     >
       
       {/* 1. STICKY BACKGROUND TEXT LAYER */}
