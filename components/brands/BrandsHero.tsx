@@ -10,7 +10,7 @@ const BrandsHero = () => {
         {/* Replace with your actual image path */}
         <div className="w-full h-full bg-black relative flex items-center justify-center">
             <Image 
-              src="/temp/home/theme/WEBSITE_THEME BANNER_1.jpg.jpeg"
+              src="/temp/edition/brands/brand-hero.png"
               alt="Brand Hero" 
               fill
               className="object-cover"

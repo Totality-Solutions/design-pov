@@ -1,104 +1,108 @@
-// import { createClient } from '@supabase/supabase-js';
-// import { NextResponse } from 'next/server';
-// import type { HubSpotPayload } from '@/types';
-
-// // Initialize Supabase with Service Role Key to allow writes
-// const supabase = createClient(
-//   process.env.NEXT_PUBLIC_SUPABASE_URL!,
-//   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY! 
-// );
-
-// export async function POST(req: Request) {
-//     console.log(supabase)
-//   try {
-//     const body: HubSpotPayload = await req.json();
-//     const { type, email, ...rest } = body;
-
-//     // Insert into Supabase 'submissions' table
-//     const { data, error } = await supabase
-//       .from('submissions')
-//       .insert([
-//         {
-//           email: email,
-//           form_type: type,
-//           payload: rest, // Storing extra dynamic fields in a JSONB column
-//           submitted_at: new Date().toISOString(),
-//         },
-//       ])
-//       .select();
-
-//     if (error) throw error;
-
-//     return NextResponse.json({ success: true, data }, { status: 200 });
-//   } catch (error: any) {
-//     console.error("Supabase Error:", error);
-//     return NextResponse.json(
-//       { error: error },
-//       { status: 500 }
-//     );
-//   }
-// }
-
-
 import { createClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
+import { SESClient, SendEmailCommand } from '@aws-sdk/client-ses';
 
-// Initialize Supabase Client
-// Note: Using the Anon Key requires the RLS policy to be set in your dashboard
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
 
+const ses = new SESClient({
+  region: process.env.AWS_SES_REGION!,
+  credentials: {
+    accessKeyId: process.env.AWS_SES_ACCESS_KEY_ID!,
+    secretAccessKey: process.env.AWS_SES_SECRET_ACCESS_KEY!,
+  },
+});
+
+const MARKETING_EMAIL = 'marketing@designpovindia.com';
+const FROM_EMAIL = process.env.SES_FROM_EMAIL || 'noreply@designpovindia.com';
+
+function buildEmailHtml(fields: Record<string, string | null>) {
+  const rows = Object.entries(fields)
+    .filter(([, v]) => v != null)
+    .map(
+      ([key, value]) =>
+        `<tr>
+          <td style="padding:8px 16px;font-weight:600;background:#f4f4f4;white-space:nowrap;border:1px solid #ddd">${key}</td>
+          <td style="padding:8px 16px;border:1px solid #ddd">${value}</td>
+        </tr>`
+    )
+    .join('');
+
+  return `
+    <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
+      <div style="background:#c00;padding:20px 24px">
+        <h1 style="color:#fff;margin:0;font-size:20px">Design POV — New Submission</h1>
+      </div>
+      <div style="padding:24px">
+        <table style="width:100%;border-collapse:collapse">${rows}</table>
+      </div>
+      <div style="padding:12px 24px;background:#f4f4f4;font-size:12px;color:#888">
+        Submitted at ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })} IST
+      </div>
+    </div>`;
+}
+
+async function sendEmail(subject: string, fields: Record<string, string | null>) {
+  const command = new SendEmailCommand({
+    Source: FROM_EMAIL,
+    Destination: { ToAddresses: [MARKETING_EMAIL] },
+    Message: {
+      Subject: { Data: subject, Charset: 'UTF-8' },
+      Body: {
+        Html: { Data: buildEmailHtml(fields), Charset: 'UTF-8' },
+      },
+    },
+  });
+  await ses.send(command);
+}
+
 export async function POST(req: Request) {
   try {
-    // 1. Parse the incoming request body
     const body = await req.json();
+    const { type, category, name, email, contact, fileName } = body;
 
-    // 2. Destructure the data to match your requested format
-    // These names match the keys being sent from your useHubspotForm hook
-    const { 
-      type, 
-      category, 
-      name, 
-      email, 
-      contact, 
-      fileName 
-    } = body;
-
-    // 3. Insert into Supabase 'submissions' table
-    // We map the camelCase names from the frontend to the underscore_names in the DB
+    // 1. Save to Supabase
     const { data, error } = await supabase
       .from('submissions')
       .insert([
         {
-          type: type,
-          category: category,
-          name: name,
-          email: email,
-          contact: contact,
-          file_name: fileName, // Maps 'fileName' from frontend to 'file_name' column
+          type,
+          category,
+          name,
+          email,
+          contact,
+          file_name: fileName,
           created_at: new Date().toISOString(),
-        }
+        },
       ])
       .select();
 
-    // 4. Handle database errors (like RLS violations or missing columns)
     if (error) {
-        console.error("Supabase Database Error:", error);
-        throw error;
+      console.error('Supabase error:', error);
+      throw error;
     }
 
-    // 5. Return success response
-    return NextResponse.json({ success: true, data }, { status: 200 });
+    // 2. Send SES email (non-blocking failure — DB save is the source of truth)
+    try {
+      const subject = `New Submission: ${category || type || 'Form'}`;
+      await sendEmail(subject, {
+        Category: category || type || null,
+        Name: name || null,
+        Email: email || null,
+        Phone: contact || null,
+        'File Name': fileName || null,
+      });
+    } catch (emailErr) {
+      console.error('SES email error (non-fatal):', emailErr);
+    }
 
+    return NextResponse.json({ success: true, data }, { status: 200 });
   } catch (error: any) {
-    console.error("API Route Error:", error);
+    console.error('API Route Error:', error);
     return NextResponse.json(
-      { 
-        error: error.message || "Internal Server Error",
-        details: error 
-      },
+      { error: error.message || 'Internal Server Error', details: error },
       { status: 500 }
     );
   }

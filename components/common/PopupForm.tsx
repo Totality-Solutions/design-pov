@@ -19,6 +19,7 @@ export default function PopupForm({ isOpen, onClose }: PopupFormProps) {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [errors, setErrors] = useState<{ name?: string; email?: string; phone?: string }>({});
+  const [isLoading, setIsLoading] = useState(false);
 
   if (!isOpen) return null;
 
@@ -31,8 +32,29 @@ export default function PopupForm({ isOpen, onClose }: PopupFormProps) {
     return Object.keys(next).length === 0;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!validate()) return;
+    setIsLoading(true);
+
+    try {
+      await fetch("/api/submissions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "popup",
+          category: "Show Deck Download",
+          name,
+          email,
+          contact: phone,
+          fileName: null,
+        }),
+      });
+    } catch {
+      // Proceed to download even if API fails
+    } finally {
+      setIsLoading(false);
+    }
+
     const link = document.createElement("a");
     link.href = SHOW_DECK_PDF;
     link.download = "Design-POV-Show-Deck.pdf";
@@ -130,7 +152,7 @@ export default function PopupForm({ isOpen, onClose }: PopupFormProps) {
               </label>
               <input
                 type="tel"
-                placeholder="+91"
+                placeholder="+91 XXXXX XXXXX"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 className="w-full px-5 py-4 bg-zinc-100 text-sm font-['Montserrat'] outline-none focus:ring-1 focus:ring-black transition-all"
@@ -140,7 +162,7 @@ export default function PopupForm({ isOpen, onClose }: PopupFormProps) {
 
             <div className="pt-4">
               <CTABtn
-                label="Submit & Download"
+                label={isLoading ? "Submitting..." : "Submit & Download"}
                 btnBg="var(--color-black)"
                 btnHoverBg="var(--primary-red)"
                 textColor="var(--color-white)"
@@ -153,6 +175,7 @@ export default function PopupForm({ isOpen, onClose }: PopupFormProps) {
                 bottomKey1Right="40px"
                 bottomKey2Right="10px"
                 onClick={handleSubmit}
+                disabled={isLoading}
               />
             </div>
           </form>

@@ -2,7 +2,7 @@ import ApplySection from "@/components/brands/ApplySection";
 import Brands from "@/components/brands/Brands";
 import BrandsHero from "@/components/brands/BrandsHero";
 import Sponsors from "@/components/brands/Sponsors";
-import React from "react";
+import BuildPartner from "@/components/brands/BuildPartner";
 
 const BrandsPage = () => {
   return (
@@ -11,6 +11,7 @@ const BrandsPage = () => {
       <BrandsHero />
       <Sponsors />
       <Brands />
+      <BuildPartner />
       <ApplySection />
 
     </main>

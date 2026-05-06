@@ -121,7 +121,7 @@ export default function MagazineSubmissionForm() {
 
             {/* IMAGE UPLOAD */}
             <div className="space-y-4">
-              <label className="text-[15px] text-black/50 font-medium block">Image Upload :</label>
+              <label className="text-[15px] text-black/50 font-medium block">Image Upload </label>
               <div className="flex flex-col gap-4">
                 {!imgName ? (
                   <label className="cursor-pointer border border-black/20 px-8 py-2 my-4 rounded-sm flex items-center gap-3 hover:bg-gray-50 transition-colors w-fit">
