@@ -7,11 +7,11 @@ import PressGrid  from "@/components/common/PressGrid";
 const INTERVIEW_DATA = [
   {
     category: "Designers",
-    title: "Conversations on the future of sustainable architecture",
+    title: "Episode 1 of #TheCore’25: Ameet Mirpuri’s Nostalgia",
     author: "Design POV",
     date: "12 Mar, 2026",
     image: "/temp/about/1.png", 
-    slug: "https://www.youtube.com/"
+    slug: "https://youtu.be/g4k7-ZfcDlk?si=58JIvM0aUCQ9qmSs"
   },
   {
     category: "Architects",

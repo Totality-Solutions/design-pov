@@ -5,38 +5,64 @@ import SectionHeading from '../common/SectionHeading';
 import CTABtn from '../common/CTABtn';
 
 export default function MagazineSubmissionForm() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [docName, setDocName] = useState("");
   const [imgName, setImgName] = useState("");
   const [isHovered, setIsHovered] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  
+  const [errorMsg, setErrorMsg] = useState("");
+
   const formRef = useRef<HTMLFormElement>(null);
 
-  // File handlers for separate state
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>, type: 'doc' | 'img') {
-    let file = e.target.files?.[0];
+    const file = e.target.files?.[0];
     if (file) {
       if (type === 'doc') setDocName(file.name);
       else setImgName(file.name);
     }
   }
 
-  function handleSubmit(e?: React.MouseEvent) {
+  async function handleSubmit(e?: React.MouseEvent) {
     if (e) e.preventDefault();
-    
-    // UI Feedback
-    setIsSubmitted(true);
-    
-    // Clear dynamic states
-    setDocName("");
-    setImgName("");
 
-    // Reset native form inputs
-    if (formRef.current) {
-      formRef.current.reset();
+    if (!name.trim() || !email.trim() || !phone.trim() || !docName?.trim()) {
+      setErrorMsg("Please fill in all required fields.");
+      return;
     }
-    
-    setTimeout(() => setIsSubmitted(false), 5000);
+    setErrorMsg("");
+    setIsLoading(true);
+
+    try {
+      const res = await fetch("/api/submissions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "magazine",
+          category: "Magazine Submission",
+          name,
+          email,
+          contact: phone,
+          fileName: docName || imgName || null,
+        }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || "Submission failed");
+      }
+
+      setIsSubmitted(true);
+      setName(""); setEmail(""); setPhone(""); setDocName(""); setImgName("");
+      if (formRef.current) formRef.current.reset();
+      setTimeout(() => setIsSubmitted(false), 5000);
+    } catch (err: any) {
+      setErrorMsg(err.message || "Something went wrong. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
@@ -53,20 +79,20 @@ export default function MagazineSubmissionForm() {
           {/* TOP ROW: NAME, EMAIL, PHONE */}
           <div className='py-8'>
             <div className="flex flex-col gap-2">
-              <label className="text-[15px] text-black/50 font-medium">Full Name :</label>
-              <input type="text" placeholder="@Name" className="border-b border-black/20 py-2 text-[#000000] outline-none text-[13px] font-medium transition-colors focus:border-primary-blue" />
+              <label className="text-[15px] text-black/50 font-medium">Full Name <span className="text-red-600">*</span></label>
+              <input type="text" placeholder="@Name" value={name} onChange={(e) => setName(e.target.value)} className="border-b border-black/20 py-2 text-[#000000] outline-none text-[13px] font-medium transition-colors focus:border-primary-blue" />
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2  gap-x-12 gap-y-12 mb-8">
             <div className="flex flex-col gap-2">
-              <label className="text-[15px] text-black/50 font-medium">Email :</label>
-              <input type="email" placeholder="info@yourdomain.com" className="border-b border-black/20 py-2 text-[#000000] outline-none text-[13px] font-medium transition-colors focus:border-primary-blue" />
+              <label className="text-[15px] text-black/50 font-medium">Email <span className="text-red-600">*</span></label>
+              <input type="email" placeholder="info@yourdomain.com" value={email} onChange={(e) => setEmail(e.target.value)} className="border-b border-black/20 py-2 text-[#000000] outline-none text-[13px] font-medium transition-colors focus:border-primary-blue" />
             </div>
 
             <div className="flex flex-col gap-2">
-              <label className="text-[15px] text-black/50 font-medium">Phone No :</label>
-              <input type="text" placeholder="+91 XXXXX XXXXX" className="border-b border-black/20 py-2 text-[#000000] outline-none text-[13px] font-medium transition-colors focus:border-primary-blue" />
+              <label className="text-[15px] text-black/50 font-medium">Phone No <span className="text-red-600">*</span></label>
+              <input type="text" placeholder="+91 XXXXX XXXXX" value={phone} onChange={(e) => setPhone(e.target.value)} className="border-b border-black/20 py-2 text-[#000000] outline-none text-[13px] font-medium transition-colors focus:border-primary-blue" />
             </div>
           </div>
 
@@ -76,7 +102,7 @@ export default function MagazineSubmissionForm() {
             <div className="grid grid-cols-1 lg:grid-cols-2">
             {/* DOC UPLOAD */}
             <div className="space-y-4">
-              <label className="text-[15px] text-black/50 font-medium block">Doc Upload :</label>
+              <label className="text-[15px] text-black/50 font-medium block">Doc Upload <span className="text-red-600">*</span></label>
               <div className="flex flex-col gap-4">
                 {!docName ? (
                   <label className="cursor-pointer border border-black/20 px-8 py-2 my-4 rounded-sm flex items-center gap-3 hover:bg-gray-50 transition-colors w-fit">
@@ -114,10 +140,18 @@ export default function MagazineSubmissionForm() {
             </div>
 
             {/* SUBMIT BUTTON AREA */}
-            <div className="w-full flex flex-col items-end justify-end relative">
+            <div className="w-full flex flex-col items-end justify-end gap-3">
+              {isSubmitted && (
+                <p className="text-green-600 text-[13px] font-medium animate-in fade-in slide-in-from-bottom-1 duration-300 whitespace-nowrap">
+                  Your submission has been received successfully!
+                </p>
+              )}
+              {errorMsg && (
+                <p className="text-red-600 text-[13px] font-medium text-right">{errorMsg}</p>
+              )}
               <div onClick={handleSubmit} className="cursor-pointer">
                 <CTABtn
-                  label="Submit"
+                  label={isLoading ? "Submitting..." : "Submit"}
                   iconType="arrow"
                   btnBg="transparent"
                   btnHoverBg="var(--primary-blue)"
@@ -131,15 +165,9 @@ export default function MagazineSubmissionForm() {
                   bottomKey1Right="50px"
                   bottomKey2Right="15px"
                   href="javascript:void(0)"
+                  disabled={isLoading}
                   />
-                  {/* SUCCESS MESSAGE */}
-                  {isSubmitted && (
-                    <p className="absolute top-0 right-0 text-green-600 text-[13px] font-medium animate-in fade-in slide-in-from-top-1 duration-300 whitespace-nowrap">
-                      Your submission has been received successfully!
-                    </p>
-                  )}
               </div>
-                
             </div>
 
           </div>
