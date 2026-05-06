@@ -126,37 +126,37 @@ export const ShowcaseModal = ({
                   {data.label}
                 </h2>
                 <motion.button
-  onClick={onClose}
-  initial="initial"
-  whileHover="hover" // This triggers the "hover" variant in all children
-  className="relative w-8 h-8 group flex items-center justify-center"
->
-  {/* Red background */}
-  <div className="absolute inset-0 bg-primary-red opacity-0 group-hover:opacity-30 transition-opacity duration-300 rounded-full" />
-
-  {/* Icon Container */}
-  <motion.div
-    className="relative w-full h-full flex items-center justify-center z-10"
-    variants={{
-      initial: { rotate: 45 },
-      hover: { rotate: 0 }
-    }}
-    transition={{ duration: 0.3, ease: "easeInOut" }}
-  >
-    {/* Horizontal line (Static) */}
-    <div className="absolute w-[16px] h-[1.5px] bg-black" />
-
-    {/* Vertical line (Fades out) */}
-    <motion.div
-      className="absolute w-[1.5px] h-[16px] bg-black"
-      variants={{
-        initial: { opacity: 1 },
-        hover: { opacity: 0 }
-      }}
-      transition={{ duration: 0.2 }}
-    />
-  </motion.div>
-</motion.button>
+                  onClick={onClose}
+                  initial="initial"
+                  whileHover="hover" // This triggers the "hover" variant in all children
+                  className="relative w-8 h-8 group flex items-center justify-center"
+                >
+                  {/* Red background */}
+                  <div className="absolute inset-0 bg-primary-red opacity-0 group-hover:opacity-30 transition-opacity duration-300 rounded-full" />
+                              
+                  {/* Icon Container */}
+                  <motion.div
+                    className="relative w-full h-full flex items-center justify-center z-10"
+                    variants={{
+                      initial: { rotate: 45 },
+                      hover: { rotate: 0 }
+                    }}
+                    transition={{ duration: 0.3, ease: "easeInOut" }}
+                  >
+                    {/* Horizontal line (Static) */}
+                    <div className="absolute w-[16px] h-[1.5px] bg-black" />
+                  
+                    {/* Vertical line (Fades out) */}
+                    <motion.div
+                      className="absolute w-[1.5px] h-[16px] bg-black"
+                      variants={{
+                        initial: { opacity: 1 },
+                        hover: { opacity: 0 }
+                      }}
+                      transition={{ duration: 0.2 }}
+                    />
+                  </motion.div>
+                </motion.button>
               </div>
 
               {/* SCROLLABLE BODY: Description */}
