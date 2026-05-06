@@ -11,7 +11,7 @@ export default function MagazineHero() {
     <section className="w-full h-fit bg-pov-white border-b border-pov-black/40">
       {/* TEXT SECTION: Clean horizontal layout with border */}
 
-    <div className="w-full border-pov-black lg:pt-20">
+    <div className="w-full pt-10 lg:pt-20">
       <UnderlineText lineHeight={72} className="text-h2-mobile md:text-h2-tab lg:text-h2 tracking-tight font-semibold">
         A curation of stories from those who consume and create design - from the Indian sub-continent and beyond.
       </UnderlineText>
@@ -43,9 +43,8 @@ export default function MagazineHero() {
       </div>
 
       {/* MEDIA SECTION: Responsive container for Image or Video */}
-      <div className="relative w-full overflow-hidden flex items-center justify-center">
-        
-        {/* Main Video/Image Asset (No background visuals) */}
+      {/* <div className="relative w-full overflow-hidden flex items-center justify-center">
+
         <div className="relative z-10 w-full h-[400px] bg-black overflow-hidden">
           <MediaRenderer 
             src="/temp/home/theme/WEBSITE_THEME BANNER_1.jpg.jpeg" 
@@ -54,7 +53,7 @@ export default function MagazineHero() {
           />
         </div>
 
-      </div>
+      </div> */}
     </section>
   );
 }

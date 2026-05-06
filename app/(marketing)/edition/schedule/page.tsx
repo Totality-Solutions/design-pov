@@ -1,13 +1,13 @@
-"use client";
 
-import React, { useState } from "react";
 import ScheduleParagraph from "@/components/schedule/ScheculeParagraph";
 import DynamicScheduleGrid from "@/components/schedule/DynamicScheduleGrid";
 import CTAStrip from "@/components/common/CTAStrip";
 import PopupForm from "@/components/common/PopupForm";
+import DesignPovTicket from "@/components/schedule/DesignPovTicket";
+import ShowDeckCTA from "@/components/common/ShowDeckCTA";
 
 const SchedulePage = () => {
-  const [isFormOpen, setIsFormOpen] = useState(false);
+
   return (
     <main className="min-h-screen bg-white">
       {/* Hero or Page Header could go here */}
@@ -21,21 +21,8 @@ const SchedulePage = () => {
         description2="Each session brings together distinct perspectives shaping how we think about design, culture, and collaboration."
       />
       <DynamicScheduleGrid />
-      {/* <div className="w-full z-10 bg-white border-b">
-        <CTAStrip
-          title="Where Design Meets Dialogue"
-          ctaLabel="Apply"
-          // 3. Pass the open function to onClick
-          onClick={() => setIsFormOpen(true)} 
-          hoverBgColor="#000000"
-          textColor='var(--primary-red)'
-          hoverTextColor='var(--color-white)'
-        />
-      </div> */}
-      <PopupForm 
-        isOpen={isFormOpen} 
-        onClose={() => setIsFormOpen(false)} 
-      />
+      <DesignPovTicket />
+      <ShowDeckCTA />
     </main>
   );
 };
