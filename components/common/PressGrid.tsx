@@ -63,7 +63,7 @@ export default function PressGrid({
               className="group cursor-pointer block"
             >
               {/* Image Container */}
-              <div className="relative aspect-[16/9] w-full overflow-hidden bg-gray-100 mb-6">
+              <div className="relative aspect-video w-full overflow-hidden bg-gray-100 mb-6">
                 <Image
                   src={item.image}
                   alt={item.title}
@@ -74,17 +74,17 @@ export default function PressGrid({
 
               {/* Text Content */}
               <div className="flex flex-col gap-2">
-                <span className="text-[16px] text-black/60">
+                {/* <span className="text-[16px] text-black/60">
                   {item.category}
-                </span>
+                </span> */}
                 <h3 className="text-[18px] md:text-[20px] font-normal leading-[1.2] text-black line-clamp-2 group-hover:text-[var(--primary-red)] transition-colors">
                   {item.title}
                 </h3>
-                <div className="flex items-center gap-2 mt-2 text-[12px] font-medium text-black/60">
+                {/* <div className="flex items-center gap-2 mt-2 text-[12px] font-medium text-black/60">
                   <span>by {item.author}</span>
                   <span className="w-[1px] h-[12px] bg-black/20" />
                   <span>{item.date}</span>
-                </div>
+                </div> */}
               </div>
             </Link>
           ))}
