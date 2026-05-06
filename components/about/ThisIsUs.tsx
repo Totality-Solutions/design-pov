@@ -133,9 +133,9 @@ const ThisIsUs: React.FC = () => {
                 playsInline
               /> */}
               <Image
-              src="/temp/about/asif-gagan.jpeg"
+              src="/temp/about/founder.jpeg"
               width={1000}
-              style={{ objectFit: "cover", objectPosition: "center" }}
+              style={{ objectFit: "contain", objectPosition: "center" }}
               height={200}
               alt="Asif Gagan"
               />

@@ -65,7 +65,7 @@ export default function ParticipationPopup({ isOpen, onClose, category }: Partic
             </div>
 
             {/* RIGHT COLUMN: FORM */}
-            <div className="bg-white p-8 md:p-16 flex flex-col border-[10px] border-red-600 overflow-y-auto">
+            <div className="bg-white p-8 md:p-16 flex flex-col justify-between border-10 border-red-600">
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-2 h-2 bg-black rounded-full flex-shrink-0" />
                 <h3 className="text-black text-2xl font-medium tracking-tight font-['Montserrat'] uppercase">

@@ -5,13 +5,18 @@ import { ArrowUpRight, ArrowLeft, ArrowRight, X } from "lucide-react";
 import CTABtn from "../common/CTABtn";
 
 const images = [
-'/temp/home/theme/WEBSITE_THEME BANNER_1.jpg.jpeg',
-'/temp/home/theme/WEBSITE_THEME BANNER_4.jpg.jpeg',
-'/temp/home/theme/WEBSITE_THEME BANNER_2.jpg.jpeg',
-'/temp/home/theme/WEBSITE_THEME BANNER_3.jpg.jpeg',
-'/temp/home/theme/WEBSITE_THEME BANNER_1.jpg.jpeg',
-'/temp/home/theme/WEBSITE_THEME BANNER_3.jpg.jpeg',
-'/temp/home/theme/WEBSITE_THEME BANNER_1.jpg.jpeg',
+'/temp/collaborate/brand1.jpeg',
+'/temp/collaborate/brand2.jpg',
+'/temp/collaborate/circle1.jpeg',
+'/temp/collaborate/circle2.jpg',
+'/temp/collaborate/core1.jpg',
+'/temp/collaborate/core2.jpg',
+'/temp/collaborate/elevate1.jpeg',
+'/temp/collaborate/object1.jpeg',
+'/temp/collaborate/partner1.jpeg',
+'/temp/collaborate/partner2.jpeg',
+'/temp/collaborate/partner3.jpeg',
+'/temp/collaborate/partner4.jpg',
 ];
 
 const CollaborateSection = () => {

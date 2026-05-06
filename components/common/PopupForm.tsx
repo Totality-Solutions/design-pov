@@ -1,12 +1,13 @@
 "use client";
 
-import React from "react";
+import { useState } from "react";
 import Image from "next/image";
 import { FiX } from "react-icons/fi";
 import CTABtn from "./CTABtn";
 
-// Example logo asset: Ensure this exists in your /public directory or change the src
-import LogoImage from "@/public/logo/Logo.svg"; 
+import LogoImage from "@/public/logo/Logo.svg";
+
+const SHOW_DECK_PDF = "/show-deck.pdf";
 
 interface PopupFormProps {
   isOpen: boolean;
@@ -14,7 +15,36 @@ interface PopupFormProps {
 }
 
 export default function PopupForm({ isOpen, onClose }: PopupFormProps) {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [errors, setErrors] = useState<{ name?: string; email?: string; phone?: string }>({});
+
   if (!isOpen) return null;
+
+  const validate = () => {
+    const next: typeof errors = {};
+    if (!name.trim()) next.name = "Full name is required";
+    if (!email.trim()) next.email = "Email is required";
+    if (!phone.trim()) next.phone = "Phone number is required";
+    setErrors(next);
+    return Object.keys(next).length === 0;
+  };
+
+  const handleSubmit = () => {
+    if (!validate()) return;
+    const link = document.createElement("a");
+    link.href = SHOW_DECK_PDF;
+    link.download = "Design-POV-Show-Deck.pdf";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    setName("");
+    setEmail("");
+    setPhone("");
+    setErrors({});
+    onClose();
+  };
 
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-6">
@@ -36,31 +66,27 @@ export default function PopupForm({ isOpen, onClose }: PopupFormProps) {
         </button>
 
         {/* LEFT COLUMN: BRANDING & LOGO */}
-        <div className="hidden lg:block relative bg-red-600 p-8 md:p-12 flex flex-col items-center min-h-[200px] md:min-h-full">
-          
-          {/* Logo - Vertically & Horizontally Centered */}
-          <div className="flex-grow flex items-center justify-center">
-            <div className="relative w-40 h-20 md:w-80 md:h-40 opacity-90">
-                <Image 
-                    src={LogoImage} 
-                    alt="Design POV Logo" 
-                    fill 
+         <div className="hidden lg:flex flex-col relative bg-red-600 p-8 md:p-12 items-center min-h-full">
+              <div className="flex-grow flex items-center justify-center">
+                <div className="relative w-40 h-20 md:w-80 md:h-40 opacity-90">
+                  <Image
+                    src={LogoImage}
+                    alt="Design POV Logo"
+                    fill
                     priority
-                    className="object-contain" 
-                />
+                    className="object-contain"
+                  />
+                </div>
+              </div>
+              <div className="w-full text-center md:pb-6">
+                <h2 className="text-black text-md md:text-xl font-medium uppercase tracking-widest leading-tight font-['Montserrat']">
+                  Design Done Differently
+                </h2>
+              </div>
             </div>
-          </div>
-          
-          {/* Bottom Center Text */}
-          <div className="w-full text-center md:pb-6">
-            <h2 className="text-black text-md md:text-xl font-medium uppercase tracking-[0.1em] leading-tight font-['Montserrat']">
-              Design Done Differently
-            </h2>
-          </div>
-        </div>
 
         {/* RIGHT COLUMN: FORM (With added 10px Red Border) */}
-        <div className="bg-white p-8 md:p-16 flex flex-col justify-between border-[10px] border-red-600">
+        <div className="bg-white p-8 md:p-16 flex flex-col justify-between border-10 border-red-600">
           
           <div className="flex items-center gap-3 mb-10">
             <div className="w-2 h-2 bg-black rounded-full" />
@@ -69,56 +95,65 @@ export default function PopupForm({ isOpen, onClose }: PopupFormProps) {
             </h3>
           </div>
 
-          <form className="space-y-6 flex-grow" onSubmit={(e) => e.preventDefault()}>
+          <form className="space-y-6 flex-grow" onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
             <div className="flex flex-col gap-2">
               <label className="text-black text-[14px] font-medium tracking-wide font-['Montserrat']">
                 Full Name <span className="text-red-600">*</span>
               </label>
-              <input 
-                type="text" 
+              <input
+                type="text"
                 placeholder="Full Name*"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 className="w-full px-5 py-4 bg-zinc-100 text-sm font-['Montserrat'] outline-none focus:ring-1 focus:ring-black transition-all"
               />
+              {errors.name && <span className="text-red-600 text-xs font-['Montserrat']">{errors.name}</span>}
             </div>
 
             <div className="flex flex-col gap-2">
               <label className="text-black text-[14px] font-medium tracking-wide font-['Montserrat']">
                 Email Address <span className="text-red-600">*</span>
               </label>
-              <input 
-                type="email" 
+              <input
+                type="email"
                 placeholder="xyz@gmail.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="w-full px-5 py-4 bg-zinc-100 text-sm font-['Montserrat'] outline-none focus:ring-1 focus:ring-black transition-all"
               />
+              {errors.email && <span className="text-red-600 text-xs font-['Montserrat']">{errors.email}</span>}
             </div>
 
             <div className="flex flex-col gap-2">
               <label className="text-black text-[14px] font-medium tracking-wide font-['Montserrat']">
                 Phone Number <span className="text-red-600">*</span>
               </label>
-              <input 
-                type="tel" 
+              <input
+                type="tel"
                 placeholder="+91"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
                 className="w-full px-5 py-4 bg-zinc-100 text-sm font-['Montserrat'] outline-none focus:ring-1 focus:ring-black transition-all"
               />
+              {errors.phone && <span className="text-red-600 text-xs font-['Montserrat']">{errors.phone}</span>}
             </div>
 
             <div className="pt-4">
-                <CTABtn
-                  label="Submit"
-                  btnBg="var(--color-black)"
-                  btnHoverBg="var(--primary-red)"
-                  textColor="var(--color-white)"
-                  borderColor="transparent"
-                  borderHoverColor="transparent"
-                  lineColor="var(--color-white)"
-                  lineHoverColor="var(--primary-red)"
-                  bottomKey1Width="30px"
-                  bottomKey2Width="10px"
-                  bottomKey1Right="40px"
-                  bottomKey2Right="10px"
-                  href="#"
-                />
+              <CTABtn
+                label="Submit & Download"
+                btnBg="var(--color-black)"
+                btnHoverBg="var(--primary-red)"
+                textColor="var(--color-white)"
+                borderColor="transparent"
+                borderHoverColor="transparent"
+                lineColor="var(--color-white)"
+                lineHoverColor="var(--primary-red)"
+                bottomKey1Width="30px"
+                bottomKey2Width="10px"
+                bottomKey1Right="40px"
+                bottomKey2Right="10px"
+                onClick={handleSubmit}
+              />
             </div>
           </form>
         </div>
