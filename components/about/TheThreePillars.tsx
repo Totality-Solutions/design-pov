@@ -156,7 +156,7 @@ const TheThreePillars: React.FC = () => {
                  - z-index: ensures the last card is at bottom, or you can manually set it
               */
               className="pillar-image-trigger w-full flex flex-col md:border-b border-[#DFDFDF] last:border-b-0 relative 
-                         sticky top-20 lg:relative bg-white"
+                         sticky lg:top-0 top-20 lg:relative bg-white"
               style={{ zIndex: index + 1 }}
             >
               {/* MOBILE ONLY TEXT */}

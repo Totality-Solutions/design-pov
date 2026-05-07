@@ -49,7 +49,7 @@ export default function ThemeCollaborators() {
   return (
     <section className="w-full bg-white flex flex-col items-center select-none">
       <main className="w-full px-6 lg:px-10 pb-12">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-[50px]">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-[50px]">
           {themeData.map((project) => (
             <HoverCard
               key={project.id}

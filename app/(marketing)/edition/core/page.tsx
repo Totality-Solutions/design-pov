@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import CTAStrip from "@/components/common/CTAStrip";
-import { CoreShowcase } from "@/components/core/CoreShowcase";
-import CoreForm from "@/components/core/CoreForm";
+import { CoreShowcase } from "@/components/edition26/core/CoreShowcase";
+import CoreForm from "@/components/edition26/core/CoreForm";
 
 export default function CorePage() {
   return (

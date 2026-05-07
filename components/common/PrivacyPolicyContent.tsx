@@ -49,7 +49,7 @@ const PrivacyPolicyContent: React.FC = () => {
         </ul>
       </section>
 
-      <footer className="space-y-4 pt-4 border-t">
+      <footer className="space-y-4">
         <p>
           <span className="font-bold">Data Security:</span> We use industry-standard encryption and secure servers to protect your information.
         </p>

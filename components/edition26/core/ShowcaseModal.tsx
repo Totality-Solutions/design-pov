@@ -122,9 +122,14 @@ export const ShowcaseModal = ({
               
               {/* STICKY HEADER: Title and Close Button */}
               <div className="flex items-start justify-between px-8 md:px-12 pb-4 py-2 md:py-6 bg-white z-20">
-                <h2 className="text-2xl md:text-4xl font-semibold leading-tight text-black pr-8">
+                <div className="flex-col">
+                <h2 className="text-h3-mobile md:text-h3-tab lg:text-h3 font-semibold leading-tight text-black pr-8">
                   {data.label}
                 </h2>
+                <p className="text-body-mobile md:text-body-tab lg:text-body font-medium leading-tight text-black pr-8">
+                  {data.sublabel}
+                </p>
+                </div>
                 <motion.button
                   onClick={onClose}
                   initial="initial"

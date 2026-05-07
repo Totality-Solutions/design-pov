@@ -1,7 +1,7 @@
-import ApplySection from "@/components/brands/ApplySection";
-import Brands from "@/components/brands/Brands";
-import BrandsHero from "@/components/brands/BrandsHero";
-import Sponsors from "@/components/brands/Sponsors";
+import ApplySection from "@/components/edition26/brands/ApplySection";
+import Brands from "@/components/edition26/brands/Brands";
+import BrandsHero from "@/components/edition26/brands/BrandsHero";
+import Sponsors from "@/components/edition26/brands/Sponsors";
 import React from "react";
 
 const BrandsPage = () => {

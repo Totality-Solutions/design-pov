@@ -14,9 +14,41 @@ import { Container } from "../common/Container";
 import Link from "next/link";
 
 const navLinks = {
-  Partners: { items: ["Tickets", "Ecosystem"], img: "/image1.svg" },
-  AboutUs: { items: ["Program", "Designers"], img: "/image2.svg" },
-  Originals: { items: ["Objects", "Elevate", "Edits"], img: "/image3.svg" },
+  Partners: {
+    title: "Ecosystem",
+    href: "/ecosystem",
+    img: "/image1.svg",
+    items: [
+      { title: "Circle", href: "/ecosystem/circle" },
+      { title: "Elevate", href: "/ecosystem/elevate" },
+      { title: "Objects", href: "/ecosystem/objects" },
+    ],
+  },
+
+  AboutUs: {
+    title: "2026 Edition",
+    href: "/about-us",
+    img: "/image2.svg",
+    items: [
+      { title: "Theme", href: "/edition/theme" },
+      { title: "Brands", href: "/edition/brands" },
+      { title: "Core", href: "/edition/core" },
+      { title: "Schedule", href: "/edition/schedule" },
+    ],
+  },
+
+  Originals: {
+    title: "Quick Links",
+    href: "",
+    img: "/image3.svg",
+    items: [
+      { title: "About", href: "/about" },
+      { title: "Collaborate", href: "/collaborate" },
+      { title: "Magazine", href: "/magazine" },
+      { title: "Contact", href: "/contact" },
+      { title: "POV Index", href: "https://povindex.designpovindia.com/" },
+    ],
+  },
 };
 
 const Footer = () => {
@@ -71,7 +103,7 @@ const Footer = () => {
   }
 
   return (
-    <div className="!px-0">
+    <div className="!px-0 border-t border-black/10">
       <motion.footer
         ref={containerRef}
         onMouseMove={handleMouseMove}
@@ -84,7 +116,7 @@ const Footer = () => {
         }}
         className="relative overflow-hidden w-full flex items-center"
         style={{
-          height: "600px",
+          minHeight: "600px",
           isolation: "isolate",
         }}
       >
@@ -154,9 +186,9 @@ const Footer = () => {
 
             {/* RIGHT: Main Navigation Columns */}
             <div className="flex pointer-events-auto" style={{ gap: "var(--footer-gap-links)"}}>
-              <FooterTextColumn title="Partners" items={navLinks.Partners.items} />
-              <FooterTextColumn title="About us" items={navLinks.AboutUs.items} />
-              <FooterTextColumn title="Originals" items={navLinks.Originals.items} />
+              <FooterTextColumn {...navLinks.Partners} />
+              <FooterTextColumn {...navLinks.AboutUs} />
+              <FooterTextColumn {...navLinks.Originals} />
             </div>
           </div>
 
@@ -282,19 +314,28 @@ const MagneticFollowFlare = ({ index, mouseX, imageSrc, colWidth, baseFlareWidth
   );
 };
 
-const FooterTextColumn = ({ title, items }: any) => (
-  <div className="flex flex-col pl-4" style={{ width: "var(--footer-col-width)"}}>
+const FooterTextColumn = ({ title, href, items }: any) => (
+  <div
+    className="flex flex-col pl-4"
+    style={{ width: "var(--footer-col-width)" }}
+  >
     <div className="flex flex-col gap-[32px]">
-      <h3 className="text-white text-[16px] font-medium tracking-[0.05em]">
-        {title}
-      </h3>
-      <ul className="flex flex-col gap-5">
-        {items.map((item: string) => (
-          <li
-            key={item}
-            className="text-white text-[14px] font-light cursor-pointer whitespace-nowrap opacity-80 hover:opacity-100 transition-opacity"
-          >
-            {item}
+
+      <Link href={href}>
+        <h3 className="text-white text-[16px] font-medium tracking-[0.05em] hover:opacity-70 transition-opacity cursor-pointer">
+          {title}
+        </h3>
+      </Link>
+
+      <ul className="flex flex-col gap-3">
+        {items.map((item: any) => (
+          <li key={item.title}>
+            <Link
+              href={item.href}
+              className="text-white text-[14px] font-light whitespace-nowrap opacity-80 hover:opacity-100 transition-opacity"
+            >
+              {item.title}
+            </Link>
           </li>
         ))}
       </ul>

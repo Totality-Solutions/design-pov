@@ -1,49 +1,83 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Container } from "../common/Container";
 import SectionHeading from "../common/SectionHeading";
 import Link from "next/link";
 
 const ClientLogo = () => {
-  // const IGNORED_IDS = [41, 27, 40, 50, 18, 21, 53, 20];
-  const [isHovered, setIsHovered] = useState(false)
+  const [isHovered, setIsHovered] = useState(false);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const firstGroupRef = useRef<HTMLDivElement>(null);
 
-  const Client = Array.from({ length: 48 }, (_, i) => i + 1)
-    // .filter((id) => !IGNORED_IDS.includes(id))
-    .map((id) => ({
-      src: `/temp/edition/brands/${id}.png`,
-      alt: `Client Logo ${id}`,
-    }));
+  const Client = Array.from({ length: 48 }, (_, i) => i + 1).map((id) => ({
+    src: `/temp/edition/brands/${id}.png`,
+    alt: `Client Logo ${id}`,
+  }));
+
+  useEffect(() => {
+    const measure = () => {
+      if (!firstGroupRef.current || !trackRef.current) return;
+      const w = firstGroupRef.current.offsetWidth;
+      if (w > 0) {
+        trackRef.current.style.setProperty("--marquee-shift", `${w}px`);
+      }
+    };
+
+    measure();
+
+    // Re-measure after each image loads so variable is always accurate
+    const imgs = firstGroupRef.current?.querySelectorAll("img") ?? [];
+    imgs.forEach((img) => {
+      if (!img.complete) img.addEventListener("load", measure, { once: true });
+    });
+
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, []);
 
   return (
-    <Container 
+    <Container
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-    <div className="overflow-hidden flex items-center gap-2 md:gap-4">
-      <div className="shrink-0 whitespace-nowrap">
-  <SectionHeading 
-    titleMain="Brands" 
-    titleBold="2026" 
-    sticky={false}
-    isSectionHovered={isHovered} 
-  />
-</div>
-        <Link href="/edition/brands">
-      <div className="marquee-track py-6">
-        {[...Client, ...Client].map((logo, i) => (
-          <img
-            key={i}
-            src={logo.src}
-            alt={logo.alt}
-            className="h-12 w-auto object-contain shrink-0 "
-            draggable={false}
+      <div className="flex items-center gap-2 md:gap-4">
+        <div className="shrink-0 whitespace-nowrap">
+          <SectionHeading
+            titleMain="Brands"
+            titleBold="2026"
+            sticky={false}
+            isSectionHovered={isHovered}
           />
-        ))}
+        </div>
+        {/* overflow-hidden is on its own wrapper so the track's max-content width is not constrained by flex layout */}
+        <div className="overflow-hidden flex-1 min-w-0">
+          <div ref={trackRef} className="marquee-track py-6">
+            <div ref={firstGroupRef} className="marquee-group">
+              {Client.map((logo, i) => (
+                <img
+                  key={i}
+                  src={logo.src}
+                  alt={logo.alt}
+                  className="h-12 w-auto object-contain shrink-0"
+                  draggable={false}
+                />
+              ))}
+            </div>
+            <div className="marquee-group" aria-hidden="true">
+              {Client.map((logo, i) => (
+                <img
+                  key={i}
+                  src={logo.src}
+                  alt={logo.alt}
+                  className="h-12 w-auto object-contain shrink-0"
+                  draggable={false}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
-        </Link>
-    </div>
     </Container>
   );
 };

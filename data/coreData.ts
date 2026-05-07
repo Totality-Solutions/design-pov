@@ -2,6 +2,7 @@ export type CoreItem = {
   id: string;
   src: string;
   label: string;
+  sublabel?: string;
   description: string;
   additionalImages: string[];
   logo: string;

@@ -1,8 +1,8 @@
 "use client"
 import React, { useRef, useState } from 'react'
 import { useHubspotForm } from '@/hooks/useHubspotForm'
-import CTABtn from '../common/CTABtn'
-import SectionHeading from '../common/SectionHeading';
+import CTABtn from '../../common/CTABtn'
+import SectionHeading from '../../common/SectionHeading';
 
 const CoreForm = () => {
   const [fileName, setFileName] = useState("");

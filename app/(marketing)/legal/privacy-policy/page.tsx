@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function PrivacyPolicyPage(): JSX.Element {
   return (
-    <main className="min-h-screen ">
+    <main className=" ">
       <PrivacyPolicyContent />
     </main>
   );
