@@ -27,7 +27,7 @@ const navLinks = {
 
   AboutUs: {
     title: "2026 Edition",
-    href: "/about-us",
+    href: "/edition",
     img: "/image2.svg",
     items: [
       { title: "Theme", href: "/edition/theme" },
@@ -239,7 +239,7 @@ const Footer = () => {
               </div>
 
               {/* Totality Branding */}
-              <div className="flex flex-col items-end">
+              <a href="https://www.totality.solutions" target="_blank" rel="noopener noreferrer" className="flex flex-col items-end pointer-events-auto">
                 <p className="text-white text-[12px] mb-2 uppercase tracking-widest font-medium">
                   An IP by:
                 </p>
@@ -248,7 +248,7 @@ const Footer = () => {
                   alt="Totality"
                   className="w-[120px] lg:w-[140px] object-contain brightness-0 invert"
                 />
-              </div>
+              </a>
             </div>
 
             {/* Legal Row */}
@@ -259,7 +259,7 @@ const Footer = () => {
                 <div className="flex gap-20">
                   <Link href="/legal/privacy-policy"><p className="cursor-pointer hover:text-neutral-400 transition">Privacy Policy</p></Link>
                   <Link href="/legal/terms-of-use"><p className="cursor-pointer hover:text-neutral-400 transition">Terms of Use</p></Link>
-                  <p>Developed by Totality Solutions</p>
+                  <a href="https://www.totality.solutions" target="_blank" rel="noopener noreferrer">Developed by Totality Solutions</a>
                 </div>
               </div>
             </div>
