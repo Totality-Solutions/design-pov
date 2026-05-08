@@ -41,7 +41,7 @@ const ClientLogo = () => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="flex items-center gap-2 md:gap-4">
+      <div className="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-4">
         <div className="shrink-0 whitespace-nowrap">
           <SectionHeading
             titleMain="Brands"
@@ -53,7 +53,7 @@ const ClientLogo = () => {
         {/* overflow-hidden is on its own wrapper so the track's max-content width is not constrained by flex layout */}
         <div className="overflow-hidden flex-1 min-w-0">
           <div ref={trackRef} className="marquee-track py-6">
-            <div ref={firstGroupRef} className="marquee-group">
+            <div ref={firstGroupRef} className="flex gap-8 pr-8">
               {Client.map((logo, i) => (
                 <img
                   key={i}
@@ -64,7 +64,7 @@ const ClientLogo = () => {
                 />
               ))}
             </div>
-            <div className="marquee-group" aria-hidden="true">
+            <div className="flex gap-8 pr-8" aria-hidden="true">
               {Client.map((logo, i) => (
                 <img
                   key={i}
