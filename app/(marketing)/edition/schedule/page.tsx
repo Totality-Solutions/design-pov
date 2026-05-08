@@ -1,9 +1,9 @@
 
-import ScheduleParagraph from "@/components/schedule/ScheculeParagraph";
-import DynamicScheduleGrid from "@/components/schedule/DynamicScheduleGrid";
+import ScheduleParagraph from "@/components/edition26/schedule/ScheculeParagraph";
+import DynamicScheduleGrid from "@/components/edition26/schedule/DynamicScheduleGrid";
 import CTAStrip from "@/components/common/CTAStrip";
 import PopupForm from "@/components/common/PopupForm";
-import DesignPovTicket from "@/components/schedule/DesignPovTicket";
+import DesignPovTicket from "@/components/edition26/schedule/DesignPovTicket";
 import ShowDeckCTA from "@/components/common/ShowDeckCTA";
 
 const SchedulePage = () => {

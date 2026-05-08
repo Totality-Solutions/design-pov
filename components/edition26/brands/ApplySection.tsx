@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import CTABtn from "../common/CTABtn";
+import CTABtn from "../../common/CTABtn";
 
 type ApplyCardProps = {
   title: string;

@@ -2,7 +2,9 @@
 
 import React, { useRef } from "react";
 import Image from "next/image";
-import { ChevronLeft, ChevronRight } from "lucide-react"; // Or use your own icon path
+import { ChevronLeft, ChevronRight} from "lucide-react"; // Or use your own icon path
+import Link from "next/link";
+
 
 const ecosystemPillars = [
   {
@@ -10,35 +12,40 @@ const ecosystemPillars = [
     title: "The Core",
     description: "Sixteen design studios create immersive environments where ideas take spatial form.",
     imageSrc: "/temp/home/ecosystem/N1.jpg",
-    logoSrc: "/temp/ecosystem/icons/core.png"
+    logoSrc: "/temp/ecosystem/icons/core.png",
+    href:"/edition/core"
   },
   {
     id: 2,
     title: "Circle",
     description: "A live forum for dialogue—bringing together voices shaping how we think, build, and live.",
     imageSrc: "/temp/home/ecosystem/N-3.jpg",
-    logoSrc: "/temp/ecosystem/icons/circle.png"
+    logoSrc: "/temp/ecosystem/icons/circle.png",
+    href:"/edition/schedule"
   },
   {
     id: 3,
     title: "Objects",
     description: "A collection of original, one-of-one pieces—each a distilled expression of perspective.",
     imageSrc: "/temp/home/ecosystem/OBJECT.jpeg",
-    logoSrc: "/temp/ecosystem/icons/objects.png"
+    logoSrc: "/temp/ecosystem/icons/objects.png",
+    href:"/ecosystem/objects"
   },
   {
     id: 4,
     title: "Elevate",
     description: "Curated extensions that create meaningful brand moments beyond the show floor.",
     imageSrc: "/temp/home/ecosystem/N-2.jpg",
-    logoSrc: "/temp/ecosystem/icons/elevate.png"
+    logoSrc: "/temp/ecosystem/icons/elevate.png",
+    href:"/ecosystem/elevate"
   },
   {
     id: 5,
     title: "Afterhours",
     description: "Where the industry unwinds—a late-night program of music, culture, and networking.",
     imageSrc: "/temp/home/ecosystem/N-4.png",
-    logoSrc: "/temp/ecosystem/icons/afterhours.png"
+    logoSrc: "/temp/ecosystem/icons/afterhours.png",
+    href:"/ecosystem"
   }
 ];
 
@@ -98,6 +105,7 @@ export default function EcosystemCarousel() {
 function PillarCard({ pillar }: { pillar: (typeof ecosystemPillars)[0] }) {
   return (
     <div className="flex flex-col items-start text-left">
+      <Link href={pillar.href}>
       <div className="relative w-full aspect-[6/3] bg-[#F2F2F2] overflow-hidden my-8">
         <Image
           src={pillar.imageSrc}
@@ -123,6 +131,7 @@ function PillarCard({ pillar }: { pillar: (typeof ecosystemPillars)[0] }) {
           {pillar.description}
         </p>
       </div>
+      </Link>
     </div>
   );
 }

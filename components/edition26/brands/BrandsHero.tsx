@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import { UnderlineText } from '../common/Underlinetext';
+import { UnderlineText } from '../../common/Underlinetext';
 
 const BrandsHero = () => {
   return (

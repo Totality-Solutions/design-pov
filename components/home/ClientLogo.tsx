@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Container } from "../common/Container";
 import SectionHeading from "../common/SectionHeading";
+import Link from "next/link";
 
 const ClientLogo = () => {
   const [isHovered, setIsHovered] = useState(false);

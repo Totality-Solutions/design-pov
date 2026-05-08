@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import type { NextPage } from 'next';
 import Image from "next/image";
 import { motion, useSpring, AnimatePresence } from 'framer-motion';
+import Link from 'next/link';
 
 // 1. Data Set with Mobile (Fixed), Tablet (New), and Desktop (Fixed)
 const themeData = [
@@ -108,6 +109,7 @@ const Theme2026: NextPage = () => {
       onMouseLeave={() => setIsInsideSection(false)}
       className={`relative w-full bg-white h-[180vh] md:h-[200vh] lg:h-[270vh] 2xl:h-[200vh] overflow-visible ${device === 'desktop' ? 'cursor-none' : 'cursor-default'}`}
     >
+      <Link href="/edition/theme" className='cursor-none'>
       
       {/* 1. STICKY BACKGROUND TEXT LAYER */}
       <div className="sticky top-0 h-screen w-full flex flex-col items-center justify-center pointer-events-none z-0 px-6">
@@ -203,6 +205,9 @@ const Theme2026: NextPage = () => {
           );
         })}
       </div>
+
+      </Link>
+
     </section>
   );
 };

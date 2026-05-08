@@ -9,7 +9,7 @@ import CTABtn from "../common/CTABtn";
 import ParticipationPopup from "./ParticipationPopup";
 
 const modules = [
-  { name: "Circle", href: "/ecosystem/circle", description: "A collaborative space for unfiltered dialogue, bringing together diverse voices to shape the cultural and creative landscape." },
+  { name: "Circle", href: "/edition/schedule", description: "A collaborative space for unfiltered dialogue, bringing together diverse voices to shape the cultural and creative landscape." },
   { name: "Core", href: "/edition/core", description: "The architectural foundation of our vision, where structural integrity meets the fluid needs of modern society through innovative design." },
   { name: "Object", href: "/ecosystem/objects", description: "Exploring the boundary between art and utility through a curated collection of physical artifacts that redefine spaces." },
   { name: "Elevate", href: "/ecosystem/elevate", description: "A dedicated platform designed to amplify emerging talent and high-concept projects within the global design community." },
