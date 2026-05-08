@@ -18,6 +18,7 @@ const nextConfig = {
         hostname: "img.youtube.com",
       },
     ],
+    domains: ["localhost"],
   },
   experimental: {
     // typedRoutes: true,
