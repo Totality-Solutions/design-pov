@@ -400,4 +400,4 @@ const FooterTextColumn = ({ title, href, items }: any) => (
   </div>
 );
 
-export default Footer;
+export default Footer;  
