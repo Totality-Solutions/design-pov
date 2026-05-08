@@ -44,12 +44,11 @@ export default function MagazineBase({ activeBlog: initialBlog, isInnerPage = fa
     return () => { document.body.style.overflow = "auto"; };
   }, [isSidebarOpen]);
 
-  // 4. Determine Sidebar Blogs
-  // Outer Page: Show absolute latest 3 (e.g. 29, 28, 27)
-  // Inner Page: Show latest 4, excluding the one currently being read
-  const displayBlogs = isInnerPage 
-    ? sortedBlogs.filter(b => b.id !== activeBlog.id).slice(0, 4) 
-    : sortedBlogs.slice(0, 3);
+  const otherBlogs = blogs
+    .filter((b) => b.id !== activeBlog.id)
+    .sort((a, b) => b.id - a.id); // latest first
+
+  const visibleBlogs = isInnerPage ? otherBlogs.slice(1, 5) : otherBlogs.slice(1, 3);
 
   const sidebarItems: SidebarItem[] = [];
   displayBlogs.forEach((blog, index) => {
