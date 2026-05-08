@@ -11,10 +11,10 @@ import { Container } from "@/components/common/Container"
 
 
 const text1 =
-  `Elevate is a platform for experimental thinking, immersive storytelling, and spatial expression shaped through contemporary design.`
+  `POV Elevate is not about being seen everywhere—it’s about being seen where it matters. We craft rare, intentional moments where your brand meets influence with precision, placing you in the company of those who shape spaces, ideas, and culture. `
 
 const text2 =
-  `Bringing together creators, brands, and visionaries, it transforms ideas into experiences that blur the boundaries between object, environment, and emotion.`
+  `This is visibility, refined—where every detail is considered, every interaction meaningful, and every presence unforgettable.`
 
 function Word({ word, progress, range }: any) {
   const opacity = useTransform(progress, range, [0.2, 1])

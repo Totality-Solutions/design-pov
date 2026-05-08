@@ -15,6 +15,20 @@ import BlogImg13 from "@/public/temp/home/blogs/blog-4.jpg";
 import BlogImg14 from "@/public/temp/home/blogs/blog-3.jpg";
 import BlogImg15 from "@/public/temp/home/blogs/blog-2.jpg";
 import BlogImg16 from "@/public/temp/home/blogs/blog-1.jpg";
+import BlogImg17 from "@/public/temp/home/blogs/blog-1.jpg";
+import BlogImg18 from "@/public/temp/home/blogs/blog-1.jpg";
+import BlogImg19 from "@/public/temp/home/blogs/blog-1.jpg";
+import BlogImg20 from "@/public/temp/home/blogs/blog-1.jpg";
+import BlogImg21 from "@/public/temp/home/blogs/blog-1.jpg";
+import BlogImg22 from "@/public/temp/home/blogs/blog-1.jpg";
+import BlogImg23 from "@/public/temp/home/blogs/blog-1.jpg";
+import BlogImg24 from "@/public/temp/home/blogs/blog-1.jpg";
+import BlogImg25 from "@/public/temp/home/blogs/blog-1.jpg";
+import BlogImg26 from "@/public/temp/home/blogs/blog-1.jpg";
+import BlogImg27 from "@/public/temp/home/blogs/blog-1.jpg";
+import BlogImg28 from "@/public/temp/home/blogs/blog-1.jpg";
+import BlogImg29 from "@/public/temp/home/blogs/blog-1.jpg";
+
 
 export type ContentBlock =
   | {
@@ -55,8 +69,8 @@ export const blogs: Blog[] = [
   author: "Dyumni Pandit",
   date: "17 May 2021",
   isFeatured: false,
-  image: BlogImg16,
-  thumbnail: BlogImg16,
+  image: BlogImg1,
+  thumbnail: BlogImg1,
   title: "The Bombay Storey-s: A carousel through the British architecture in Mumbai",
   subtitle: "A carousel through the British architecture in Mumbai",
   description: "First and foremost, let me establish that in all my twenty-one years of existence, I’ve resided in Mumbai.",
@@ -89,7 +103,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/blogs/bombay-town-hall.jpg",
+      value: "/temp/magazine/1/blog-1-1.jpg",
       caption: "The neoclassical grandeur of Bombay Town Hall with its iconic Doric columns."
     },
     {
@@ -103,7 +117,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/blogs/csmt-architecture.jpg",
+      value: "/temp/magazine/1/blog-1-2.jpg",
       caption: "The Gothic Revival splendour of Chhatrapati Shivaji Maharaj Terminus."
     },
     {
@@ -121,7 +135,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/blogs/knesset-eliyahoo-synagogue.jpg",
+      value: "/temp/magazine/1/blog-1-3.jpg",
       caption: "The sky-blue Victorian Gothic facade of the Knesset Eliyahoo Synagogue."
     },
     {
@@ -134,7 +148,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/blogs/st-xaviers-college.jpg",
+      value: "/temp/magazine/1/blog-1-4.jpg",
       caption: "Historic Victorian Gothic architecture across Mumbai’s academic institutions."
     },
     {
@@ -144,7 +158,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/blogs/gateway-of-india.jpg",
+      value: "/temp/magazine/1/blog-1-5.jpg",
       caption: "The Indo-Saracenic silhouette of the Gateway of India during sunset."
     },
     {
@@ -162,6 +176,7 @@ export const blogs: Blog[] = [
     }
   ]
 },
+
   {
   type: "blog",
   id: 2,
@@ -170,8 +185,8 @@ export const blogs: Blog[] = [
   author: "Dyumni Pandit",
   date: "24 May 2021",
   isFeatured: false,
-  image: BlogImg15,
-  thumbnail: BlogImg15,
+  image: BlogImg2,
+  thumbnail: BlogImg2,
   title: "Splendour Living transforms an abandoned warehouse into a creative workspace",
   subtitle: "An abandoned warehouse reimagined into a contemporary creative studio",
   description: "As time passes and a city develops, its essence starts transforming.",
@@ -195,7 +210,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/blogs/maraal-studio.jpg",
+      value: "/temp/magazine/1/blog-2-1.jpg",
       caption: "Maraal studio preserves the industrial identity of the original warehouse while embracing contemporary design."
     },
     {
@@ -246,11 +261,12 @@ export const blogs: Blog[] = [
     }
   ]
 },
+
   {
   type: "blog",
   id: 3,
   slug: "studio-camarada-1522-the-pub-kamanahalli",
-  category: "Interior",
+  category: "Design",
   author: "Dyumni Pandit",
   date: "17 May 2021",
   isFeatured: false,
@@ -360,11 +376,12 @@ export const blogs: Blog[] = [
     }
   ]
 },
+
   {
   type: "blog",
   id: 4,
   slug: "house-on-the-edge-hyderabad-quirk-studio",
-  category: "Interior",
+  category: "Design",
   author: "Dyumni Pandit",
   date: "17 May 2021",
   isFeatured: false,
@@ -467,11 +484,12 @@ export const blogs: Blog[] = [
     }
   ]
 },
+
   {
   type: "blog",
   id: 5,
   slug: "villa-palladio-jaipur-barbara-miolini-marie-anna-oudejans",
-  category: "Interior",
+  category: "Design",
   author: "Dyumni Pandit",
   date: "17 May 2021",
   isFeatured: false,
@@ -598,11 +616,12 @@ export const blogs: Blog[] = [
     }
   ]
 },
+
   {
   type: "blog",
   id: 6,
   slug: "ancestral-gujarat-home-doro-minimalism",
-  category: "Interior",
+  category: "Design",
   author: "Dyumni Pandit",
   date: "17 May 2021",
   isFeatured: false,
@@ -668,11 +687,12 @@ export const blogs: Blog[] = [
     }
   ]
 },
+
   {
   type: "blog",
   id: 7,
   slug: "bakers-arch-cafe-laurie-baker-legacy",
-  category: "Interior",
+  category: "Design",
   author: "Dyumni Pandit",
   date: "17 May 2021",
   isFeatured: false,
@@ -792,11 +812,12 @@ export const blogs: Blog[] = [
     }
   ]
 },
+
   {
   type: "blog",
   id: 8,
   slug: "house-of-grace-vintage-contemporary-home",
-  category: "Interior",
+  category: "Design",
   author: "Dyumni Pandit",
   date: "17 May 2021",
   isFeatured: false,
@@ -912,11 +933,12 @@ export const blogs: Blog[] = [
     }
   ]
 },
+
   {
   type: "blog",
   id: 9,
   slug: "benefits-of-attending-design-pov-2025",
-  category: "Design",
+  category: "POV Blogs",
   author: "Dyumni Pandit",
   date: "17 May 2021",
   isFeatured: false,
@@ -1096,11 +1118,12 @@ export const blogs: Blog[] = [
     }
   ]
 },
+
   {
   type: "blog",
   id: 10,
   slug: "echoes-of-tomorrow-design-pov-2025-theme",
-  category: "Design",
+  category: "POV Blogs",
   author: "Dyumni Pandit",
   date: "17 May 2021",
   isFeatured: false,
@@ -1262,11 +1285,12 @@ export const blogs: Blog[] = [
     }
   ]
 },
+
   {
   type: "blog",
   id: 11,
   slug: "credai-mchi-design-pov",
-  category: "Design",
+  category: "POV Blogs",
   author: "Dyumni Pandit",
   date: "17 May 2021",
   isFeatured: false,
@@ -1367,11 +1391,12 @@ export const blogs: Blog[] = [
     }
   ]
 },
+
   {
   type: "blog",
   id: 12,
   slug: "bombay-founders-club-design-pov-2025",
-  category: "Design",
+  category: "POV Blogs",
   author: "Dyumni Pandit",
   date: "17 May 2021",
   isFeatured: false,
@@ -1511,11 +1536,12 @@ export const blogs: Blog[] = [
     }
   ]
 },
+
   {
   type: "blog",
   id: 13,
   slug: "nrai-design-pov-2025",
-  category: "Design",
+  category: "POV Blogs",
   author: "Dyumni Pandit",
   date: "17 May 2021",
   isFeatured: false,
@@ -1655,11 +1681,12 @@ export const blogs: Blog[] = [
     }
   ]
 },
+
   {
   type: "blog",
   id: 14,
   slug: "how-to-use-color-psychology-in-restaurant-interiors",
-  category: "Interior",
+  category: "POV Blogs",
   author: "Dyumni Pandit",
   date: "17 May 2021",
   isFeatured: false,
@@ -1820,11 +1847,12 @@ export const blogs: Blog[] = [
     }
   ]
 },
+
   {
   type: "blog",
   id: 15,
   slug: "inside-art-mumbai-from-where-we-stood",
-  category: "Art",
+  category: "Design",
   author: "Dyumni Pandit",
   date: "17 May 2021",
   isFeatured: false,
@@ -2025,11 +2053,12 @@ export const blogs: Blog[] = [
     }
   ]
 },
+
   {
   type: "blog",
   id: 16,
   slug: "cordkraft-design-studio-laad-5-ahmedabad",
-  category: "Interior",
+  category: "Design",
   author: "Dyumni Pandit",
   date: "17 May 2021",
   isFeatured: false,
@@ -2148,7 +2177,533 @@ export const blogs: Blog[] = [
       value: "Through monochrome restraint, sculptural detailing, and carefully curated materiality, Cordkraft Design Studio crafts a retreat where silence, texture, and craftsmanship speak louder than ornamentation."
     }
   ]
-}
+},
+
+  {
+    "type": "blog",
+    "id": 17,
+    "slug": "woven-legacy-design-pov-2026",
+    "category": "Spotlight",
+    "author": "Design POV Editorial",
+    "date": "08 May 2026",
+    "isFeatured": false,
+    image: BlogImg16,
+    thumbnail: BlogImg17,
+    "title": "Woven Legacy brings handcrafted rug traditions into contemporary interiors at Design POV ’26",
+    "subtitle": "A Mirzapur-based rug brand redefining handcrafted luxury through materiality and craftsmanship",
+    "description": "Rooted in Mirzapur, Woven Legacy creates handmade luxury rugs that bridge traditional weaving techniques with contemporary interior design.",
+    "featuredParagraphs": [
+      "Woven Legacy brings India’s rug-making heritage into contemporary living spaces through handcrafted luxury rugs.",
+      "The brand works closely with designers and homeowners to create rugs rooted in craftsmanship and authenticity.",
+      "At Design POV ’26, Woven Legacy joins the conversation around craft, materiality, and Indian design heritage."
+    ],
+    "detailedContent": [
+      {
+        "type": "text",
+        "value": "Rooted in Mirzapur, Woven Legacy is a participating brand at Design POV India 2026 that brings India's rug-making heritage into contemporary living spaces with clarity and intent."
+      },
+      {
+        "type": "text",
+        "value": "The brand crafts handmade luxury rugs that work at the intersection of traditional technique and modern design. Their philosophy is that rugs are the foundation of a well-designed space."
+      },
+      {
+        "type": "image",
+        "value": "/temp/magazine/blogs/woven-legacy-1.jpg",
+        "caption": "Handcrafted luxury rugs from Woven Legacy bridge the gap between tradition and modern interiors."
+      },
+      {
+        "type": "text",
+        "title": "The Pillars of Craftsmanship",
+        "value": "Every piece is made by skilled artisans using time-tested methods, developed through close collaboration with designers, architects, and homeowners. The process is guided by four values: craftsmanship, integrity, authenticity, and ambition."
+      },
+      {
+        "type": "text",
+        "value": "Woven Legacy works directly with the design community to translate creative briefs into handcrafted pieces that are built to last. Their collections are designed to carry warmth, texture, and character into interiors without overpowering them."
+      }
+    ]
+  },
+
+  {
+    "type": "blog",
+    "id": 18,
+    "slug": "kuche7-design-pov-2026",
+    "category": "Spotlight",
+    "author": "Design POV Editorial",
+    "date": "08 May 2026",
+    "isFeatured": false,
+    image: BlogImg18,
+    thumbnail: BlogImg18,
+    "title": "Kuche7 explores stainless steel luxury interiors at Design POV ’26",
+    "subtitle": "The modular kitchen brand brings precision-engineered stainless steel systems into contemporary living",
+    "description": "Kuche7 designs modular kitchens and living systems using 304 food-grade stainless steel engineered for durability and hygiene.",
+    "featuredParagraphs": [
+      "Kuche7 specialises in modular kitchens and living solutions crafted in stainless steel.",
+      "Their systems balance engineering precision with long-term functionality and aesthetics.",
+      "At Design POV ’26, the brand will unveil a statement stainless steel island installation."
+    ],
+    "detailedContent": [
+      {
+        "type": "text",
+        "value": "Kuche7 joins Design POV '26 as a participating brand, bringing their craft of designing modular kitchens and living spaces to the show. Their 304 food-grade stainless steel material choice is deliberate: it's strong, hygienic, and built for long-term use."
+      },
+      {
+        "type": "text",
+        "title": "Precision and Hygiene",
+        "value": "Stainless steel as a design material carries specific advantages. It doesn't absorb bacteria, holds up over decades, and responds well to precision engineering. Kuche7 builds its product range around these properties, making a case for the material across the broader interior."
+      },
+      {
+        "type": "image",
+        "value": "/temp/magazine/blogs/kuche7-island.jpg",
+        "caption": "The statement stainless steel island installation at Design POV '26 highlights precision engineering."
+      },
+      {
+        "type": "text",
+        "title": "Design Flexibility",
+        "value": "With over 20,000 options across colours, finishes, and textures, Kuche7 gives designers and homeowners the room to work within their own aesthetic without having to compromise on material quality."
+      }
+    ]
+  },
+
+  {
+    "type": "blog",
+    "id": 19,
+    "slug": "kstairs-design-pov-2026",
+    "category": "Spotlight",
+    "author": "Design POV Editorial",
+    "date": "08 May 2026",
+    "isFeatured": false,
+    image: BlogImg19,
+    thumbnail: BlogImg19,
+    "title": "KStairs showcases custom staircase engineering at Design POV ’26",
+    "subtitle": "Over two decades of staircase manufacturing and installation expertise comes to the event",
+    "description": "KStairs designs and manufactures custom staircases across residential and commercial spaces using advanced CNC fabrication technology.",
+    "featuredParagraphs": [
+      "KStairs has spent over 21 years designing custom staircases across Maharashtra.",
+      "Their work spans floating, helical, curved, cantilever, and spiral staircase systems.",
+      "At Design POV ’26, the brand brings together technical precision and design craftsmanship."
+    ],
+    "detailedContent": [
+      {
+        "type": "text",
+        "value": "Formerly known as Khodiyar Stairs Pvt. Ltd., KStairs has spent over 21 years designing, manufacturing, and installing staircases for residential and commercial spaces across Maharashtra."
+      },
+      {
+        "type": "text",
+        "title": "Advanced Fabrication",
+        "value": "Their manufacturing facility in Vasai operates with CNC laser cutting and bending machines, giving the team the ability to handle complex installations. Their work covers a range of forms including floating, cantilever, helical, curved, and spiral configurations."
+      },
+      {
+        "type": "image",
+        "value": "/temp/magazine/blogs/kstairs-floating.jpg",
+        "caption": "KStairs specializes in complex geometries, from helical to floating cantilever systems."
+      },
+      {
+        "type": "text",
+        "value": "At Design POV '26, KStairs brings that manufacturing depth into a space where craft, material, and design thinking are in direct conversation."
+      }
+    ]
+  },
+
+  {
+    "type": "blog",
+    "id": 20,
+    "slug": "astronea-design-pov-2026",
+    "category": "Spotlight",
+    "author": "Design POV Editorial",
+    "date": "08 May 2026",
+    "isFeatured": false,
+    image: BlogImg20,
+    thumbnail: BlogImg20,
+    "title": "Astronea introduces Italian wardrobe systems and precision hardware at Design POV ’26",
+    "subtitle": "The Mumbai-based brand combines modular design with international hardware collaborations",
+    "description": "Astronea creates premium wardrobe systems and interior solutions through collaborations with leading international hardware brands.",
+    "featuredParagraphs": [
+      "Astronea specialises in Italian wardrobe concepts and modular interior systems.",
+      "The brand collaborates with international hardware manufacturers for precision-engineered solutions.",
+      "At Design POV ’26, Astronea will showcase how design and engineering coexist within contemporary interiors."
+    ],
+    "detailedContent": [
+      {
+        "type": "text",
+        "value": "Astronea is a Mumbai-based interior design brand specialising in Italian wardrobe concepts. The brand's approach sits at the intersection of design intent and functional engineering."
+      },
+      {
+        "type": "text",
+        "title": "International Collaborations",
+        "value": "A significant part of their offering comes through collaborations with international hardware brands such as Porta Pivot (Belgium), Terno Scorrevoli (Italy), and Effegibrevetti. These partnerships give Astronea access to hardware that directly affects the precision and finish of their installations."
+      },
+      {
+        "type": "image",
+        "value": "/temp/magazine/blogs/astronea-wardrobe.jpg",
+        "caption": "Modular wardrobe systems featuring precision hardware from international partners."
+      },
+      {
+        "type": "text",
+        "value": "At Design POV '26, Astronea will be displaying their work in context, giving architects and designers a direct look at how their systems translate into the final product."
+      }
+    ]
+  },
+
+  {
+    "type": "blog",
+    "id": 21,
+    "slug": "sunrooof-design-pov-2026",
+    "category": "Spotlight",
+    "author": "Design POV Editorial",
+    "date": "08 May 2026",
+    "isFeatured": true,
+    image: BlogImg21,
+    thumbnail: BlogImg21,
+    "title": "Sunrooof reimagines artificial lighting through sky simulation technology at Design POV ’26",
+    "subtitle": "A wellness lighting system designed to recreate natural sunlight indoors",
+    "description": "Founded in 2019, Sunrooof creates intelligent ceiling systems that simulate natural daylight using advanced optics and AI integration.",
+    "featuredParagraphs": [
+      "Sunrooof transforms ceilings into immersive simulations of natural sky and sunlight.",
+      "The technology is designed to support circadian rhythms and overall well-being indoors.",
+      "At Design POV ’26, the brand presents a new category between lighting, wellness, and interior design."
+    ],
+    "detailedContent": [
+      {
+        "type": "text",
+        "value": "Founded by Ishat Jain in 2019, Sunrooof is a wellness lighting system that transforms ceilings into a simulation of natural sky. The technology works by recreating the experience of natural sunlight indoors, including in spaces without windows."
+      },
+      {
+        "type": "text",
+        "title": "Circadian Support",
+        "value": "Using advanced optics and AI integration, the system adjusts colour and brightness to mirror the sky outside in real time. The technology is designed to support circadian rhythms, affecting mood, focus, energy, and overall well-being."
+      },
+      {
+        "type": "image",
+        "value": "/temp/magazine/blogs/sunrooof-sky.jpg",
+        "caption": "Sky simulation technology recreates the visual and wellness benefits of natural daylight."
+      },
+      {
+        "type": "text",
+        "title": "Global Expansion",
+        "value": "Sunrooof has completed 500-plus installations across diverse project types within its first ten months. At Design POV '26, the brand brings a product category that addresses how built environments affect the people living in them."
+      }
+    ]
+  },
+
+  {
+    "type": "blog",
+    "id": 22,
+    "slug": "pare-innovations-design-pov-2026",
+    "category": "Spotlight",
+    "author": "Design POV Editorial",
+    "date": "08 May 2026",
+    "isFeatured": false,
+    image: BlogImg22,
+    thumbnail: BlogImg22,
+    "title": "PARÉ Innovations brings premium surface systems to Design POV ’26",
+    "subtitle": "From wall panels to flooring and facade systems, the brand expands material possibilities",
+    "description": "PARÉ Innovations develops premium surface materials across ceilings, walls, facades, and flooring applications.",
+    "featuredParagraphs": [
+      "PARÉ Innovations works across premium wall, ceiling, facade, and flooring systems.",
+      "Their catalogue spans acoustic panels, louvres, SPC flooring, and UV-protected facades.",
+      "At Design POV ’26, the brand showcases its material systems within a designed spatial context."
+    ],
+    "detailedContent": [
+      {
+        "type": "text",
+        "value": "Headquartered in Mumbai with a manufacturing unit near Vapi, PARÉ Innovations works in the building materials space, focusing on premium surfaces for ceilings, walls, flooring, and facade systems."
+      },
+      {
+        "type": "text",
+        "title": "Material Catalogue",
+        "value": "Their product range spans over 35 offerings, including baffle and acoustic panels, louvered configurations, and UV-protected exterior-grade panels. Their flooring line includes LVT, SPC, and HDF options."
+      },
+      {
+        "type": "image",
+        "value": "/temp/magazine/blogs/pare-panels.jpg",
+        "caption": "Versatile surface systems designed for both interior acoustics and exterior durability."
+      },
+      {
+        "type": "text",
+        "value": "At Design POV '26, PARÉ Innovations will give architects and designers a direct look at their surface systems in a designed context."
+      }
+    ]
+  },
+
+  {
+    "type": "blog",
+    "id": 23,
+    "slug": "kubik-design-pov-2026",
+    "category": "Spotlight",
+    "author": "Design POV Editorial",
+    "date": "08 May 2026",
+    "isFeatured": false,
+    image: BlogImg23,
+    thumbnail: BlogImg23,
+    "title": "Kubik presents demountable partition systems and Porta Lino doors at Design POV ’26",
+    "subtitle": "A decade of partition design and installation expertise comes to the event",
+    "description": "Kubik designs and installs demountable glass partition systems that support flexible contemporary interiors.",
+    "featuredParagraphs": [
+      "Kubik has completed over 12,00,000 sq. ft. of partition installations across India.",
+      "Their systems focus on flexible interiors that minimise construction disruption and waste.",
+      "At Design POV ’26, Kubik brings together partition systems and next-generation door solutions."
+    ],
+    "detailedContent": [
+      {
+        "type": "text",
+        "value": "Founded by Jimesh Shah, Kubik has spent over a decade designing, manufacturing, and installing demountable partition systems across India, covering over 12,00,000 sq. ft. of glass installations."
+      },
+      {
+        "type": "text",
+        "title": "The Porta Lino System",
+        "value": "More recently, Kubik has extended into doors with Porta Lino, a next-generation system available in granite, wood, ceramic, and glass finishes. The demountable nature of their partitions allows interiors to be reconfigured without conventional construction waste."
+      },
+      {
+        "type": "image",
+        "value": "/temp/magazine/blogs/kubik-partitions.jpg",
+        "caption": "Demountable glass partitions offer flexibility for evolving contemporary workspaces."
+      },
+      {
+        "type": "text",
+        "value": "At Design POV '26, Kubik brings a product range that speaks directly to how modern commercial and residential interiors are being designed and built."
+      }
+    ]
+  },
+
+  {
+    "type": "blog",
+    "id": 24,
+    "slug": "deluxe-veneers-design-pov-2026",
+    "category": "Spotlight",
+    "author": "Design POV Editorial",
+    "date": "08 May 2026",
+    "isFeatured": false,
+    image: BlogImg24,
+    thumbnail: BlogImg24,
+    "title": "Deluxe Veneers brings four decades of veneer craftsmanship to Design POV ’26",
+    "subtitle": "The factory-owned veneer brand showcases globally sourced natural wood collections",
+    "description": "Deluxe Veneers produces A++ grade natural veneers through globally sourced timber and advanced embossing technology.",
+    "featuredParagraphs": [
+      "Deluxe Veneers has spent over four decades working in natural veneer manufacturing.",
+      "Their collections span marquetry, fluted surfaces, dyed veneers, and embossed textures.",
+      "At Design POV ’26, the brand showcases veneer craftsmanship within contemporary interiors."
+    ],
+    "detailedContent": [
+      {
+        "type": "text",
+        "value": "With over four decades in the industry, Deluxe Veneers is a factory-owned brand working in natural veneers, producing A++ grade surfaces from globally handpicked wood."
+      },
+      {
+        "type": "text",
+        "title": "Exclusive Textures",
+        "value": "Notably, Deluxe Veneers is the only company in India equipped with heavy embossing machines, allowing them to produce textures and finishes—such as Rilevo Legno and Marquetry—that aren't available elsewhere in the market."
+      },
+      {
+        "type": "image",
+        "value": "/temp/magazine/blogs/deluxe-veneers-texture.jpg",
+        "caption": "Heavily embossed natural veneers create tactile architectural surfaces."
+      },
+      {
+        "type": "text",
+        "value": "Their 6,500 sq. ft. experience centre in Worli allows designers to engage with the collections, which will be showcased in context at Design POV ‘26."
+      }
+    ]
+  },
+
+  {
+    "type": "blog",
+    "id": 25,
+    "slug": "paradigm-quartz-design-pov-2026",
+    "category": "Spotlight",
+    "author": "Design POV Editorial",
+    "date": "08 May 2026",
+    "isFeatured": false,
+    image: BlogImg25,
+    thumbnail: BlogImg25,
+    "title": "Paradigm Quartz showcases engineered stone innovation at Design POV ’26",
+    "subtitle": "Quartz, terrazzo, and artificial marble systems designed for large-format architecture",
+    "description": "Paradigm Quartz manufactures engineered stone surfaces across quartz, terrazzo, and artificial marble categories.",
+    "featuredParagraphs": [
+      "Paradigm Quartz operates dedicated manufacturing plants for engineered stone production.",
+      "Their Super Jumbo Quartz slabs respond to the growing demand for large-format surfaces.",
+      "At Design POV ’26, the brand presents durability, scale, and material innovation together."
+    ],
+    "detailedContent": [
+      {
+        "type": "text",
+        "value": "Paradigm Stone India Pvt. Ltd. was established in 2010. Over the past fifteen years, the brand has built out a full engineered stone portfolio covering quartz, artificial marble, and terrazzo."
+      },
+      {
+        "type": "text",
+        "title": "Industrial Scale",
+        "value": "Their quartz plant runs a monthly production capacity of 3,00,000 sq. ft. The Super Jumbo Quartz slab, introduced in 2022, meets the growing demand for large-format surfaces in contemporary architecture."
+      },
+      {
+        "type": "image",
+        "value": "/temp/magazine/blogs/paradigm-stone.jpg",
+        "caption": "Super Jumbo Quartz slabs designed for seamless, large-format architectural applications."
+      },
+      {
+        "type": "text",
+        "value": "At Design POV '26, Paradigm Quartz brings the depth of a vertically integrated manufacturer into a space where material quality is central."
+      }
+    ]
+  },
+
+  {
+    "type": "blog",
+    "id": 26,
+    "slug": "acespace-design-pov-2026",
+    "category": "Spotlight",
+    "author": "Design POV Editorial",
+    "date": "08 May 2026",
+    "isFeatured": false,
+    image: BlogImg26,
+    thumbnail: BlogImg26,
+    "title": "Acespace brings a decade of veneer expertise to Design POV ’26",
+    "subtitle": "Globally sourced wood veneers crafted for contemporary architectural applications",
+    "description": "Acespace develops premium veneer collections for walls, ceilings, furniture, and cabinetry across residential and commercial interiors.",
+    "featuredParagraphs": [
+      "Acespace creates premium veneer collections sourced from forests across the world.",
+      "Their surfaces are designed for architectural and interior applications across multiple scales.",
+      "At Design POV ’26, the brand presents natural wood textures within contemporary design contexts."
+    ],
+    "detailedContent": [
+      {
+        "type": "text",
+        "value": "Celebrating ten years in the industry, Acespace works in premium veneer production, sourcing wood from forests across the world to craft surfaces for high-end applications."
+      },
+      {
+        "type": "text",
+        "title": "Pattern and Precision",
+        "value": "The range spans exclusive colours and patterns designed to work across walls, cabinets, and furniture. Their focus has been on maintaining consistency while expanding species and finishes available to designers."
+      },
+      {
+        "type": "image",
+        "value": "/temp/magazine/blogs/acespace-wood.jpg",
+        "caption": "Acespace presents a decade of expertise in natural wood textures and finishes."
+      },
+      {
+        "type": "text",
+        "value": "At Design POV '26, Acespace brings a collection that gives the design community a direct look at what natural wood surfaces can bring to contemporary interiors."
+      }
+    ]
+  },
+
+  {
+    "type": "blog",
+    "id": 27,
+    "slug": "embelliish-design-pov-2026",
+    "category": "Spotlight",
+    "author": "Design POV Editorial",
+    "date": "08 May 2026",
+    "isFeatured": false,
+    image: BlogImg27,
+    thumbnail: BlogImg27,
+    "title": "Embelliish brings luxury soft furnishings and drapery expertise to Design POV ’26",
+    "subtitle": "The Mumbai and Hyderabad-based brand specialises in premium curtains and upholstery",
+    "description": "Embelliish develops luxury curtains, upholstery, blinds, and soft furnishing systems for residential and hospitality interiors.",
+    "featuredParagraphs": [
+      "Embelliish works across curtains, upholstery, and luxury window treatments.",
+      "The brand focuses on material specificity, texture, and custom detailing.",
+      "At Design POV ’26, Embelliish explores how soft furnishings shape interior atmospheres."
+    ],
+    "detailedContent": [
+      {
+        "type": "text",
+        "value": "Led by Hitesh and Neelam Bhanushali, Embelliish works in luxury curtains and soft furnishings with flagship stores in Mumbai and Hyderabad."
+      },
+      {
+        "type": "text",
+        "title": "Material Specificity",
+        "value": "The brand's approach is distinguished by the level of specificity applied to fabric selection. Every weave and detail is chosen with the finished interior in mind, covering everything from classic drapery to automated blind systems."
+      },
+      {
+        "type": "image",
+        "value": "/temp/magazine/blogs/embelliish-fabrics.jpg",
+        "caption": "Luxury curtains and soft furnishings that define the atmospheric quality of a space."
+      },
+      {
+        "type": "text",
+        "value": "At Design POV '26, Embelliish explores how soft furnishings shape interior atmospheres through material quality and custom detailing."
+      }
+    ]
+  },
+
+  {
+    "type": "blog",
+    "id": 28,
+    "slug": "kajaria-design-pov-2026",
+    "category": "Spotlight",
+    "author": "Design POV Editorial",
+    "date": "08 May 2026",
+    "isFeatured": true,
+    image: BlogImg28,
+    thumbnail: BlogImg28,
+    "title": "Kajaria joins Design POV ’26 as Presenting Partner",
+    "subtitle": "India’s largest tile manufacturer brings over three decades of surface innovation to the event",
+    "description": "Kajaria operates nine manufacturing plants across India, producing ceramic and vitrified tile collections for residential and commercial applications.",
+    "featuredParagraphs": [
+      "Kajaria joins Design POV ’26 as the event’s Presenting Partner.",
+      "The brand produces over 4,000 tile designs across ceramic and vitrified categories.",
+      "At Design POV ’26, Kajaria presents large-format surfaces and evolving material applications."
+    ],
+    "detailedContent": [
+      {
+        "type": "text",
+        "value": "Founded in 1985, Kajaria is India's largest manufacturer of ceramic and vitrified tiles, operating nine plants with an annual capacity of 87.80 million square metres."
+      },
+      {
+        "type": "text",
+        "title": "Evolving Formats",
+        "value": "Their Eternity range, which includes extra-large vitrified slabs, reflects a direct response to the growing demand for large-format surfaces. The portfolio covers over 4,000 designs exported to 25 countries."
+      },
+      {
+        "type": "image",
+        "value": "/temp/magazine/blogs/kajaria-slabs.jpg",
+        "caption": "Kajaria's extra-large vitrified slabs represent the next evolution in surface innovation."
+      },
+      {
+        "type": "text",
+        "value": "At Design POV '26, Kajaria's presence will extend across the event, engaging designers with a brand that has shaped Indian spaces for three decades."
+      }
+    ]
+  },
+
+  {
+    "type": "blog",
+    "id": 29,
+    "slug": "pacific-homes-design-pov-2026",
+    "category": "Spotlight",
+    "author": "Design POV Editorial",
+    "date": "08 May 2026",
+    "isFeatured": true,
+    image: BlogImg29,
+    thumbnail: BlogImg29,
+    "title": "Pacific Homes powers Design POV ’26 with engineered stone and surface innovation",
+    "subtitle": "The exporter showcases Super Jumbo slabs and globally sourced stone collections",
+    "description": "Pacific Homes manufactures quartz, granite, and engineered stone slabs using Bretonstone technology for architectural applications.",
+    "featuredParagraphs": [
+      "Pacific Homes joins Design POV ’26 as the powering partner of the event.",
+      "Their product portfolio spans quartz, granite, exotic stones, and engineered surfaces.",
+      "At Design POV ’26, the brand showcases material innovation through large-format slab systems."
+    ],
+    "detailedContent": [
+      {
+        "type": "text",
+        "value": "Design POV '26 is powered by Pacific Homes, whose manufacturing facility runs on Bretonstone technology, producing full-body Super Jumbo slabs."
+      },
+      {
+        "type": "text",
+        "title": "Technological Edge",
+        "value": "The portfolio covers quartz, granite, and rare exotic stones sourced globally. A recent addition is CHROMIA, a slab enhancement technology developed in-house that extends design possibilities within their range."
+      },
+      {
+        "type": "image",
+        "value": "/temp/magazine/blogs/pacific-homes-quartz.jpg",
+        "caption": "Full-body Super Jumbo slabs provide architectural scale and material durability."
+      },
+      {
+        "type": "text",
+        "value": "As the powering partner, Pacific Homes brings their stone and engineered surface range on display for architects and homeowners attending the event."
+      }
+    ]
+  }
 ];
 
 export const advertisements: Ad[] = [
