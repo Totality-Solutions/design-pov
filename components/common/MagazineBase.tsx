@@ -103,7 +103,7 @@ export default function MagazineBase({ activeBlog: initialBlog, isInnerPage = fa
                         </h3>
                       )}
                       {/* 2. Render the paragraph text */}
-                      <p className="text-black/60 text-lg leading-relaxed">
+                      <p className="text-black/80 text-lg font-normal leading-relaxed">
                         {block.value}
                       </p>
                     </div>
@@ -121,7 +121,7 @@ export default function MagazineBase({ activeBlog: initialBlog, isInnerPage = fa
                         />
                       </div>
                       {block.caption && (
-                        <span className="text-xs italic text-black/40">{block.caption}</span>
+                        <span className="text-md font-normal text-black/80">{block.caption}</span>
                       )}
                     </div>
                   )}
@@ -136,7 +136,7 @@ export default function MagazineBase({ activeBlog: initialBlog, isInnerPage = fa
             ) : (
               <>
                 {activeBlog.featuredParagraphs.map((para, i) => (
-                  <p key={i} className="text-black/60 text-lg leading-relaxed">{para}</p>
+                  <p key={i} className="text-black/80 text-lg leading-relaxed">{para}</p>
                 ))}
                 <div className="mt-4">
                   <CTABtn label="Read More" href={`/magazine/${activeBlog.slug}`} btnBg="transparent" textColor="black" borderColor="black" />
