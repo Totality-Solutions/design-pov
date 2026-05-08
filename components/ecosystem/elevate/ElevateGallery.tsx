@@ -6,12 +6,18 @@ import Image from "next/image";
 import { Container } from "@/components/common/Container";
 import Section from "@/components/common/Section";
 
-import img1 from "@/public/temp/home/section2/1.jpg";
-import img2 from "@/public/temp/home/section2/2.jpg";
-import img3 from "@/public/temp/home/section2/3.jpg";
-import img4 from "@/public/temp/home/section2/4.jpg";
-import img5 from "@/public/temp/home/section2/5.jpg";
-import img6 from "@/public/temp/home/section2/6.jpg";
+const img1 = "/temp/edition/elevate/1.JPG";
+const img2 = "/temp/edition/elevate/2.JPG";
+const img3 = "/temp/edition/elevate/3.JPG";
+const img4 = "/temp/edition/elevate/4.JPG";
+const img5 = "/temp/edition/elevate/5.JPG";
+const img6 = "/temp/edition/elevate/6.JPG";
+const img7 = "/temp/edition/elevate/7.JPG";
+const img8 = "/temp/edition/elevate/8.JPG";
+const img9 = "/temp/edition/elevate/9.JPG";
+const img10 = "/temp/edition/elevate/10.JPG";
+const img11 = "/temp/edition/elevate/11.JPG";
+const img12 = "/temp/edition/elevate/12.JPG";
 
 const gallery = [
   { id: 1, image: img1, thumbnail: img1 },
@@ -20,6 +26,12 @@ const gallery = [
   { id: 4, image: img4, thumbnail: img4 },
   { id: 5, image: img5, thumbnail: img5 },
   { id: 6, image: img6, thumbnail: img6 },
+  { id: 7, image: img7, thumbnail: img7 },
+  { id: 8, image: img8, thumbnail: img8 },
+  { id: 9, image: img9, thumbnail: img9 },
+  { id: 10, image: img10, thumbnail: img10 },
+  { id: 11, image: img11, thumbnail: img11 },
+  { id: 12, image: img12, thumbnail: img12 },
 ];
 
 export default function ElevateGallery() {
@@ -126,8 +138,9 @@ export default function ElevateGallery() {
                 <Image
                   src={gallery[prevIndex].image}
                   alt=""
+                  fill
                   priority
-                  className={`absolute inset-0 w-full h-full object-cover z-[1]
+                  className={`object-cover z-[1]
                   ${
                     direction === "down"
                       ? "animate-[heroExitDown_0.6s_cubic-bezier(0.4,0,1,1)_forwards]"
@@ -141,8 +154,9 @@ export default function ElevateGallery() {
                 key={imgKey}
                 src={current.image}
                 alt="Gallery Image"
+                fill
                 priority
-                className={`absolute inset-0 w-full h-full object-cover z-[2]
+                className={`object-cover z-[2]
                 ${
                   direction === "down"
                     ? "animate-[heroEnterDown_0.82s_cubic-bezier(0.16,1,0.3,1)_forwards]"

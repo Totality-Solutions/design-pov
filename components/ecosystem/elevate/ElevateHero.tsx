@@ -11,10 +11,10 @@ import { Container } from "@/components/common/Container"
 
 
 const text1 =
-  `POV Elevate is not about being seen everywhere—it’s about being seen where it matters. We craft rare, intentional moments where your brand meets influence with precision, placing you in the company of those who shape spaces, ideas, and culture. `
+  `Design POV has always believed that meaningful visibility comes from intent, context, and reaching the right audience. POV Elevate extends this philosophy beyond the show floor as an exclusive initiative for brands within the ecosystem, helping create lasting impressions and meaningful relationships.`
 
 const text2 =
-  `This is visibility, refined—where every detail is considered, every interaction meaningful, and every presence unforgettable.`
+  `Through curated offline events, tailored programming, access to discerning audiences, media and F&B partnerships, and strategic online amplification, brands are positioned in front of the people who matter. POV Elevate enables collaboration with Design POV beyond the traditional playbook.`
 
 function Word({ word, progress, range }: any) {
   const opacity = useTransform(progress, range, [0.2, 1])
