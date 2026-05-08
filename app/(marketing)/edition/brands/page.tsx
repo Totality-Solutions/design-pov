@@ -3,6 +3,7 @@ import Brands from "@/components/edition26/brands/Brands";
 import BrandsHero from "@/components/edition26/brands/BrandsHero";
 import BuildPartner from "@/components/edition26/brands/BuildPartner";
 import Sponsors from "@/components/edition26/brands/Sponsors";
+import BuildPartner from "@/components/edition26/brands/BuildPartner";
 import PageLoader from "@/components/common/PageLoader";
 
 const BrandsPage = () => {
