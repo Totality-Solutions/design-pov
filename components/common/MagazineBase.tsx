@@ -33,7 +33,7 @@ export default function MagazineBase({ activeBlog: initialBlog, isInnerPage = fa
     .filter((b) => b.id !== activeBlog.id)
     .sort((a, b) => b.id - a.id); // latest first
 
-  const visibleBlogs = isInnerPage ? otherBlogs.slice(0, 2) : otherBlogs.slice(0, 2);
+  const visibleBlogs = isInnerPage ? otherBlogs.slice(1, 5) : otherBlogs.slice(1, 3);
 
   const sidebarItems: SidebarItem[] = [];
   visibleBlogs.forEach((blog, index) => {
