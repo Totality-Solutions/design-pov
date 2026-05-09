@@ -51,7 +51,7 @@ const ClientLogo = () => {
           />
         </div>
         {/* overflow-hidden is on its own wrapper so the track's max-content width is not constrained by flex layout */}
-        <div className="overflow-hidden flex-1 min-w-0">
+        <div className="overflow-hidden flex-1 min-w-0 w-full">
           <div ref={trackRef} className="marquee-track py-6">
             <div ref={firstGroupRef} className="flex gap-8 pr-8">
               {Client.map((logo, i) => (

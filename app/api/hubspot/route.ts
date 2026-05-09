@@ -1,4 +1,6 @@
 import { NextResponse } from "next/server";
+import { createClient } from "@supabase/supabase-js";
+import { getDepartment } from "@/lib/mailDepartment";
 
 // HubSpot list IDs — configure in HubSpot and add to .env
 const LIST_MAP: Record<string, string> = {
@@ -77,6 +79,24 @@ export async function POST(req: Request) {
         }
       }
     }
+
+    // Dual-write to pov_mails (non-blocking)
+    const department = getDepartment(type, segment);
+    createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    )
+      .from("pov_mails")
+      .insert([{
+        department,
+        form_type: "apply",
+        category: segment,
+        subject: `New Apply: ${segment}`,
+        from_name: rest.firstname || rest.company || null,
+        from_email: email,
+        extra_data: rest,
+      }])
+      .then(({ error: e }) => { if (e) console.error("pov_mails write error:", e); });
 
     return NextResponse.json({ success: true, segment });
   } catch (error) {

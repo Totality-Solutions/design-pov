@@ -7,7 +7,7 @@ import {
   useSpring,
   useTransform,
 } from "framer-motion";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Home } from "lucide-react";
 
 import FooterTablet from "./FooterTablet";
 import { Container } from "../common/Container";
@@ -43,6 +43,7 @@ const navLinks = {
     img: "/image3.svg",
     items: [
       { title: "About", href: "/about" },
+      { title: "Home", href: "/" },
       { title: "Collaborate", href: "/collaborate" },
       { title: "Magazine", href: "/magazine" },
       { title: "Contact", href: "/contact" },
