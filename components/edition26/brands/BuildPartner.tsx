@@ -43,6 +43,7 @@ export default function BuildPartner() {
     { name: "Degital Media Partners", src: "/temp/edition/media-partners/4.png" },
     // Ticketing Partners
     { name: "Ticketing Partners", src: "/temp/edition/ticketing-partners/1.png" },
+    { name: "Ticketing Partners", src: "/temp/edition/ticketing-partners/2.png" },
     // Sensory Collaborator
     { name: "Sensory Collaborator", src: "/temp/edition/sensory/12.png" },
     // Key execution Partner
