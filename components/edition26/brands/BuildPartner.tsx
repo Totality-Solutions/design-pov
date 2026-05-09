@@ -33,6 +33,7 @@ export default function BuildPartner() {
     // Gifting Partners
     { name: "Gifting Partners", src: "/temp/edition/gifting-partners/1.png" },
     { name: "Gifting Partners", src: "/temp/edition/gifting-partners/2.png" },
+    { name: "Gifting Partners", src: "/temp/edition/gifting-partners/3.png" },
     { name: "Gifting Partners", src: "/temp/edition/gifting-partners/4.png" },
     // Media Partners
     { name: "Media Partners", src: "/temp/edition/media-partners/1.png" },
@@ -46,6 +47,9 @@ export default function BuildPartner() {
     { name: "Sensory Collaborator", src: "/temp/edition/sensory/12.png" },
     // Key execution Partner
     { name: "Key execution Partner", src: "/temp/edition/key-execution/1.jpg" },
+
+    //operation partner
+    { name: "Operation Partner", src: "/temp/edition/operation-partner/1.png" },
   ];
   
 const BransCollaborators = partners.filter(p => p.name === "Brand Collaborators");
@@ -56,6 +60,7 @@ const DigitalMediaPartners = partners.filter(p => p.name === "Degital Media Part
 const TicketingPartners = partners.filter(p => p.name === "Ticketing Partners");
 const SensoryCollaborator = partners.filter(p => p.name === "Sensory Collaborator");
 const KeyExecutionPartner = partners.filter(p => p.name === "Key execution Partner");
+const OperationPartner = partners.filter(p => p.name === "Operation Partner");
 
   return (
     <div className="py-12 space-y-12">
@@ -66,7 +71,7 @@ const KeyExecutionPartner = partners.filter(p => p.name === "Key execution Partn
       <BrandLogo title="GIFTING PARTNERS" logos={GiftingPartners} />
       <BrandLogo title="TICKETING PARTNERS" logos={TicketingPartners} />
       <BrandLogo title="SENSORY COLLABORATOR" logos={SensoryCollaborator} />
-      <BrandLogo title="KEY EXECUTION PARTNER" logos={KeyExecutionPartner} />
+      <BrandLogo title="OPERATION PARTNER" logos={OperationPartner} />
     </div>
   );
 }
