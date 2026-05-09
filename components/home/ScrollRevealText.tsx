@@ -7,8 +7,8 @@ import CTABtn from "../common/CTABtn";
 export default function ScrollMaskText() {
   return (
     <section className="w-full pt-5 lg:pt-20">
-      <div className=" w-full  bg-black py-12 px-6 md:px-10">
-        <Container className="flex flex-col lg:flex-row gap-8 items-center justify-between">
+      <div className=" w-full bg-black py-12 px-6 md:px-10">
+        <div className="flex flex-col lg:flex-row gap-8 items-center justify-between">
         {/* Left Text */}
         <div className="max-w-4xl">
           <h2 className="text-body-mobile md:text-2xl font-medium text-white duration-300"
@@ -38,7 +38,7 @@ export default function ScrollMaskText() {
             href="/edition"
           />
         </div>
-        </Container>
+        </div>
         
       </div>
     </section>

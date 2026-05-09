@@ -595,7 +595,7 @@ a {
 /* Featured Story */
 
 .mc-root {
-  max-height: 100vh;
+  max-height: 120vh;
   background: var(--color-white);
   display: flex;
   align-items: center;
