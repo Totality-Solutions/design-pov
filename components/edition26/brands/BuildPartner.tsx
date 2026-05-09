@@ -61,9 +61,9 @@ const KeyExecutionPartner = partners.filter(p => p.name === "Key execution Partn
     <div className="py-12 space-y-12">
       <BrandLogo title="BRAND COLLABORATORS" logos={BransCollaborators} />
       <BrandLogo title="BUILD PARTNERS" logos={BuildPartners} />
-      <BrandLogo title="GIFTING PARTNERS" logos={GiftingPartners} />
       <BrandLogo title="MEDIA PARTNERS" logos={MediaPartners} />
       <BrandLogo title="DIGITAL MEDIA PARTNERS" logos={DigitalMediaPartners} />
+      <BrandLogo title="GIFTING PARTNERS" logos={GiftingPartners} />
       <BrandLogo title="TICKETING PARTNERS" logos={TicketingPartners} />
       <BrandLogo title="SENSORY COLLABORATOR" logos={SensoryCollaborator} />
       <BrandLogo title="KEY EXECUTION PARTNER" logos={KeyExecutionPartner} />
