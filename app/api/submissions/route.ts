@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
 import { SESClient, SendEmailCommand } from '@aws-sdk/client-ses';
+import { getDepartment } from '@/lib/mailDepartment';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -50,9 +51,7 @@ async function sendEmail(subject: string, fields: Record<string, string | null>)
     Destination: { ToAddresses: [MARKETING_EMAIL] },
     Message: {
       Subject: { Data: subject, Charset: 'UTF-8' },
-      Body: {
-        Html: { Data: buildEmailHtml(fields), Charset: 'UTF-8' },
-      },
+      Body: { Html: { Data: buildEmailHtml(fields), Charset: 'UTF-8' } },
     },
   });
   await ses.send(command);
@@ -63,31 +62,30 @@ export async function POST(req: Request) {
     const body = await req.json();
     const { type, category, name, email, contact, fileName } = body;
 
-    // 1. Save to Supabase
+    // 1. Save to submissions table
     const { data, error } = await supabase
       .from('submissions')
-      .insert([
-        {
-          type,
-          category,
-          name,
-          email,
-          contact,
-          file_name: fileName,
-          created_at: new Date().toISOString(),
-        },
-      ])
+      .insert([{ type, category, name, email, contact, file_name: fileName, created_at: new Date().toISOString() }])
       .select();
 
-    if (error) {
-      console.error('Supabase error:', error);
-      throw error;
-    }
+    if (error) throw error;
 
-    // 2. Send SES email (non-blocking failure — DB save is the source of truth)
+    // 2. Dual-write to pov_mails (non-blocking)
+    const department = getDepartment(type, category);
+    supabase.from('pov_mails').insert([{
+      department,
+      form_type: type,
+      category,
+      subject: `New Submission: ${category || type || 'Form'}`,
+      from_name: name || null,
+      from_email: email || null,
+      from_phone: contact || null,
+      extra_data: fileName ? { file_name: fileName } : {},
+    }]).then(({ error: e }) => { if (e) console.error('pov_mails write error:', e); });
+
+    // 3. Send SES email (non-blocking)
     try {
-      const subject = `New Submission: ${category || type || 'Form'}`;
-      await sendEmail(subject, {
+      await sendEmail(`New Submission: ${category || type || 'Form'}`, {
         Category: category || type || null,
         Name: name || null,
         Email: email || null,
@@ -101,9 +99,6 @@ export async function POST(req: Request) {
     return NextResponse.json({ success: true, data }, { status: 200 });
   } catch (error: any) {
     console.error('API Route Error:', error);
-    return NextResponse.json(
-      { error: error.message || 'Internal Server Error', details: error },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: error.message || 'Internal Server Error' }, { status: 500 });
   }
 }
