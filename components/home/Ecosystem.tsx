@@ -119,7 +119,7 @@ const EcosystemSection = () => {
         isSectionHovered={isHovered}
       />
 
-      <Section className="!py-0 lg:!pb-8 !px-0 lg:!px-14">
+      <Section className="!py-0 lg:!pb-8 !px-0 lg:!px-10">
         <Container>
           {/* ───────── DESKTOP (Accordion) ───────── */}
           <div

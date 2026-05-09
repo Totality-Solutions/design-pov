@@ -48,7 +48,7 @@ const FooterTablet = ({ navLinks }: Props) => {
       ref={containerRef}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="relative w-full bg-[#000000] py-16 px-6 sm:px-10 flex flex-col font-['Montserrat'] text-white overflow-hidden"
+      className="relative w-full bg-[#000000] pt-10 pb-4 px-6 sm:px-10 flex flex-col font-['Montserrat'] text-white overflow-hidden"
       style={{ isolation: "isolate" }}
     >
       {/* LAYER 1: AUTO-MOVING FLARES */}
@@ -113,11 +113,11 @@ const FooterTablet = ({ navLinks }: Props) => {
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-10 w-full lg:w-auto">
           {Object.entries(navLinks).map(
             ([key, value]: [string, any]) => (
-              <div key={key} className="flex flex-col gap-5">
+              <div key={key} className="flex flex-col gap-3">
                 
                 {/* TITLE */}
                 <Link href={value.href}>
-                  <h3 className="text-[11px] uppercase tracking-widest font-medium opacity-50 hover:opacity-100 transition-opacity">
+                  <h3 className="text-[14px] font-regular transition-opacity">
                     {value.title ||
                       key.replace(/([A-Z])/g, " $1").trim()}
                   </h3>
@@ -129,7 +129,7 @@ const FooterTablet = ({ navLinks }: Props) => {
                     <li key={item.title}>
                       <Link
                         href={item.href}
-                        className="text-[14px] opacity-80 font-light hover:opacity-100 transition-opacity"
+                        className="text-[14px] font-regular hover:opacity-100 transition-opacity"
                       >
                         {item.title}
                       </Link>
@@ -143,10 +143,10 @@ const FooterTablet = ({ navLinks }: Props) => {
       </div>
 
       {/* BOTTOM LEGAL ROW */}
-      <div className="relative z-20 mt-24 pt-8 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center gap-6 opacity-40 text-[10px] uppercase tracking-[0.2em] mix-blend-difference">
+      <div className="relative z-20 mt-6 pt-4 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center gap-1 opacity-40 text-[14px] mix-blend-difference">
         <p>© 2026 Design POV India.</p>
 
-        <div className="flex gap-8">
+        <div className="flex gap-4">
           <Link
             href="/legal/privacy-policy"
             className="cursor-pointer hover:text-white transition"

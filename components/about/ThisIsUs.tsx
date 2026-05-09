@@ -104,13 +104,13 @@ const ThisIsUs: React.FC = () => {
               </p>
             ))}
           </div>
-          <h2 className="text-[20px] md:text-h4 font-bold text-black uppercase tracking-tighter pt-16">
+          <h2 className="text-[18px] md:text-h4 font-bold text-black tracking-tighter pt-6 lg:pt-16">
             What was the real trigger behind Design POV?
           </h2>
         </div>
 
         {/* BOTTOM SECTION: 3 GRID LAYOUT */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 pt-6 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 pt-3 lg:pt-6 items-start">
 
           {/* LEFT CONTENT: Gagan Bhatia */}
           <div className="flex flex-col gap-2 lg:gap-4">

@@ -37,13 +37,15 @@ export default function BlogsCarousel({ filter }: CarouselProps) {
       <div className="relative flex items-center w-full">
         
         {/* LEFT BUTTON - Absolutely positioned to the left */}
-        <button
-          onClick={() => scroll("left")}
-          className="absolute left-[-10] z-10 flex-shrink-0 w-6 h-6 lg:w-10 lg:h-10 lg:w-10 lg:h-10 lg:w-10 lg:h-10 bg-black text-white items-center justify-center flex hover:cursor-pointer transition-colors duration-300 disabled:opacity-20"
-          disabled={filteredBlogs.length === 0}
-        >
-          <FiChevronLeft size={20} />
-        </button>
+        {filteredBlogs.length > 0 && (
+          <button
+            onClick={() => scroll("left")}
+            className="absolute left-[-10] z-10 flex-shrink-0 w-6 h-6 lg:w-10 lg:h-10 bg-black text-white items-center justify-center flex hover:cursor-pointer transition-colors duration-300"
+          >
+            <FiChevronLeft size={20} />
+          </button>
+        )}
+      
 
         {/* CAROUSEL CONTENT */}
         <div
@@ -86,22 +88,23 @@ export default function BlogsCarousel({ filter }: CarouselProps) {
             ))
           ) : (
             /* FALLBACK UI */
-            <div className="w-full py-36 flex flex-col items-center justify-center border border-dashed border-gray-200 rounded-lg">
-              <p className="font-['Montserrat'] text-gray-400 text-lg">
+            <div className="w-full py-36 flex flex-col items-center justify-center">
+              <p className="font-['Montserrat'] text-black text-lg">
                 No Articles found in {filter}
               </p>
             </div>
           )}
         </div>
 
-        {/* RIGHT BUTTON - Absolutely positioned to the right */}'
-        <button
-          onClick={() => scroll("right")}
-          className="absolute right-[-10] z-10 flex-shrink-0 w-6 h-6 lg:w-10 lg:h-10 lg:w-10 lg:h-10 lg:w-10 lg:h-10 bg-black text-white items-center justify-center flex hover:cursor-pointer transition-colors duration-300 disabled:opacity-20"
-          disabled={filteredBlogs.length === 0}
-        >
-          <FiChevronRight size={20} />
-        </button>
+        {/* RIGHT BUTTON - Absolutely positioned to the right */}
+        {filteredBlogs.length > 0 && (
+          <button
+            onClick={() => scroll("right")}
+            className="absolute right-[-10] z-10 flex-shrink-0 w-6 h-6 lg:w-10 lg:h-10 bg-black text-white items-center justify-center flex hover:cursor-pointer transition-colors duration-300"
+          >
+            <FiChevronRight size={20} />
+          </button>
+        )}
       </div>
     </section>
   );

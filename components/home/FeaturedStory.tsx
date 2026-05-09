@@ -154,7 +154,7 @@ export default function MarqueeCarousel() {
                 </p>
               </div>
 
-              <div>
+              {/* <div>
                 <div className="clip">
                   <p key={`label-${textKey}`} className="text-label rtl s2">
                     {current.author}
@@ -165,7 +165,7 @@ export default function MarqueeCarousel() {
                     {current.subtitle}
                   </p>
                 </div>
-              </div>
+              </div> */}
 
               <div className="clip">
                 <h2

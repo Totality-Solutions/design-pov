@@ -114,7 +114,7 @@ const WhatPOV = () => {
         <div className="sticky top-10 pt-20 h-screen flex flex-col justify-between gap-12 overflow-hidden">
           
           {/* 🔹 TEXT REVEAL SECTION */}
-          <div className="flex items-center justify-center px-6 md:px-0">
+          <div className="flex items-center justify-center px-6 md:px-10">
             <div className="space-y-8 max-w-4xl w-full text-center">
               <WordReveal 
                 text={text1} 
