@@ -9,34 +9,49 @@ export default function MagazineBase({ activeBlog: initialBlog, isInnerPage = fa
   const sectionRef = useRef<HTMLElement>(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
-  const [activeBlog, setActiveBlog] = useState(initialBlog);
 
+  // 1. Sort blogs by ID descending (Latest first)
+  const sortedBlogs = [...blogs].sort((a, b) => b.id - a.id);
+
+  // 2. Initialize activeBlog state
+  // On Outer Page: Default to the blog with the highest ID
+  // On Inner Page: Default to the prop passed from the dynamic route
+  const [activeBlog, setActiveBlog] = useState<Blog>(() => {
+    if (!isInnerPage) {
+      return sortedBlogs[0]; 
+    }
+    return initialBlog;
+  });
+
+  // 3. Sync state if the initialBlog prop changes (e.g., navigating between posts)
+  useEffect(() => {
+    if (isInnerPage) {
+      setActiveBlog(initialBlog);
+    }
+  }, [initialBlog, isInnerPage]);
+
+  // Handle Visibility for Mobile Trigger
   useEffect(() => {
     const observer = new IntersectionObserver(([entry]) => setIsVisible(entry.isIntersecting), { threshold: 0.1 });
     if (sectionRef.current) observer.observe(sectionRef.current);
     return () => { if (sectionRef.current) observer.unobserve(sectionRef.current); };
   }, []);
 
+  // Lock Body Scroll when Mobile Sidebar is open
   useEffect(() => {
-  if (isSidebarOpen) {
-    document.body.style.overflow = "hidden";
-  } else {
-    document.body.style.overflow = "auto";
-  }
+    document.body.style.overflow = isSidebarOpen ? "hidden" : "auto";
+    return () => { document.body.style.overflow = "auto"; };
+  }, [isSidebarOpen]);
 
-  return () => {
-    document.body.style.overflow = "auto";
-  };
-}, [isSidebarOpen]);
-
-  const otherBlogs = blogs
-    .filter((b) => b.id !== activeBlog.id)
-    .sort((a, b) => b.id - a.id); // latest first
-
-  const visibleBlogs = isInnerPage ? otherBlogs.slice(1, 5) : otherBlogs.slice(1, 3);
+  // 4. Determine Sidebar Blogs
+  // Outer Page: Show absolute latest 3 (e.g. 29, 28, 27)
+  // Inner Page: Show latest 4, excluding the one currently being read
+  const displayBlogs = isInnerPage 
+    ? sortedBlogs.filter(b => b.id !== activeBlog.id).slice(0, 4) 
+    : sortedBlogs.slice(0, 3);
 
   const sidebarItems: SidebarItem[] = [];
-  visibleBlogs.forEach((blog, index) => {
+  displayBlogs.forEach((blog, index) => {
     sidebarItems.push(blog);
     if (advertisements[index]) sidebarItems.push(advertisements[index]);
   });
@@ -45,40 +60,28 @@ export default function MagazineBase({ activeBlog: initialBlog, isInnerPage = fa
     <div ref={sectionRef as any} className="grid grid-cols lg:grid-cols-[1fr_320px] gap-10 lg:gap-12 relative bg-white">
 
       {/* MOBILE TRIGGER */}
-      <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className={`lg:hidden fixed top-1/2 -translate-y-1/2 z-[110] bg-black text-white w-10 h-12 flex items-center justify-center  shadow-2xl transition-all duration-500 ${isSidebarOpen ? "right-[85%] sm:right-[350px]" : "right-0"} ${isVisible ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
+      <button 
+        onClick={() => setIsSidebarOpen(!isSidebarOpen)} 
+        className={`lg:hidden fixed top-1/2 -translate-y-1/2 z-[110] bg-black text-white w-10 h-12 flex items-center justify-center shadow-2xl transition-all duration-500 ${isSidebarOpen ? "right-[85%] sm:right-[350px]" : "right-0"} ${isVisible ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+      >
         <FiChevronLeft size={24} className={isSidebarOpen ? "rotate-180" : ""} />
       </button>
 
-      {/* LEFT COLUMN */}
-      <div className="flex flex-col h-full lg:border lg:border-neutral-100 bg-white">
+      {/* LEFT COLUMN: MAIN CONTENT */}
+      <div className="flex flex-col h-full  bg-white">
+        
+        {/* HERO IMAGE SECTION */}
+        <div className={isInnerPage ? "relative w-full h-[60vh] md:h-[80vh]" : "sticky top-20 lg:top-0 h-[50vh] lg:h-full w-full overflow-hidden z-0"}>
+          <Image
+            src={activeBlog.image}
+            alt={activeBlog.title}
+            fill
+            priority
+            className="object-cover object-top"
+          />
+        </div>
 
-        {/* SCROLLING PART START */}
-        {isInnerPage ? (
-          // ✅ INNER PAGE (NO STICKY)
-          <div className="relative w-full h-[60vh] md:h-[80vh]">
-            <Image
-              src={activeBlog.image}
-              alt={activeBlog.title}
-              fill
-              priority
-              className="object-cover"
-            />
-          </div>
-        ) : (
-          // ✅ OUTER PAGE (STICKY IMAGE)
-          <div className="sticky top-20 lg:top-0 h-[50vh] lg:h-full w-full overflow-hidden z-0">
-            <Image
-              src={activeBlog.image}
-              alt={activeBlog.title}
-              fill
-              priority
-              className="object-cover"
-            />
-          </div>
-        )}
-
-        {/* SCROLLING PART END */}
-
+        {/* BLOG CONTENT */}
         <div className="relative z-10 bg-white py-6 px-4 md:p-8 flex flex-col gap-6">
           <div className="flex items-center gap-4 text-sm font-medium text-black/40 uppercase">
             <span>{activeBlog.date}</span>
@@ -96,33 +99,17 @@ export default function MagazineBase({ activeBlog: initialBlog, isInnerPage = fa
                 <React.Fragment key={i}>
                   {block.type === "text" && (
                     <div className="flex flex-col gap-4">
-                      {/* 1. Check if the title exists and render it */}
-                      {block.title && (
-                        <h3 className="text-2xl md:text-2xl font-medium text-black mt-6 tracking-tight capitalize">
-                          {block.title}
-                        </h3>
-                      )}
-                      {/* 2. Render the paragraph text */}
-                      <p className="text-black/80 text-lg font-normal leading-relaxed">
-                        {block.value}
-                      </p>
+                      {block.title && <h3 className="text-2xl md:text-2xl font-medium text-black mt-6 tracking-tight capitalize">{block.title}</h3>}
+                      <p className="text-black/80 text-lg font-normal leading-relaxed">{block.value}</p>
                     </div>
                   )}
 
                   {block.type === "image" && (
                     <div className="flex flex-col gap-2 py-2">
                       <div className="relative w-full h-auto">
-                        <Image
-                          src={block.value}
-                          alt="Mag Detail"
-                          width={1200}
-                          height={800}
-                          className="w-full h-auto object-contain bg-neutral-100"
-                        />
+                        <Image src={block.value} alt="Mag Detail" width={1200} height={800} className="w-full h-[400px] lg:h-[600px] object-contain " />
                       </div>
-                      {block.caption && (
-                        <span className="text-md font-normal text-black/80">{block.caption}</span>
-                      )}
+                      {/* {block.caption && <span className="text-sm font-normal text-black/80">{block.caption}</span>} */}
                     </div>
                   )}
 
@@ -147,14 +134,23 @@ export default function MagazineBase({ activeBlog: initialBlog, isInnerPage = fa
         </div>
       </div>
 
-      {/* RIGHT SIDEBAR */}
+      {/* RIGHT SIDEBAR: UP NEXT */}
       <aside className={`${isSidebarOpen ? "translate-x-0" : "translate-x-full lg:translate-x-0"} fixed lg:relative top-0 right-0 h-full w-[85%] sm:w-[350px] lg:w-full bg-white lg:bg-transparent z-[100] p-6 transition-transform duration-500 overflow-y-auto`}>
-        <div className="flex justify-end mb-6 lg:hidden"><button onClick={() => setIsSidebarOpen(false)} className="p-2 bg-neutral-100 rounded-full"><FiX size={24} /></button></div>
+        <div className="flex justify-end mb-6 lg:hidden">
+          <button onClick={() => setIsSidebarOpen(false)} className="p-2 bg-neutral-100 rounded-full"><FiX size={24} /></button>
+        </div>
         <div className="flex flex-col gap-10 sticky top-10">
           <h4 className="text-xs font-bold uppercase border-b border-black pb-2 tracking-widest text-black/60">Up Next</h4>
           {sidebarItems.map((item) => (
             item.type === "blog" ? (
-              <div key={item.id} onClick={() => { setActiveBlog(item); setIsSidebarOpen(false); }} className={`flex flex-col gap-4 group cursor-pointer transition-all duration-300 ${activeBlog.id === item.id ? "opacity-40" : "opacity-100"}`}>
+              <div 
+                key={item.id} 
+                onClick={() => { 
+                  setActiveBlog(item); 
+                  setIsSidebarOpen(false); 
+                }} 
+                className={`flex flex-col gap-4 group cursor-pointer transition-all duration-300 ${activeBlog.id === item.id ? "opacity-100 pointer-events-none" : "opacity-100"}`}
+              >
                 <div className="relative aspect-[4/3] w-full overflow-hidden">
                   <Image src={item.image} alt={item.title} fill className="object-cover group-hover:scale-110 transition-transform duration-500" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-80" />
@@ -166,16 +162,12 @@ export default function MagazineBase({ activeBlog: initialBlog, isInnerPage = fa
               </div>
             ) : (
               <div key={item.id} className="flex flex-col h-fit">
-                <div className="py-1 px-6 bg-neutral-100 mb-0.5"><span className="text-[10px] text-black/40 uppercase font-bold tracking-widest">Advertisement</span></div>
-                <div className={`relative group overflow-hidden bg-gray-100 ${item.aspect} w-full flex flex-col justify-end`}>
+                <div className="py-1 px-6 bg-neutral-100 mb-0.5">
+                  <span className="text-[10px] text-black/40 uppercase font-bold tracking-widest">Advertisement</span>
+                </div>
+                <div className={`relative group overflow-hidden bg-gray-100 ${item.aspect} w-full`}>
                   <Image src={item.image} alt="Ad" fill className="object-cover transition-transform duration-700 group-hover:scale-105" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-black/40 z-10 opacity-80" />
-                  {/* <div className="absolute inset-0 flex items-center justify-center z-30 opacity-0 group-hover:opacity-100 transition-all translate-y-2 group-hover:translate-y-0">
-                    <button className="bg-white text-black px-5 py-2 text-[10px] font-bold uppercase shadow-xl">Visit Ads</button>
-                  </div> */}
-                  {/* <div className="relative z-20 p-5 text-center">
-                    <p className="text-[10px] text-white/60 leading-relaxed uppercase tracking-widest">Creative Direction by <br /><span className="text-white font-semibold">Design POV</span></p>
-                  </div> */}
                 </div>
               </div>
             )
