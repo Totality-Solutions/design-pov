@@ -8,8 +8,8 @@ import CTABtn from '../common/CTABtn';
 import SectionHeading from '../common/SectionHeading';
 
 // Assets
-import Img1 from '@/public/temp/about/1600-x-1200.-1.png'
-import Img2 from '@/public/temp/about/1600-x-1200.png'
+import Img1 from '@/public/temp/about/1600-x-1200.png'
+import Img2 from '@/public/temp/about/1600-x-1200.-1.png'
 import Img3 from '@/public/temp/about/build-partner.png'
 
 interface Pillar {
@@ -104,7 +104,7 @@ const TheThreePillars: React.FC = () => {
       <div className="relative flex flex-col md:flex-row items-start w-full">
         
         {/* DESKTOP SIDEBAR - Unchanged */}
-        <div className="hidden lg:flex w-[388px] sticky top-0 h-screen pl-[70px] flex-col justify-end pb-20 border-r border-[#DFDFDF] bg-white">
+        <div className="hidden lg:flex w-[388px] sticky top-0 h-screen pl-[70px] py-20 flex-col justify-end pb-20 border-r border-[#DFDFDF] bg-white">
           <AnimatePresence mode="wait">
             <motion.div
               key={activePillar}
@@ -155,7 +155,7 @@ const TheThreePillars: React.FC = () => {
                  - shadow: adds depth to the stack
                  - z-index: ensures the last card is at bottom, or you can manually set it
               */
-              className="pillar-image-trigger w-full flex flex-col md:border-b border-[#DFDFDF] last:border-b-0 relative 
+              className="pillar-image-trigger w-full h-screen flex flex-col md:border-b border-[#DFDFDF] last:border-b-0 relative 
                          sticky lg:top-0 top-20 lg:relative bg-white"
               style={{ zIndex: index + 1 }}
             >
@@ -176,7 +176,7 @@ const TheThreePillars: React.FC = () => {
 
               {/* IMAGE CONTAINER */}
               <div className="p-6 md:p-[40px] flex items-center justify-center bg-white md:bg-transparent">
-                <div className="w-full h-[45vh] md:h-[75vh] aspect-[3/2] relative overflow-hidden">
+                <div className="w-full h-[45vh] md:h-[90vh] aspect-[3/2] relative overflow-hidden">
                   <Image 
                     src={pillar?.image} 
                     alt={pillar?.title} 

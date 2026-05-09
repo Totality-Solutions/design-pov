@@ -9,7 +9,6 @@ const ContactFormSection = () => {
 
   return (
     <section className="w-full bg-white py-12 font-['Montserrat']">
-      <div className="max-w-[1440px] mx-auto">
         <div className="w-full bg-[#DEDEDE]/20 flex flex-col lg:flex-row justify-between items-start py-6 px-6 md:px-10 gap-12">
           
           {/* Left: Info Column */}
@@ -41,7 +40,6 @@ const ContactFormSection = () => {
             </button>
           </form>
         </div>
-      </div>
     </section>
   );
 };

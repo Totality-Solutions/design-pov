@@ -595,17 +595,17 @@ a {
 /* Featured Story */
 
 .mc-root {
-  max-height: 120vh;
+  max-height: 100vh;
   background: var(--color-white);
   display: flex;
-  align-items: center;
-  justify-content: center;
+  padding-bottom: 10px;
+  /* align-items: center;
+  justify-content: center; */
   overflow: hidden;
 }
 
 .mc-wrap {
   width: 100%;
-  max-width: 1400px;
   display: grid;
   grid-template-columns: 1fr 130px 1fr;
   gap: 0 28px;
@@ -840,7 +840,7 @@ RIGHT: TEXT PANEL — slides RIGHT → LEFT
   font-weight: 300;
   line-height: 1.8;
   color: var(--color-black);
-  max-width: 360px;
+  /* max-width: 360px; */
 }
 
 /* Label (small heading) */

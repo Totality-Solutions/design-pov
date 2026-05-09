@@ -36,6 +36,8 @@ export const NAV_DATA: Record<string, SubmenuContent> = {
       { label: "Circle", href: "/edition/schedule" }, 
       { label: "Elevate", href: "/ecosystem/elevate" }, 
       { label: "Objects", href: "/ecosystem/objects" },
+      { label: "Contact", href: "/contact" },
+
       // { label: "Afterhours", href: "/ecosystem/afterhours" }
     ],
   },
@@ -49,6 +51,7 @@ export const NAV_DATA: Record<string, SubmenuContent> = {
       { label: "Brands", href: "/edition/brands" }, 
       { label: "Core", href: "/edition/core" },
       { label: "Schedule", href: "/edition/schedule" },
+      { label: "Contact", href: "/contact" },
       // { label: "Art", href: "/edition/art" },
     ],
   },

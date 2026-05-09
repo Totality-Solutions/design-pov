@@ -11,8 +11,9 @@ const HomeSponsors: React.FC = () => {
   const partners = [
      { id: 1, logo: "/temp/edition/sponsors/2.png", href: "https://www.kajariaceramics.com/"},
     { id: 2, logo: "/temp/edition/sponsors/4.png", href: "https://www.pacific-surfaces.com/" },
-    { id: 7, logo: "/temp/edition/sponsors/1.png", href: "https://www.allhome.in/" },
-    { id: 9, logo: "/temp/edition/sponsors/3.png", href: "https://www.essentiahome.com/?srsltid=AfmBOoqCYRZnQWfAJ8Tx74fKI-F59l2uzZUYhcKm6bUDxvV6r0RBMmld" },
+    { id: 3, logo: "/temp/edition/sponsors/1.png", href: "https://www.allhome.in/" },
+    { id: 4, logo: "/temp/edition/sponsors/3.png", href: "https://www.essentiahome.com/?srsltid=AfmBOoqCYRZnQWfAJ8Tx74fKI-F59l2uzZUYhcKm6bUDxvV6r0RBMmld" },
+    { id: 5, logo: "/temp/edition/sponsors/5.png", href: "https://www.pantone.com/hk/en/" },
   ];
 
   return (
@@ -31,11 +32,11 @@ const HomeSponsors: React.FC = () => {
 
       {/* 2. PARTNER LOGO GRID (Exact same structure as your snippet) */}
       <div className="w-full bg-white">
-        <div className="grid grid-cols-2 md:grid-cols-4">
+        <div className="grid grid-cols-2 md:grid-cols-5">
           {partners.map((partner) => (
             <div
               key={partner.id}
-              className="aspect-[2/1] lg:aspect-[8/3] flex items-center justify-center border-b p-4 lg:p-8 mx-4 border-pov-black/30 transition-colors duration-300 hover:bg-gray-50/50 overflow-hidden"
+              className="aspect-[2/1] lg:aspect-[6/3] flex items-center justify-center border-b p-4 lg:p-2 mx-4 border-pov-black/30 transition-colors duration-300 hover:bg-gray-50/50 overflow-hidden"
             >
               {/* Make the Link a flex container that fills the parent */}
               <Link 
@@ -45,7 +46,7 @@ const HomeSponsors: React.FC = () => {
                 <img 
                   src={partner.logo} 
                   alt={"Partner Logo"} 
-                  className="max-w-full max-h-full object-contain hover:scale-105 transition-all duration-500"
+                  className="max-w-full max-h-full object-cover hover:scale-105 transition-all duration-500"
                 />
               </Link>
             </div>

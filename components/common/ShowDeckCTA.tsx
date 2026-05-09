@@ -9,17 +9,17 @@ const ShowDeckCTA = () => {
 
   return (
     <>
-      <div className="w-full z-10 bg-white border-b">
+      <div className="w-full z-10 bg-white border-t border-b border-black/20">
         <CTAStrip
-          title="Our highlights from Design POV 2025"
+          title="Highlights: Design POV 2025"
           ctaLabel="Download Show Deck"
           onClick={() => setIsFormOpen(true)}
           hoverBgColor="#000000"
           textColor="var(--primary-red)"
           hoverTextColor="var(--color-white)"
-          floatingImage="/temp/ctastrip/2.png"
-          floatingImageHeight={160}
-          floatingImageWidth={225}
+          floatingImage="/temp/ctastrip/3.png"
+          floatingImageHeight={107}
+          floatingImageWidth={200}
         />
       </div>
 

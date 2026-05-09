@@ -104,7 +104,7 @@ const ThisIsUs: React.FC = () => {
               </p>
             ))}
           </div>
-          <h2 className="text-[18px] md:text-h4 font-bold text-black tracking-tighter pt-6 lg:pt-16">
+          <h2 className="text-[18px] md:text-h2-mobile font-bold text-black tracking-tighter pt-6 lg:pt-16">
             What was the real trigger behind Design POV?
           </h2>
         </div>
@@ -133,7 +133,7 @@ const ThisIsUs: React.FC = () => {
                 playsInline
               /> */}
               <Image
-              src="/temp/about/founder.jpeg"
+              src="/temp/about/Founder.png"
               width={1000}
               style={{ objectFit: "contain", objectPosition: "center" }}
               height={200}

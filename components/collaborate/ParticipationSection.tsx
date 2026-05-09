@@ -25,7 +25,7 @@ export default function ParticipationSection() {
 
   return (
     <Container className="w-full bg-white" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
-      <SectionHeading titleMain="Featured " titleBold="Story" sticky={false} isSectionHovered={isHovered} className=' !border-t-0' />
+      <SectionHeading titleMain="Collaboration Mediums"  sticky={false} isSectionHovered={isHovered} className=' !border-t-0' />
 
       {/* MOBILE VIEW */}
       <div className="md:hidden flex flex-col">

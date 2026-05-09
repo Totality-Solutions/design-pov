@@ -10,7 +10,7 @@ const CATEGORIES = [
   "Build Partners",
   "Gifting Partners",
   "Media Partners",
-  "Degital Media Partners",
+  "Digital Media Partners",
   "Ticketing Partners",
   "Sensory Collaborator",
   "Key execution Partner"
@@ -41,10 +41,11 @@ const PartnersSection: React.FC = () => {
 
   const partners = [
     // Partners
-    { id: 1, category: "Partners", logo: "/temp/edition/sponsors/2.png" },
-    { id: 2, category: "Partners", logo: "/temp/edition/sponsors/4.png" },
-    { id: 7, category: "Partners", logo: "/temp/edition/sponsors/1.png" },
-    { id: 9, category: "Partners", logo: "/temp/edition/sponsors/3.png" },
+    { id: 1, category: "Partners", logo: "/temp/edition/sponsors/1.png" },
+    { id: 2, category: "Partners", logo: "/temp/edition/sponsors/2.png" },
+    { id: 7, category: "Partners", logo: "/temp/edition/sponsors/3.png" },
+    { id: 9, category: "Partners", logo: "/temp/edition/sponsors/4.png" },
+    { id: 12, category: "Partners", logo: "/temp/edition/sponsors/5.png" },
     // Brands
     ...Array.from({ length: 48 }, (_, i) => ({ id: 100 + i, category: "Brands", logo: `/temp/edition/brands/${i + 1}.png` })),
     // Brand Collaborators
@@ -68,7 +69,7 @@ const PartnersSection: React.FC = () => {
     { id: 50, category: "Media Partners", logo: "/temp/edition/media-partners/2.png" },
     { id: 50, category: "Media Partners", logo: "/temp/edition/media-partners/3.png" },
     // Degital Media Partners
-    { id: 60, category: "Degital Media Partners", logo: "/temp/edition/media-partners/4.png" },
+    { id: 60, category: "Digital Media Partners", logo: "/temp/edition/media-partners/4.png" },
     // Ticketing Partners
     { id: 70, category: "Ticketing Partners", logo: "/temp/edition/ticketing-partners/1.png" },
     // Sensory Collaborator
@@ -133,19 +134,31 @@ const PartnersSection: React.FC = () => {
 
       {/* 3. PARTNER LOGO GRID */}
       <div className="w-full bg-white pb-12">
-        <div className="grid grid-cols-3 md:grid-cols-6 border-t border-[#EEEEEE] ">
+        <div className={`grid border-t border-[#EEEEEE] ${
+          activeTab === "Partners" 
+          ? "grid-cols-1 md:grid-cols-6" // Larger layout for main Partners
+          : "grid-cols-3 md:grid-cols-6" // Standard layout for others
+        }`}>
           {gridCells.map((_, index) => {
             const partner = filtered[index];
+            const isMain = activeTab === "Partners";
+            
             return (
               <div
                 key={index}
-                className="aspect-square flex items-center justify-center p-4 md:p-8 border-b mx-4 border-pov-black/30 transition-colors duration-300 hover:bg-gray-50/50"
+                className={`flex items-center justify-center border-b border-pov-black/30 transition-colors duration-300 hover:bg-gray-50/50 ${
+                  isMain 
+                  ? "aspect-[16/13] mx-4" 
+                  : "aspect-[16/13] p-8  mx-4"
+                }`}
               >
                 {partner ? (
                   <img 
                     src={partner.logo} 
                     alt="Partner Logo" 
-                    className="max-w-[75%] max-h-[50%] object-contain transition-all duration-500"
+                    className={`object-contain transition-all duration-500 ${
+                      isMain ? "max-w-[85%] max-h-[70%]" : "max-w-[75%] max-h-[50%]"
+                    }`}
                   />
                 ) : (
                   <div className="w-full h-full" />

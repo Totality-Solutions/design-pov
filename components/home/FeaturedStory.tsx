@@ -97,8 +97,7 @@ export default function MarqueeCarousel() {
       onMouseLeave={() => setIsHovered(false)}
     >
       <SectionHeading
-        titleMain="Featured "
-        titleBold="Story"
+        titleMain="Magazine"
         sticky={false}
         isSectionHovered={isHovered}
       />
