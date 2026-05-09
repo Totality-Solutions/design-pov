@@ -72,6 +72,7 @@ const PartnersSection: React.FC = () => {
     { id: 60, category: "Digital Media Partners", logo: "/temp/edition/media-partners/4.png" },
     // Ticketing Partners
     { id: 70, category: "Ticketing Partners", logo: "/temp/edition/ticketing-partners/1.png" },
+    { id: 70, category: "Ticketing Partners", logo: "/temp/edition/ticketing-partners/2.png" },
     // Sensory Collaborator
     { id: 5, category: "Sensory Collaborator", logo: "/temp/edition/sensory/12.png" },
     // Key execution Partner
