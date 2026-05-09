@@ -287,18 +287,18 @@ const DynamicScheduleGrid = () => {
       </div>
 
       {/* --- LOWER WHITE DETAIL GRID (Untouched) --- */}
-      <div className="w-full mx-auto max-w-[1440px] overflow-x-auto">
-        <div className="grid grid-row lg:grid-cols-[0.6fr_0.6fr_1.2fr] min-w-[full] lg:min-w-[900px] border border-gray-100 bg-gray-50/30 ">
+      <div className="w-full  overflow-x-auto">
+        {/* <div className="grid grid-row lg:grid-cols-[0.6fr_0.6fr_1.2fr] min-w-[full] lg:min-w-[900px] border border-gray-100 bg-gray-50/30 ">
           <div className="hidden lg:flex p-6 px-12 text-body font-medium text-black border border-gray-100">Event Name</div>
           <div className="hidden lg:flex p-6 px-12 text-body font-medium text-black border border-gray-100">Image</div>
           <div className="hidden lg:flex p-6 px-12 text-body font-medium text-black border border-gray-100">Information</div>
           <div className="flex lg:hidden p-6 px-6 text-body font-medium text-black border border-gray-100">Event Details</div>
-        </div>
+        </div> */}
 
         <AnimatePresence mode="wait">
           <motion.div key={activeDate} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
             {currentData.events.map((event) => (
-              <div key={event.id} className="grid grid-row lg:grid-cols-[0.6fr_0.6fr_1.2fr] min-w-[full] lg:min-w-[900px] lg:py-0 py-10 border-b border-black/20 lg:border lg:border-gray-100 group">
+              <div key={event.id} className="grid grid-row lg:grid-cols-[1fr_1.2fr] min-w-[full] lg:min-w-[900px] lg:py-0 py-10 border-b border-black/20 lg:border lg:border-gray-100 group">
                 <div className="px-6 py-3 lg:p-12 flex flex-col gap-6 lg:border lg:border-gray-100">
                   <span className="text-5xl font-semibold tracking-tighter">{event.id}</span>
                   <div>
@@ -306,16 +306,18 @@ const DynamicScheduleGrid = () => {
                     <p className="text-zinc-500 text-sm leading-relaxed max-w-[280px]">{event.subtitle}</p>
                   </div>
                 </div>
-                <div className="px-6 py-3 lg:p-12 flex items-center justify-center lg:border lg:border-gray-100">
+
+                {/* <div className="px-6 py-3 lg:p-12 flex items-center justify-center lg:border lg:border-gray-100">
                   <div className="relative w-full max-h-[250px] aspect-video lg:aspect-[16/10] overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-700">
                     <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 to-red-600/20 z-10 mix-blend-overlay" />
                     <Image src={event.image} alt={event.title} fill className="object-cover scale-105 group-hover:scale-100 transition-transform duration-1000" />
                   </div>
-                </div>
+                </div> */}
+
                 <div className="px-6 py-3 lg:p-12 flex flex-col justify-between">
                   <div className="flex justify-between items-start">
                     <span className="text-sm font-semibold tracking-tight">{event.time}</span>
-                    <div className="flex gap-4 pointer-events-auto">
+                    {/* <div className="flex gap-4 pointer-events-auto">
                       {["IG", "BI", "IN"].map((id) => (
                         <span
                           key={id}
@@ -324,7 +326,7 @@ const DynamicScheduleGrid = () => {
                           {id}
                         </span>
                       ))}
-                    </div>
+                    </div> */}
                   </div>
                   <div className="mt-0 lg:mt-8 mb-4 lg:mb-0">
                     <div className='mb-2'>

@@ -380,7 +380,7 @@ export default function Navbar() {
                 btnBg="transparent"
                 btnHoverBg="var(--primary-blue)"
                 textColor="black"
-                href="#tickets"
+                href="https://tktplz.events/gjdlb5-design-pov"
               />
             </div>
 
@@ -579,7 +579,7 @@ export default function Navbar() {
               iconType="arrow"
               btnBg="var(--primary-blue)"
               textColor="white"
-              href="#tickets"
+              href="https://tktplz.events/gjdlb5-design-pov"
             />
           </div>
         </div>

@@ -38,7 +38,7 @@ export default function MagazinePage() {
           </div>
         </div>
       </div>
-      <HomeSponsors />
+
    </>
   );
 }

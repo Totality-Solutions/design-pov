@@ -7,8 +7,8 @@ const DesignPovTicket = () => {
   const eventData = {
     title: 'DESIGN POV LIVE',
     tagline: 'Sense & Sensibility',
-    date: '15 - 17 May, 2026',
-    location: 'Mumbai',
+    date: '15 - 16 - 17 May, 2026',
+    location: 'Jio World Convention Centre',
     qrCodeImage: '/qr/ticket-qr.svg', 
   };
 
@@ -18,7 +18,7 @@ const DesignPovTicket = () => {
   ];
 
   return (
-    <section className="bg-white py-12 px-4 font-montserrat">
+    <section className="bg-white py-12 px-4 lg:px-10 font-montserrat">
       <div >
         
         {/* ========================================= */}
