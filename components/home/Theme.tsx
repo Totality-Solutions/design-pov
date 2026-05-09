@@ -74,9 +74,9 @@ const Theme = () => {
     
     <div ref={containerRef} style={{ position: 'relative', height: '200vh' }}>
       <div className='sticky top-20 lg:top-0 h-[100vh] overflow-hidden'>
-        <div className="grid grid-cols-1 lg:grid-cols-[3fr_7fr] w-full h-full pt-12 md:pt-12 md:pb-6 py-0 gap-10 md:gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-[3fr_7fr] w-full h-full pt-12 md:pt-12 py-0 gap-10 md:gap-4">
 
-          <div className="w-full h-full flex flex-col justify-end gap-4 px-6 lg:px-10">
+          <div className="w-full h-full flex flex-col justify-end gap-4 pb-12 px-6 lg:px-10">
             <h1 className="text-h2-mobile md:text-h2-tab lg:text-h2 font-semibold uppercase">2026 THEME</h1>
             <p className="text-body-tab">
               A sharper focus on how spaces are experienced - through texture, sound, atmosphere, and memory.
