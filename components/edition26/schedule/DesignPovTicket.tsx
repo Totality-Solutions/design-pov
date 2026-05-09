@@ -5,7 +5,7 @@ import { ExternalLink } from 'lucide-react';
 const DesignPovTicket = () => {
   // Common data - make these props for a reusable component
   const eventData = {
-    title: 'DESIGN POV LIVE',
+    title: 'DESIGN POV Index',
     tagline: 'Sense & Sensibility',
     date: '15 - 16 - 17 May, 2026',
     location: 'Jio World Convention Centre',
