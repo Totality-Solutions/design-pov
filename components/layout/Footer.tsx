@@ -149,7 +149,7 @@ const Footer = () => {
 
         {/* MAIN CONTENT - Interaction Fix (pointer-events-auto for links) */}
         <div
-          className="relative z-20 w-full h-full flex flex-col justify-between mix-blend-difference pointer-events-none"
+          className="relative z-20 w-full h-full flex flex-col justify-between mix-blend-difference "
           style={{
             paddingLeft: "var(--footer-px)",
             paddingTop: "70px", 
@@ -166,20 +166,46 @@ const Footer = () => {
                 className="w-full max-w-[280px]"
               />
               <div className="text-white text-[12px] opacity-80">
-                <p className="leading-relaxed mb-6">
-                  designpovindia.com
-                  <br />
-                  hello@designpovindia.com
-                </p>
+                <div className="leading-relaxed ">
+                  <Link href="mailto:marketing@designpovindia.com">designpovindia.com</Link>
+                </div>
+                <div className="leading-relaxed mb-4">  
+                  <Link href="mailto:sales@designpovindia.com">sales@designpovindia.com</Link>
+                </div>
 
                 <div className="flex gap-4 pointer-events-auto">
-                  {["IG", "BI", "IN"].map((id) => (
-                    <span
-                      key={id}
-                      className="border border-white/20 w-[28px] h-[28px] flex items-center justify-center text-[10px] font-bold cursor-pointer hover:bg-white hover:text-black transition-colors"
+                  {[
+                    {
+                      id: "IG",
+                      href: "https://www.instagram.com/designpov.india?igsh=bnVnZTRxajRoY2g4",
+                    },
+                    {
+                      id: "FB",
+                      href: "https://www.facebook.com/share/1GiQ7sWhVw/?mibextid=wwXIfr",
+                    },
+                    {
+                      id: "IN",
+                      href: "https://www.linkedin.com/company/design-pov/",
+                    },
+                  ].map((item) => (
+                    <a
+                      key={item.id}
+                      href={item.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="
+                        border border-white/20
+                        w-[28px] h-[28px]
+                        flex items-center justify-center
+                        text-[10px] font-bold
+                        cursor-pointer
+                        hover:bg-white
+                        hover:text-black
+                        transition-colors
+                      "
                     >
-                      {id}
-                    </span>
+                      {item.id}
+                    </a>
                   ))}
                 </div>
               </div>

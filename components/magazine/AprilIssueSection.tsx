@@ -7,15 +7,15 @@ import CTABtn from "../common/CTABtn";
 
 const ISSUE_DATA = [
   {
-    category: "Architecture",
-    title: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+    category: "POV Blogs",
+    title: "Pacific Homes powers Design POV ’26 with engineered stone and surface innovation",
     author: "Design POV",
     date: "26 feb, 2026",
     image: "/temp/ads/april-issue1.png",
   },
   {
-    category: "Architecture",
-    title: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+    category: "POV Blogs",
+    title: "Acespace brings a decade of veneer expertise to Design POV ’26",
     author: "Design POV",
     date: "26 feb, 2026",
     image: "/temp/ads/april-issue2.png",
@@ -34,7 +34,7 @@ const AprilIssueSection = () => {
       {/* 1. HEADER SECTION */}
       <SectionHeading
         titleMain="The "
-        titleBold="April Issue"
+        titleBold="May Issue"
         isSectionHovered={isHovered}
       >
       {/* <CTABtn
@@ -61,7 +61,7 @@ const AprilIssueSection = () => {
           <div className="h-full">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 h-full">
               {ISSUE_DATA.map((item, index) => (
-                <div key={index} className="group cursor-pointer flex flex-col h-full">
+                <div key={index} className="group flex flex-col h-full">
                   <div className="relative aspect-square w-full overflow-hidden bg-gray-100 flex-grow">
                     <Image
                       src={item.image}
@@ -76,16 +76,16 @@ const AprilIssueSection = () => {
                     {/* TEXT CONTENT BLOCK */}
                     <div className="absolute bottom-0 left-0 w-full p-6 flex flex-col gap-1 z-10 transition-transform duration-500 ease-out group-hover:-translate-y-2">
                       
-                      {/* <span className="text-[12px] text-white/60 font-medium mb-1">
+                      <span className="text-[12px] text-white/60 font-medium mb-1">
                         {item.category}
-                      </span> */}
+                      </span>
 
                       {/* TITLE: Truncated to 1 line, expands on hover */}
-                      {/* <div className="grid grid-rows-[auto] transition-all duration-500 ease-in-out">
-                        <h3 className="text-[18px] font-semibold text-white leading-[1.3] transition-all duration-500 line-clamp-1 group-hover:line-clamp-none">
+                      <div className="grid grid-rows-[auto] transition-all duration-500 ease-in-out">
+                        <h3 className="text-[18px] font-semibold text-white leading-[1.3] transition-all duration-500 line-clamp-2 group-hover:line-clamp-none">
                           {item.title}
                         </h3>
-                      </div> */}
+                      </div>
 
                       {/* META INFO: Revealed on hover */}
                       {/* <div className="overflow-hidden max-h-0 group-hover:max-h-20 transition-all duration-700 ease-in-out opacity-0 group-hover:opacity-100">

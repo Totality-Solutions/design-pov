@@ -113,7 +113,7 @@ export default function PopupForm({ isOpen, onClose }: PopupFormProps) {
           <div className="flex items-center gap-3 mb-10">
             <div className="w-2 h-2 bg-black rounded-full" />
             <h3 className="text-black text-2xl font-medium tracking-tight font-['Montserrat']">
-              Join <span className="font-bold">Design POV</span>
+              Join <span className="font-bold">the movement</span>
             </h3>
           </div>
 

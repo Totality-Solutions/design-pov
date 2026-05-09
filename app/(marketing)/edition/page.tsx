@@ -7,11 +7,13 @@ import ThemeSection from "@/components/edition26/ThemeSection";
 import type { Metadata } from "next";
 import Link from "next/link";
 import ShowDeckCTA from "@/components/common/ShowDeckCTA";
+import WhoItIsFor from "@/components/edition26/WhoItIsFor";
 
 export default function Edition2026() {
   return (
     <div className="bg-pov-black min-h-screen">
       <ThemeSection />
+      <WhoItIsFor />
         <CoreSection />
       <div className="w-full z-10 bg-white border-t border-b border-[#DFDFDF]">
         <CTAStrip

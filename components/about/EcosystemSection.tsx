@@ -44,9 +44,9 @@ const EcosystemSection = () => {
             return (
               <Link
                 href={item.href || '#'}
-                className="relative block w-full overflow-hidden  border border-gray-200 hover:bg-black/10"
+                className="relative block w-full overflow-hidden border border-gray-200 hover:bg-black/10"
                 style={{
-                  aspectRatio:'10/5',
+                  aspectRatio:'14/4',
                   transition: "aspect-ratio 2000ms cubic-bezier(0.22, 1, 0.36, 1)",
                   transformOrigin: 'bottom',
                 }}
@@ -58,7 +58,7 @@ const EcosystemSection = () => {
                     loop
                     muted
                     playsInline
-                    className="absolute inset-0 w-full h-full object-cover will-change-transform"
+                    className="absolute inset-0 w-full h-full object-contain will-change-transform"
                     style={{
                       transform: isExpanded ? 'translate3d(0,0,0) scale(1.15)' : 'translate3d(0,0,0) scale(1)',
                       transition: 'transform 2000ms cubic-bezier(0.4, 0, 0.2, 1)',

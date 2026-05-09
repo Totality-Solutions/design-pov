@@ -4,7 +4,6 @@ const ContactHeader = () => {
   return (
     /* Using --color-pov-white and --font-display */
     <section className="w-full bg-[var(--color-pov-white)] pt-16 md:pt-24 font-[var(--font-display)]">
-      <div className="max-w-[1440px] mx-auto">
         
         {/* Header Line - Using --color-pov-black */}
         <div className="w-full border-b border-[var(--color-pov-black)] pb-5">
@@ -44,7 +43,6 @@ const ContactHeader = () => {
             Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
           </p>
         </div>
-      </div>
     </section>
   );
 };

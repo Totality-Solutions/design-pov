@@ -5,7 +5,6 @@ import BuildPartner from "@/components/edition26/brands/BuildPartner";
 import Sponsors from "@/components/edition26/brands/Sponsors";
 import BuildPartner from "@/components/edition26/brands/BuildPartner";
 import PageLoader from "@/components/common/PageLoader";
-import BuildPartner from "@/components/edition26/brands/BuildPartner";
 import React from "react";
 
 const BrandsPage = () => {

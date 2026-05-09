@@ -178,15 +178,14 @@ export default function ElevateGallery() {
 
                 <div className="overflow-hidden">
                   <h2 className="text-[clamp(24px,1vw,40px)] font-bold leading-none text-black animate-[rtlIn_0.58s_cubic-bezier(0.16,1,0.3,1)_both] [animation-delay:0.12s]">
-                    Spatial Expressions
+                    Light, reimagined
                   </h2>
                 </div>
                 <div className="overflow-hidden">
-                  <p className="text-[15px] font-light leading-[1.3] text-black max-w-[360px] animate-[rtlIn_0.58s_cubic-bezier(0.16,1,0.3,1)_both]">
-                    Elevate is a platform for experimental thinking,
-                    immersive storytelling, and spatial expression
-                    shaped through contemporary design. Bringing together creators, brands, and visionaries, 
-                    it transforms ideas into experiences that blur the boundaries between object, environment, and emotion.
+                  <p className="text-[15px] font-light leading-[1.3] text-black max-w-[450px] 2xl:pr-0 lg:pr-8 animate-[rtlIn_0.58s_cubic-bezier(0.16,1,0.3,1)_both]">
+                    In Bengaluru, Sunrooof (@sunrooof_) unveiled their new Experience Centre - a space where natural sunlight meets intelligent technology. Guests experienced guided walkthroughs of their wellness lighting systems, live demonstrations of Al-integrated innovation, and an evening of meaningful conversations with architects, designers, and industry peers.
+                    This evening also marked the beginning of POV Elevate: a new initiative by Design POV that extends our platform beyond the show floor, creating curated, design-led moments for brands within our ecosystem.
+                    Because visibility is strongest when it's intentional, and shared with the right room.<br/>In association with: @theidealhomeandgarden
                   </p>
                 </div>
 

@@ -83,7 +83,7 @@ const ElevateHero = () => {
       >
         <div className="sticky top-0 h-screen flex items-center justify-center">
           
-          <div className="max-w-[1200px] px-6 md:px-10 text-center space-y-10">
+          <div className="px-6 md:px-10 text-center space-y-10">
             
             <WordReveal
               text={text1}

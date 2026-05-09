@@ -44,7 +44,7 @@ export default function ThemeIntro() {
           <p className="text-[16px] md:text-[18px] text-black/90 font-medium leading-relaxed">
             Every creative mind brings a unique perspective shaped by memory, intention, and imagination. 
             At Design POV, the theme acts not as a constraint, but as a catalyst—guiding inspiration, 
-            collaboration, and storytelling. Shared by 20 architecture and design firms, it becomes 
+            collaboration, and storytelling. Shared by all architecture and design firms, it becomes 
             a common language that ties together installations and spatial narratives. Each participant 
             interprets it in their own way, creating diverse expressions that come together as 
             one cohesive, living dialogue.
