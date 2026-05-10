@@ -155,12 +155,12 @@ const TheThreePillars: React.FC = () => {
                  - shadow: adds depth to the stack
                  - z-index: ensures the last card is at bottom, or you can manually set it
               */
-              className="pillar-image-trigger w-full h-screen flex flex-col md:border-b border-[#DFDFDF] last:border-b-0 relative 
+              className="pillar-image-trigger w-full lg:h-screen flex pt-4 pb-8 lg:pt-0 lg:pb-0 flex-col md:border-b border-[#DFDFDF] last:border-b-0 relative 
                          sticky lg:top-0 top-20 lg:relative bg-white"
               style={{ zIndex: index + 1 }}
             >
               {/* MOBILE ONLY TEXT */}
-              <div className="lg:hidden flex flex-col py-4 pb-8 px-8 gap-6 bg-white border-b border-[#DFDFDF]">
+              <div className="lg:hidden flex flex-col py-4 pb-8 px-6 gap-6 bg-white border-b border-[#DFDFDF]">
                 <div className="flex flex-col gap-3">
                   <h3 className="text-[20px] font-bold text-black tracking-tight uppercase leading-tight">
                     {pillar.title}

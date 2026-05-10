@@ -329,79 +329,101 @@ const EcosystemSection = () => {
 
           {/* ───────── MOBILE (Stacked) ───────── */}
           <div className="md:hidden">
-            {ECOSYSTEM.map((item) => {
-              const isActive = activeId === item.id
-              return (
-                <div
-                  key={item.id}
-                  onClick={() => setActiveId(item.id)}
-                  style={{
-                    position: 'relative',
-                    borderTop: '1px solid #222',
-                    background: '#0d0d0d',
-                  }}
-                >
-                  <motion.div
-                    animate={{ scaleX: isActive ? 1 : 0 }}
-                    style={{
-                      position: 'absolute',
-                      top: 0,
-                      left: 0,
-                      height: '2px',
-                      width: '100%',
-                      background: 'var(--primary-blue)',
-                      transformOrigin: 'left',
-                      zIndex: 5,
-                    }}
-                  />
+  {ECOSYSTEM.map((item) => {
+    const isActive = activeId === item.id
 
-                  {!isActive ? (
-                    <div className="p-5 flex justify-between items-center text-[#ffffff55] font-bold">
-                      <span>{item.label}</span>
-                      <FiMinus />
-                    </div>
-                  ) : (
-                    <div className="p-10 relative z-10">
-                       {/* <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
-                        <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--primary-blue)' }} />
-                        <span style={{ fontSize: '11px', color: '#fff' }}>{item.tag}</span>
-                      </div> */}
-                      <h3 className="text-4xl font-semibold text-[#f0f0f0] mb-4">{item.title}</h3>
-                      <div className="mb-8">
-                        {item.description?.map((para, index) => (
-                          <p
-                            key={index}
-                            className="text-sm text-[#ffffff75] leading-relaxed mb-3"
-                          >
-                            {para}
-                          </p>
-                        ))}
-                      </div>
-                      
-                      {/* <div className="flex gap-8 mb-8">
-                        {item.stats.map((stat, i) => (
-                          <div key={i}>
-                            <div className="text-xl text-white font-medium">{stat.value}</div>
-                            <div className="text-[10px] text-[#ffffff75]">{stat.unit}</div>
-                          </div>
-                        ))}
-                      </div> */}
+    return (
+      <div
+        key={item.id}
+        onClick={() => setActiveId(item.id)}
+        style={{
+          position: 'relative',
+          borderTop: '1px solid #222',
+          overflow: 'hidden',
+          background: '#0d0d0d',
+        }}
+      >
+        {/* Background Image */}
+        <motion.img
+          src={item.bgImage}
+          alt={item.title}
+          animate={{
+            opacity: isActive ? 0.35 : 0,
+            scale: isActive ? 1 : 1.08,
+          }}
+          transition={{ duration: 0.4 }}
+          style={{
+            position: 'absolute',
+            inset: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            pointerEvents: 'none',
+          }}
+        />
 
-                      <CTABtn
-                        label={item.cta}
-                        className='text-mob-body'
-                        iconType="arrow"
-                        btnBg="var(--color-black)"
-                        borderColor="#fff"
-                        textColor="#fff"
-                        href="#apply"
-                      />
-                    </div>
-                  )}
-                </div>
-              )
-            })}
+        {/* Dark Overlay */}
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            background: 'rgba(0,0,0,0.65)',
+            zIndex: 1,
+          }}
+        />
+
+        {/* Top Blue Line */}
+        <motion.div
+          animate={{ scaleX: isActive ? 1 : 0 }}
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            height: '2px',
+            width: '100%',
+            background: 'var(--primary-blue)',
+            transformOrigin: 'left',
+            zIndex: 5,
+          }}
+        />
+
+        {!isActive ? (
+          <div className="relative z-10 p-6 flex justify-between items-center text-[#ffffff55] font-bold">
+            <span>{item.label}</span>
+            <FiMinus />
           </div>
+        ) : (
+          <div className="relative z-10 p-10">
+            <h3 className="text-4xl font-semibold text-[#f0f0f0] mb-4">
+              {item.title}
+            </h3>
+
+            <div className="mb-8">
+              {item.description?.map((para, index) => (
+                <p
+                  key={index}
+                  className="text-sm text-[#ffffff85] leading-relaxed mb-3"
+                >
+                  {para}
+                </p>
+              ))}
+            </div>
+
+            <CTABtn
+              label={item.cta}
+              className="text-mob-body"
+              iconType="arrow"
+              btnBg="var(--color-black)"
+              borderColor="#fff"
+              textColor="#fff"
+              href={item.href}
+            />
+          </div>
+        )}
+      </div>
+    )
+  })}
+</div>
         </Container>
       </Section>
 

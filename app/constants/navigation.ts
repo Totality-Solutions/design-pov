@@ -43,7 +43,7 @@ export const NAV_DATA: Record<string, SubmenuContent> = {
   },
   "2026 Edition": {
     mainHref: "/edition",
-    image: "/qr/ticket.png",
+    image: "/qr/Ticket.svg",
     filetype: "image",
     col1Title: "",
     col1Links: [
