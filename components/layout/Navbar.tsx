@@ -571,8 +571,17 @@ export default function Navbar() {
                 </div>
               );
             })}
+            <Link href="https://povindex.designpovindia.com/home" target="_blank" className="flex items-center justify-center  ">
+          <Image
+                          src="/qr/Ticket.svg" // your custom icon
+                          alt="toggle"
+                          width={1000}
+                          height={100}
+                          className={`transition-transform duration-200 ease-in-out bg-black `}
+                        />
+          </Link>
           </div>
-
+          
           <div className="p-10 border-t bg-white">
             <CTABtn
               label="Buy Tickets"
