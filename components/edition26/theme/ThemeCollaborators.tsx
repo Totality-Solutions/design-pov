@@ -3,13 +3,20 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { themeData, CoreItem } from "@/data/themeData"; // Import the Type as well
+import { themeData, CoreItem } from "@/data/themeData";
 import { ShowcaseModal } from "../core/ShowcaseModal";
 
-/**
- * Internal HoverCard Component
- */
-function HoverCard({ project, onClick }: { project: CoreItem; onClick: () => void }) {
+function HoverCard({
+  project,
+  onClick,
+}: {
+  project: CoreItem;
+  onClick: () => void;
+}) {
+  const architectsText = Array.isArray(project.architects)
+    ? project.architects.join(" | ")
+    : project.architects;
+
   return (
     <motion.div
       onClick={onClick}
@@ -24,25 +31,28 @@ function HoverCard({ project, onClick }: { project: CoreItem; onClick: () => voi
         />
       </div>
 
-      <div className="w-full flex items-center justify-between p-[15px]">
-        <span className="font-['Montserrat'] text-[14px] text-black uppercase font-medium">
-          {project.label}
-        </span>
-        <div className="w-[11px] h-[11px] border-[1.5px] border-black lg:group-hover:bg-primary-red lg:group-hover:border-primary-red transition-colors duration-300" />
+      <div className="w-full flex items-center justify-between py-[15px]">
+        <div className="font-['Montserrat'] text-[11px] lg:text-[14px] text-black uppercase font-medium">
+          {project.label}<br/>
+          <p className="font-['Montserrat'] text-[12px] lg:text-[14px] text-black/90 capitalize font-normal">{architectsText}</p>        
+        </div>
+        <div className="hidden lg:flex w-[11px] h-[11px] border-[1.5px] border-black lg:group-hover:bg-primary-red lg:group-hover:border-primary-red transition-colors duration-300" />
       </div>
     </motion.div>
   );
 }
 
 export default function ThemeCollaborators() {
-  // EXPLICIT TYPE SET HERE TO MATCH MODAL PROPS
   const [selectedCollaborator, setSelectedCollaborator] = useState<CoreItem | null>(null);
   const [isDesktop, setIsDesktop] = useState(false);
 
   useEffect(() => {
     const checkScreen = () => setIsDesktop(window.innerWidth >= 1024);
+
     checkScreen();
+
     window.addEventListener("resize", checkScreen);
+
     return () => window.removeEventListener("resize", checkScreen);
   }, []);
 
@@ -60,11 +70,10 @@ export default function ThemeCollaborators() {
         </div>
       </main>
 
-      {/* Modal Connection */}
       <ShowcaseModal
-        isOpen={!!selectedCollaborator} 
-        onClose={() => setSelectedCollaborator(null)} 
-        data={selectedCollaborator} 
+        isOpen={!!selectedCollaborator}
+        onClose={() => setSelectedCollaborator(null)}
+        data={selectedCollaborator}
       />
     </section>
   );
