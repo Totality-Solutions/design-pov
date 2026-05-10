@@ -187,6 +187,10 @@ const Footer = () => {
                       id: "IN",
                       href: "https://www.linkedin.com/company/design-pov/",
                     },
+                    {
+                      id: "YT",
+                      href: "https://youtube.com/@designpov?si=x8inJDuQDclsMQ9y",
+                    },
                   ].map((item) => (
                     <a
                       key={item.id}

@@ -11,93 +11,83 @@ const lines = [
   "Homeowners & Collectors",
   "Developers & Decision-Makers",
   "Artists & Cultural Thinkers",
+  "Dreamers & Design Aspirants",
 ];
-
-// Triple copy for seamless looping
-const loopLines = [...lines, ...lines, ...lines];
 
 export default function WhoItIsFor() {
   const controls = useAnimation();
 
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
 
-  /**
-   * IMPORTANT:
-   * line height must match actual row height
-   */
   const lineHeight = 52;
-
+  const padding = 2; // empty rows above and below so active is always centered
   const originalLength = lines.length;
+
+  // 2 empty rows + real lines + 2 empty rows
+  const displayLines = [...Array(padding).fill(""), ...lines, ...Array(padding).fill("")];
 
   useEffect(() => {
     let current = 0;
+    let dir = 1;
+    let cancelled = false;
 
     const runAnimation = async () => {
-      while (true) {
-        current++;
+      // Wait one frame so framer-motion controls are attached to the DOM
+      await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+      if (cancelled) return;
 
-        // ACTIVE LINE CHANGES IMMEDIATELY
-        setActiveIndex(current % originalLength);
+      setActiveIndex(0);
+      await new Promise((resolve) => setTimeout(resolve, 2200));
+      if (cancelled) return;
 
-        /**
-         * OFFSET:
-         * keeps active line centered & visible
-         */
-        const targetY =
-          -(current * lineHeight) + lineHeight ;
+      while (!cancelled) {
+        current += dir;
+        setActiveIndex(current);
 
-        // SMOOTH SCROLL
+        const targetY = -(current * lineHeight);
+
         await controls.start({
           y: targetY,
-          transition: {
-            duration: 0.45,
-            ease: [0.25, 1, 0.5, 1],
-          },
+          transition: { duration: 0.45, ease: [0.25, 1, 0.5, 1] },
         });
 
-        // HOLD ACTIVE LINE
-        await new Promise((resolve) =>
-          setTimeout(resolve, 2200)
-        );
+        if (cancelled) return;
 
-        /**
-         * SILENT RESET
-         */
-        if (current >= originalLength * 2) {
-          current = originalLength;
+        await new Promise((resolve) => setTimeout(resolve, 2200));
+        if (cancelled) return;
 
-          controls.set({
-            y:
-              -(originalLength * lineHeight) +
-              lineHeight * 2,
-          });
-        }
+        if (current >= originalLength - 1) dir = -1;
+        else if (current <= 0) dir = 1;
       }
     };
 
     runAnimation();
+
+    return () => { cancelled = true; };
   }, [controls]);
 
   return (
-    <section className="w-full bg-black">
+    <section className="w-full  bg-black" onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}>
       <SectionHeading
         titleMain="WHO"
         titleBold="IT IS FOR"
-        bgColor="bg-black"
-        textColor="text-white"
-        className="border-b border-white/10"
+        sticky={true} 
+        stickyTop="lg:top-20"
+        isSectionHovered={isHovered} 
       />
 
-      <div className="relative flex h-[180px] md:h-[220px] overflow-hidden">
-        
-        {/* LEFT */}
-        <div className="relative flex-1 overflow-hidden px-6 md:px-10">
-          
-          {/* TOP FADE */}
-          <div className="pointer-events-none absolute top-0 left-0 z-20 h-16 w-full bg-gradient-to-b from-black via-black to-transparent" />
+      <div className="relative flex px-6 md:px-12 h-[260px] w-full overflow-hidden">
 
-          {/* BOTTOM FADE */}
-          <div className="pointer-events-none absolute bottom-0 left-0 z-20 h-24 w-full bg-gradient-to-t from-black via-black to-transparent" />
+        {/* LEFT */}
+        <div className="relative flex-1 overflow-hidden w-full px-6 md:px-10">
+
+          {/* TOP FADE — covers 2 inactive items above active */}
+          <div className="pointer-events-none absolute top-0 left-0 z-20 h-[104px] w-full bg-linear-to-b from-black via-black/80 to-transparent" />
+
+          {/* BOTTOM FADE — covers 2 inactive items below active */}
+          <div className="pointer-events-none absolute bottom-0 left-0 z-20 h-[104px] w-full bg-linear-to-t from-black via-black/80 to-transparent" />
 
           {/* CENTER GLOW */}
           {/* <div className="pointer-events-none absolute inset-x-0 top-1/2 z-10 h-[70px] -translate-y-1/2 bg-white/[0.03] blur-3xl" /> */}
@@ -105,14 +95,11 @@ export default function WhoItIsFor() {
           {/* SCROLLER */}
           <motion.div
             animate={controls}
-            initial={{
-              y: lineHeight * 2,
-            }}
-            className="flex flex-col"
+            initial={{ y: 0 }}
+            className="flex flex-col text-center "
           >
-            {loopLines.map((line, index) => {
-              const isActive =
-                index % originalLength === activeIndex;
+            {displayLines.map((line, index) => {
+              const isActive = index === activeIndex + padding;
 
               return (
                 <div
@@ -146,11 +133,8 @@ export default function WhoItIsFor() {
           className="
             relative
             flex
-            w-[30%]
-            min-w-[180px]
             items-center
             justify-center
-            px-4
           "
         >
           <div className="absolute inset-0 bg-gradient-to-l from-white/[0.03] to-transparent" />
@@ -159,11 +143,11 @@ export default function WhoItIsFor() {
             label="FAQ"
             href="/faq"
             showButtonBg={true}
-            btnBg="var(--color-white)"
+            btnBg="var(--primary-blue)"
             btnHoverBg="var(--primary-blue)"
-            textColor="var(--color-black)"
-            borderColor="var(--color-black)"
-            borderHoverColor="var(--color-black)"
+            textColor="var(--color-white)"
+            borderColor="var(--primary-blue)"
+            borderHoverColor="var(--primary-blue)"
           />
         </div>
       </div>
