@@ -37,7 +37,7 @@ export default function ParticipationSection() {
               
               {/* HEADER ROW */}
               <div
-                className={`flex justify-between items-center py-6 px-4 transition-colors duration-300 ${
+                className={`flex justify-between items-center py-6 px-6 transition-colors duration-300 ${
                   isActive ? "bg-black text-white" : "bg-white text-black"
                 }`}
               >
@@ -93,7 +93,7 @@ export default function ParticipationSection() {
                 </div>
               
                 <div
-                  className="px-4 py-8"
+                  className="px-6 py-8"
                   onClick={(e) => {
                     e.stopPropagation();
                     setSelectedCategory(item.name);

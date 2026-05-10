@@ -248,7 +248,7 @@ export default function ParticipationForm() {
   }
 
   return (
-    <section className="w-full bg-white font-display pb-20"
+    <section className="w-full bg-white font-display  lg:pb-20"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -261,7 +261,7 @@ export default function ParticipationForm() {
 
       <form ref={formRef} className="flex flex-col lg:flex-row gap-12 px-6 md:px-10 items-start">
         
-        <div className="flex-1 w-full space-y-10 pt-20">
+        <div className="flex-1 w-full space-y-10 pt-8 lg:pt-20">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6 mb-6">
             <div className="flex flex-col gap-2 md:col-span-2">
               <label className="text-[15px] text-black/50 font-medium">Full Name :</label>
@@ -364,7 +364,7 @@ export default function ParticipationForm() {
         </div>
 
         {/* RIGHT SIDE: IMAGE + SUBMIT BUTTON */}
-        <div className="w-full lg:w-[250px] flex flex-col items-end justify-between self-stretch min-h-[400px] lg:min-h-full">
+        <div className="hidden lg:flex w-full lg:w-[250px] flex flex-col items-end justify-between self-stretch min-h-[400px] lg:min-h-full">
           <div className="w-full max-w-[250px] aspect-square relative overflow-hidden flex items-center justify-center">
             {selectedOption && imageMap[selectedOption] && (
               <div className="w-full h-full relative">

@@ -9,10 +9,10 @@ const HomeSponsors: React.FC = () => {
 
   // The 4 logos you want to display
   const partners = [
-     { id: 1, logo: "/temp/edition/sponsors/2.png", href: "https://www.kajariaceramics.com/"},
-    { id: 2, logo: "/temp/edition/sponsors/4.png", href: "https://www.pacific-surfaces.com/" },
-    { id: 3, logo: "/temp/edition/sponsors/1.png", href: "https://www.allhome.in/" },
-    { id: 4, logo: "/temp/edition/sponsors/3.png", href: "https://www.essentiahome.com/?srsltid=AfmBOoqCYRZnQWfAJ8Tx74fKI-F59l2uzZUYhcKm6bUDxvV6r0RBMmld" },
+     { id: 1, logo: "/temp/edition/sponsors/1.png", href: "https://www.kajariaceramics.com/"},
+    { id: 2, logo: "/temp/edition/sponsors/2.png", href: "https://www.pacific-surfaces.com/" },
+    { id: 3, logo: "/temp/edition/sponsors/3.png", href: "https://www.allhome.in/" },
+    { id: 4, logo: "/temp/edition/sponsors/4.png", href: "https://www.essentiahome.com/?srsltid=AfmBOoqCYRZnQWfAJ8Tx74fKI-F59l2uzZUYhcKm6bUDxvV6r0RBMmld" },
     { id: 5, logo: "/temp/edition/sponsors/5.png", href: "https://www.pantone.com/hk/en/" },
   ];
 
@@ -36,12 +36,12 @@ const HomeSponsors: React.FC = () => {
           {partners.map((partner) => (
             <div
               key={partner.id}
-              className="aspect-[2/1] lg:aspect-[6/3] flex items-center justify-center border-b p-4 lg:p-2 mx-4 border-pov-black/30 transition-colors duration-300 hover:bg-gray-50/50 overflow-hidden"
+              className="aspect-[9/4] lg:aspect-[6/3] flex items-center justify-center lg:p-2 transition-colors duration-300 hover:bg-gray-50/50 overflow-hidden"
             >
               {/* Make the Link a flex container that fills the parent */}
               <Link 
                 href={partner?.href} 
-                className="w-full h-full flex items-center justify-center cursor-pointer"
+                className="w-full h-full flex items-center justify-center border-b mx-6 border-pov-black/30 cursor-pointer"
               >
                 <img 
                   src={partner.logo} 

@@ -76,11 +76,11 @@ export default function EcosystemCarousel() {
     <section className="relative w-full overflow-hidden border-b border-pov-black/10 bg-pov-white">
       
       {/* LEFT NAV */}
-      <div className="absolute left-2 top-1/2 z-40 -translate-y-1/2">
+      <div className="absolute left-2 top-2/5 z-40 -translate-y-1/2">
         <button
           onClick={() => scroll("left")}
           className="
-            flex h-10 w-10 items-center justify-center
+            flex h-8 w-8 lg:h-10 lg:w-10 items-center justify-center
             border border-pov-black/10
             bg-white
             transition-colors
@@ -92,11 +92,11 @@ export default function EcosystemCarousel() {
       </div>
 
       {/* RIGHT NAV */}
-      <div className="absolute right-2 top-1/2 z-40 -translate-y-1/2">
+      <div className="absolute right-2 top-2/5 z-40 -translate-y-1/2">
         <button
           onClick={() => scroll("right")}
           className="
-            flex h-10 w-10 items-center justify-center
+            flex h-8 w-8 lg:h-10 lg:w-10 items-center justify-center
             border border-pov-black/10
             bg-white
             transition-colors
@@ -135,7 +135,7 @@ export default function EcosystemCarousel() {
               md:w-1/2
               lg:w-1/4
 
-              px-4 md:px-6 lg:px-8
+              px-6 lg:px-8
               py-8 md:py-10
             "
           >
