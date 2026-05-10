@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import SectionHeading from "../common/SectionHeading";
 import CTABtn from "../common/CTABtn";
+import Link from "next/link";
 
 const ISSUE_DATA = [
   {
@@ -103,9 +104,11 @@ const AprilIssueSection = () => {
           </div>
 
           {/* RIGHT SIDE: Advertisement column */}
+          <Link href="https://www.pacific-surfaces.com/" target="_blank" className="h-full">
           <div className="flex flex-col h-full">
             {/* CLEAN AD LABEL */}
-            <div className="py-2 px-4 bg-gray-300">
+            
+            <div className="py-2 px-4 bg-neutral-50">
               <span className="text-[14px] text-black font-medium">
                 Advertisement
               </span>
@@ -139,6 +142,7 @@ const AprilIssueSection = () => {
               </div> */}
             </div>
           </div>
+          </Link>
 
         </div>
       </div>

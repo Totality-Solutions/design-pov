@@ -10,6 +10,7 @@ import CTAStrip from "@/components/common/CTAStrip";
 import MagazineMediaForm from "@/components/magazine/MagazineMediaForm";
 import HomeSponsors from "@/components/home/HomeSponsors";
 import Image from "next/image";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Magazine",
@@ -26,19 +27,21 @@ export default function MagazinePage() {
       <FeaturedBlogSection />
       <InterviewsSection />
       <MagazineMediaForm />
-      <div id="ad-section" className="hidden lg:flex flex-col bg-white">
+      
+     <div id="ad-section" className="hidden lg:flex flex-col bg-neutral-50">
         <div className="flex justify-center px-10 py-8">
-          <div className="w-full max-w-[1100px]">
-            <div className="text-[11px] text-gray-400 mb-2 uppercase tracking-wider">
+          <Link href="https://www.kajariaceramics.com/" target="_blank">
+          <div className="w-fit bg-white p-5">
+            <div className="text-[10px] text-black/40 uppercase font-bold tracking-widest">
               Advertisement
             </div>
-            <div className="w-full h-[280px] border border-gray-200 bg-gray-50 flex items-center justify-center text-gray-300">
+            <div className="w-full h-[280px] flex items-center justify-center text-gray-300">
               <Image src="/temp/ads/1.png" alt="Ad" width={1900} height={100} className="w-full h-full object-contain" />
             </div>
           </div>
+          </Link>
         </div>
       </div>
-
    </>
   );
 }
