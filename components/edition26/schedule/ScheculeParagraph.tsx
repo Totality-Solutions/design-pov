@@ -49,7 +49,7 @@ const ScheduleParagraph: React.FC<ScheduleParagraphProps> = ({
        
 
         {/* Content */}
-        <div className="grid lg:grid-cols-[0.9fr_0.8fr_0.8fr] gap-6 lg:gap-8 text-black text-base md:text-md lg:text-lg leading-relaxed font-[Montserrat]">
+        <div className="grid lg:grid-cols-[1fr_1fr] gap-6 lg:gap-8 text-black text-base md:text-md lg:text-lg leading-relaxed font-[Montserrat]">
           <p>{description1}</p>
           <p>{description2}</p>
         </div>
