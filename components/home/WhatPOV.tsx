@@ -131,7 +131,7 @@ const WhatPOV = () => {
 
           {/* 🔹 MARQUEE SECTION */}
           <div className="flex items-center justify-center">
-            <div className="w-full overflow-hidden h-[220px] sm:h-[260px] md:h-[300px] flex items-end">
+            <div className="w-full overflow-hidden h-[360px] md:h-[300px] lg:h-[340px] flex items-end">
               <MarqueeFlow
                 items={NEW_ARRIVALS}
                 gap={5}

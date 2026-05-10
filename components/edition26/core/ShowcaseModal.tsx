@@ -69,7 +69,7 @@ export const ShowcaseModal = ({
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="relative w-full max-w-[1200px] h-[80vh] md:h-[600px] bg-white flex flex-col md:flex-row overflow-hidden shadow-2xl rounded-sm"
+            className="relative w-full max-w-[1200px] h-[80vh] md:h-[600px] bg-white flex flex-col md:flex-row overflow-hidden shadow-2xl"
           >
             {/* LEFT: Carousel */}
             <div className="relative w-full md:w-1/2 h-[300px] md:h-full bg-zinc-100 overflow-hidden">

@@ -46,7 +46,7 @@ export default function BrandLogo({ title, logos }: BrandLogoProps) {
   const currentLogos = logos.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   return (
-    <section ref={sectionRef} className="w-full bg-white font-montserrat scroll-mt-24">
+    <section ref={sectionRef} className="w-full bg-white font-montserrat scroll-mt-24 px-4">
       
       {/* 1. Heading Row */}
       <div className="w-full px-2 md:px-4">
