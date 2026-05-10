@@ -65,6 +65,8 @@ const Footer = () => {
 
   const [showHiringCard, setShowHiringCard] = useState(true);
 
+  const isHiring = false;
+
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth;
@@ -95,13 +97,13 @@ const Footer = () => {
     setIsPastHalfway(currentX > rect.width / 2);
   };
 
-  if (isMobile) {
-    return (
-      <Container className="!px-0">
-        <FooterTablet navLinks={navLinks} />
-      </Container>
-    );
-  }
+  // if (isMobile) {
+  //   return (
+  //     <Container className="!px-0">
+  //       <FooterTablet navLinks={navLinks} />
+  //     </Container>
+  //   );
+  // }
 
   return (
     <div className="!px-0 border-t border-black/10">
@@ -216,20 +218,26 @@ const Footer = () => {
             </div>
 
             {/* RIGHT: Main Navigation Columns */}
-            <div className="flex pointer-events-auto" style={{ gap: "var(--footer-gap-links)"}}>
+            <div className="hidden lg:flex pointer-events-auto" style={{ gap: "var(--footer-gap-links)"}}>
               <FooterTextColumn {...navLinks.Partners} />
               <FooterTextColumn {...navLinks.AboutUs} />
               <FooterTextColumn {...navLinks.Originals} />
             </div>
           </div>
 
+          <div className="grid grid-cols-2 lg:hidden pointer-events-auto my-8" style={{ gap: "var(--footer-gap-links)"}}>
+              <FooterTextColumn {...navLinks.Partners} />
+              <FooterTextColumn {...navLinks.AboutUs} />
+              <FooterTextColumn {...navLinks.Originals} />
+            </div>
+
           {/* BOTTOM SECTION */}
           <div className="flex flex-col gap-10" style={{
             paddingRight: "var(--footer-px)",
           }}>
-            <div className="flex justify-between items-end">
+            <div className="flex justify-between items-end lg:h-[180px]">
               {/* Hiring Card */}
-              <div className="w-[170px] pointer-events-auto relative">
+              <div className="w-[180px] pointer-events-auto relative">
                 <motion.div
                   initial={false}
                   animate={{
@@ -244,16 +252,10 @@ const Footer = () => {
                   className="overflow-hidden"
                 >
                   <div className="bg-black border border-white relative">
-                    <button
-                      onClick={() => setShowHiringCard(false)}
-                      className="absolute top-2 right-2 w-5 h-5 flex items-center justify-center text-black bg-white rounded-full text-[10px] z-10"
-                    >
-                      ✕
-                    </button>
-                    <div className="p-3">
+                    <div className="p-3 flex items-center justify-center">
                       <img
-                        src="/temp/hiring.svg"
-                        alt="Hiring"
+                        src={isHiring ? "/temp/hiring.svg" : "/qr/ticket-qr.svg"}
+                        alt={isHiring ? "Hiring" : "POV Index"}
                         className="w-[120px] lg:w-[140px] object-contain"
                       />
                     </div>
@@ -261,10 +263,14 @@ const Footer = () => {
                 </motion.div>
                 
                 <a
-                  href="/contact"
+                  href={
+                    isHiring
+                      ? "/contact"
+                      : "https://povindex.designpovindia.com/home"
+                  }
                   className="relative z-20 bg-white text-black px-5 py-3 text-[11px] font-bold uppercase tracking-wide flex items-center justify-between w-full hover:bg-neutral-200 transition-all"
                 >
-                  Join our Team
+                  {isHiring ? "Join Our Team" : "Plan Your Visit"}
                   <ArrowUpRight size={14} strokeWidth={1.8} />
                 </a>
               </div>
@@ -285,12 +291,31 @@ const Footer = () => {
             {/* Legal Row */}
             <div className="w-full pointer-events-auto">
               <div className="w-full border-t border-white/80 mb-6" />
-              <div className="flex justify-between items-center text-white text-[12px] lg:text-[14px]  font-medium">
-                <p>© 2026 Design POV India. All rights reserved.</p>
-                <div className="flex gap-20">
-                  <Link href="/legal/privacy-policy"><p className="cursor-pointer hover:text-neutral-400 transition">Privacy Policy</p></Link>
-                  <Link href="/legal/terms-of-use"><p className="cursor-pointer hover:text-neutral-400 transition">Terms of Use</p></Link>
-                  <a href="https://www.totality.solutions" target="_blank" rel="noopener noreferrer">Developed by Totality Solutions</a>
+              <div className="flex flex-col md:flex-col lg:flex-row justify-between items-center gap-4 text-white text-[10px] lg:text-[14px] font-medium">
+                {/* COPYRIGHT */}
+                <p className="text-left lg:text-left">
+                  © 2026 Design POV India. All rights reserved.
+                </p>
+                {/* LINKS */}
+                <div className="flex justify-center lg:justify-end gap-x-4 gap-y-2 text-right">
+                  <Link href="/legal/privacy-policy">
+                    <p className="cursor-pointer hover:text-neutral-400 transition">
+                      Privacy Policy
+                    </p>
+                  </Link>
+                  <Link href="/legal/terms-of-use">
+                    <p className="cursor-pointer hover:text-neutral-400 transition">
+                      Terms of Use
+                    </p>
+                  </Link>
+                  <a
+                    href="https://www.totality.solutions"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-neutral-400 transition"
+                  >
+                    Developed by Totality Solutions
+                  </a>
                 </div>
               </div>
             </div>
@@ -347,10 +372,10 @@ const MagneticFollowFlare = ({ index, mouseX, imageSrc, colWidth, baseFlareWidth
 
 const FooterTextColumn = ({ title, href, items }: any) => (
   <div
-    className="flex flex-col pl-4"
+    className="flex flex-col lg:pl-4"
     style={{ width: "var(--footer-col-width)" }}
   >
-    <div className="flex flex-col gap-[32px]">
+    <div className="flex flex-col gap-2 lg:gap-[12px]">
 
       <Link href={href}>
         <h3 className="text-white text-[16px] font-medium tracking-[0.05em] hover:opacity-70 transition-opacity cursor-pointer">
@@ -358,7 +383,7 @@ const FooterTextColumn = ({ title, href, items }: any) => (
         </h3>
       </Link>
 
-      <ul className="flex flex-col gap-3">
+      <ul className="flex flex-col gap-1 lg:gap-3">
         {items.map((item: any) => (
           <li key={item.title}>
             <Link
