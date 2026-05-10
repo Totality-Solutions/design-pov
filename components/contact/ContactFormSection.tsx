@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
+import CTABtn from '../common/CTABtn';
 
 const ContactFormSection = () => {
   const [formData, setFormData] = useState({
@@ -13,31 +14,30 @@ const ContactFormSection = () => {
           
           {/* Left: Info Column */}
           <div className="flex flex-col gap-12 w-full lg:w-1/3 mt-10">
-            <h4 className="text-lg font-semibold text-[#010101] ">Get in Touch</h4>
+            <h4 className="text-2xl font-semibold text-[#010101] ">Get in Touch</h4>
             <div className="space-y-12">
-              <InfoItem label="Office Address" value="Mumbai, Maharashtra, India" />
-              <InfoItem label="Phone" value="+91 XXXXX XXXXX" />
-              <InfoItem label="Email" value="info@yourdomain.com" />
+              <InfoItem label="Office Address" value="501, Janki Centre, Off Veera Desai Rd, opp. Chitrakoot Ground, near Decathlon Showroom, Industrial Area, Andheri West, Mumbai, Maharashtra 400053
+" />
+              <InfoItem label="Phone" value="+91 8655654736" />
+              <InfoItem label="Email" value="marketing@designpovindia.com" />
             </div>
-            <div className='mt-20'>
+            {/* <div className='mt-20'>
                <InfoItem label="Support Line" value='Available Monday – Saturday | 10:00 AM – 7:00 PM' />
-            </div>
+            </div> */}
           </div>
 
           {/* Right: Form Column */}
-          <form className="w-full lg:max-w-[584px] bg-white p-6 md:p-10 flex flex-col gap-6 shadow-sm border border-gray-100">
-            <Input label="Name" placeholder="@Name" />
+          <form className="w-full lg:max-w-[584px] bg-white p-6 md:p-10 flex flex-col  gap-6 shadow-sm border border-gray-100">
+            <Input label="Name" placeholder="Full Name" />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Input label="Email" type="email" placeholder="info@domain.com" />
-              <Input label="Contact" placeholder="+91 XXXXX XXXXX" />
+              <Input label="Contact" placeholder="XXXXX XXXXX" />
             </div>
-            <Input label="Organization" placeholder="@Name" />
-            <Input label="Designation" placeholder="@Name" />
+            <Input label="Organization" placeholder="Organization Name" />
+            <Input label="Designation" placeholder="Designation" />
             <Input label="Your Location" placeholder="Mumbai, India" />
             
-            <button type="submit" className="w-full bg-[#0000B3] text-white font-semibold py-2 mt-3 hover:bg-blue-800 transition-colors">
-              Talk to Us
-            </button>
+            <CTABtn label="Talk to Us" />
           </form>
         </div>
     </section>

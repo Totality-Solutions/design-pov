@@ -7,7 +7,7 @@ import CTABtn from "./CTABtn";
 
 import LogoImage from "@/public/logo/Logo.svg";
 
-const SHOW_DECK_PDF = "/show-deck.pdf";
+const SHOW_DECK_PDF = "/pdf/POV '25 Show Deck.pdf";
 
 interface PopupFormProps {
   isOpen: boolean;
