@@ -108,14 +108,13 @@ const CollaborateSection = () => {
           </div>
 
           {/* Content */}
-          <div className="grid md:grid-cols-[1fr_0.2fr] gap-8 text-black text-base md:text-lg leading-relaxed font-[Montserrat]">
+          <div className="grid md:grid-cols-[1.3fr_1fr] gap-8 text-black text-base md:text-lg leading-relaxed font-[Montserrat]">
             <p>
               From immersive spaces to conversations, objects, and extensions beyond the show - Design POV is an ecosystem shaped by many voices.
               If you’d like to be part of it, we’d like to hear from you.
             </p>
             {/* <p>
-              It has survived not only five centuries, but also the leap into electronic typesetting.
-              It has survived not only five centuries, but also the leap into electronic typesetting.
+             If you’d like to be part of it, we’d like to hear from you.
             </p> */}
           </div>
         </div>

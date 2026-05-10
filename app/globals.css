@@ -630,6 +630,7 @@ a {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: top;
   will-change: transform, opacity;
 }
 
@@ -758,6 +759,7 @@ a {
   height: 100%;
   object-fit: cover;
   display: block;
+  object-position: top;
   transition: transform 0.5s ease;
 }
 

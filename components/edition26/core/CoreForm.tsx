@@ -41,7 +41,7 @@ const CoreForm = () => {
   }
 
   return (
-    <section className="w-full bg-white font-display pb-20"
+    <section className="w-full bg-white font-display pb-10"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -52,9 +52,9 @@ const CoreForm = () => {
         isSectionHovered={isHovered} 
       />
 
-      <form ref={formRef} className="flex flex-col gap-12 px-6 md:px-10 items-end ">
+      <form ref={formRef} className="flex flex-col gap-6 px-6 md:px-10 items-end ">
         
-        <div className="flex-1 w-full space-y-10 pt-20">
+        <div className="flex-1 w-full space-y-10 pt-10">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6 mb-6">
             <div className="flex flex-col gap-2 md:col-span-2">
               <label className="text-[15px] text-black/50 font-medium">Full Name :</label>

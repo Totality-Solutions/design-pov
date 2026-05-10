@@ -39,8 +39,8 @@ export default function BuildPartner() {
     { name: "Media Partners", src: "/temp/edition/media-partners/1.png" },
     { name: "Media Partners", src: "/temp/edition/media-partners/2.png" },
     { name: "Media Partners", src: "/temp/edition/media-partners/3.png" },
-    // Degital Media Partners
-    { name: "Degital Media Partners", src: "/temp/edition/media-partners/4.png" },
+    // Digital Media Partners
+    { name: "Digital Media Partners", src: "/temp/edition/media-partners/4.png" },
     // Ticketing Partners
     { name: "Ticketing Partners", src: "/temp/edition/ticketing-partners/1.png" },
     { name: "Ticketing Partners", src: "/temp/edition/ticketing-partners/2.png" },

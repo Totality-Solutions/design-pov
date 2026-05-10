@@ -7,10 +7,12 @@ import Image from "next/image";
 import Section from "../common/Section";
 import { Container } from "../common/Container";
 import SectionHeading from "../common/SectionHeading";
+import Link from "next/link";
 
 // shared blogs data import kar rahe hain
 import { Blog, blogs } from "@/data/magazineData";
-import Link from "next/link";
+
+const reversedBlogs = [...blogs].reverse();
 
 export default function MarqueeCarousel() {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -43,7 +45,7 @@ export default function MarqueeCarousel() {
   );
 
   const next = useCallback(() => {
-    const nextIdx = (activeIndex + 1) % blogs.length;
+    const nextIdx = (activeIndex + 1) % reversedBlogs.length;
     goTo(nextIdx, "down");
   }, [activeIndex, goTo]);
 
@@ -88,7 +90,7 @@ export default function MarqueeCarousel() {
     }
   }, [activeIndex]);
 
-  const current = blogs[activeIndex];
+  const current = reversedBlogs[activeIndex];
 
   return (
     <Container
@@ -115,7 +117,7 @@ export default function MarqueeCarousel() {
                 {prevIndex !== null && (
                   <Image
                     className={`hero-img z1 ${direction === "down" ? "exit-down" : "exit-up"}`}
-                    src={blogs[prevIndex].image}
+                    src={reversedBlogs[prevIndex].image}
                     alt=""
                     priority
                   />
@@ -133,7 +135,7 @@ export default function MarqueeCarousel() {
 
             {/* ── CENTER (Thumbnails) ── */}
             <div className="thumb-strip" ref={carouselRef}>
-              {blogs.map((s, i) => (
+              {reversedBlogs.map((s, i) => (
                 <div
                   key={s.id}
                   data-idx={i}

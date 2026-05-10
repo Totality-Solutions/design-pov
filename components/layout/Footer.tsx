@@ -47,6 +47,7 @@ const navLinks = {
       { title: "Collaborate", href: "/collaborate" },
       { title: "Magazine", href: "/magazine" },
       { title: "Contact", href: "/contact" },
+      { title: "FAQs", href: "/faq" },
       { title: "POV Index", href: "https://povindex.designpovindia.com/" },
     ],
   },
@@ -268,7 +269,7 @@ const Footer = () => {
                       ? "/contact"
                       : "https://povindex.designpovindia.com/home"
                   }
-                  className="relative z-20 bg-white text-black px-5 py-3 text-[11px] font-bold uppercase tracking-wide flex items-center justify-between w-full hover:bg-neutral-200 transition-all"
+                  className="relative z-20 bg-white text-black px-5 py-3 text-[14px] font-medium flex items-center justify-between w-full hover:bg-neutral-200 transition-all"
                 >
                   {isHiring ? "Join Our Team" : "Plan Your Visit"}
                   <ArrowUpRight size={14} strokeWidth={1.8} />

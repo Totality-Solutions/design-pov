@@ -13,21 +13,19 @@ export default function ObjectsHero() {
 
     <div className="w-full pt-10 lg:pt-20">
       <UnderlineText lineHeight={72} className="text-h2-mobile md:text-h2-tab lg:text-h2 tracking-tight font-semibold">
-        A curation of stories from those who consume and create design - from the Indian sub-continent and beyond.
+        A collection of original, one-of-one pieces—each a distilled expression of perspective.
       </UnderlineText>
-      
+    </div>
 
-</div>
-      <div className="grid grid-cols-4 items-center justify-center w-full px-6 md:px-10 py-10">
-        {/* 75% Column */}
+      {/* <div className="grid grid-cols-4 items-center justify-center w-full px-6 md:px-10 py-10">
+
         <div className="col-span-3">
           <p className="text-body-mobile md:text-body-tab lg:text-body tracking-tight font-semibold">
             An editorial platform capturing the voices and narratives shaping design today.
           </p>
         </div>
         
-        {/* 25% Column */}
-        {/* <div className="col-span-1 flex items-center justify-end"> 
+        <div className="col-span-1 flex items-center justify-end"> 
           <CTABtn
             label="View Issues"
             btnBg="var(--primary-blue)"
@@ -39,8 +37,8 @@ export default function ObjectsHero() {
             lineHoverColor="transparent"
             href="#tickets"
           />
-        </div> */}
-      </div>
+        </div>
+      </div> */}
 
       {/* MEDIA SECTION: Responsive container for Image or Video */}
       {/* <div className="relative w-full overflow-hidden flex items-center justify-center">
