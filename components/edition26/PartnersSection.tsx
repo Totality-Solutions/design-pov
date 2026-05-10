@@ -81,7 +81,7 @@ const PartnersSection: React.FC = () => {
   
   const filtered = partners.filter(p => p.category === activeTab);
   
-  const columns = isMobile ? 3 : 1;
+  const columns = isMobile ? 1 : 1;
   const remainder = filtered.length % columns;
   const paddingNeeded = remainder === 0 ? 0 : columns - remainder;
   const displayCount = filtered.length === 0 ? columns : filtered.length + paddingNeeded;
@@ -137,8 +137,8 @@ const PartnersSection: React.FC = () => {
       <div className="w-full bg-white pb-12">
         <div className={`grid border-t border-[#EEEEEE] ${
           activeTab === "Partners" 
-          ? "grid-cols-1 md:grid-cols-6" // Larger layout for main Partners
-          : "grid-cols-3 md:grid-cols-6" // Standard layout for others
+          ? "grid-cols-2 md:grid-cols-6" // Larger layout for main Partners
+          : "grid-cols-2 md:grid-cols-6" // Standard layout for others
         }`}>
           {gridCells.map((_, index) => {
             const partner = filtered[index];
@@ -150,7 +150,7 @@ const PartnersSection: React.FC = () => {
                 className={`flex items-center justify-center border-b border-pov-black/30 transition-colors duration-300 hover:bg-gray-50/50 ${
                   isMain 
                   ? "aspect-[16/13] mx-4" 
-                  : "aspect-[16/13] p-8  mx-4"
+                  : "aspect-[16/13] p-4  mx-4"
                 }`}
               >
                 {partner ? (
