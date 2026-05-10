@@ -38,7 +38,7 @@ export const MediaRenderer = ({ src, alt = "", className = "" }: MediaRendererPr
         loop
         muted
         playsInline
-        className={`object-cover w-full h-full ${className}`}
+        className={`object-cover w-full md:h-full  ${className}`}
       />
     );
   }
