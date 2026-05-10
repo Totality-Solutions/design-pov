@@ -4,6 +4,7 @@ import Image from "next/image";
 import { FiChevronLeft, FiX } from "react-icons/fi";
 import CTABtn from "../common/CTABtn";
 import { Blog, SidebarItem, blogs, advertisements } from "@/data/magazineData";
+import Link from "next/link";
 
 export default function MagazineBase({ activeBlog: initialBlog, isInnerPage = false }: { activeBlog: Blog, isInnerPage?: boolean }) {
   const sectionRef = useRef<HTMLElement>(null);
@@ -161,15 +162,17 @@ export default function MagazineBase({ activeBlog: initialBlog, isInnerPage = fa
                 </div>
               </div>
             ) : (
+              <Link href={item?.link} target="_blank" key={item.id} className="flex flex-col h-fit">
               <div key={item.id} className="flex flex-col h-fit">
                 <div className="py-1 px-6 bg-neutral-100 mb-0.5">
                   <span className="text-[10px] text-black/40 uppercase font-bold tracking-widest">Advertisement</span>
                 </div>
                 <div className={`relative group overflow-hidden bg-gray-100 ${item.aspect} w-full`}>
                   <Image src={item.image} alt="Ad" fill className="object-cover transition-transform duration-700 group-hover:scale-105" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-black/40 z-10 opacity-80" />
+                  <div className="absolute inset-0 bg-linear-to-t from-black/90 via-transparent to-black/40 z-10 opacity-80" />
                 </div>
               </div>
+              </Link>
             )
           ))}
         </div>

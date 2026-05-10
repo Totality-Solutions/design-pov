@@ -57,7 +57,7 @@ export interface Blog {
   detailedContent: ContentBlock[]; // For inner pages
 }
 
-export type Ad = { type: "ad"; id: string; image: string; aspect: string; };
+export type Ad = { type: "ad"; id: string; image: string; link: string; aspect: string; };
 export type SidebarItem = Blog | Ad;
 
 export const blogs: Blog[] = [
@@ -2733,6 +2733,6 @@ export const blogs: Blog[] = [
 ];
 
 export const advertisements: Ad[] = [
-  { type: "ad", id: "ad-1", image: "/temp/ads/3.png", aspect: "aspect-[3/4]" },
-  { type: "ad", id: "ad-2", image: "/temp/ads/4.png", aspect: "aspect-square" }
+  { type: "ad", id: "ad-1", image: "/temp/ads/3.png", link: "https://www.allhome.in/", aspect: "aspect-[3/4]" },
+  { type: "ad", id: "ad-2", image: "/temp/ads/4.png", link: "https://www.essentiahome.com/?srsltid=AfmBOoqCYRZnQWfAJ8Tx74fKI-F59l2uzZUYhcKm6bUDxvV6r0RBMmld", aspect: "aspect-square" }
 ];
