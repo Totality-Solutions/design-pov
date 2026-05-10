@@ -115,10 +115,10 @@ const Theme2026: NextPage = () => {
       <div className="sticky top-0 h-screen w-full flex flex-col items-center justify-center pointer-events-none z-0 px-6">
         <div className="text-center">
           <h2 className="font-['Montserrat'] text-[40px] md:text-[56px] lg:text-[72px] font-bold text-black leading-none uppercase select-none">
-            THEME 2026
+            Sense & Sensibility
           </h2>
           <p className="font-['Montserrat'] text-[16px] md:text-[20px] lg:text-[24px] font-medium text-black/80 mt-2 select-none">
-            Sense & Sensibility
+            Most platforms present design as a product.<br/>We present it as a perspective.
           </p>
         </div>
       </div>
