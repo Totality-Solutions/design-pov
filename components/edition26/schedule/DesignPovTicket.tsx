@@ -1,6 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { ExternalLink } from 'lucide-react';
+import Link from 'next/link';
 
 const DesignPovTicket = () => {
   // Common data - make these props for a reusable component
@@ -96,6 +97,7 @@ const DesignPovTicket = () => {
           <div className="bg-black text-white p-12 relative flex items-center gap-12 h-[300px]">
                 
             {/* Left Section: QR Code (Fixed Shrink) */}
+            <Link href="https://povindex.designpovindia.com/map">
             <div 
               className="shrink-0 p-5 border-y border-white"
               style={{
@@ -120,6 +122,7 @@ const DesignPovTicket = () => {
                 className="block"
               />
             </div>
+            </Link>
                 
             {/* Main Content Grid: 2 Columns */}
             <div className="flex-grow grid grid-cols-[1fr_auto] items-center gap-12">
