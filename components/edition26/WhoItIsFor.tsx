@@ -78,7 +78,7 @@ export default function WhoItIsFor() {
         isSectionHovered={isHovered} 
       />
 
-      <div className="relative flex px-6 md:px-12 h-[260px] w-full overflow-hidden">
+      <div className="relative flex flex-col md:flex-row py-5 px-6 md:px-12 h-[300px] w-full overflow-hidden">
 
         {/* LEFT */}
         <div className="relative flex-1 overflow-hidden w-full px-6 md:px-10">
