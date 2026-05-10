@@ -25,13 +25,13 @@ const ContactHeader = () => {
         {/* Description Container */}
         <div className="max-w-3xl mt-12 md:mt-20 px-6 md:px-10">
           {/* Subheading using --text-h3 variants */}
-          <h3 className="font-semibold mb-3 text-[var(--color-pov-black)]
+          {/* <h3 className="font-semibold mb-3 text-[var(--color-pov-black)]
             text-[length:var(--text-h3-mobile)]
             md:text-[length:var(--text-h3-tab)]
             lg:text-[length:var(--text-h3)]"
           >
             Lorem Ipsum is simply dummy text.
-          </h3>
+          </h3> */}
           
           {/* Body text using --text-body variants */}
           <p className="font-normal text-[var(--color-pov-black)] opacity-70 leading-relaxed
@@ -39,8 +39,7 @@ const ContactHeader = () => {
             md:text-[length:var(--text-body-tab)]
             lg:text-[length:var(--text-body)]"
           >
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
-            Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
+            Whether you’re looking to participate, collaborate, partner, or simply learn more, we’d like to hear from you. Reach out to the team and we’ll direct your enquiry to the relevant department.
           </p>
         </div>
     </section>

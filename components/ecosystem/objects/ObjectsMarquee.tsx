@@ -129,7 +129,7 @@ const ObjectsMarquee: React.FC = () => {
             renderItem={(item, _index, isExpanded) => {
               return (
                 <button
-                  onClick={() => setSelectedObject(item)}
+                  // onClick={() => setSelectedObject(item)}
                   className="relative block w-full overflow-hidden shadow-xl text-left"
                   style={{
                     aspectRatio: isExpanded ? "6/5" : "10/5",
