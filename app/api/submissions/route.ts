@@ -1,18 +1,13 @@
-import { createClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
 import { SESClient, SendEmailCommand } from '@aws-sdk/client-ses';
+import { createServerClient } from '@/lib/supabase/server';
 import { getDepartment } from '@/lib/mailDepartment';
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
-
 const ses = new SESClient({
-  region: process.env.AWS_SES_REGION!,
+  region: process.env.AWS_REGION!,
   credentials: {
-    accessKeyId: process.env.AWS_SES_ACCESS_KEY_ID!,
-    secretAccessKey: process.env.AWS_SES_SECRET_ACCESS_KEY!,
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID!.trim(),
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!.trim(),
   },
 });
 
@@ -46,29 +41,52 @@ function buildEmailHtml(fields: Record<string, string | null>) {
 }
 
 async function sendEmail(subject: string, fields: Record<string, string | null>) {
-  const command = new SendEmailCommand({
-    Source: FROM_EMAIL,
+  const plainText = Object.entries(fields)
+    .filter(([, v]) => v != null)
+    .map(([k, v]) => `${k}: ${v}`)
+    .join('\n');
+
+  await ses.send(new SendEmailCommand({
+    Source: `Design POV <${FROM_EMAIL}>`,
     Destination: { ToAddresses: [MARKETING_EMAIL] },
     Message: {
       Subject: { Data: subject, Charset: 'UTF-8' },
-      Body: { Html: { Data: buildEmailHtml(fields), Charset: 'UTF-8' } },
+      Body: {
+        Html: { Data: buildEmailHtml(fields), Charset: 'UTF-8' },
+        Text: { Data: plainText, Charset: 'UTF-8' },
+      },
     },
-  });
-  await ses.send(command);
+  }));
 }
 
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { type, category, name, email, contact, fileName } = body;
+    const { type, category, name, email, contact, message, fileName } = body;
+
+    const supabase = createServerClient();
 
     // 1. Save to submissions table
     const { data, error } = await supabase
       .from('submissions')
-      .insert([{ type, category, name, email, contact, file_name: fileName, created_at: new Date().toISOString() }])
-      .select();
+      .insert([{
+        type,
+        category,
+        name,
+        email,
+        contact,
+        file_name: fileName,
+        created_at: new Date().toISOString(),
+      }])
+      .select()
+      .single();
 
-    if (error) throw error;
+    if (error) {
+      console.error('[submissions] Supabase insert error:', error);
+      throw error;
+    }
+
+    console.log('[submissions] Saved to Supabase:', data);
 
     // 2. Dual-write to pov_mails (non-blocking)
     const department = getDepartment(type, category);
@@ -80,25 +98,31 @@ export async function POST(req: Request) {
       from_name: name || null,
       from_email: email || null,
       from_phone: contact || null,
+      message: message || null,
       extra_data: fileName ? { file_name: fileName } : {},
-    }]).then(({ error: e }) => { if (e) console.error('pov_mails write error:', e); });
+    }]).then(({ data: mailData, error: mailErr }) => {
+      if (mailErr) {
+        console.error('[submissions] pov_mails write error:', mailErr);
+      } else {
+        console.log('[submissions] Saved to pov_mails:', mailData);
+      }
+    });
 
     // 3. Send SES email (non-blocking)
-    try {
-      await sendEmail(`New Submission: ${category || type || 'Form'}`, {
-        Category: category || type || null,
-        Name: name || null,
-        Email: email || null,
-        Phone: contact || null,
-        'File Name': fileName || null,
-      });
-    } catch (emailErr) {
-      console.error('SES email error (non-fatal):', emailErr);
-    }
+    sendEmail(`New Submission: ${category || type || 'Form'}`, {
+      Category: category || type || null,
+      Name: name || null,
+      Email: email || null,
+      Phone: contact || null,
+      Message: message || null,
+      'File Name': fileName || null,
+    }).catch((emailErr) => {
+      console.error('[submissions] SES email error (non-fatal):', emailErr);
+    });
 
     return NextResponse.json({ success: true, data }, { status: 200 });
   } catch (error: any) {
-    console.error('API Route Error:', error);
+    console.error('[submissions] API route error:', error);
     return NextResponse.json({ error: error.message || 'Internal Server Error' }, { status: 500 });
   }
 }

@@ -37,6 +37,7 @@ export default function FormInner({ category }: { category?: string }) {
           name,
           email,
           contact: phone,
+          message: message || null,
           fileName: imgName || null,
         }),
       });

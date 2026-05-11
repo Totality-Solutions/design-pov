@@ -1,11 +1,12 @@
 import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
 import { NextResponse } from "next/server";
+import { createServerClient } from "@/lib/supabase/server";
 
 const ses = new SESClient({
-  region: process.env.AWS_SES_REGION!,
+  region: process.env.AWS_REGION!,
   credentials: {
-    accessKeyId: process.env.AWS_SES_ACCESS_KEY_ID!,
-    secretAccessKey: process.env.AWS_SES_SECRET_ACCESS_KEY!,
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID!.trim(),
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!.trim(),
   },
 });
 
@@ -20,6 +21,52 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Name and email are required." }, { status: 400 });
     }
 
+    const supabase = createServerClient();
+
+    // 1. Save to submissions table
+    const { data, error } = await supabase
+      .from('submissions')
+      .insert([{
+        type: 'contact',
+        category: 'Contact Page',
+        name,
+        email,
+        contact: contact || null,
+        created_at: new Date().toISOString(),
+      }])
+      .select()
+      .single();
+
+    if (error) {
+      console.error('[contact] Supabase insert error:', error);
+    } else {
+      console.log('[contact] Saved to Supabase:', data);
+    }
+
+    // 2. Dual-write to pov_mails (non-blocking)
+    supabase.from('pov_mails').insert([{
+      department: 'marketing',
+      form_type: 'contact',
+      category: 'Contact Page',
+      subject: `Contact Enquiry from ${name}`,
+      from_name: name,
+      from_email: email,
+      from_phone: contact || null,
+      message: message || null,
+      extra_data: {
+        ...(organization && { organization }),
+        ...(designation && { designation }),
+        ...(location && { location }),
+      },
+    }]).then(({ data: mailData, error: mailErr }) => {
+      if (mailErr) {
+        console.error('[contact] pov_mails write error:', mailErr);
+      } else {
+        console.log('[contact] Saved to pov_mails:', mailData);
+      }
+    });
+
+    // 3. Send SES email
     const fields: [string, string | undefined][] = [
       ["Name", name],
       ["Email", email],
@@ -55,20 +102,29 @@ export async function POST(req: Request) {
         </div>
       </div>`;
 
+    const plainText = fields
+      .filter(([, v]) => v)
+      .map(([k, v]) => `${k}: ${v}`)
+      .join("\n");
+
     await ses.send(
       new SendEmailCommand({
-        Source: FROM_EMAIL,
+        Source: `Design POV <${FROM_EMAIL}>`,
         Destination: { ToAddresses: [TO_EMAIL] },
+        ReplyToAddresses: [email],
         Message: {
           Subject: { Data: `Contact Enquiry from ${name}`, Charset: "UTF-8" },
-          Body: { Html: { Data: html, Charset: "UTF-8" } },
+          Body: {
+            Html: { Data: html, Charset: "UTF-8" },
+            Text: { Data: plainText, Charset: "UTF-8" },
+          },
         },
       })
     );
 
     return NextResponse.json({ success: true });
   } catch (err: any) {
-    console.error("Contact SES error:", err);
+    console.error("[contact] SES error:", err);
     return NextResponse.json({ error: err.message || "Failed to send message." }, { status: 500 });
   }
 }
