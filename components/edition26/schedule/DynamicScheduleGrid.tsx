@@ -152,14 +152,49 @@ const DynamicScheduleGrid = () => {
               currentData.events.map((event, idx) => (
                 <div
                   key={event.id}
-                  className="grid grid-row lg:grid-cols-[1fr_1.2fr_0.6fr_180px] min-w-[full] lg:min-w-[900px] lg:py-0 py-10 border-b border-black/20 lg:border lg:border-gray-100 group"
+                  className="grid grid-cols-1 lg:grid-cols-[1fr_1.2fr_0.6fr_180px] min-w-[full] lg:min-w-[900px] lg:py-0 py-10 border-b border-black/20 lg:border lg:border-gray-100 group"
                 >
-                  {/* Left Column — Event Info (original design) */}
-                  <div className="px-6 py-3 lg:p-12 flex flex-col gap-6 lg:border lg:border-gray-100">
+                  {/* Col 1 — Event number + Title + Subtitle */}
+                  <div className="px-6 py-3 lg:p-12 flex flex-col gap-6 lg:border-r lg:border-gray-100">
                     <span className="text-5xl font-semibold tracking-tighter">{event.id}</span>
                     <div>
                       <h3 className="text-2xl font-semibold text-black mb-2">{event.title}</h3>
-                      <div className="flex flex-col justify-center gap-3 lg:border-l lg:border-gray-100">
+                      <p className="text-zinc-500 text-sm leading-relaxed max-w-[280px]">
+                        {event.subtitle}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Col 2 — Time + Speakers + Moderator */}
+                  <div className="px-6 py-3 lg:p-12 flex flex-col justify-between lg:border-r lg:border-gray-100">
+                    <div className="flex justify-between items-start">
+                      <span className="text-sm font-semibold tracking-tight">{event.time}</span>
+                    </div>
+
+                    <div className="mt-0 lg:mt-8 mb-4 lg:mb-0">
+                      {event.speakers.length > 0 && (
+                        <div className="mb-4">
+                          <span className="text-[14px] font-medium text-zinc-400 block mb-1 font-['Montserrat']">
+                            Speaker{event.speakers.length > 1 ? 's' : ''}
+                          </span>
+                          <p className="text-sm font-medium">
+                            {event.speakers.join("  |  ")}
+                          </p>
+                        </div>
+                      )}
+                      {event.moderator && (
+                        <div>
+                          <span className="text-[14px] font-medium text-zinc-400 block mb-1 font-['Montserrat']">
+                            Moderator
+                          </span>
+                          <p className="text-sm font-medium">{event.moderator}</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Col 3 — Venue + Category + Partners */}
+                  <div className="px-6 py-3 lg:p-12 flex flex-col justify-center gap-4 lg:border-r lg:border-gray-100">
                     <div>
                       <span className="text-[14px] font-medium text-zinc-400 block mb-1 font-['Montserrat']">Venue</span>
                       <p className="text-sm font-medium text-primary-blue">{event.venue}</p>
@@ -177,45 +212,9 @@ const DynamicScheduleGrid = () => {
                       </div>
                     )}
                   </div>
-                    </div>
-                  </div>
 
-                  {/* 2nd Column — Time & Details (original design) */}
-                  <div className="px-6 py-3 lg:p-12 flex flex-col justify-between">
-                    <div className="flex justify-between items-start">
-                      <span className="text-sm font-semibold tracking-tight">{event.time}</span>
-                    </div>
-
-                    <div className="mt-0 lg:mt-8 mb-4 lg:mb-0">
-                      {/* Speakers */}
-                      {event.speakers.length > 0 && (
-                        <div className="mb-4">
-                          <span className="text-[14px] font-medium text-zinc-400 block mb-1 font-['Montserrat']">
-                            Speaker{event.speakers.length > 1 ? 's' : ''}
-                          </span>
-                          <p className="text-sm font-medium">
-                            {event.speakers.join("  |  ")}
-                          </p>
-                        </div>
-                      )}
-
-                      {/* Moderator */}
-                      {event.moderator && (
-                        <div>
-                          <span className="text-[14px] font-medium text-zinc-400 block mb-1 font-['Montserrat']">
-                            Moderator
-                          </span>
-                          <p className="text-sm font-medium">{event.moderator}</p>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* 3rd Column — Venue + Category + Partners */}
-                  
-
-                  {/* 4th Column — Image (commented) + Invite Only button */}
-                  <div className="px-6 py-3 lg:p-12 flex flex-col items-start lg:items-center justify-center gap-4 lg:border-l lg:border-gray-100">
+                  {/* Col 4 — Image (commented) + Invite Only button */}
+                  <div className="px-6 py-3 lg:p-12 flex flex-col items-start lg:items-center justify-center gap-4">
 
                     {/* IMAGE COLUMN — commented out, do not remove
                     <div className="relative w-full h-28 overflow-hidden">
