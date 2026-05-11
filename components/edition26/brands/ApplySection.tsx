@@ -1,14 +1,17 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import CTABtn from "../../common/CTABtn";
+import ParticipationPopup from "@/components/collaborate/ParticipationPopup";
+import ParticipationPopupForm from "./ParticipationPopupForm";
 
 type ApplyCardProps = {
   title: string;
   description: string;
   buttonText: string;
   isInitiallyDark: boolean;
-  href?: string;
+  onClick: () => void;
 };
 
 const ApplyCard = ({
@@ -16,18 +19,20 @@ const ApplyCard = ({
   description,
   buttonText,
   isInitiallyDark,
-  href = "#",
+  onClick,
 }: ApplyCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
-  // Check if we are on mobile/tab to handle default hover state
   useEffect(() => {
     const checkDevice = () => {
       setIsMobile(window.innerWidth < 1024);
     };
+
     checkDevice();
+
     window.addEventListener("resize", checkDevice);
+
     return () => window.removeEventListener("resize", checkDevice);
   }, []);
 
@@ -68,12 +73,16 @@ const ApplyCard = ({
           btnHoverBg="var(--primary-blue)"
           borderColor="var(--color-black)"
           borderHoverColor="var(--primary-blue)"
-          // FIX: Mobile par agar card dark hai toh text white hona chahiye
-          textColor={isInitiallyDark ? (isMobile ? "white" : "black") : "black"}
-          href={href}
-          // Mobile par default hover state dikhayega, Desktop par card hover par
+          textColor={
+            isInitiallyDark
+              ? isMobile
+                ? "white"
+                : "black"
+              : "black"
+          }
           forceHover={isMobile ? true : isHovered}
-          className="md:group-hover:!text-white" 
+          className="md:group-hover:!text-white"
+          onClick={onClick}
         />
       </div>
     </div>
@@ -81,26 +90,75 @@ const ApplyCard = ({
 };
 
 const ApplySection = () => {
-  return (
-    <section className="w-full flex flex-col border-t border-gray-200 bg-white mt-12">
-      <div className="w-full flex flex-col md:flex-row min-h-[350px]">
-        <ApplyCard
-          isInitiallyDark={true}
-          title="Become a Partner"
-          description="Align with a platform shaping design culture and create meaningful visibility through considered partnerships."
-          buttonText="Apply as a Partner"
-          href="/partner-apply"
-        />
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [popupCategory, setPopupCategory] = useState("");
 
-        <ApplyCard
-          isInitiallyDark={false}
-          title="Join as a Participant"
-          description="Collaborate within the ecosystem to present your work in context - where it’s experienced, not just seen."
-          buttonText="Apply as a Participant"
-          href="/participant-apply"
-        />
-      </div>
-    </section>
+  const [isParticipationPopupOpen, setIsParticipationPopupOpen] =
+    useState(false);
+
+  const openPopup = (category: string) => {
+    setPopupCategory(category);
+    setIsPopupOpen(true);
+  };
+
+  return (
+    <>
+      <section className="w-full flex flex-col border-t border-gray-200 bg-white mt-12">
+        <div className="w-full flex flex-col md:flex-row min-h-[350px]">
+
+          {/* PARTNER */}
+          <ApplyCard
+            isInitiallyDark={true}
+            title="Become a Partner"
+            description="Align with a platform shaping design culture and create meaningful visibility through considered partnerships."
+            buttonText="Apply as a Partner"
+            onClick={() => openPopup("Partner")}
+          />
+
+          {/* PARTICIPANT */}
+          <ApplyCard
+            isInitiallyDark={false}
+            title="Join as a Participant"
+            description="Collaborate within the ecosystem to present your work in context - where it’s experienced, not just seen."
+            buttonText="Apply as a Participant"
+            onClick={() => setIsParticipationPopupOpen(true)}
+          />
+
+        </div>
+      </section>
+      {/* PARTICIPATION POPUP */}
+      <AnimatePresence>
+        {isParticipationPopupOpen && (
+          <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-6">
+            
+            {/* BACKDROP - Click to close */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsParticipationPopupOpen(false)}
+              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            />
+      
+            {/* FORM MODAL */}
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="relative z-10 w-full flex justify-center"
+            >
+              <ParticipationPopupForm onClose={() => setIsParticipationPopupOpen(false)} />
+            </motion.div>
+            
+          </div>
+        )}
+      </AnimatePresence>
+      <ParticipationPopup
+        isOpen={isPopupOpen}
+        onClose={() => setIsPopupOpen(false)}
+        category={popupCategory}
+      />
+    </>
   );
 };
 
