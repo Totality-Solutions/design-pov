@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/react";
 import { Montserrat } from 'next/font/google';
+import PageLoader from "@/components/common/PageLoader";
 
 const montserrat = Montserrat({
   subsets: ['latin'],
@@ -42,7 +43,9 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className={montserrat.variable}>
       <body className="grain">
-        {children}
+        <PageLoader>
+          {children}
+        </PageLoader>
         <Analytics/>
       </body>
     </html>
