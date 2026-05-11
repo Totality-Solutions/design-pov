@@ -1,6 +1,3 @@
-// Enhanced Schedule Data with Images and Categories
-// Place this in src/data/scheduleData.ts
-
 interface Speaker {
   name: string;
   role?: "moderator" | "speaker";
@@ -9,14 +6,17 @@ interface Speaker {
 interface ScheduleEvent {
   id: string;
   title: string;
+  subtitle?: string; // NEW (for Epistle themes etc.)
   speakers: Speaker[];
-  venue: "Circle" | "Show floor"; // Category: Circle or Workshop
+  venue: "Circle" | "Show floor" | "Workshop Zone";
   startTime: string;
   endTime: string;
   day: 1 | 2 | 3;
   isInviteOnly?: boolean;
   description?: string;
-  image?: string; // Image path
+  image?: string;
+  partners?: string[]; // NEW (Design Pataki, Epistle, etc.)
+  categoryTag?: string; // NEW (Epistle / Workshop / Elevate)
 }
 
 interface DaySchedule {
@@ -31,49 +31,58 @@ const scheduleData: DaySchedule[] = [
     date: "15 May 2026",
     events: [
       {
+        id: "day1-event0",
+        title: "Show Opening",
+        speakers: [],
+        venue: "Show floor",
+        startTime: "11:00 AM",
+        endTime: "12:00 PM",
+        day: 1,
+        description: "Opening of the exhibition floor.",
+        image: "/temp/about/1.png"
+      },
+      {
         id: "day1-event1",
-        title: "Inaugural Design POV",
+        title: "Welcome Note",
         speakers: [],
         venue: "Circle",
-        startTime: "12:00 pm",
-        endTime: "1:00 pm",
+        startTime: "12:00 PM",
+        endTime: "1:00 PM",
         day: 1,
-        isInviteOnly: false,
-        description: "Opening panel discussion on design perspectives.",
+        description: "Opening address for Design POV.",
         image: "/temp/about/1.png"
       },
       {
         id: "day1-event2",
-        title: "Design Pataki - The Art Of Sourcing",
+        title: "The Art Of Sourcing",
         speakers: [
-          { name: "Jasmine Jhaveri", role: "speaker" },
-          { name: "Mita Mehta", role: "speaker" },
-          { name: "Riddhika Jesrani", role: "speaker" },
-          { name: "Saniya Tadha", role: "speaker" },
-          { name: "Maitri Shah", role: "speaker" },
-          { name: "Esha", role: "moderator" }
+          { name: "Jasmine Jhaveri" },
+          { name: "Mita Mehta" },
+          { name: "Riddhika Jesrani" },
+          { name: "Saniya Tadha" },
+          { name: "Maitri Shah" },
+          { name: "Esha Gupta", role: "moderator" }
         ],
         venue: "Circle",
-        startTime: "3:00 pm",
-        endTime: "4:00 pm",
+        startTime: "3:00 PM",
+        endTime: "4:00 PM",
         day: 1,
-        isInviteOnly: false,
-        description: "Exploring the art and craft of sourcing materials and designs.",
+        partners: ["Design Pataki"], // ADDED
+        description: "A conversation on sourcing, curation and material storytelling in design.",
         image: "/temp/about/2.png"
       },
       {
         id: "day1-event3",
-        title: "Riddhi Khosla Jalan x Tanmay Bhatt Fireside chat",
+        title: "Fireside Chat and Walkthrough",
         speakers: [
-          { name: "Riddhi Jalan Khosla", role: "speaker" },
-          { name: "Tanmay Bhatt", role: "speaker" }
+          { name: "Ridhi Khosla Jalan" },
+          { name: "Tanmay Bhat" }
         ],
         venue: "Circle",
-        startTime: "5:00 pm",
-        endTime: "5:30 pm",
+        startTime: "5:00 PM",
+        endTime: "5:30 PM",
         day: 1,
-        isInviteOnly: false,
-        description: "An insight into contemporary design thinking.",
+        description: "An intimate walkthrough of ideas, journeys and perspectives.",
         image: "/temp/about/3.png"
       },
       {
@@ -81,11 +90,11 @@ const scheduleData: DaySchedule[] = [
         title: "The Macallan Experience",
         speakers: [],
         venue: "Circle",
-        startTime: "6:30 pm",
-        endTime: "8:30 pm",
+        startTime: "6:30 PM",
+        endTime: "8:30 PM",
         day: 1,
         isInviteOnly: true,
-        description: "Exclusive tasting experience (Invite Only).",
+        description: "An exclusive curated experience.",
         image: "/temp/about/4.png"
       },
       {
@@ -93,11 +102,11 @@ const scheduleData: DaySchedule[] = [
         title: "All Home Networking Night",
         speakers: [],
         venue: "Show floor",
-        startTime: "8:00 pm",
-        endTime: "10:30 pm",
+        startTime: "8:00 PM",
+        endTime: "10:30 PM",
         day: 1,
         isInviteOnly: true,
-        description: "Evening networking with industry professionals.",
+        description: "An evening of networking with the design community.",
         image: "/temp/about/5.png"
       }
     ]
@@ -108,49 +117,79 @@ const scheduleData: DaySchedule[] = [
     events: [
       {
         id: "day2-event1",
-        title: "Epistle Session 1 - The Body as Instrument",
+        title: "The Body as Instrument",
+        subtitle: "Experiencing Through Touch & Perception",
         speakers: [
-          { name: "Rahul Mistri", role: "speaker" },
-          { name: "Hardesh Chawla", role: "speaker" },
-          { name: "Saurabh Suryan", role: "speaker" }
+          { name: "Rahul Mistri" },
+          { name: "Hardesh Chawla" },
+          { name: "Saurabh Suryan" }
         ],
         venue: "Circle",
-        startTime: "12:30 pm",
-        endTime: "1:30 pm",
+        startTime: "12:30 PM",
+        endTime: "1:00 PM",
         day: 2,
-        isInviteOnly: false,
-        description: "Experiencing Through Touch & Perception.",
+        partners: ["Epistle"], // ADDED
+        categoryTag: "Epistle",
+        description: "A sensory exploration of how the body interacts with space and material.",
         image: "/temp/about/1.png"
       },
       {
         id: "day2-event2",
-        title: "Epistle Session 2 - What We Take With Us",
-        speakers: [
-          { name: "Raghav Priyadarshi", role: "speaker" },
-          { name: "Zahabiya Gabajiwala", role: "speaker" },
-          { name: "Pankaj Sethi", role: "speaker" },
-          { name: "Naiyya Saggi", role: "speaker" },
-          { name: "Devika Khosla", role: "moderator" }
-        ],
-        venue: "Circle",
-        startTime: "3:30 pm",
-        endTime: "4:30 pm",
+        title: "Art Workshop - Focus in Repetition",
+        speakers: [],
+        venue: "Workshop Zone",
+        startTime: "2:30 PM",
+        endTime: "3:30 PM",
         day: 2,
-        isInviteOnly: false,
-        description: "Panel continuation with diverse perspectives.",
+        partners: ["Happy Hikkups"], // ADDED
+        categoryTag: "Workshop",
+        description: "Exploring rhythm and repetition as a creative process.",
         image: "/temp/about/2.png"
       },
       {
         id: "day2-event3",
-        title: "Afterhours",
+        title: "What We Take With Us",
+        speakers: [
+          { name: "Raghav Priyadarshi" },
+          { name: "Zahabiya Gabajiwala" },
+          { name: "Pankaj Sethi" },
+          { name: "Naiyya Saggi" },
+          { name: "Devika Khosla", role: "moderator" }
+        ],
+        venue: "Circle",
+        startTime: "3:30 PM",
+        endTime: "4:30 PM",
+        day: 2,
+        partners: ["Epistle"],
+        categoryTag: "Epistle",
+        description: "A dialogue on memory, identity and what we carry forward in design.",
+        image: "/temp/about/3.png"
+      },
+      {
+        id: "day2-event4",
+        title: "Art Workshop - Touch as Design Language",
+        speakers: [],
+        venue: "Workshop Zone",
+        startTime: "3:30 PM",
+        endTime: "4:30 PM",
+        day: 2,
+        partners: ["Happy Hikkups"],
+        categoryTag: "Workshop",
+        description: "Understanding touch as a medium of expression in design.",
+        image: "/temp/about/4.png"
+      },
+      {
+        id: "day2-event5",
+        title: "Afterparty - Essentia x DesignPOV",
         speakers: [],
         venue: "Show floor",
-        startTime: "5:30 pm",
-        endTime: "6:30 pm",
+        startTime: "8:00 PM",
+        endTime: "11:59 PM",
         day: 2,
-        isInviteOnly: false,
-        description: "Casual networking and evening interactions.",
-        image: "/temp/about/3.png"
+        isInviteOnly: true,
+        categoryTag: "POV Elevate", // ADDED
+        description: "An invite-only closing celebration with music and community.",
+        image: "/temp/about/5.png"
       }
     ]
   },
@@ -160,38 +199,65 @@ const scheduleData: DaySchedule[] = [
     events: [
       {
         id: "day3-event1",
-        title: "Epistle Session 3 - Culture In Conversation",
-        speakers: [
-          { name: "Aman Nath", role: "speaker" },
-          { name: "Rahul Bhushan", role: "speaker" },
-          { name: "Vandana Saxena", role: "speaker" },
-          { name: "Asha Sairam", role: "speaker" },
-          { name: "Gaurav Jai Gupta", role: "speaker" },
-          { name: "Mariyam", role: "moderator" }
-        ],
-        venue: "Circle",
-        startTime: "2:00 pm",
-        endTime: "3:00 pm",
+        title: "Art Workshop - Urban Pop Canvas",
+        speakers: [],
+        venue: "Workshop Zone",
+        startTime: "12:30 PM",
+        endTime: "1:30 PM",
         day: 3,
-        isInviteOnly: false,
-        description: "Exploring cultural narratives in design.",
+        partners: ["Happy Hikkups"],
+        categoryTag: "Workshop",
+        description: "A bold exploration of contemporary visual expression.",
         image: "/temp/about/1.png"
       },
       {
         id: "day3-event2",
-        title: "Epistle Session 4 - Radical Futures",
+        title: "Art Workshop - Design What You Don’t See",
+        speakers: [],
+        venue: "Workshop Zone",
+        startTime: "1:30 PM",
+        endTime: "2:30 PM",
+        day: 3,
+        partners: ["Happy Hikkups"],
+        categoryTag: "Workshop",
+        description: "Designing through intuition and the unseen.",
+        image: "/temp/about/2.png"
+      },
+      {
+        id: "day3-event3",
+        title: "Culture In Conversation",
         speakers: [
-          { name: "Manish Gulati", role: "speaker" },
-          { name: "Arjun Bahl", role: "speaker" },
-          { name: "George Ramapuram", role: "speaker" }
+          { name: "Aman Nath" },
+          { name: "Rahul Bhushan" },
+          { name: "Vandana Saxena" },
+          { name: "Asha Sairam" },
+          { name: "Gaurav Jai Gupta" },
+          { name: "Mariyam", role: "moderator" }
         ],
         venue: "Circle",
-        startTime: "3:00 pm",
-        endTime: "4:00 pm",
+        startTime: "2:00 PM",
+        endTime: "3:00 PM",
         day: 3,
-        isInviteOnly: false,
-        description: "Envisioning the future of design and innovation.",
-        image: "/temp/about/2.png"
+        partners: ["Epistle"],
+        categoryTag: "Epistle",
+        description: "Exploring how culture shapes contemporary design narratives.",
+        image: "/temp/about/3.png"
+      },
+      {
+        id: "day3-event4",
+        title: "Solo Talk - Radical Futures",
+        speakers: [
+          { name: "Manish Gulati" },
+          { name: "Arjun Bahl" }
+        ],
+        venue: "Circle",
+        startTime: "3:00 PM",
+        endTime: "3:45 PM",
+        day: 3,
+        partners: ["Epistle"],
+        categoryTag: "Epistle",
+        description: "Speculating the future of design, architecture and innovation.",
+        image: "/temp/about/4.png"
       }
     ]
   }

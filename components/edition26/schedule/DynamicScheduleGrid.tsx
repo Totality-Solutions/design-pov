@@ -2,94 +2,69 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import Image from 'next/image';
+// import Image from 'next/image';
 import { Instagram, Linkedin, Globe, ArrowUpRight } from 'lucide-react';
 
 // --- IMPORT SCHEDULE DATA ---
-import scheduleData from './Scheduledata'; // Adjust path based on your project structure
+import scheduleData from './Scheduledata';
+import CTABtn from '@/components/common/CTABtn';
 
 // --- TYPE DEFINITIONS ---
-interface QuickEvent {
-  title: string;
-  status: "Book Now" | "Invite only" | "Coming Soon";
-}
-
 interface DetailedEvent {
   id: string;
   title: string;
   subtitle: string;
-  image: string;
+  // image: string;   // IMAGE COLUMN — kept for future use, do not remove
   time: string;
+  venue: string;
+  categoryTag?: string;
+  partners?: string[];
   speakers: string[];
   moderator?: string;
+  isInviteOnly: boolean;
   links: { ig?: string; li?: string; web?: string };
 }
 
 interface DayData {
   dayDigit: string;
   date: string;
-  atCircle: QuickEvent[];
-  atWorkshop: QuickEvent[];
   events: DetailedEvent[];
 }
 
 // --- CONVERT SCHEDULE DATA TO COMPONENT FORMAT ---
 const convertScheduleData = (): Record<string, DayData> => {
-  const dayDateMap: Record<number, string> = {
-    1: "15",
-    2: "16",
-    3: "17"
-  };
-
-  const dayDigitMap: Record<number, string> = {
-    1: "01",
-    2: "02",
-    3: "03"
-  };
+  const dayDateMap: Record<number, string> = { 1: "15", 2: "16", 3: "17" };
+  const dayDigitMap: Record<number, string> = { 1: "01", 2: "02", 3: "03" };
 
   const result: Record<string, DayData> = {};
 
   scheduleData.forEach((daySchedule) => {
-    const dateKey = dayDateMap[daySchedule.day];
+    const dateKey  = dayDateMap[daySchedule.day];
     const dayDigit = dayDigitMap[daySchedule.day];
 
-    // Convert ScheduleEvent to DetailedEvent
     const detailedEvents: DetailedEvent[] = daySchedule.events.map((event, index) => ({
-      id: `${String(index + 1).padStart(2, '0')}.`,
-      title: event.title,
-      subtitle: event.speakers.length > 0 
-        ? event.speakers.map(s => s.name).join(", ")
-        : "Design discussion and presentation",
-      image: `/temp/about/${index + 1}.png`, // Placeholder image path
-      time: `${event.startTime} - ${event.endTime}`,
-      speakers: event.speakers
-        .filter(s => s.role === "speaker")
-        .map(s => s.name),
-      moderator: event.speakers.find(s => s.role === "moderator")?.name,
-      links: { web: "#" }
+      id:          `${String(index + 1).padStart(2, '0')}.`,
+      title:       event.title,
+      subtitle:    event.subtitle
+        ? event.subtitle
+        : event.speakers.length > 0
+          ? event.speakers.map(s => s.name).join(", ")
+          : "",
+      // image:    event.image ?? `/temp/about/${index + 1}.png`,   // IMAGE COLUMN — do not remove
+      time:        `${event.startTime} - ${event.endTime}`,
+      venue:       event.venue,
+      categoryTag: event.categoryTag,
+      partners:    event.partners,
+      speakers:    event.speakers.filter(s => s.role !== "moderator").map(s => s.name),
+      moderator:   event.speakers.find(s => s.role === "moderator")?.name,
+      isInviteOnly: event.isInviteOnly ?? false,
+      links:       { web: "#" }
     }));
-
-    // Categorize events by venue
-    const circleEvents: QuickEvent[] = daySchedule.events
-      .filter(e => e.venue === "Circle")
-      .map(e => ({
-        title: e.title,
-        status: e.isInviteOnly ? "Invite only" : "Book Now"
-      }));
-
-    const workshopEvents: QuickEvent[] = daySchedule.events
-      .filter(e => e.venue === "Show floor")
-      .map(e => ({
-        title: e.title,
-        status: e.isInviteOnly ? "Invite only" : "Book Now"
-      }));
 
     result[dateKey] = {
       dayDigit,
       date: daySchedule.date,
-      atCircle: circleEvents,
-      atWorkshop: workshopEvents,
-      events: detailedEvents
+      events: detailedEvents,
     };
   });
 
@@ -109,21 +84,20 @@ const DynamicScheduleGrid = () => {
 
   const currentData = SCHEDULE_STORE[activeDate];
 
-  // Fallback if no data exists for that date
   if (!currentData) {
     return <div className="w-full bg-white p-8 text-center">No schedule data available</div>;
   }
 
   return (
     <section className="w-full bg-white flex flex-col font-display overflow-hidden">
-      
+
       {/* --- UPPER BLACK HEADER SECTION --- */}
       <div className="w-full bg-black">
         <div className="grid grid-cols-3 w-full border-b border-white/20">
           {DATES.map((date, index) => {
             const isActive = activeDate === date;
             const dateData = SCHEDULE_STORE[date];
-            
+
             return (
               <button
                 key={date}
@@ -132,12 +106,10 @@ const DynamicScheduleGrid = () => {
                   isActive ? "text-white" : "text-white/40 hover:text-white/70"
                 }`}
               >
-                {/* Day Label */}
                 <span className="text-[16px] lg:text-h2 font-bold uppercase">
                   Day 0{index + 1}
                 </span>
-              
-                {/* Subtitle Date - Visible only when active */}
+
                 <div className="h-[20px] lg:h-[24px]">
                   <AnimatePresence>
                     {isActive && (
@@ -152,8 +124,7 @@ const DynamicScheduleGrid = () => {
                     )}
                   </AnimatePresence>
                 </div>
-                  
-                {/* Active Indicator Line */}
+
                 {isActive && (
                   <motion.div
                     layoutId="activeTabUnderline"
@@ -170,40 +141,55 @@ const DynamicScheduleGrid = () => {
       {/* --- LOWER WHITE DETAIL GRID --- */}
       <div className="w-full overflow-x-auto" ref={scrollRef}>
         <AnimatePresence mode="wait">
-          <motion.div 
-            key={activeDate} 
-            initial={{ opacity: 0 }} 
-            animate={{ opacity: 1 }} 
+          <motion.div
+            key={activeDate}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
           >
             {currentData.events.length > 0 ? (
               currentData.events.map((event, idx) => (
-                <div 
-                  key={event.id} 
-                  className="grid grid-row lg:grid-cols-[1fr_1.2fr] min-w-[full] lg:min-w-[900px] lg:py-0 py-10 border-b border-black/20 lg:border lg:border-gray-100 group"
+                <div
+                  key={event.id}
+                  className="grid grid-row lg:grid-cols-[1fr_1.2fr_0.6fr_180px] min-w-[full] lg:min-w-[900px] lg:py-0 py-10 border-b border-black/20 lg:border lg:border-gray-100 group"
                 >
-                  {/* Left Column - Event Info */}
+                  {/* Left Column — Event Info (original design) */}
                   <div className="px-6 py-3 lg:p-12 flex flex-col gap-6 lg:border lg:border-gray-100">
                     <span className="text-5xl font-semibold tracking-tighter">{event.id}</span>
                     <div>
                       <h3 className="text-2xl font-semibold text-black mb-2">{event.title}</h3>
-                      <p className="text-zinc-500 text-sm leading-relaxed max-w-[280px]">
-                        {event.subtitle}
-                      </p>
+                      <div className="flex flex-col justify-center gap-3 lg:border-l lg:border-gray-100">
+                    <div>
+                      <span className="text-[14px] font-medium text-zinc-400 block mb-1 font-['Montserrat']">Venue</span>
+                      <p className="text-sm font-medium text-primary-blue">{event.venue}</p>
+                    </div>
+                    {event.categoryTag && (
+                      <div>
+                        <span className="text-[14px] font-medium text-zinc-400 block mb-1 font-['Montserrat']">Category</span>
+                        <p className="text-sm font-medium">{event.categoryTag}</p>
+                      </div>
+                    )}
+                    {event.partners && event.partners.length > 0 && (
+                      <div>
+                        <span className="text-[14px] font-medium text-zinc-400 block mb-1 font-['Montserrat']">Partner</span>
+                        <p className="text-sm font-medium">{event.partners.join(", ")}</p>
+                      </div>
+                    )}
+                  </div>
                     </div>
                   </div>
 
-                  {/* Right Column - Time & Details */}
+                  {/* 2nd Column — Time & Details (original design) */}
                   <div className="px-6 py-3 lg:p-12 flex flex-col justify-between">
                     <div className="flex justify-between items-start">
                       <span className="text-sm font-semibold tracking-tight">{event.time}</span>
                     </div>
-                    
+
                     <div className="mt-0 lg:mt-8 mb-4 lg:mb-0">
                       {/* Speakers */}
                       {event.speakers.length > 0 && (
-                        <div className='mb-4'>
+                        <div className="mb-4">
                           <span className="text-[14px] font-medium text-zinc-400 block mb-1 font-['Montserrat']">
                             Speaker{event.speakers.length > 1 ? 's' : ''}
                           </span>
@@ -212,7 +198,7 @@ const DynamicScheduleGrid = () => {
                           </p>
                         </div>
                       )}
-                      
+
                       {/* Moderator */}
                       {event.moderator && (
                         <div>
@@ -224,6 +210,44 @@ const DynamicScheduleGrid = () => {
                       )}
                     </div>
                   </div>
+
+                  {/* 3rd Column — Venue + Category + Partners */}
+                  
+
+                  {/* 4th Column — Image (commented) + Invite Only button */}
+                  <div className="px-6 py-3 lg:p-12 flex flex-col items-start lg:items-center justify-center gap-4 lg:border-l lg:border-gray-100">
+
+                    {/* IMAGE COLUMN — commented out, do not remove
+                    <div className="relative w-full h-28 overflow-hidden">
+                      <Image
+                        src={event.image}
+                        alt={event.title}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                    */}
+
+                    {event.isInviteOnly && (
+                      <CTABtn
+                        label="Invite Only"
+                        iconType="arrow"
+                        btnBg="var(--color-white)"
+                        btnHoverBg="var(--primary-blue)"
+                        textColor="var(--color-black)"
+                        borderColor="var(--color-black)"
+                        borderHoverColor="transparent"
+                        lineColor="var(--color-white)"
+                        lineHoverColor="var(--primary-blue)"
+                        bottomKey1Width="40px"
+                        bottomKey2Width="12px"
+                        bottomKey1Right="50px"
+                        bottomKey2Right="15px"
+                        href="#"
+                      />
+                    )}
+                  </div>
+
                 </div>
               ))
             ) : (
