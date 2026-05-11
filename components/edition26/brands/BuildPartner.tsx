@@ -51,6 +51,15 @@ export default function BuildPartner() {
 
     //operation partner
     { name: "Operation Partner", src: "/temp/edition/operation-partner/1.png" },
+
+    //curatorial partner 
+    { name: "Curatorial Partner", src: "/temp/edition/curatorial-partner/1.png" },
+    { name: "Experience Partner", src: "/temp/edition/experience-partner/1.png" },
+    { name: "Learning Partner", src: "/temp/edition/learning-partner/1.png" },
+    { name: "Visual Experience Partner", src: "/temp/edition/visual-experience-partner/1.png" },
+    { name: "Workshop Partner", src: "/temp/edition/workshop-partner/1.png" },
+    { name: "Community Partner", src: "/temp/edition/community-partner/1.png" },
+    { name: "Community Partner", src: "/temp/edition/community-partner/2.png" },
   ];
   
 const BransCollaborators = partners.filter(p => p.name === "Brand Collaborators");
@@ -62,6 +71,12 @@ const TicketingPartners = partners.filter(p => p.name === "Ticketing Partners");
 const SensoryCollaborator = partners.filter(p => p.name === "Sensory Collaborator");
 const KeyExecutionPartner = partners.filter(p => p.name === "Key execution Partner");
 const OperationPartner = partners.filter(p => p.name === "Operation Partner");
+const CuratorialPartner = partners.filter(p => p.name === "Curatorial Partner");
+const CommunityPartner = partners.filter(p => p.name === "Community Partner");
+const ExperiencePartner = partners.filter(p => p.name === "Experience Partner");
+const LearningPartner = partners.filter(p => p.name === "Learning Partner");
+const VisualExperiencePartner = partners.filter(p => p.name === "Visual Experience Partner");
+const WorkshopPartner = partners.filter(p => p.name === "Workshop Partner");
 
   return (
     <div className="py-12 space-y-12">
@@ -74,6 +89,12 @@ const OperationPartner = partners.filter(p => p.name === "Operation Partner");
       <BrandLogo title="TICKETING PARTNERS" logos={TicketingPartners} />
       <BrandLogo title="SENSORY COLLABORATOR" logos={SensoryCollaborator} />
       <BrandLogo title="OPERATION PARTNER" logos={OperationPartner} />
+      <BrandLogo title="CURATORIAL PARTNER" logos={CuratorialPartner} />
+      <BrandLogo title="COMMUNITY PARTNER" logos={CommunityPartner} />
+      <BrandLogo title="EXPERIENCE PARTNER" logos={ExperiencePartner} />
+      <BrandLogo title="LEARNING PARTNER" logos={LearningPartner} />
+      <BrandLogo title="VISUAL EXPERIENCE PARTNER" logos={VisualExperiencePartner} />
+      <BrandLogo title="WORKSHOP PARTNER" logos={WorkshopPartner} />
     </div>
   );
 }

@@ -13,7 +13,12 @@ const CATEGORIES = [
   "Digital Media Partners",
   "Ticketing Partners",
   "Sensory Collaborator",
-  "Key execution Partner"
+  "Key execution Partner",
+  "Curatorial Partner",
+  "Experience Partner",
+  "Learning Partner",
+  "Visual Experience Partner",
+  "Workshop Partner"
 ];
 
 const PartnersSection: React.FC = () => {
@@ -77,6 +82,15 @@ const PartnersSection: React.FC = () => {
     { id: 5, category: "Sensory Collaborator", logo: "/temp/edition/sensory/12.png" },
     // Key execution Partner
     { id: 6, category: "Key execution Partner", logo: "/temp/edition/key-execution/1.jpg" },
+
+    { id:1, category: "Community Partner", logo: "/temp/edition/community-partner/1.png" },
+    { id:1, category: "Community Partner", logo: "/temp/edition/community-partner/2.png" },
+
+    { id:1, category: "Curatorial Partner", logo: "/temp/edition/curatorial-partner/1.png" },
+    { id:1, category: "Experience Partner", logo: "/temp/edition/experience-partner/1.png" },
+    { id:1, category: "Learning Partner", logo: "/temp/edition/learning-partner/1.png" },
+    { id:1, category: "Visual Experience Partner", logo: "/temp/edition/visual-experience-partner/1.png" },
+    { id:1, category: "Workshop Partner", logo: "/temp/edition/workshop-partner/1.png" },
   ];
   
   const filtered = partners.filter(p => p.category === activeTab);
