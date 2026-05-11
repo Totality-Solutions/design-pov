@@ -39,7 +39,7 @@ export const ShowcaseModal = ({
   useEffect(() => {
     if (!isOpen || !data) return;
     const interval = setInterval(() => {
-      const totalImages = data.additionalImages.length + 1;
+      const totalImages = (data.additionalImages?.length || 0) + 1;
       setCurrentSlide((prev) => (prev + 1) % totalImages);
     }, 4000);
     return () => clearInterval(interval);
@@ -47,7 +47,7 @@ export const ShowcaseModal = ({
 
   if (!isOpen || !data) return null;
 
-  const images = [data.src, ...data.additionalImages];
+  const images = [data.src, ...(data.additionalImages || [])];
   const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % images.length);
   const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + images.length) % images.length);
 

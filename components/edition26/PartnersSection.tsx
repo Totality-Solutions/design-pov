@@ -8,12 +8,12 @@ const CATEGORIES = [
   // "Brands",
   // "Brand Collaborators",
   "Build Partners",
+  "Key execution Partner",
   "Gifting Partners",
   "Media Partners",
   "Digital Media Partners",
   "Ticketing Partners",
   "Sensory Collaborator",
-  "Key execution Partner",
   "Curatorial Partner",
   "Experience Partner",
   "Learning Partner",
@@ -57,7 +57,7 @@ const PartnersSection: React.FC = () => {
     { id: 30, category: "Brand Collaborators", logo: "/logos/logo-placeholder.svg" },
     // Build Partners
     { id: 3, category: "Build Partners", logo: "/temp/edition/build-partners/1.png" },
-    { id: 8, category: "Build Partners", logo: "/temp/edition/build-partners/2.png" },
+    // { id: 8, category: "Build Partners", logo: "/temp/edition/build-partners/2.png" },
     { id: 10, category: "Build Partners", logo: "/temp/edition/build-partners/3.png" },
     { id: 13, category: "Build Partners", logo: "/temp/edition/build-partners/4.png" },
     { id: 15, category: "Build Partners", logo: "/temp/edition/build-partners/5.png" },
@@ -114,11 +114,11 @@ const PartnersSection: React.FC = () => {
         bgColor = "black"
         isSectionHovered={isHovered} 
       >
-        <div className="hidden md:flex">
-            <a href='/edition/brands' className="opacity-100 hover:cursor-pointer hover:underline hover:text-primary-red text-lg font-medium text-black">
+        <div className="flex">
+            <a href='/edition/brands' className="opacity-100 hover:cursor-pointer hover:underline hover:text-primary-red text-sm md:text-lg font-medium text-black">
               View Brands
             </a>
-          </div>
+        </div>
       </SectionHeading>
 
       {/* 2. TAB NAVIGATION (Responsive Spacing Fix) */}

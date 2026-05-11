@@ -48,7 +48,7 @@ const navLinks = {
       { title: "Magazine", href: "/magazine" },
       { title: "Contact", href: "/contact" },
       { title: "FAQs", href: "/faq" },
-      { title: "POV Index", href: "https://povindex.designpovindia.com/" },
+      // { title: "POV Index", href: "https://povindex.designpovindia.com/" },
     ],
   },
 };
@@ -169,13 +169,10 @@ const Footer = () => {
                 className="w-full max-w-[280px]"
               />
               <div className="text-white text-[12px] opacity-80">
-                <div className="leading-relaxed ">
-                  <Link href="mailto:marketing@designpovindia.com">designpovindia.com</Link>
+                <div className="leading-relaxed mb-4">
+                  {/* <Link href="mailto:marketing@designpovindia.com">designpovindia.com</Link> */}
+                  <p>A design-led platform where lived spaces, ideas, and perspectives come together.</p>
                 </div>
-                <div className="leading-relaxed mb-4">  
-                  <Link href="mailto:sales@designpovindia.com">sales@designpovindia.com</Link>
-                </div>
-
                 <div className="flex gap-4 pointer-events-auto">
                   {[
                     {

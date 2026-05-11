@@ -1,6 +1,6 @@
 "use client";
 
-import React, { ReactNode } from "react";
+import React, { ReactNode, useState, useEffect } from "react";
 
 interface SectionHeadingProps {
   titleMain?: string;
@@ -27,15 +27,30 @@ export default function SectionHeading({
   textColor = "text-pov-black",
   className = "",
 }: SectionHeadingProps) {
-  const dotBaseColor = textColor.replace("text-", "bg-");
+  const [isMobileOrTab, setIsMobileOrTab] = useState(false);
 
+  // Check if current device is mobile or tablet (typically < 1024px)
+  useEffect(() => {
+    const checkDevice = () => {
+      setIsMobileOrTab(window.innerWidth < 1024);
+    };
+
+    checkDevice();
+    window.addEventListener("resize", checkDevice);
+    return () => window.removeEventListener("resize", checkDevice);
+  }, []);
+
+  // Use the prop value on Desktop, but force 'true' on Mobile/Tab
+  const isActive = isMobileOrTab || isSectionHovered;
+
+  const dotBaseColor = textColor.replace("text-", "bg-");
   const hasChildren = React.Children.count(children) > 0;
 
   return (
     <div
       className={`
         w-full
-        flex flex-col md:flex-row
+        flex flex-row
         items-start md:items-center
         ${hasChildren ? "justify-between" : "justify-start"}
         px-6 md:px-10
@@ -62,7 +77,7 @@ export default function SectionHeading({
               blur-[10px]
               transition-all duration-300
               ${
-                isSectionHovered
+                isActive // Changed from isSectionHovered
                   ? "animate-pulse-glow opacity-80"
                   : "opacity-0"
               }
@@ -76,7 +91,7 @@ export default function SectionHeading({
               rounded-full
               z-10
               transition-colors duration-300
-              ${isSectionHovered ? "bg-primary-red" : dotBaseColor}
+              ${isActive ? "bg-primary-red" : dotBaseColor} // Changed from isSectionHovered
             `}
           />
         </div>
@@ -103,8 +118,8 @@ export default function SectionHeading({
       {hasChildren && (
         <div
           className={`
-            mt-6 md:mt-0
-            flex flex-wrap items-center
+            mt-0
+            flex  items-center
             gap-4 md:gap-6
             ${textColor}
           `}
@@ -112,11 +127,6 @@ export default function SectionHeading({
           {children}
         </div>
       )}
-
-      {/* Bottom Border for Sticky Version */}
-      {/* {sticky && (
-        <div className="absolute bottom-0 left-0 w-full h-[1px] bg-black/5" />
-      )} */}
     </div>
   );
 }

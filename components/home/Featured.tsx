@@ -172,10 +172,10 @@ const designers: Designer[] = [
   { id: 2, media: [{ src: img3, name: "Abin Design Studio", link: "/edition/core?designer=03" }, { src: img4, name: "Baldiwala Edge", link: "/edition/core?designer=04" }] },
   { id: 3, media: [{ src: video1, type: "video", name: "Arjun Sharma", link: "/edition/core" }] },
   { id: 4, media: [{ src: img5, name: "Cityspace’82 Architects", link: "/edition/core?designer=05" }, { src: img6, name: "Design Hex", link: "/edition/core?designer=06" }] },
-  { id: 5, media: [{ src: img7, name: "DSP Design", link: "/edition/core?designer=07" }, { src: img8, name: "Jannat Vasi Interiors", link: "/edition/core?designer=08" }] },
+  { id: 5, media: [{ src: img7, name: "DSP Design", link: "/edition/core?designer=07" }, { src: img8, name: "Jannat Vasi Design", link: "/edition/core?designer=08" }] },
   { id: 6, media: [{ src: img9, name: "NA Architects", link: "/edition/core?designer=09" }, { src: img10, name: "Poonam Akash", link: "/edition/core?designer=10" }] },
   { id: 7, media: [{ src: img11, name: "Sanjay Puri Architects", link: "/edition/core?designer=11" }, { src: img12, name: "SAV", link: "/edition/core?designer=12" }] },
-  { id: 8, media: [{ src: img13, name: "Shroffleon", link: "/edition/core?designer=13" }, { src: img14, name: "Sparc Design", link: "/edition/core?designer=14" }] },
+  { id: 8, media: [{ src: img13, name: "Shroffleón", link: "/edition/core?designer=13" }, { src: img14, name: "Sparc Design", link: "/edition/core?designer=14" }] },
   { id: 9, media: [{ src: img15, name: "Studio Archohm", link: "/edition/core?designer=15" }, { src: img16, name: "Talati & Partners", link: "/edition/core?designer=16" }] },
 ];
 
@@ -216,8 +216,7 @@ export default function FeaturedDesigners() {
       onMouseLeave={() => setIsHovered(false)}
     >
       <SectionHeading
-        titleMain="Featured " 
-        titleBold="Designers" 
+        titleMain="Core Collective" 
         sticky={false}
         isSectionHovered={isHovered} 
         className=' !border-0'

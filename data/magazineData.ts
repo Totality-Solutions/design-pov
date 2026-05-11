@@ -28,6 +28,7 @@ import BlogImg26 from "@/public/temp/magazine/26/blog-26-1.jpeg";
 import BlogImg27 from "@/public/temp/magazine/27/blog-27-1.jpeg";
 import BlogImg28 from "@/public/temp/magazine/28/blog-28-1.jpeg";
 import BlogImg29 from "@/public/temp/magazine/29/blog-29-1.jpg";
+import BlogImg30 from "@/public/temp/magazine/30/blog-30-1.png";
 
 
 export type ContentBlock =
@@ -2690,6 +2691,48 @@ export const blogs: Blog[] = [
       }
     ]
   },
+
+  {
+  "type": "blog",
+  "id": 30,
+  "slug": "hybec-air-design-pov-2026",
+  "category": "Spotlight",
+  "author": "Design POV Editorial",
+  "date": "11 May 2026",
+  "isFeatured": true,
+  image: BlogImg30,
+  thumbnail: BlogImg30,
+  "title": "HYBEC AIR",
+  "subtitle": "We're pleased to welcome Hybec to Design POV '26 as a participating brand.",
+  "description": "Founded in 2000 and based in Mumbai, Hybec specialises in LED lighting solutions across indoor, outdoor, facade, and landscape applications, serving luxury residences, offices, retail, and hospitality spaces across India.",
+  "featuredParagraphs": [
+    "Over two decades, the brand has built a product range that covers a broad spectrum of lighting requirements across both residential and commercial projects.",
+    "At Design POV '26, Hybec introduces Hybec Air, its newest line of fans and ventilation products.",
+    "At Design POV '26, Hybec will be showcasing both their LED lighting solutions and the Hybec Air range."
+  ],
+  "detailedContent": [
+    {
+      "type": "text",
+      "value": "We're pleased to welcome Hybec to Design POV '26 as a participating brand."
+    },
+    {
+      "type": "text",
+      "value": "Founded in 2000 and based in Mumbai, Hybec specialises in LED lighting solutions across indoor, outdoor, facade, and landscape applications, serving luxury residences, offices, retail, and hospitality spaces across India. Over two decades, the brand has built a product range that covers a broad spectrum of lighting requirements across both residential and commercial projects."
+    },
+    {
+      "type": "text",
+      "value": "At Design POV '26, Hybec introduces Hybec Air, its newest line of fans and ventilation products. The range covers ceiling fans, decorative fans, wall fans, pedestal fans, and exhaust fans, designed for homes, offices, and commercial spaces. Each product is built for high air delivery and quiet operation, extending Hybec's offering beyond lighting into indoor environment and comfort."
+    },
+    {
+      "type": "text",
+      "value": "Lighting and air circulation are two elements that directly affect how a space feels to the people using it, and having both under one brand gives designers and architects a single point of reference for two related specifications within a project."
+    },
+    {
+      "type": "text",
+      "value": "At Design POV '26, Hybec will be showcasing both their LED lighting solutions and the Hybec Air range, giving the design community a direct look at how the two product lines work together within a considered interior"
+    }
+  ]
+},
 
   //   {
   //   "type": "blog",
