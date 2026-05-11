@@ -153,7 +153,7 @@ function DesignerTile({
       pointerEvents: "none",
     }}
   >
-    <span style={{ color: "#fff", fontSize: "13px" }}>
+    <span className="uppercase" style={{ color: "#fff", fontSize: "13px" }}>
       {currentMedia.name}
     </span>
 
