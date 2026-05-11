@@ -1,15 +1,8 @@
-import { createClient } from "@supabase/supabase-js";
 import { NextResponse } from "next/server";
-
-function getClient() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  );
-}
+import { createServerClient } from "@/lib/supabase/server";
 
 export async function GET() {
-  const { data, error } = await getClient()
+  const { data, error } = await createServerClient()
     .from("blogs")
     .select("*")
     .order("created_at", { ascending: false });
@@ -21,7 +14,7 @@ export async function GET() {
 export async function POST(req: Request) {
   const body = await req.json();
 
-  const { data, error } = await getClient()
+  const { data, error } = await createServerClient()
     .from("blogs")
     .insert([{ ...body, updated_at: new Date().toISOString() }])
     .select()

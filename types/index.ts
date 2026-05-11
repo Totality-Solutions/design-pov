@@ -111,7 +111,7 @@ export interface PortableTextBlock {
 }
 
 // ─── FORM ─────────────────────────────────────────────────
-export type ApplyType = "exhibit" | "sponsor" | "speak" | "curate" | "elevate" | "media";
+export type ApplyType = "exhibit" | "ecosystem" | "partner" | "speak" | "curate" | "elevate" | "media" | "core" | "circle";
 
 export interface HubSpotPayload {
   type: ApplyType | "waitlist" | "newsletter";

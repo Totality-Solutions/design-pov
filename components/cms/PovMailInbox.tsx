@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 type Department = "all" | "marketing" | "sales" | "core" | "rsvp";
 
@@ -28,6 +28,7 @@ const DEPT_COLORS: Record<string, string> = {
 
 export default function PovMailInbox({ initialMails }: { initialMails: Mail[] }) {
   const [mails, setMails]             = useState<Mail[]>(initialMails);
+  useEffect(() => { setMails(initialMails); }, [initialMails]);
   const [activeTab, setActiveTab]     = useState<Department>("all");
   const [search, setSearch]           = useState("");
   const [activeId, setActiveId]       = useState<string | null>(null);

@@ -1,13 +1,12 @@
-import { createClient } from "@supabase/supabase-js";
 import { notFound } from "next/navigation";
 import CmsSidebar from "@/components/cms/CmsSidebar";
 import BlogForm from "@/components/cms/BlogForm";
+import { createServerClient } from "@/lib/supabase/server";
+
+export const dynamic = "force-dynamic";
 
 async function getBlog(id: string) {
-  const { data } = await createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  )
+  const { data } = await createServerClient()
     .from("blogs")
     .select("*")
     .eq("id", id)
@@ -21,24 +20,26 @@ export default async function EditBlogPage({ params }: { params: Promise<{ id: s
   if (!blog) notFound();
 
   const initialData = {
-    title: blog.title ?? "",
-    slug: blog.slug ?? "",
-    subtitle: blog.subtitle ?? "",
-    description: blog.description ?? "",
-    category: blog.category ?? "Design",
+    title:            blog.title ?? "",
+    slug:             blog.slug ?? "",
+    subtitle:         blog.subtitle ?? "",
+    description:      blog.description ?? "",
+    category:         blog.category ?? "Design",
     category_display: blog.category_display ?? "",
-    author: blog.author ?? "",
-    date: blog.date ?? "",
-    is_featured: blog.is_featured ?? false,
-    status: blog.status ?? "draft",
-    image: blog.image ?? "",
-    thumbnail: blog.thumbnail ?? "",
-    featured_paragraphs: Array.isArray(blog.featured_paragraphs) && blog.featured_paragraphs.length > 0
-      ? blog.featured_paragraphs
-      : [""],
-    detailed_content: Array.isArray(blog.detailed_content) && blog.detailed_content.length > 0
-      ? blog.detailed_content
-      : [{ type: "text", title: "", value: "" }],
+    author:           blog.author ?? "",
+    date:             blog.date ?? "",
+    is_featured:      blog.is_featured ?? false,
+    status:           blog.status ?? "draft",
+    image:            blog.image ?? "",
+    thumbnail:        blog.thumbnail ?? "",
+    featured_paragraphs:
+      Array.isArray(blog.featured_paragraphs) && blog.featured_paragraphs.length > 0
+        ? blog.featured_paragraphs
+        : [""],
+    detailed_content:
+      Array.isArray(blog.detailed_content) && blog.detailed_content.length > 0
+        ? blog.detailed_content
+        : [{ type: "text", title: "", value: "" }],
   };
 
   return (

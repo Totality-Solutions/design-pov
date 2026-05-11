@@ -1,14 +1,11 @@
 import CmsSidebar from "@/components/cms/CmsSidebar";
 import SubmissionsTable from "@/components/cms/SubmissionsTable";
-import { createClient } from "@supabase/supabase-js";
+import { createServerClient } from "@/lib/supabase/server";
+
+export const dynamic = "force-dynamic";
 
 async function getSubmissions() {
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  );
-
-  const { data } = await supabase
+  const { data } = await createServerClient()
     .from("submissions")
     .select("*")
     .order("created_at", { ascending: false });

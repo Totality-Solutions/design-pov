@@ -203,7 +203,7 @@ export default function ParticipationForm() {
 
   // 2. Initialize the hook (we use 'exhibit' as the type for this form)
   const { submit, loading, success, error } = useHubspotForm({
-    type: "exhibit",
+    type: "ecosystem",
     onSuccess: () => {
       // Reset UI on success
       setSelectedOption("");

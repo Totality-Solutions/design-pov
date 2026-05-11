@@ -17,5 +17,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/cms/:path*"],
+  matcher: ["/cms/:path*", "/api/cms/:path*"],
 };

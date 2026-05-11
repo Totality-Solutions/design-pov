@@ -11,7 +11,7 @@ const CoreForm = () => {
   const formRef = useRef<HTMLFormElement>(null);
 
   const { submit, loading, success, error } = useHubspotForm({
-    type: "exhibit",
+    type: "core",
     onSuccess: () => {
       setFileName("");
       if (formRef.current) formRef.current.reset();

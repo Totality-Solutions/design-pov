@@ -1,12 +1,11 @@
-import { createClient } from "@supabase/supabase-js";
 import Link from "next/link";
 import CmsSidebar from "@/components/cms/CmsSidebar";
+import { createServerClient } from "@/lib/supabase/server";
+
+export const dynamic = "force-dynamic";
 
 async function getStats() {
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  );
+  const supabase = createServerClient();
 
   const [{ data: subs }, { data: blgs }] = await Promise.all([
     supabase.from("submissions").select("type, category"),

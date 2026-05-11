@@ -25,7 +25,7 @@ type BlogFormData = {
   detailed_content: ContentBlock[];
 };
 
-const CATEGORIES = ["Design", "POV Blogs", "Interview", "Feature", "Architecture", "Interiors"];
+const CATEGORIES = ["Design", "POV Blogs", "Spotlight", "Interview", "Feature", "Architecture", "Interiors"];
 
 function toSlug(title: string) {
   return title.toLowerCase().replace(/[^a-z0-9\s-]/g, "").trim().replace(/\s+/g, "-");
@@ -51,6 +51,7 @@ const emptyForm: BlogFormData = {
 export default function BlogForm({ initialData, blogId }: { initialData?: Partial<BlogFormData>; blogId?: string }) {
   const router = useRouter();
   const isEdit = !!blogId;
+  const viewUrl = isEdit && initialData?.slug ? `/magazine/${initialData.slug}` : null;
 
   const [form, setForm] = useState<BlogFormData>({ ...emptyForm, ...initialData });
   const [slugEdited, setSlugEdited] = useState(isEdit);
@@ -150,6 +151,12 @@ export default function BlogForm({ initialData, blogId }: { initialData?: Partia
   return (
     <form onSubmit={handleSubmit} className="space-y-10">
       {error && <p className="text-sm text-red-600 bg-red-50 border border-red-200 px-4 py-3">{error}</p>}
+      {viewUrl && (
+        <a href={viewUrl} target="_blank" rel="noopener noreferrer"
+          className="inline-flex items-center gap-1.5 text-[11px] uppercase tracking-widest text-gray-400 hover:text-black transition-colors border-b border-dashed border-gray-300">
+          View on site ↗
+        </a>
+      )}
 
       {/* ── Core Info ── */}
       <Section title="Core Info">

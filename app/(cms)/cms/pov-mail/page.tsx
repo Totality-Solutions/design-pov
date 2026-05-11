@@ -2,6 +2,8 @@ import { createClient } from "@supabase/supabase-js";
 import CmsSidebar from "@/components/cms/CmsSidebar";
 import PovMailInbox from "@/components/cms/PovMailInbox";
 
+export const dynamic = "force-dynamic";
+
 async function getMails() {
   const { data } = await createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
