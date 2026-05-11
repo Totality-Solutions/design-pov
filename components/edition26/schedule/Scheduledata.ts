@@ -63,13 +63,14 @@ const scheduleData: DaySchedule[] = [
       },
       {
         id: "day1-event3",
-        title: "Riddhi Jalan Khosla Fireside Chat",
+        title: "Riddhi Khosla Jalan x Tanmay Bhatt Fireside chat",
         speakers: [
-          { name: "Riddhi Jalan Khosla", role: "speaker" }
+          { name: "Riddhi Jalan Khosla", role: "speaker" },
+          { name: "Tanmay Bhatt", role: "speaker" }
         ],
         venue: "Circle",
-        startTime: "4:00 pm",
-        endTime: "5:00 pm",
+        startTime: "5:00 pm",
+        endTime: "5:30 pm",
         day: 1,
         isInviteOnly: false,
         description: "An insight into contemporary design thinking.",

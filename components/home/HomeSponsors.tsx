@@ -36,7 +36,7 @@ const HomeSponsors: React.FC = () => {
           {partners.map((partner) => (
             <div
               key={partner.id}
-              className="aspect-[9/4] lg:aspect-[6/3] flex items-center justify-center lg:p-2 transition-colors duration-300 hover:bg-gray-50/50 overflow-hidden"
+              className="aspect-[9/4] lg:aspect-[6/3] flex items-center justify-center p-6 lg:p-2 transition-colors duration-300 hover:bg-gray-50/50 overflow-hidden"
             >
               {/* Make the Link a flex container that fills the parent */}
               <Link 
@@ -46,7 +46,7 @@ const HomeSponsors: React.FC = () => {
                 <img 
                   src={partner.logo} 
                   alt={"Partner Logo"} 
-                  className="max-w-full max-h-full object-cover hover:scale-105 transition-all duration-500"
+                  className="max-w-full max-h-full object-cover hover:scale-105 transition-all p-[4px] duration-500"
                 />
               </Link>
             </div>

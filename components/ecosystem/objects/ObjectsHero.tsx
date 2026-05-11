@@ -14,6 +14,7 @@ export default function ObjectsHero() {
     <div className="w-full pt-10 lg:pt-20">
       <UnderlineText lineHeight={72} className="text-h2-mobile md:text-h2-tab lg:text-h2 tracking-tight font-semibold">
         A collection of original, one-of-one pieces—each a distilled expression of perspective.
+        
       </UnderlineText>
     </div>
 
