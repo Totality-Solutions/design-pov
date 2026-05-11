@@ -174,7 +174,7 @@ export default function PopupForm({ isOpen, onClose }: PopupFormProps) {
                 bottomKey2Width="10px"
                 bottomKey1Right="40px"
                 bottomKey2Right="10px"
-                onClick={handleSubmit}
+                // onClick={handleSubmit}
                 disabled={isLoading}
               />
             </div>
