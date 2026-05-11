@@ -80,7 +80,7 @@ export const CoreShowcase = () => {
                 className="flex items-center gap-4 cursor-default"
               >
                 <StatusDot isActive={activeIndex === i} />
-                <h3 className="text-body-tab font-semibold ">{item.label}</h3>
+                <h3 className="text-body-tab font-semibold uppercase">{item.label}</h3>
               </motion.div>
             ))}
           </div>
