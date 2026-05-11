@@ -4,7 +4,10 @@ import type { NextRequest } from "next/server";
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  if (pathname === "/cms/login") return NextResponse.next();
+  // Public routes — never block these
+  if (pathname === "/cms/login" || pathname === "/api/cms/auth") {
+    return NextResponse.next();
+  }
 
   const session = request.cookies.get("cms_session")?.value;
   const secret = process.env.CMS_SECRET;
