@@ -24,6 +24,22 @@ interface ArrivalItem {
   href: string;
 }
 
+const NEW_ARRIVALS: ArrivalItem[] = [
+  { id: 1,  img: img1,                          title: 'Simply Dummy', href: '#' },
+  { id: 10, img: '/temp/home/section2/1.mp4',   title: 'Simply Dummy', href: '#' },
+  { id: 2,  img: img2,                          title: 'Dynamic Video', href: '#' },
+  { id: 11, img: '/temp/home/section2/2.mp4',   title: 'Simply Dummy', href: '#' },
+  { id: 3,  img: img3,                          title: 'Simply Dummy', href: '#' },
+  { id: 12, img: '/temp/home/section2/3.mp4',   title: 'Simply Dummy', href: '#' },
+  { id: 4,  img: img4,                          title: 'Simply Dummy', href: '#' },
+  { id: 13, img: '/temp/home/section2/4.mp4',   title: 'Simply Dummy', href: '#' },
+  { id: 5,  img: img5,                          title: 'Simply Dummy', href: '#' },
+  { id: 6,  img: img6,                          title: 'Simply Dummy', href: '#' },
+  { id: 7,  img: img7,                          title: 'Simply Dummy', href: '#' },
+  { id: 8,  img: img8,                          title: 'Simply Dummy', href: '#' },
+  { id: 9,  img: img9,                          title: 'Simply Dummy', href: '#' },
+];
+
 const text1 = `Design POV is a curated platform that brings together multiple disciplines to explore how design is lived, not just displayed.`
 const text2 = `Across immersive installations, collaborative spaces, and evolving narratives, it creates a setting where design moves beyond product and into experience.`
 
@@ -68,6 +84,7 @@ function WordReveal({ text, progress, range }: any) {
 const WhatPOV = () => {
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const [isMobile, setIsMobile] = useState(false)
+  const [expandedIndex, setExpandedIndex] = useState(0)
 
   const { scrollYProgress } = useScroll({
     target: scrollContainerRef,
@@ -80,22 +97,6 @@ const WhatPOV = () => {
     window.addEventListener('resize', check)
     return () => window.removeEventListener('resize', check)
   }, [])
-
-  const NEW_ARRIVALS: ArrivalItem[] = [
-    { id: 1, img: img1, title: 'Simply Dummy', href: '#' },
-    { id: 10, img: '/temp/home/section2/1.mp4', title: 'Simply Dummy', href: '#' },
-    { id: 2, img: img2, title: 'Dynamic Video', href: '#' },
-    { id: 11, img: '/temp/home/section2/2.mp4', title: 'Simply Dummy', href: '#' },
-    { id: 3, img: img3, title: 'Simply Dummy', href: '#' },
-    { id: 12, img: '/temp/home/section2/3.mp4', title: 'Simply Dummy', href: '#' },
-    { id: 4, img: img4, title: 'Simply Dummy', href: '#' },
-    { id: 13, img: '/temp/home/section2/4.mp4', title: 'Simply Dummy', href: '#' },
-    { id: 5, img: img5, title: 'Simply Dummy', href: '#' },
-    { id: 6, img: img6, title: 'Simply Dummy', href: '#' },
-    { id: 7, img: img7, title: 'Simply Dummy', href: '#' },
-    { id: 8, img: img8, title: 'Simply Dummy', href: '#' },
-    { id: 9, img: img9, title: 'Simply Dummy', href: '#' },
-  ];
 
   const smooth = useSpring(scrollYProgress, {
     stiffness: 100,
@@ -137,7 +138,9 @@ const WhatPOV = () => {
                 gap={5}
                 speed={200}
                 desktopCount={4}
-                renderItem={(item, _index, isExpanded) => {
+                onExpandChange={setExpandedIndex}
+                renderItem={(item, index) => {
+                  const isExpanded = index === expandedIndex;
                   const isVideo = typeof item.img === 'string' && item.img.match(/\.(mp4|webm|ogg)$/i);
                   return (
                     <Link

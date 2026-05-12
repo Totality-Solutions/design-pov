@@ -18,6 +18,7 @@ const ITEMS = [
 
 const EcosystemSection = () => {
   const [isHovered, setIsHovered] = useState(false);
+  const [expandedIndex, setExpandedIndex] = useState(0);
   return (
     <section 
       onMouseEnter={() => setIsHovered(true)}
@@ -39,8 +40,10 @@ const EcosystemSection = () => {
           gap={5}
           speed={200}
           desktopCount={4}
-          renderItem={(item, _index, isExpanded) => {
-          const isVideo = typeof item.img === 'string' && item.img.match(/\.(mp4|webm|ogg)$/i);
+          onExpandChange={setExpandedIndex}
+          renderItem={(item, index) => {
+            const isExpanded = index === expandedIndex;
+            const isVideo = typeof item.img === 'string' && item.img.match(/\.(mp4|webm|ogg)$/i);
             return (
               <Link
                 href={item.href || '#'}
@@ -72,7 +75,7 @@ const EcosystemSection = () => {
                     fill
                     className="object-contain will-change-transform p-2"
                     style={{
-                      transform: 'translate3d(0,0,0) scale(1)',
+                      transform: isExpanded ? 'translate3d(0,0,0) scale(1.05)' : 'translate3d(0,0,0) scale(1)',
                       transition: 'transform 2000ms cubic-bezier(0.4, 0, 0.2, 1)',
                       transformOrigin: 'bottom center',
                       backfaceVisibility: 'hidden',
