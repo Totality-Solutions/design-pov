@@ -68,26 +68,24 @@ export default function WhoItIsFor() {
   }, [controls]);
 
   return (
-    <section className="w-full  bg-black" onMouseEnter={() => setIsHovered(true)}
+    <section className="w-full py-6 bg-white" onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}>
       <SectionHeading
-        titleMain="WHO"
-        titleBold="IT IS FOR"
+        titleMain="For those who consume & create design:"
         sticky={true} 
-        stickyTop="lg:top-20"
         isSectionHovered={isHovered} 
       />
 
-      <div className="relative flex px-6 md:px-12 h-[260px] w-full overflow-hidden">
+      <div className="relative flex flex-col md:flex-row px-6 md:px-10 md:h-[270px] w-full overflow-hidden bg-black">
 
         {/* LEFT */}
-        <div className="relative flex-1 overflow-hidden w-full px-6 md:px-10">
+        <div className="relative flex-1 overflow-hidden w-full md:px-10 max-h-[140px] md:max-h-none">
 
           {/* TOP FADE — covers 2 inactive items above active */}
-          <div className="pointer-events-none absolute top-0 left-0 z-20 h-[104px] w-full bg-linear-to-b from-black via-black/80 to-transparent" />
+          <div className="pointer-events-none absolute top-0 left-0 z-20 h-[60px] md:h-[104px] w-full bg-linear-to-b from-black via-black/80 to-transparent" />
 
           {/* BOTTOM FADE — covers 2 inactive items below active */}
-          <div className="pointer-events-none absolute bottom-0 left-0 z-20 h-[104px] w-full bg-linear-to-t from-black via-black/80 to-transparent" />
+          <div className="pointer-events-none absolute bottom-0 left-0 z-20 h-[60px] md:h-[104px] w-full bg-linear-to-t from-black via-black/80 to-transparent" />
 
           {/* CENTER GLOW */}
           {/* <div className="pointer-events-none absolute inset-x-0 top-1/2 z-10 h-[70px] -translate-y-1/2 bg-white/[0.03] blur-3xl" /> */}
@@ -105,7 +103,7 @@ export default function WhoItIsFor() {
                 <div
                   key={index}
                   className={`
-                    h-[52px]
+                    h-[38px] md:h-[52px]
                     flex
                     items-center
                     whitespace-nowrap
@@ -133,8 +131,13 @@ export default function WhoItIsFor() {
           className="
             relative
             flex
-            items-center
-            justify-center
+            items-start
+            justify-start
+            lg:items-center
+            lg:justify-center
+            pb-4
+            md:py-0
+            
           "
         >
           <div className="absolute inset-0 bg-gradient-to-l from-white/[0.03] to-transparent" />
