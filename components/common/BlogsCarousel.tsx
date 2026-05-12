@@ -3,35 +3,34 @@
 import React, { useRef, useMemo } from "react";
 import Image from "next/image";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
-import { Blog, blogs } from "@/data/magazineData";
+import { blogs as staticBlogs } from "@/data/magazineData";
+import { NormalizedBlog, normalizeStaticBlog } from "@/lib/blog";
 
 interface CarouselProps {
   filter: string;
+  allBlogs?: NormalizedBlog[];
 }
 
-export default function BlogsCarousel({ filter }: CarouselProps) {
+export default function BlogsCarousel({ filter, allBlogs }: CarouselProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  const filteredBlogs = useMemo(() => {
-  const filtered =
-    filter === "Magazine"
-      ? [...blogs]
-      : blogs.filter(
-          item => item.category.toLowerCase() === filter.toLowerCase()
-        );
+  const sourceBlogs: NormalizedBlog[] = allBlogs && allBlogs.length > 0
+    ? allBlogs
+    : [...staticBlogs].sort((a, b) => (b.id as number) - (a.id as number)).map(normalizeStaticBlog);
 
-  // Latest blog first (higher id = newer)
-  return filtered.sort((a, b) => b.id - a.id);
-}, [filter]);
+  const filteredBlogs = useMemo(() => {
+    return filter === "Magazine"
+      ? [...sourceBlogs]
+      : sourceBlogs.filter(item => item.category.toLowerCase() === filter.toLowerCase());
+  }, [filter, sourceBlogs]);
 
   const scroll = (direction: "left" | "right") => {
     if (scrollRef.current) {
       const firstItem = scrollRef.current.firstElementChild as HTMLElement;
       const cardWidth = firstItem ? firstItem.offsetWidth + 24 : 300;
-
       scrollRef.current.scrollTo({
-        left: direction === "left" 
-          ? scrollRef.current.scrollLeft - cardWidth 
+        left: direction === "left"
+          ? scrollRef.current.scrollLeft - cardWidth
           : scrollRef.current.scrollLeft + cardWidth,
         behavior: "smooth",
       });
@@ -40,10 +39,8 @@ export default function BlogsCarousel({ filter }: CarouselProps) {
 
   return (
     <section className="w-full bg-white py-6 px-6 lg:px-10">
-      {/* Container is relative so buttons can sit at the far edges */}
       <div className="relative flex items-center w-full">
-        
-        {/* LEFT BUTTON - Absolutely positioned to the left */}
+
         {filteredBlogs.length > 0 && (
           <button
             onClick={() => scroll("left")}
@@ -52,16 +49,14 @@ export default function BlogsCarousel({ filter }: CarouselProps) {
             <FiChevronLeft size={20} />
           </button>
         )}
-      
 
-        {/* CAROUSEL CONTENT */}
         <div
           ref={scrollRef}
-          className="flex gap-6 overflow-x-auto no-scrollbar scroll-smooth w-full "
-          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          className="flex gap-6 overflow-x-auto no-scrollbar scroll-smooth w-full"
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           {filteredBlogs.length > 0 ? (
-            filteredBlogs.map((item: Blog) => (
+            filteredBlogs.map((item) => (
               <div
                 key={item.id}
                 className="flex-shrink-0 w-full sm:w-[calc(50%-12px)] lg:w-[calc(25%-18px)] group cursor-pointer"
@@ -75,16 +70,11 @@ export default function BlogsCarousel({ filter }: CarouselProps) {
                     className="object-cover object-top transition-transform duration-700 group-hover:scale-110"
                   />
                 </div>
-
                 <div className="flex flex-col gap-2">
-                  <span className="text-[16px] text-black/60">
-                    {item.category}
-                  </span>
-
+                  <span className="text-[16px] text-black/60">{item.category}</span>
                   <h3 className="text-base md:text-[18px] font-medium leading-tight text-black line-clamp-2 group-hover:text-red-600 transition-colors">
                     {item.title}
                   </h3>
-
                   <div className="flex items-center gap-2 mt-1 text-[11px] font-medium text-black/60 uppercase">
                     <span>{item.author}</span>
                     <span className="w-1 h-1 rounded-full bg-black/20" />
@@ -94,16 +84,12 @@ export default function BlogsCarousel({ filter }: CarouselProps) {
               </div>
             ))
           ) : (
-            /* FALLBACK UI */
             <div className="w-full py-36 flex flex-col items-center justify-center">
-              <p className="font-['Montserrat'] text-black text-lg">
-                No Articles found in {filter}
-              </p>
+              <p className="font-['Montserrat'] text-black text-lg">No Articles found in {filter}</p>
             </div>
           )}
         </div>
 
-        {/* RIGHT BUTTON - Absolutely positioned to the right */}
         {filteredBlogs.length > 0 && (
           <button
             onClick={() => scroll("right")}

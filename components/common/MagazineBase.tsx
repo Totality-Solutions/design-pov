@@ -3,32 +3,37 @@ import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { FiChevronLeft, FiX } from "react-icons/fi";
 import CTABtn from "../common/CTABtn";
-import { Blog, SidebarItem, blogs, advertisements } from "@/data/magazineData";
+import { advertisements } from "@/data/magazineData";
+import { NormalizedBlog, normalizeStaticBlog } from "@/lib/blog";
+import { blogs as staticBlogs } from "@/data/magazineData";
 import Link from "next/link";
 
-export default function MagazineBase({ activeBlog: initialBlog, isInnerPage = false }: { activeBlog: Blog, isInnerPage?: boolean }) {
+type Ad = { type: "ad"; id: string; image: string; link: string; aspect: string };
+type SidebarItem = NormalizedBlog | Ad;
+
+export default function MagazineBase({
+  activeBlog: initialBlog,
+  isInnerPage = false,
+  allBlogs,
+}: {
+  activeBlog: NormalizedBlog;
+  isInnerPage?: boolean;
+  allBlogs?: NormalizedBlog[];
+}) {
   const sectionRef = useRef<HTMLElement>(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
 
-  // 1. Sort blogs by ID descending (Latest first)
-  const sortedBlogs = [...blogs].sort((a, b) => b.id - a.id);
+  const sortedBlogs: NormalizedBlog[] = allBlogs && allBlogs.length > 0
+    ? allBlogs
+    : [...staticBlogs].sort((a, b) => (b.id as number) - (a.id as number)).map(normalizeStaticBlog);
 
-  // 2. Initialize activeBlog state
-  // On Outer Page: Default to the blog with the highest ID
-  // On Inner Page: Default to the prop passed from the dynamic route
-  const [activeBlog, setActiveBlog] = useState<Blog>(() => {
-    if (!isInnerPage) {
-      return sortedBlogs[0]; 
-    }
-    return initialBlog;
-  });
+  const [activeBlog, setActiveBlog] = useState<NormalizedBlog>(() =>
+    isInnerPage ? initialBlog : (sortedBlogs[0] ?? initialBlog)
+  );
 
-  // 3. Sync state if the initialBlog prop changes (e.g., navigating between posts)
   useEffect(() => {
-    if (isInnerPage) {
-      setActiveBlog(initialBlog);
-    }
+    if (isInnerPage) setActiveBlog(initialBlog);
   }, [initialBlog, isInnerPage]);
 
   // Handle Visibility for Mobile Trigger
@@ -44,11 +49,8 @@ export default function MagazineBase({ activeBlog: initialBlog, isInnerPage = fa
     return () => { document.body.style.overflow = "auto"; };
   }, [isSidebarOpen]);
 
-  // 4. Determine Sidebar Blogs
-  // Outer Page: Show absolute latest 3 (e.g. 29, 28, 27)
-  // Inner Page: Show latest 4, excluding the one currently being read
-  const displayBlogs = isInnerPage 
-    ? sortedBlogs.filter(b => b.id !== activeBlog.id).slice(0, 4) 
+  const displayBlogs = isInnerPage
+    ? sortedBlogs.filter(b => b.id !== activeBlog.id).slice(0, 4)
     : sortedBlogs.slice(0, 3);
 
   const sidebarItems: SidebarItem[] = [];
@@ -74,7 +76,7 @@ export default function MagazineBase({ activeBlog: initialBlog, isInnerPage = fa
         {/* HERO IMAGE SECTION */}
         <div className={isInnerPage ? "relative w-full h-[60vh] md:h-[80vh]" : "sticky top-20 lg:top-0 h-[50vh] lg:h-full w-full overflow-hidden z-0"}>
           <Image
-            src={activeBlog.image}
+            src={activeBlog.image || "/temp/home/blogs/blog-16.jpg"}
             alt={activeBlog.title}
             fill
             priority

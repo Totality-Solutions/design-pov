@@ -20,9 +20,9 @@ export default function SeedBlogsButton() {
         setMsg(json.error || "Seed failed");
         return;
       }
-      const { inserted, skipped, errors } = json;
+      const { upserted, errors } = json;
       setStatus("done");
-      setMsg(`✓ Inserted ${inserted}, skipped ${skipped}${errors?.length ? `, ${errors.length} error(s)` : ""}`);
+      setMsg(`✓ Synced ${upserted} blogs${errors?.length ? `, ${errors.length} error(s)` : ""}`);
       router.refresh();
     } catch (e: any) {
       setStatus("error");

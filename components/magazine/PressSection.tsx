@@ -4,14 +4,15 @@ import React, { useState } from "react";
 import SectionHeading from "../common/SectionHeading";
 import BlogsCarousel from "../common/BlogsCarousel";
 import MagazineNav from "./MagazineNav";
-import SubmissionForm from "./SubmissionForm"; // Import the new form
+import SubmissionForm from "./SubmissionForm";
+import { NormalizedBlog } from "@/lib/blog";
 
-export default function PressSection() {
+export default function PressSection({ allBlogs }: { allBlogs?: NormalizedBlog[] }) {
   const [isHovered, setIsHovered] = useState(false);
   const [activeCategory, setActiveCategory] = useState("Magazine");
 
   return (
-    <div 
+    <div
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       className="bg-white"
@@ -20,18 +21,17 @@ export default function PressSection() {
         titleMain={activeCategory === "Submit" ? "Collaborate" : "Latest"}
         isSectionHovered={isHovered}
       />
-      
-      <MagazineNav 
-        activeCategory={activeCategory} 
-        setActiveCategory={setActiveCategory} 
+
+      <MagazineNav
+        activeCategory={activeCategory}
+        setActiveCategory={setActiveCategory}
       />
 
-      {/* CONDITIONAL RENDERING LOGIC */}
       <div className="w-full">
         {activeCategory === "Submit" ? (
           <SubmissionForm />
         ) : (
-          <BlogsCarousel filter={activeCategory} />
+          <BlogsCarousel filter={activeCategory} allBlogs={allBlogs} />
         )}
       </div>
     </div>
