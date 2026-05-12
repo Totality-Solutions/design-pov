@@ -42,7 +42,7 @@ import { useState } from "react";
 import type { ApplyType } from "@/types";
 
 interface UseHubspotFormOptions {
-  type: ApplyType | "waitlist" | "newsletter";
+  type: ApplyType | "waitlist" | "newsletter" | "brands";
   onSuccess?: () => void;
 }
 

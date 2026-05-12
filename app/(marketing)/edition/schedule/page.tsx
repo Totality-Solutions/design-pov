@@ -1,18 +1,29 @@
-
 import ScheduleParagraph from "@/components/edition26/schedule/ScheculeParagraph";
 import DynamicScheduleGrid from "@/components/edition26/schedule/DynamicScheduleGrid";
-import CTAStrip from "@/components/common/CTAStrip";
-import PopupForm from "@/components/common/PopupForm";
 import DesignPovTicket from "@/components/edition26/schedule/DesignPovTicket";
 import ShowDeckCTA from "@/components/common/ShowDeckCTA";
+import { createServerClient } from "@/lib/supabase/server";
 
-const SchedulePage = () => {
+export const dynamic = "force-dynamic";
+
+async function getScheduleEvents() {
+  try {
+    const { data } = await createServerClient()
+      .from("schedule_events")
+      .select("id, title, subtitle, speakers, venue, start_time, end_time, day, is_invite_only, invite_only_link, image, partners, category_tag")
+      .order("day", { ascending: true })
+      .order("sort_order", { ascending: true });
+    return data ?? null;
+  } catch {
+    return null;
+  }
+}
+
+const SchedulePage = async () => {
+  const serverEvents = await getScheduleEvents();
 
   return (
     <main className="min-h-screen bg-white">
-      {/* Hero or Page Header could go here */}
-      
-      {/* The Schedule Intro Section */}
       <ScheduleParagraph
         title="Event Schedule"
         ctaLabel="Download Schedule"
@@ -20,7 +31,7 @@ const SchedulePage = () => {
         description1="A curated programme of conversations and gatherings, from panel discussions and fireside chats to invite-only moments, designed to extend the experience beyond the spaces."
         description2="Each session brings together distinct perspectives shaping how we think about design, culture, and collaboration."
       />
-      <DynamicScheduleGrid />
+      <DynamicScheduleGrid serverEvents={serverEvents} />
       <DesignPovTicket />
       <ShowDeckCTA />
     </main>

@@ -5,9 +5,26 @@ import { motion, AnimatePresence } from 'framer-motion';
 // import Image from 'next/image';
 import { Instagram, Linkedin, Globe, ArrowUpRight } from 'lucide-react';
 
-// --- IMPORT SCHEDULE DATA ---
+// --- IMPORT SCHEDULE DATA (fallback) ---
 import scheduleData from './Scheduledata';
 import CTABtn from '@/components/common/CTABtn';
+
+// --- SERVER EVENT TYPE (from Supabase) ---
+interface ScheduleEventRow {
+  id: string;
+  title: string;
+  subtitle: string | null;
+  speakers: Array<{ name: string; role?: string }> | null;
+  venue: string;
+  start_time: string;
+  end_time: string;
+  day: number;
+  is_invite_only: boolean;
+  invite_only_link: string | null;
+  image: string | null;
+  partners: string[] | null;
+  category_tag: string | null;
+}
 
 // --- TYPE DEFINITIONS ---
 interface DetailedEvent {
@@ -73,16 +90,57 @@ const convertScheduleData = (): Record<string, DayData> => {
   return result;
 };
 
-const SCHEDULE_STORE = convertScheduleData();
+// --- CONVERT SERVER EVENTS TO COMPONENT FORMAT ---
+const convertServerEvents = (events: ScheduleEventRow[]): Record<string, DayData> => {
+  const dayDateMap: Record<number, string>  = { 1: "15", 2: "16", 3: "17" };
+  const dayDigitMap: Record<number, string> = { 1: "01", 2: "02", 3: "03" };
+  const dayLabelMap: Record<number, string> = { 1: "15 May 2026", 2: "16 May 2026", 3: "17 May 2026" };
+
+  const result: Record<string, DayData> = {};
+  [1, 2, 3].forEach((d) => {
+    result[dayDateMap[d]] = { dayDigit: dayDigitMap[d], date: dayLabelMap[d], events: [] };
+  });
+
+  events.forEach((event) => {
+    const dateKey = dayDateMap[event.day];
+    if (!dateKey) return;
+    const eventNum = result[dateKey].events.length + 1;
+    const speakers  = (event.speakers ?? []).filter(s => s.role !== "moderator").map(s => s.name);
+    const moderator = (event.speakers ?? []).find(s => s.role === "moderator")?.name;
+    result[dateKey].events.push({
+      id:             `${String(eventNum).padStart(2, '0')}.`,
+      title:          event.title,
+      subtitle:       event.subtitle ?? (speakers.length > 0 ? speakers.join(", ") : ""),
+      // image:       event.image ?? undefined,   // IMAGE COLUMN — kept for future use, do not remove
+      time:           `${event.start_time} - ${event.end_time}`,
+      venue:          event.venue,
+      categoryTag:    event.category_tag ?? undefined,
+      partners:       event.partners ?? undefined,
+      speakers,
+      moderator,
+      isInviteOnly:   event.is_invite_only ?? false,
+      inviteOnlyLink: event.invite_only_link ?? undefined,
+      links:          { web: "#" },
+    });
+  });
+
+  return result;
+};
+
+const STATIC_STORE = convertScheduleData();
 const DATES = ["15", "16", "17"];
 
-const DynamicScheduleGrid = () => {
+const DynamicScheduleGrid = ({ serverEvents }: { serverEvents?: ScheduleEventRow[] | null }) => {
   const [activeDate, setActiveDate] = useState("15");
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (scrollRef.current) scrollRef.current.scrollTop = 0;
   }, [activeDate]);
+
+  const SCHEDULE_STORE = serverEvents && serverEvents.length > 0
+    ? convertServerEvents(serverEvents)
+    : STATIC_STORE;
 
   const currentData = SCHEDULE_STORE[activeDate];
 
