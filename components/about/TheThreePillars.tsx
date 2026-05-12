@@ -7,10 +7,7 @@ import CTAStrip from '@/components/common/CTAStrip';
 import CTABtn from '../common/CTABtn';
 import SectionHeading from '../common/SectionHeading';
 
-// Assets
-import Img1 from '@/public/temp/about/1600-x-1200.png'
-import Img2 from '@/public/temp/about/1600-x-1200.-1.png'
-import Img3 from '@/public/temp/about/build-partner.png'
+import { cdn } from '@/lib/cdn'
 
 interface Pillar {
   id: string;
@@ -26,7 +23,7 @@ const PILLAR_DATA: Pillar[] = [
     id: "arch",
     title: "Architect Firms (The Core):",
     description: "Shape the vision: translating ideas into immersive, narrative-led environments.",
-    image: Img1,
+    image: cdn('/temp/about/1600-x-1200.png'),
     buttonLabel: "Explore",
     buttonHref:"/edition/core"
   },
@@ -34,7 +31,7 @@ const PILLAR_DATA: Pillar[] = [
     id: "brand",
     title: "Home & Lifestyle Brands:",
     description: "Enable the narrative: bringing material, product, and innovation into context.",
-    image: Img2,
+    image: cdn('/temp/about/1600-x-1200.-1.png'),
     buttonLabel: "Explore",
     buttonHref:"/edition/brands"
   },
@@ -42,7 +39,7 @@ const PILLAR_DATA: Pillar[] = [
     id: "build",
     title: "Build Partners:",
     description: "Realise the vision: transforming concepts into precise, tangible spaces.",
-    image: Img3,
+    image: cdn('/temp/about/build-partner.png'),
     buttonLabel: "Explore",
     buttonHref:"/edition/theme"
   }

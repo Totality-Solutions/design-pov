@@ -6,11 +6,6 @@ import { motion, MotionValue } from "framer-motion";
 import Image from "next/image";
 
 
-// ✅ Import images locally (inside this file only)
-import img1 from "@/public/temp/home/theme/WEBSITE_THEME BANNER_1.jpg.jpeg";
-import img2 from "@/public/temp/home/theme/WEBSITE_THEME BANNER_2.jpg.jpeg";
-import img3 from "@/public/temp/home/theme/WEBSITE_THEME BANNER_3.jpg.jpeg";
-import img4 from "@/public/temp/home/theme/WEBSITE_THEME BANNER_4.jpg.jpeg";
 import Link  from "next/link";
 
 // ✅ Flexible Cell (image | video | empty for color)
@@ -79,7 +74,7 @@ const MasonryGrid = forwardRef<HTMLDivElement, MasonryGridProps>(
 
             {/* 01 IMAGE */}
             <div className="row-span-2">
-              <Cell type="image" src={img4} alt="Theme 1" />
+              <Cell type="image" src={cdn("/temp/home/theme/WEBSITE_THEME BANNER_4.jpg.jpeg")} alt="Theme 1" />
             </div>
 
             {/* 02 BRAND COLOR (KEEP) */}
@@ -89,7 +84,7 @@ const MasonryGrid = forwardRef<HTMLDivElement, MasonryGridProps>(
 
             {/* 03 IMAGE */}
             <div className="row-span-2">
-              <Cell type="image" src={img2} alt="Theme 2" />
+              <Cell type="image" src={cdn("/temp/home/theme/WEBSITE_THEME BANNER_2.jpg.jpeg")} alt="Theme 2" />
             </div>
 
             {/* 04 BRAND COLOR (KEEP) */}
@@ -99,7 +94,7 @@ const MasonryGrid = forwardRef<HTMLDivElement, MasonryGridProps>(
 
             {/* 05 IMAGE */}
             <div className="row-span-3">
-              <Cell type="image" src={img3} alt="Theme 3" />
+              <Cell type="image" src={cdn("/temp/home/theme/WEBSITE_THEME BANNER_3.jpg.jpeg")} alt="Theme 3" />
             </div>
 
             {/* 06 VIDEO EXAMPLE */}
@@ -124,7 +119,7 @@ const MasonryGrid = forwardRef<HTMLDivElement, MasonryGridProps>(
 
             {/* 10 FULL WIDTH IMAGE */}
             <div className="col-span-2">
-              <Cell type="image" src={img1} alt="Theme 6" />
+              <Cell type="image" src={cdn("/temp/home/theme/WEBSITE_THEME BANNER_1.jpg.jpeg")} alt="Theme 6" />
             </div>
 
           </div>

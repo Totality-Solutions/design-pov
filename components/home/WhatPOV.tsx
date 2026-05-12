@@ -4,40 +4,31 @@ import React, { useEffect, useRef, useState } from "react"
 import { motion, useScroll, useSpring, useTransform } from "framer-motion"
 import { Container } from "../common/Container"
 import MarqueeFlow from "../common/MarqueeFlow"
-import Image, { StaticImageData } from "next/image"
+import Image from "next/image"
 import Link from "next/link"
-
-import img1 from "@/public/temp/home/section2/1.jpg"
-import img2 from "@/public/temp/home/section2/2.jpg"
-import img3 from "@/public/temp/home/section2/3.jpg"
-import img4 from "@/public/temp/home/section2/4.jpg"
-import img5 from "@/public/temp/home/section2/5.jpg"
-import img6 from "@/public/temp/home/section2/6.jpg"
-import img7 from "@/public/temp/home/section2/7.jpg"
-import img8 from "@/public/temp/home/section2/8.jpg"
-import img9 from "@/public/temp/home/section2/9.jpg"
+import { cdn } from "@/lib/cdn"
 
 interface ArrivalItem {
   id: number;
-  img: string | StaticImageData;
+  img: string;
   title: string;
   href: string;
 }
 
 const NEW_ARRIVALS: ArrivalItem[] = [
-  { id: 1,  img: img1,                          title: 'Simply Dummy', href: '#' },
-  { id: 10, img: '/temp/home/section2/1.mp4',   title: 'Simply Dummy', href: '#' },
-  { id: 2,  img: img2,                          title: 'Dynamic Video', href: '#' },
-  { id: 11, img: '/temp/home/section2/2.mp4',   title: 'Simply Dummy', href: '#' },
-  { id: 3,  img: img3,                          title: 'Simply Dummy', href: '#' },
-  { id: 12, img: '/temp/home/section2/3.mp4',   title: 'Simply Dummy', href: '#' },
-  { id: 4,  img: img4,                          title: 'Simply Dummy', href: '#' },
-  { id: 13, img: '/temp/home/section2/4.mp4',   title: 'Simply Dummy', href: '#' },
-  { id: 5,  img: img5,                          title: 'Simply Dummy', href: '#' },
-  { id: 6,  img: img6,                          title: 'Simply Dummy', href: '#' },
-  { id: 7,  img: img7,                          title: 'Simply Dummy', href: '#' },
-  { id: 8,  img: img8,                          title: 'Simply Dummy', href: '#' },
-  { id: 9,  img: img9,                          title: 'Simply Dummy', href: '#' },
+  { id: 1,  img: cdn('/temp/home/section2/1.jpg'),   title: 'Simply Dummy', href: '#' },
+  { id: 10, img: cdn('/temp/home/section2/1.mp4'),   title: 'Simply Dummy', href: '#' },
+  { id: 2,  img: cdn('/temp/home/section2/2.jpg'),   title: 'Dynamic Video', href: '#' },
+  { id: 11, img: cdn('/temp/home/section2/2.mp4'),   title: 'Simply Dummy', href: '#' },
+  { id: 3,  img: cdn('/temp/home/section2/3.jpg'),   title: 'Simply Dummy', href: '#' },
+  { id: 12, img: cdn('/temp/home/section2/3.mp4'),   title: 'Simply Dummy', href: '#' },
+  { id: 4,  img: cdn('/temp/home/section2/4.jpg'),   title: 'Simply Dummy', href: '#' },
+  { id: 13, img: cdn('/temp/home/section2/4.mp4'),   title: 'Simply Dummy', href: '#' },
+  { id: 5,  img: cdn('/temp/home/section2/5.jpg'),   title: 'Simply Dummy', href: '#' },
+  { id: 6,  img: cdn('/temp/home/section2/6.jpg'),   title: 'Simply Dummy', href: '#' },
+  { id: 7,  img: cdn('/temp/home/section2/7.jpg'),   title: 'Simply Dummy', href: '#' },
+  { id: 8,  img: cdn('/temp/home/section2/8.jpg'),   title: 'Simply Dummy', href: '#' },
+  { id: 9,  img: cdn('/temp/home/section2/9.jpg'),   title: 'Simply Dummy', href: '#' },
 ];
 
 const text1 = `Design POV is a curated platform that brings together multiple disciplines to explore how design is lived, not just displayed.`

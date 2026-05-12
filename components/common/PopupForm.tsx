@@ -6,7 +6,7 @@ import { FiX } from "react-icons/fi";
 import CTABtn from "./CTABtn";
 import { cdn } from "@/lib/cdn";
 
-const SHOW_DECK_PDF = "/pdf/POV '25 Show Deck.pdf";
+const SHOW_DECK_PDF = cdn("/pdf/POV '25 Show Deck.pdf");
 
 interface PopupFormProps {
   isOpen: boolean;

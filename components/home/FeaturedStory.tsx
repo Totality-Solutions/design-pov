@@ -120,6 +120,7 @@ export default function MarqueeCarousel() {
                     src={reversedBlogs[prevIndex].image}
                     alt=""
                     priority
+                    fill
                   />
                 )}
                 <Image
@@ -128,6 +129,7 @@ export default function MarqueeCarousel() {
                   src={current.image}
                   alt={current.title}
                   priority
+                  fill
                 />
               </div>
             </div>
@@ -142,7 +144,7 @@ export default function MarqueeCarousel() {
                   className={`thumb-item${i === activeIndex ? " active" : ""}`}
                   onClick={() => goTo(i)}
                 >
-                  <Image src={s.thumbnail} alt={s.title} loading="lazy" />
+                  <Image src={s.thumbnail} alt={s.title} fill loading="lazy" />
                 </div>
               ))}
             </div>

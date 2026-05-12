@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
+import { cdn } from "@/lib/cdn";
 import Image from "next/image";
 import { FiChevronLeft, FiX } from "react-icons/fi";
 import CTABtn from "../common/CTABtn";
@@ -76,7 +77,7 @@ export default function MagazineBase({
         {/* HERO IMAGE SECTION */}
         <div className={isInnerPage ? "relative w-full h-[60vh] md:h-[80vh]" : "sticky top-20 lg:top-0 h-[50vh] lg:h-full w-full overflow-hidden z-0"}>
           <Image
-            src={activeBlog.image || "/temp/home/blogs/blog-16.jpg"}
+            src={activeBlog.image || cdn("/temp/home/blogs/blog-16.jpg")}
             alt={activeBlog.title}
             fill
             priority

@@ -6,8 +6,7 @@
 // import React from "react";
 // import Image from "next/image";
 // import Link from "next/link";
-// import Logo from "@/public/logo/Logo.svg";
-
+// 
 // import CTABtn from "../common/CTABtn";
 // import { Container } from "../common/Container";
 // import { NAV_DATA, NAV_LABELS } from "@/app/constants/navigation";
@@ -260,7 +259,6 @@ import Link from "next/link";
 import {motion, AnimatePresence} from "framer-motion";
 // 1. Import usePathname to detect current route
 import { usePathname } from "next/navigation"; 
-import Logo from "@/public/logo/Logo.svg";
 import Menu from "@/components/icons/Menu.svg";
 import Close from "@/components/icons/Menu-close.svg";
 
@@ -342,7 +340,7 @@ export default function Navbar() {
             <div className="flex-shrink-0 relative z-[2101]">
               <Link href="/" onClick={() => setMobileOpen(false)}>
                 <Image
-                  src={Logo}
+                  src={cdn("/logo/Logo.svg")}
                   alt="Design POV"
                   width={220}
                   height={40}
@@ -576,7 +574,7 @@ export default function Navbar() {
             })}
             <Link href="https://povindex.designpovindia.com/home" target="_blank" className="flex items-center justify-center  ">
           <Image
-                          src="/qr/Ticket.svg" // your custom icon
+                          src={cdn("/qr/Ticket.svg")}
                           alt="toggle"
                           width={1000}
                           height={100}

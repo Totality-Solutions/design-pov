@@ -2,6 +2,7 @@
 
 import React, { useState, useRef } from "react";
 import Image from "next/image";
+import { cdn } from "@/lib/cdn";
 import SectionHeading from "../common/SectionHeading";
 import CTABtn from "../common/CTABtn";
 import { useHubspotForm } from "@/hooks/useHubspotForm";
@@ -27,12 +28,12 @@ export default function ParticipationForm() {
   });
 
   let imageMap: Record<string, any> = {
-    Core: "/temp/home/ecosystem/N1.jpg",
-    Circle: "/temp/home/ecosystem/N-3.jpg",
-    Objects: "/temp/home/ecosystem/OBJECT.jpeg",
-    Elevate: "/temp/home/ecosystem/N-2.jpg",
-    Brands: "/temp/ecosystem/brand-hero.png",
-    Partnership: "/temp/about/3.png",
+    Core: cdn("/temp/home/ecosystem/N1.jpg"),
+    Circle: cdn("/temp/home/ecosystem/N-3.jpg"),
+    Objects: cdn("/temp/home/ecosystem/OBJECT.jpeg"),
+    Elevate: cdn("/temp/home/ecosystem/N-2.jpg"),
+    Brands: cdn("/temp/ecosystem/brand-hero.png"),
+    Partnership: cdn("/temp/about/3.png"),
   };
 
   let options = [

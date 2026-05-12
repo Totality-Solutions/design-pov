@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
+import Image from "next/image";
 
 interface Logo {
   src: string;
@@ -117,10 +118,13 @@ export default function BrandLogo({
 
       <div className="h-32 flex items-center justify-center w-full border-b border-gray-200">
 
-        <img
+        <Image
           src={logo.src}
           alt={logo.name}
-          className="w-full h-full max-w-[180px] object-contain"
+          width={180}
+          height={80}
+          className="max-w-[180px] object-contain"
+          unoptimized
         />
 
       </div>
