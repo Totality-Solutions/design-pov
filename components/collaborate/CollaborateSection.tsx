@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { ArrowUpRight, ArrowLeft, ArrowRight, X } from "lucide-react";  
 import CTABtn from "../common/CTABtn";
+import CollaborateGallary from "./CollaborateGallary";
 
 const images = [
 '/temp/collaborate/brand1.jpeg',
@@ -77,15 +78,16 @@ const CollaborateSection = () => {
   return (
     <>
       {/* ===== SECTION ===== */}
+      <div className="lg:flex">
       <section className="w-full bg-white pt-6 lg:pt-24 lg:pb-16 px-6 md:px-10 lg:px-10">
 
-        <div className="flex flex-col gap-6 lg:gap-10">
+        <div className="flex flex-col  justify-center h-full gap-6 lg:gap-10">
 
           {/* Header */}
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 text-left ">
               <h2 className="text-3xl md:text-4xl font-bold font-[Montserrat]">
-                Collaborate
+                Contribute to the Dialogue
               </h2>
               {/* <ArrowUpRight className="w-5 h-5 mb-4 stroke-[1.5]" /> */}
             </div>
@@ -108,7 +110,7 @@ const CollaborateSection = () => {
           </div>
 
           {/* Content */}
-          <div className="grid md:grid-cols-[1.3fr_1fr] gap-8 text-black text-base md:text-lg leading-relaxed font-[Montserrat]">
+          <div className="grid gap-8 text-black text-base md:text-lg leading-relaxed font-[Montserrat]">
             <p>
               From immersive spaces to conversations, objects, and extensions beyond the show - Design POV is an ecosystem shaped by many voices.
               If you’d like to be part of it, we’d like to hear from you.
@@ -119,26 +121,27 @@ const CollaborateSection = () => {
           </div>
         </div>
       </section>
-
+      
       {/* ===== MARQUEE ===== */}
       <div
-        className="relative mt-14 overflow-hidden"
+        className="relative w-full mt-14 "
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
         <div
-          ref={trackRef}
-          className="flex gap-3 md:gap-2 will-change-transform"
+          // ref={trackRef}
+          className="w-full flex gap-3 md:gap-2 will-change-transform"
         >
-          {duplicatedImages.map((img, i) => (
-            <div key={i} className="relative group flex-shrink-0">
+          {/* {duplicatedImages.map((img, i) => ( */}
+            {/* <div className="relative group flex-shrink-0"> */}
 
               {/* ✅ NATURAL WIDTH */}
-              <img
+               {/* <img
                 src={img}
                 alt=""
                 className="h-32 md:h-40 w-auto object-cover flex-shrink-0 transition-transform duration-500 "
-              />
+              /> */}
+             <CollaborateGallary Images={duplicatedImages}/>
 
               {/* Overlay */}
               {/* <div className="absolute inset-0 bg-black/50 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition flex items-center justify-center">
@@ -153,13 +156,12 @@ const CollaborateSection = () => {
                 </button>
               </div> */}
 
-            </div>
-          ))}
+            {/* </div> */}
         </div>
 
         <div className="mt-4 border-t border-neutral-200"></div>
       </div>
-
+</div>
       {/* ===== LIGHTBOX ===== */}
       {lightboxOpen && (
         <div className="fixed inset-0 bg-black/70 backdrop-blur-md z-[9999] flex items-center justify-center">

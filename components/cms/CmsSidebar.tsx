@@ -11,6 +11,7 @@ const links = [
   { href: "/cms/pov-mail",    label: "POV Mail" },
   { href: "/cms/submissions", label: "Submissions" },
   { href: "/cms/blogs",       label: "Blogs" },
+  { href: "/cms/schedule",    label: "Schedule" },
   { href: "/cms/theme",       label: "Theme" },
 ];
 

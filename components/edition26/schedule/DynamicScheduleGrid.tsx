@@ -5,9 +5,26 @@ import { motion, AnimatePresence } from 'framer-motion';
 // import Image from 'next/image';
 import { Instagram, Linkedin, Globe, ArrowUpRight } from 'lucide-react';
 
-// --- IMPORT SCHEDULE DATA ---
+// --- IMPORT SCHEDULE DATA (fallback) ---
 import scheduleData from './Scheduledata';
 import CTABtn from '@/components/common/CTABtn';
+
+// --- SERVER EVENT TYPE (from Supabase) ---
+interface ScheduleEventRow {
+  id: string;
+  title: string;
+  subtitle: string | null;
+  speakers: Array<{ name: string; role?: string }> | null;
+  venue: string;
+  start_time: string;
+  end_time: string;
+  day: number;
+  is_invite_only: boolean;
+  invite_only_link: string | null;
+  image: string | null;
+  partners: string[] | null;
+  category_tag: string | null;
+}
 
 // --- TYPE DEFINITIONS ---
 interface DetailedEvent {
@@ -22,6 +39,7 @@ interface DetailedEvent {
   speakers: string[];
   moderator?: string;
   isInviteOnly: boolean;
+  inviteOnlyLink?: string;
   links: { ig?: string; li?: string; web?: string };
 }
 
@@ -58,6 +76,7 @@ const convertScheduleData = (): Record<string, DayData> => {
       speakers:    event.speakers.filter(s => s.role !== "moderator").map(s => s.name),
       moderator:   event.speakers.find(s => s.role === "moderator")?.name,
       isInviteOnly: event.isInviteOnly ?? false,
+      inviteOnlyLink: event.inviteOnlyLink,
       links:       { web: "#" }
     }));
 
@@ -71,16 +90,57 @@ const convertScheduleData = (): Record<string, DayData> => {
   return result;
 };
 
-const SCHEDULE_STORE = convertScheduleData();
+// --- CONVERT SERVER EVENTS TO COMPONENT FORMAT ---
+const convertServerEvents = (events: ScheduleEventRow[]): Record<string, DayData> => {
+  const dayDateMap: Record<number, string>  = { 1: "15", 2: "16", 3: "17" };
+  const dayDigitMap: Record<number, string> = { 1: "01", 2: "02", 3: "03" };
+  const dayLabelMap: Record<number, string> = { 1: "15 May 2026", 2: "16 May 2026", 3: "17 May 2026" };
+
+  const result: Record<string, DayData> = {};
+  [1, 2, 3].forEach((d) => {
+    result[dayDateMap[d]] = { dayDigit: dayDigitMap[d], date: dayLabelMap[d], events: [] };
+  });
+
+  events.forEach((event) => {
+    const dateKey = dayDateMap[event.day];
+    if (!dateKey) return;
+    const eventNum = result[dateKey].events.length + 1;
+    const speakers  = (event.speakers ?? []).filter(s => s.role !== "moderator").map(s => s.name);
+    const moderator = (event.speakers ?? []).find(s => s.role === "moderator")?.name;
+    result[dateKey].events.push({
+      id:             `${String(eventNum).padStart(2, '0')}.`,
+      title:          event.title,
+      subtitle:       event.subtitle ?? (speakers.length > 0 ? speakers.join(", ") : ""),
+      // image:       event.image ?? undefined,   // IMAGE COLUMN — kept for future use, do not remove
+      time:           `${event.start_time} - ${event.end_time}`,
+      venue:          event.venue,
+      categoryTag:    event.category_tag ?? undefined,
+      partners:       event.partners ?? undefined,
+      speakers,
+      moderator,
+      isInviteOnly:   event.is_invite_only ?? false,
+      inviteOnlyLink: event.invite_only_link ?? undefined,
+      links:          { web: "#" },
+    });
+  });
+
+  return result;
+};
+
+const STATIC_STORE = convertScheduleData();
 const DATES = ["15", "16", "17"];
 
-const DynamicScheduleGrid = () => {
+const DynamicScheduleGrid = ({ serverEvents }: { serverEvents?: ScheduleEventRow[] | null }) => {
   const [activeDate, setActiveDate] = useState("15");
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (scrollRef.current) scrollRef.current.scrollTop = 0;
   }, [activeDate]);
+
+  const SCHEDULE_STORE = serverEvents && serverEvents.length > 0
+    ? convertServerEvents(serverEvents)
+    : STATIC_STORE;
 
   const currentData = SCHEDULE_STORE[activeDate];
 
@@ -152,14 +212,14 @@ const DynamicScheduleGrid = () => {
               currentData.events.map((event, idx) => (
                 <div
                   key={event.id}
-                  className="grid grid-row lg:grid-cols-[1fr_1.2fr_0.6fr_180px] min-w-[full] lg:min-w-[900px] lg:py-0 py-10 border-b border-black/20 lg:border lg:border-gray-100 group"
+                  className="grid grid-cols-1 lg:grid-cols-[1fr_1.2fr_0.6fr_180px] min-w-[full] lg:min-w-[900px] lg:py-0 py-10 border-b border-black/20 lg:border lg:border-gray-100 group"
                 >
-                  {/* Left Column — Event Info (original design) */}
-                  <div className="px-6 py-3 lg:p-12 flex flex-col gap-6 lg:border lg:border-gray-100">
+                  {/* Col 1 — Event number + Title + Subtitle */}
+                  <div className="px-6 py-3 lg:p-12 flex flex-col gap-6 lg:border-r lg:border-gray-100">
                     <span className="text-5xl font-semibold tracking-tighter">{event.id}</span>
                     <div>
                       <h3 className="text-2xl font-semibold text-black mb-2">{event.title}</h3>
-                      <div className="flex flex-col justify-center gap-3 lg:border-l lg:border-gray-100">
+                     <div className="flex flex-col justify-center gap-4 lg:border-r lg:border-gray-100">
                     <div>
                       <span className="text-[14px] font-medium text-zinc-400 block mb-1 font-['Montserrat']">Venue</span>
                       <p className="text-sm font-medium text-primary-blue">{event.venue}</p>
@@ -180,14 +240,13 @@ const DynamicScheduleGrid = () => {
                     </div>
                   </div>
 
-                  {/* 2nd Column — Time & Details (original design) */}
-                  <div className="px-6 py-3 lg:p-12 flex flex-col justify-between">
+                  {/* Col 2 — Time + Speakers + Moderator */}
+                  <div className="px-6 py-3 lg:p-12 flex flex-col justify-between lg:border-r lg:border-gray-100">
                     <div className="flex justify-between items-start">
                       <span className="text-sm font-semibold tracking-tight">{event.time}</span>
                     </div>
 
                     <div className="mt-0 lg:mt-8 mb-4 lg:mb-0">
-                      {/* Speakers */}
                       {event.speakers.length > 0 && (
                         <div className="mb-4">
                           <span className="text-[14px] font-medium text-zinc-400 block mb-1 font-['Montserrat']">
@@ -198,8 +257,6 @@ const DynamicScheduleGrid = () => {
                           </p>
                         </div>
                       )}
-
-                      {/* Moderator */}
                       {event.moderator && (
                         <div>
                           <span className="text-[14px] font-medium text-zinc-400 block mb-1 font-['Montserrat']">
@@ -211,11 +268,11 @@ const DynamicScheduleGrid = () => {
                     </div>
                   </div>
 
-                  {/* 3rd Column — Venue + Category + Partners */}
+                  {/* Col 3 — Venue + Category + Partners */}
                   
 
-                  {/* 4th Column — Image (commented) + Invite Only button */}
-                  <div className="px-6 py-3 lg:p-12 flex flex-col items-start lg:items-center justify-center gap-4 lg:border-l lg:border-gray-100">
+                  {/* Col 4 — Image (commented) + Invite Only button */}
+                  <div className="px-6 py-3 lg:p-12 flex flex-col items-start lg:items-center justify-center gap-4">
 
                     {/* IMAGE COLUMN — commented out, do not remove
                     <div className="relative w-full h-28 overflow-hidden">
@@ -243,7 +300,7 @@ const DynamicScheduleGrid = () => {
                         bottomKey2Width="12px"
                         bottomKey1Right="50px"
                         bottomKey2Right="15px"
-                        href="#"
+                        href={event.inviteOnlyLink}
                       />
                     )}
                   </div>

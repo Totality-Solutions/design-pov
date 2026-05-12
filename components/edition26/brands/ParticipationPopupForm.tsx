@@ -18,7 +18,7 @@ export default function ParticipationPopupForm({ onClose }: ParticipationPopupFo
   const formRef = useRef<HTMLFormElement>(null);
 
   const { submit, loading, success, error } = useHubspotForm({
-    type: "exhibit",
+    type: "brands",
     onSuccess: () => {
       setSelectedOption("");
       setFileName("");
@@ -28,10 +28,23 @@ export default function ParticipationPopupForm({ onClose }: ParticipationPopupFo
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      setFileName(file.name);
-    }
+    if (file) setFileName(file.name);
   };
+
+  async function handleSubmit(e?: React.MouseEvent) {
+    if (e) e.preventDefault();
+    if (loading || !formRef.current) return;
+    if (!formRef.current.reportValidity()) return;
+
+    const formData = new FormData(formRef.current);
+    await submit({
+      name:     formData.get("fullname") as string,
+      email:    formData.get("email") as string,
+      contact:  formData.get("contact") as string,
+      category: selectedOption,
+      fileName,
+    });
+  }
 
   const options = ["Core", "Circle", "Objects", "Elevate", "Brands", "Partnership"];
 
@@ -150,13 +163,8 @@ export default function ParticipationPopupForm({ onClose }: ParticipationPopupFo
 
             {/* Submit Button Section */}
             <div className="pt-4 pb-6">
-              <div 
-                onClick={(e) => { 
-                  if (!loading) {
-                    e.preventDefault(); 
-                    submit({ name: 'form', fileName }); 
-                  }
-                }} 
+              <div
+                onClick={handleSubmit}
                 className={`w-fit ${loading ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
               >
                 <CTABtn 

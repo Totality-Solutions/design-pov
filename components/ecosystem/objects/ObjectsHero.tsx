@@ -8,7 +8,7 @@ import { UnderlineText } from "@/components/common/Underlinetext";
 
 export default function ObjectsHero() {
   return (
-    <section className="w-full h-fit bg-pov-white">
+    <section className="w-full h-full bg-pov-white">
       {/* TEXT SECTION: Clean horizontal layout with border */}
 
     <div className="w-full pt-10 lg:pt-20">

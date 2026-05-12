@@ -34,12 +34,45 @@ const coverImageMap: Record<number, string> = {
   27: "/temp/magazine/27/blog-27-1.jpeg",
   28: "/temp/magazine/28/blog-28-1.jpeg",
   29: "/temp/magazine/29/blog-29-1.jpg",
+  30: "/temp/magazine/30/blog-30-1.png",
+  31: "/temp/magazine/31/blog-31-1.png",
+  32: "/temp/magazine/32/blog-32-1.jpeg",
 };
+
+function buildRow(blog: (typeof blogs)[number]) {
+  const coverImage = coverImageMap[blog.id] ?? null;
+  const detailedContent = (blog.detailedContent ?? []).map((block) => ({
+    type:  block.type,
+    value: typeof block.value === "string" ? block.value : (block.value as any)?.src ?? null,
+    ...("title"   in block && block.title   ? { title:   block.title   } : {}),
+    ...("caption" in block && block.caption ? { caption: block.caption } : {}),
+  }));
+
+  return {
+    title:               blog.title,
+    slug:                blog.slug,
+    subtitle:            blog.subtitle ?? null,
+    description:         blog.description ?? null,
+    category:            blog.category,
+    category_display:    (blog as any).categoryDisplay ?? null,
+    author:              blog.author,
+    date:                blog.date,
+    is_featured:         blog.isFeatured ?? false,
+    status:              "published",
+    image:               coverImage,
+    thumbnail:           coverImage,
+    featured_paragraphs: blog.featuredParagraphs ?? [],
+    detailed_content:    detailedContent,
+    updated_at:          new Date().toISOString(),
+    created_at:          new Date(blog.date).toString() !== "Invalid Date"
+                           ? new Date(blog.date).toISOString()
+                           : new Date().toISOString(),
+  };
+}
 
 export async function POST() {
   const supabase = createServerClient();
 
-  // Check table exists by doing a dry-run select
   const { error: tableErr } = await supabase.from("blogs").select("id").limit(1);
   if (tableErr) {
     return NextResponse.json(
@@ -48,44 +81,17 @@ export async function POST() {
     );
   }
 
-  const { data: existing } = await supabase.from("blogs").select("slug");
-  const existingSlugs = new Set((existing ?? []).map((r) => r.slug));
-
-  const results = { inserted: 0, skipped: 0, errors: [] as string[] };
+  const results = { upserted: 0, errors: [] as string[] };
 
   for (const blog of blogs) {
-    if (existingSlugs.has(blog.slug)) { results.skipped++; continue; }
+    const row = buildRow(blog);
 
-    const coverImage = coverImageMap[blog.id] ?? null;
-    const detailedContent = (blog.detailedContent ?? []).map((block) => ({
-      type: block.type,
-      value: typeof block.value === "string" ? block.value : (block.value as any)?.src ?? null,
-      ...("title"   in block && block.title   ? { title: block.title }     : {}),
-      ...("caption" in block && block.caption ? { caption: block.caption } : {}),
-    }));
-
-    const { error } = await supabase.from("blogs").insert({
-      title:               blog.title,
-      slug:                blog.slug,
-      subtitle:            blog.subtitle ?? null,
-      description:         blog.description ?? null,
-      category:            blog.category,
-      category_display:    (blog as any).categoryDisplay ?? null,
-      author:              blog.author,
-      date:                blog.date,
-      is_featured:         blog.isFeatured ?? false,
-      status:              "published",
-      image:               coverImage,
-      thumbnail:           coverImage,
-      featured_paragraphs: blog.featuredParagraphs ?? [],
-      detailed_content:    detailedContent,
-      created_at:          new Date(blog.date).toString() !== "Invalid Date"
-                             ? new Date(blog.date).toISOString()
-                             : new Date().toISOString(),
-    });
+    const { error } = await supabase
+      .from("blogs")
+      .upsert(row, { onConflict: "slug" });
 
     if (error) results.errors.push(`Blog ${blog.id} (${blog.slug}): ${error.message}`);
-    else results.inserted++;
+    else results.upserted++;
   }
 
   return NextResponse.json(results);
