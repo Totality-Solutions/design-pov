@@ -51,7 +51,7 @@ function Cell({
   if (type === "image" && src) {
     return (
       <div className="relative w-full h-full">
-        <Image src={src} alt={alt || ""} fill className="object-cover" />
+        <Image src={src} alt={alt || ""} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover" />
       </div>
     );
   }
