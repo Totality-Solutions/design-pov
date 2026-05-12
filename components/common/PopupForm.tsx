@@ -4,8 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { FiX } from "react-icons/fi";
 import CTABtn from "./CTABtn";
-
-import LogoImage from "@/public/logo/Logo.svg";
+import { cdn } from "@/lib/cdn";
 
 const SHOW_DECK_PDF = "/pdf/POV '25 Show Deck.pdf";
 
@@ -92,7 +91,7 @@ export default function PopupForm({ isOpen, onClose }: PopupFormProps) {
               <div className="flex-grow flex items-center justify-center">
                 <div className="relative w-40 h-20 md:w-80 md:h-40 opacity-90">
                   <Image
-                    src={LogoImage}
+                    src={cdn("/logo/Logo.svg")}
                     alt="Design POV Logo"
                     fill
                     priority
