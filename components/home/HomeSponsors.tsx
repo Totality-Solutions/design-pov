@@ -61,13 +61,13 @@ const HomeSponsors: React.FC = () => {
           {partners.map((partner) => (
             <div
               key={partner.id}
-              className="relative aspect-[9/4] lg:aspect-[6/3] flex items-center justify-center p-6 lg:p-2 transition-colors duration-300 hover:bg-gray-50/50 overflow-hidden"
+              className="relative aspect-[9/4] lg:aspect-[6/3] flex items-center justify-center p-8 lg:p-2 transition-colors duration-300 hover:bg-gray-50/50 overflow-hidden"
             >
 
               {/* TEXT */}
               <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10 text-center w-full px-4">
 
-                <h4 className="text-black text-[9px] md:text-[12px] font-medium leading-tight tracking-wide uppercase">
+                <h4 className="text-black text-[12px] font-medium leading-tight tracking-wide uppercase">
                   {partner.name}
                 </h4>
 

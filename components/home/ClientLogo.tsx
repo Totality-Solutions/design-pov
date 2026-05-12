@@ -10,7 +10,7 @@ const ClientLogo = () => {
   const trackRef = useRef<HTMLDivElement>(null);
   const firstGroupRef = useRef<HTMLDivElement>(null);
 
-  const Client = Array.from({ length: 48 }, (_, i) => i + 1).map((id) => ({
+  const Client = Array.from({ length: 65 }, (_, i) => i + 1).map((id) => ({
     src: `/temp/edition/brands/${id}.png`,
     alt: `Client Logo ${id}`,
   }));

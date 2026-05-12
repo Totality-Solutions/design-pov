@@ -85,7 +85,7 @@ export default function MagazineNav({ activeCategory, setActiveCategory }: NavPr
                 relative flex items-center justify-center transition-colors duration-300
                 font-['Montserrat'] text-[16px] leading-[24px] outline-none cursor-pointer
                 ${isFirst ? "py-[15px] pr-[28px] border-r border-[#DDDDDD] font-normal" : "px-[30px] py-[15px] font-normal"}
-                ${isFirst ? "text-black opacity-100" : (isHovered || isActive) ? "text-primary-red font-semibold opacity-100" : "text-black opacity-50"}
+                ${isFirst ? "text-black opacity-100" : (isHovered || isActive) ? "text-primary-red font-semibold opacity-100" : "text-black"}
               `}
             >
               {item.label}

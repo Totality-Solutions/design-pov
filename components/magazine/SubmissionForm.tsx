@@ -80,14 +80,14 @@ export default function MagazineSubmissionForm() {
           <div className='py-8'>
             <div className="flex flex-col gap-2">
               <label className="text-[15px] text-black/50 font-medium">Full Name <span className="text-red-600">*</span></label>
-              <input type="text" placeholder="@Name" value={name} onChange={(e) => setName(e.target.value)} className="border-b border-black/20 py-2 text-[#000000] outline-none text-[13px] font-medium transition-colors focus:border-primary-blue" />
+              <input type="text" placeholder="Full Name" value={name} onChange={(e) => setName(e.target.value)} className="border-b border-black/20 py-2 text-[#000000] outline-none text-[13px] font-medium transition-colors focus:border-primary-blue" />
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2  gap-x-12 gap-y-12 mb-8">
             <div className="flex flex-col gap-2">
               <label className="text-[15px] text-black/50 font-medium">Email <span className="text-red-600">*</span></label>
-              <input type="email" placeholder="info@yourdomain.com" value={email} onChange={(e) => setEmail(e.target.value)} className="border-b border-black/20 py-2 text-[#000000] outline-none text-[13px] font-medium transition-colors focus:border-primary-blue" />
+              <input type="email" placeholder="xyz@gmail.com" value={email} onChange={(e) => setEmail(e.target.value)} className="border-b border-black/20 py-2 text-[#000000] outline-none text-[13px] font-medium transition-colors focus:border-primary-blue" />
             </div>
 
             <div className="flex flex-col gap-2">
@@ -105,13 +105,13 @@ export default function MagazineSubmissionForm() {
               <label className="text-[15px] text-black/50 font-medium block">Doc Upload <span className="text-red-600">*</span></label>
               <div className="flex flex-col gap-4">
                 {!docName ? (
-                  <label className="cursor-pointer border border-black/20 px-8 py-2 my-4 rounded-sm flex items-center gap-3 hover:bg-gray-50 transition-colors w-fit">
+                  <label className="cursor-pointer border border-black/20 px-8 py-2 my-4 r flex items-center gap-3 hover:bg-gray-50 transition-colors w-fit">
                     <span className="text-[15px] text-black/60">Upload file</span>
                     <input type="file" accept=".pdf,.doc,.docx" className="hidden" onChange={(e) => handleFileChange(e, 'doc')} />
                   </label>
                 ) : (
-                  <div className="flex items-center gap-4 border border-black/10 p-2 pr-4 my-2 bg-gray-50 w-fit">
-                    <div className="bg-blue-800 text-white px-2 py-1 rounded-sm text-[10px] font-bold uppercase">Doc</div>
+                  <div className="flex items-center gap-4 border border-black/10 p-2 pr-4 my-4 bg-gray-50 w-fit">
+                    {/* <div className="bg-blue-800 text-white px-2 py-1 rounded-sm text-[10px] font-bold uppercase">Doc</div> */}
                     <span className="text-[15px] text-black max-w-[200px] truncate">{docName}</span>
                     <button type="button" onClick={() => setDocName("")} className="text-red-500 text-[12px] ml-4 hover:underline">Remove</button>
                   </div>
@@ -124,13 +124,13 @@ export default function MagazineSubmissionForm() {
               <label className="text-[15px] text-black/50 font-medium block">Image Upload </label>
               <div className="flex flex-col gap-4">
                 {!imgName ? (
-                  <label className="cursor-pointer border border-black/20 px-8 py-2 my-4 rounded-sm flex items-center gap-3 hover:bg-gray-50 transition-colors w-fit">
+                  <label className="cursor-pointer border border-black/20 px-8 py-2 my-4 flex items-center gap-3 hover:bg-gray-50 transition-colors w-fit">
                     <span className="text-[15px] text-black/60">Upload image</span>
                     <input type="file" accept="image/*" className="hidden" onChange={(e) => handleFileChange(e, 'img')} />
                   </label>
                 ) : (
-                  <div className="flex items-center gap-4 border border-black/10 p-2 pr-4 my-2 bg-gray-50 w-fit">
-                    <div className="bg-green-700 text-white px-2 py-1 rounded-sm text-[10px] font-bold uppercase">Img</div>
+                  <div className="flex items-center gap-4 border border-black/10 p-2 pr-4 my-4 bg-gray-50 w-fit">
+                    {/* <div className="bg-green-700 text-white px-2 py-1 rounded-sm text-[10px] font-bold uppercase">Img</div> */}
                     <span className="text-[15px] text-black max-w-[200px] truncate">{imgName}</span>
                     <button type="button" onClick={() => setImgName("")} className="text-red-500 text-[12px] ml-4 hover:underline">Remove</button>
                   </div>

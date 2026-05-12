@@ -65,7 +65,7 @@ const CoreForm = () => {
             <div className="flex flex-col gap-2">
               <label className="text-[15px] text-black/50 font-medium">Email :</label>
               {/* Added 'name' attribute */}
-              <input name="email" type="email" required placeholder="info@yourdomain.com" className="border-b border-black/20 py-2 text-[#000000] outline-none text-[13px] font-medium transition-colors" />
+              <input name="email" type="email" required placeholder="xyz@gmail.com" className="border-b border-black/20 py-2 text-[#000000] outline-none text-[13px] font-medium transition-colors" />
             </div>
 
             <div className="flex flex-col gap-2">

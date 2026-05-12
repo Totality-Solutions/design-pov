@@ -13,6 +13,22 @@ export type CoreItem = {
 export const themeData: CoreItem[] = [
   {
     id: "01",
+    src: "/temp/home/core/Abin.jpg",
+    label: "Abin Design Studio",
+    architects:[
+      "Abin Chaudhury"
+    ],
+    description: "In today’s context of compressed urban living—where apartments are multifunctional and the boundary between inside and outside has become a luxury—the courtyard garden feels almost radical, even utopian. Yet Abin Design Studio treats it not as an exception, but as an essential gesture, where even the smallest courtyard—a shaft of sky, a potted garden, or a narrow green threshold—carries the same soulfulness. Scale does not diminish its impact; a single tree can still hold the centre, inviting pause, orientation, and the feeling of place over mere room. The pavilion quietly asserts that the soul of a space is defined not by its square footage, but by the quality of connection it offers.",
+    // additionalImages: [
+    //   "/temp/home/core/ABIN_1.jpg",
+    // ],
+    logo: "/temp/edition/core-logo/ads.png",
+    website: "https://www.abindesignstudio.com/",
+    instagram: "https://www.instagram.com/abindesign_studio?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
+  },
+
+  {
+    id: "02",
     src: "/temp/home/core/ADND.jpg",
     label: "ADND",
     architects:[
@@ -28,21 +44,6 @@ export const themeData: CoreItem[] = [
     instagram: "https://www.instagram.com/adnd_studio/"
   },
   
-  {
-    id: "02",
-    src: "/temp/home/core/Abin.jpg",
-    label: "Abin Design Studio",
-    architects:[
-      "Abin Chaudhury"
-    ],
-    description: "In today’s context of compressed urban living—where apartments are multifunctional and the boundary between inside and outside has become a luxury—the courtyard garden feels almost radical, even utopian. Yet Abin Design Studio treats it not as an exception, but as an essential gesture, where even the smallest courtyard—a shaft of sky, a potted garden, or a narrow green threshold—carries the same soulfulness. Scale does not diminish its impact; a single tree can still hold the centre, inviting pause, orientation, and the feeling of place over mere room. The pavilion quietly asserts that the soul of a space is defined not by its square footage, but by the quality of connection it offers.",
-    // additionalImages: [
-    //   "/temp/home/core/ABIN_1.jpg",
-    // ],
-    logo: "/temp/edition/core-logo/ads.png",
-    website: "https://www.abindesignstudio.com/",
-    instagram: "https://www.instagram.com/abindesign_studio?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
-  },
 
   {
     id: "03",
@@ -176,7 +177,7 @@ export const themeData: CoreItem[] = [
     id: "12",
     src: "/temp/home/core/SAV.jpg",
     label: "SAV",
-    architects:["Amita Vikrant"],
+    architects:["Amita Kulkarni", "Vikrant Tike"],
     description: "Memory in Space frames the design as a multi-sensory experience, encouraging engagement through sound, touch, light, and atmosphere so that memories are felt rather than simply seen. Chromatic Horizon explores the sensorial quality of the horizon as a moment where sun, sky, and earth dissolve into shifting fields of colour and light. OFEK explores a sensorial experience of the horizon through the interplay of color, light, and reflection, where textures and reflective surfaces transform the space into an immersive field of changing tones, inviting viewers to experience an atmosphere where perception, emotion, and light converge.",
     // additionalImages: [
     //   "/temp/home/core/SAV_1.jpg",
@@ -218,7 +219,7 @@ export const themeData: CoreItem[] = [
     id: "15",
     src: "/temp/home/core/STUDIO ARCHOHM.jpg",
     label: "Studio Archohm",
-    architects:["Sourabh Gupta"],
+    architects:["Kunal Savarkar","Sourabh Gupta","Mridu Sahai"],
     description: "The Self, Unfolding explores how moments of friction, interruption, and detour make spatial experiences truly memorable by reframing perception. It manifests as a continuously revealing ground of shifting levels—inclines, pauses, and departures—that choreograph both bodily movement and mental engagement. At its core, the stair transcends its functional role, framing paths and views while enabling multiple modes of inhabitation: ascent for panoramic perspectives, pauses for interaction, and moments of solitude. Three trajectories emerge—collective, purposeful, and introspective—shaping varied experiences within the same form. Surrounding this, a restrained palette of absorbing blacks and grounding metals is punctuated by a singular red that flows through the pavilion, guiding movement and intent. As a deliberate and disruptive insert, the project creates space for engagement and introspection, ultimately reframing views, perspectives, and thought.",
     // additionalImages: [
     //   "/temp/home/core/ARCHOHM_1.jpg",
@@ -232,7 +233,7 @@ export const themeData: CoreItem[] = [
     id: "16",
     src: "/temp/home/core/TALATI & PARTNER.jpg",
     label: "Talati & Partners",
-    architects:["Amit Surve"],
+    architects:["Nistas Sanga"],
     description: "The design creates a transitional threshold between outdoors and indoors that is not a passage but a destination in itself, slowing visitors down and heightening awareness through sensory engagement. A solid, earthy outer shell builds curiosity and contrast, leading into a calm, immersive courtyard-like space that shifts the experience from the noise of the exhibition to a more introspective and tactile setting. This courtyard acts as a sensory buffer, blurring built and natural boundaries as light, material, and spatial sequencing shape perception. In this language, “sense” refers to perception of space, while “sensory” refers to how it is felt and experienced.",
     // additionalImages: [
     //   "/temp/home/core/TALATI_1.jpg",
