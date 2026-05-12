@@ -1,23 +1,24 @@
 "use client";
+import { cdn } from "@/lib/cdn";
 
 import React, { useEffect, useRef, useState } from "react";
-import { ArrowUpRight, ArrowLeft, ArrowRight, X } from "lucide-react";  
+import { ArrowUpRight, ArrowLeft, ArrowRight, X } from "lucide-react";
 import CTABtn from "../common/CTABtn";
 import CollaborateGallary from "./CollaborateGallary";
 
 const images = [
-'/temp/collaborate/brand1.jpeg',
-'/temp/collaborate/brand2.jpg',
-'/temp/collaborate/circle1.jpeg',
-'/temp/collaborate/circle2.jpg',
-'/temp/collaborate/core1.jpg',
-'/temp/collaborate/core2.jpg',
-'/temp/collaborate/elevate1.jpeg',
-'/temp/collaborate/object1.jpeg',
-'/temp/collaborate/partner1.jpeg',
-'/temp/collaborate/partner2.jpeg',
-'/temp/collaborate/partner3.jpeg',
-'/temp/collaborate/partner4.jpg',
+  cdn('/temp/collaborate/brand1.jpeg'),
+  cdn('/temp/collaborate/brand2.jpg'),
+  cdn('/temp/collaborate/circle1.jpeg'),
+  cdn('/temp/collaborate/circle2.jpg'),
+  cdn('/temp/collaborate/core1.jpg'),
+  cdn('/temp/collaborate/core2.jpg'),
+  cdn('/temp/collaborate/elevate1.jpeg'),
+  cdn('/temp/collaborate/object1.jpeg'),
+  cdn('/temp/collaborate/partner1.jpeg'),
+  cdn('/temp/collaborate/partner2.jpeg'),
+  cdn('/temp/collaborate/partner3.jpeg'),
+  cdn('/temp/collaborate/partner4.jpg'),
 ];
 
 const CollaborateSection = () => {

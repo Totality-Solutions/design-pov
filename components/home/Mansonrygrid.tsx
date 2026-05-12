@@ -1,4 +1,5 @@
 "use client";
+import { cdn } from "@/lib/cdn";
 
 import { forwardRef, useRef, useEffect } from "react";
 import { motion, MotionValue } from "framer-motion";
@@ -103,7 +104,7 @@ const MasonryGrid = forwardRef<HTMLDivElement, MasonryGridProps>(
 
             {/* 06 VIDEO EXAMPLE */}
             <div className="row-span-2">
-              <Cell type="video" src="/temp/home/theme/WEBSITE1.mp4" />
+              <Cell type="video" src={cdn("/temp/home/theme/WEBSITE1.mp4")} />
             </div>
 
             {/* 07 IMAGE */}

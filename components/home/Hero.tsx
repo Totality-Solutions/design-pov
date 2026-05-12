@@ -1,4 +1,5 @@
 "use client";
+import { cdn } from "@/lib/cdn";
 
 import { useRef, useState, useEffect } from "react";
 import { Container } from "../common/Container";
@@ -106,8 +107,8 @@ export default function Hero() {
         {/* Video */}
         <video
           ref={videoRef}
-          src="/video/POV ad 1.mp4"
-          preload="metadata"
+          src={cdn("/video/POV ad 1.mp4")}
+          preload="none"
           autoPlay
           muted
           loop

@@ -254,6 +254,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { cdn } from "@/lib/cdn";
 import Image from "next/image";
 import Link from "next/link";
 import {motion, AnimatePresence} from "framer-motion";
@@ -319,7 +320,7 @@ export default function Navbar() {
               Advertisement
             </div>
             <div className="w-full h-[280px] flex items-center justify-center text-gray-300">
-              <Image src="/temp/ads/1.png" alt="Ad" width={1900} height={100} className="w-full h-full object-contain" />
+              <Image src={cdn("/temp/ads/1.png")} alt="Ad" width={1900} height={100} className="w-full h-full object-contain" />
             </div>
           </div>
           </Link>
@@ -402,7 +403,7 @@ export default function Navbar() {
                       className="absolute inset-0"
                     >
                       <Image
-                        src="/icons/Menu-close.svg"
+                        src={cdn("/icons/Menu-close.svg")}
                         alt="close"
                         fill
                         className="object-contain"
@@ -418,7 +419,7 @@ export default function Navbar() {
                       className="absolute inset-0"
                     >
                       <Image
-                        src="/icons/Menu.svg"
+                        src={cdn("/icons/Menu.svg")}
                         alt="menu"
                         fill
                         className="object-contain"
@@ -452,6 +453,7 @@ export default function Navbar() {
                   <video
                     src={NAV_DATA[activeMenu].video}
                     autoPlay muted loop playsInline
+                    preload="none"
                     className="w-full h-full object-cover opacity-80"
                   />
                 ) : NAV_DATA[activeMenu].filetype === "image" ? (
@@ -543,7 +545,7 @@ export default function Navbar() {
                         }
                       >
                         <Image
-                          src="/icons/Menu-close.svg" // your custom icon
+                          src={cdn("/icons/Menu-close.svg")} // your custom icon
                           alt="toggle"
                           width={20}
                           height={20}

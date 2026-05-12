@@ -1,4 +1,5 @@
 "use client";
+import { cdn } from "@/lib/cdn";
 
 import React, { useRef, useState, useEffect } from "react";
 import {
@@ -279,7 +280,7 @@ const Footer = () => {
                   An IP by:
                 </p>
                 <img
-                  src="/logo/Totality.svg"
+                  src={cdn("/logo/Totality.svg")}
                   alt="Totality"
                   className="w-[120px] lg:w-[140px] object-contain brightness-0 invert"
                 />

@@ -1,4 +1,5 @@
 "use client";
+import { cdn } from "@/lib/cdn";
 
 import React, { useState, useEffect } from 'react';
 import type { NextPage } from 'next';
@@ -8,22 +9,22 @@ import { motion } from 'framer-motion';
 import SectionHeading from '../common/SectionHeading';
 
 const projects = [
-  { id: 1, title: "Abin", img: "/temp/home/core/Abin.jpg", url: "#" },
-  { id: 2, title: "ADND", img: "/temp/home/core/ADND.jpg", url: "#" },
-  { id: 3, title: "ALARA STUDIO", img: "/temp/home/core/ALARA STUDIO.jpg", url: "#" },
-  { id: 4, title: "BALDIWALA EDGE", img: "/temp/home/core/BALDIWALA EDGE.jpg", url: "#" },
-  { id: 5, title: "CITYSPACE", img: "/temp/home/core/CITYSPACE.png", url: "#" },
-  { id: 6, title: "DESIGN HEX", img: "/temp/home/core/DESIGN HEX.jpg", url: "#" },
-  { id: 7, title: "DSP DESIGN", img: "/temp/home/core/DSP DESIGN.jpg", url: "#" },
-  { id: 8, title: "JANNAT VASI", img: "/temp/home/core/JANNAT VASI.jpg", url: "#" },
-  { id: 9, title: "NA ARCHITECT", img: "/temp/home/core/NA ARCHITECT.jpg", url: "#" },
-  { id: 10, title: "POONAM AKASH", img: "/temp/home/core/POONAM AKASH.jpg", url: "#" },
-  { id: 11, title: "SANJAY PURI", img: "/temp/home/core/SANJAY PURI.jpg", url: "#" },
-  { id: 12, title: "SAV", img: "/temp/home/core/SAV.jpg", url: "#" },
-  { id: 13, title: "SHROFFLEON", img: "/temp/home/core/SHROFFLEON.jpg", url: "#" },
-  { id: 14, title: "SPARC DESIGN", img: "/temp/home/core/SPARC DESIGN.jpg", url: "#" },
-  { id: 15, title: "STUDIO ARCHOHM", img: "/temp/home/core/STUDIO ARCHOHM.jpg", url: "#" },
-  { id: 16, title: "TALATI & PARTNER", img: "/temp/home/core/TALATI & PARTNER.jpg", url: "#" },
+  { id: 1, title: "Abin", img: cdn("/temp/home/core/Abin.jpg"), url: "#" },
+  { id: 2, title: "ADND", img: cdn("/temp/home/core/ADND.jpg"), url: "#" },
+  { id: 3, title: "ALARA STUDIO", img: cdn("/temp/home/core/ALARA STUDIO.jpg"), url: "#" },
+  { id: 4, title: "BALDIWALA EDGE", img: cdn("/temp/home/core/BALDIWALA EDGE.jpg"), url: "#" },
+  { id: 5, title: "CITYSPACE", img: cdn("/temp/home/core/CITYSPACE.png"), url: "#" },
+  { id: 6, title: "DESIGN HEX", img: cdn("/temp/home/core/DESIGN HEX.jpg"), url: "#" },
+  { id: 7, title: "DSP DESIGN", img: cdn("/temp/home/core/DSP DESIGN.jpg"), url: "#" },
+  { id: 8, title: "JANNAT VASI", img: cdn("/temp/home/core/JANNAT VASI.jpg"), url: "#" },
+  { id: 9, title: "NA ARCHITECT", img: cdn("/temp/home/core/NA ARCHITECT.jpg"), url: "#" },
+  { id: 10, title: "POONAM AKASH", img: cdn("/temp/home/core/POONAM AKASH.jpg"), url: "#" },
+  { id: 11, title: "SANJAY PURI", img: cdn("/temp/home/core/SANJAY PURI.jpg"), url: "#" },
+  { id: 12, title: "SAV", img: cdn("/temp/home/core/SAV.jpg"), url: "#" },
+  { id: 13, title: "SHROFFLEON", img: cdn("/temp/home/core/SHROFFLEON.jpg"), url: "#" },
+  { id: 14, title: "SPARC DESIGN", img: cdn("/temp/home/core/SPARC DESIGN.jpg"), url: "#" },
+  { id: 15, title: "STUDIO ARCHOHM", img: cdn("/temp/home/core/STUDIO ARCHOHM.jpg"), url: "#" },
+  { id: 16, title: "TALATI & PARTNER", img: cdn("/temp/home/core/TALATI & PARTNER.jpg"), url: "#" },
 ];
 
 const HoverCard = ({ project, isDesktop }: any) => {
@@ -106,7 +107,7 @@ const Core2026: NextPage = () => {
       />
       <Link href="/edition/core">
         <div className="w-full h-full">
-          <video src="/video/The Core 26.mp4" autoPlay loop muted className="w-full h-full bg-cover object-contain" />
+          <video src={cdn("/video/The Core 26.mp4")} autoPlay loop muted playsInline preload="none" className="w-full h-full bg-cover object-contain" />
         </div>
       </Link>
       {/* <main className="w-full max-w-[1420px] pt-[20px] px-6 lg:px-[50px] pb-20">

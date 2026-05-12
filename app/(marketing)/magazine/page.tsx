@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { cdn } from "@/lib/cdn";
 import MagazineHero from "@/components/magazine/MagazineHero";
 import PressSection from "@/components/magazine/PressSection";
 import AprilIssueSection from "@/components/magazine/AprilIssueSection";
@@ -53,7 +54,7 @@ export default async function MagazinePage() {
                 Advertisement
               </div>
               <div className="w-full h-[280px] flex items-center justify-center text-gray-300">
-                <Image src="/temp/ads/1.png" alt="Ad" width={1900} height={100} className="w-full h-full object-contain" />
+                <Image src={cdn("/temp/ads/1.png")} alt="Ad" width={1900} height={100} className="w-full h-full object-contain" />
               </div>
             </div>
           </Link>

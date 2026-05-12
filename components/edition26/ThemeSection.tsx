@@ -1,4 +1,5 @@
 "use client";
+import { cdn } from "@/lib/cdn";
 
 import React, { useState, useEffect } from 'react';
 import type { NextPage } from 'next';
@@ -9,31 +10,31 @@ import Link from 'next/link';
 // 1. Data Set with Mobile (Fixed), Tablet (New), and Desktop (Fixed)
 const themeData = [
   { 
-    id: 1, w: 320, h: 260, img: "/temp/home/theme/WEBSITE_THEME BANNER_1.jpg.jpeg",
+    id: 1, w: 320, h: 260, img: cdn("/temp/home/theme/WEBSITE_THEME BANNER_1.jpg.jpeg"),
     desktop: { top: '8%', left: '5%' },
     tablet: { top: '5%', left: '10%' }, // In-between
     mobile: { top: '9%', left: '16%' } 
   },
   { 
-    id: 2, w: 320, h: 320, img: "/temp/home/theme/WEBSITE_THEME BANNER_2.jpg.jpeg",
+    id: 2, w: 320, h: 320, img: cdn("/temp/home/theme/WEBSITE_THEME BANNER_2.jpg.jpeg"),
     desktop: { top: '26%', left: '70%' },
     tablet: { top: '30%', left: '62%' },
     mobile: { top: '34%', left: '50%' } 
   },
   { 
-    id: 3, w: 320, h: 200, img: "/temp/home/theme/WEBSITE_THEME BANNER_3.jpg.jpeg",
+    id: 3, w: 320, h: 200, img: cdn("/temp/home/theme/WEBSITE_THEME BANNER_3.jpg.jpeg"),
     desktop: { top: '50%', left: '40%' },
     tablet: { top: '53%', left: '35%' },
     mobile: { top: '53%', left: '30%' } 
   },
   { 
-    id: 4, w: 200, h: 260, img: "/temp/home/theme/WEBSITE_THEME BANNER_4.jpg.jpeg",
+    id: 4, w: 200, h: 260, img: cdn("/temp/home/theme/WEBSITE_THEME BANNER_4.jpg.jpeg"),
     desktop: { top: '69%', left: '15%' },
     tablet: { top: '72%', left: '15%' },
     mobile: { top: '68%', left: '15%' } 
   },
   { 
-    id: 5, w: 280, h: 350, img: "/temp/home/theme/WEBSITE_THEME BANNER_2.jpg.jpeg",
+    id: 5, w: 280, h: 350, img: cdn("/temp/home/theme/WEBSITE_THEME BANNER_2.jpg.jpeg"),
     desktop: { top: '78%', left: '75%' },
     tablet: { top: '80%', left: '62%' },
     mobile: { top: '82%', left: '50%' } 

@@ -1,4 +1,5 @@
 "use client";
+import { cdn } from "@/lib/cdn";
 
 import React, { useState } from "react";
 import SectionHeading from "../common/SectionHeading";
@@ -11,31 +12,31 @@ const HomeSponsors: React.FC = () => {
     {
       id: 1,
       name: "PRESENTING PARTNER",
-      logo: "/temp/edition/sponsors/1.png",
+      logo: cdn("/temp/edition/sponsors/1.png"),
       href: "https://www.kajariaceramics.com/",
     },
     {
       id: 2,
       name: "POWERED BY",
-      logo: "/temp/edition/sponsors/2.png",
+      logo: cdn("/temp/edition/sponsors/2.png"),
       href: "https://www.pacific-surfaces.com/",
     },
     {
       id: 3,
       name: "NETWORK PARTNER",
-      logo: "/temp/edition/sponsors/3.png",
+      logo: cdn("/temp/edition/sponsors/3.png"),
       href: "https://www.allhome.in/",
     },
     {
       id: 4,
       name: "LOUNGE PARTNER",
-      logo: "/temp/edition/sponsors/4.png",
+      logo: cdn("/temp/edition/sponsors/4.png"),
       href: "https://www.essentiahome.com/?srsltid=AfmBOoqCYRZnQWfAJ8Tx74fKI-F59l2uzZUYhcKm6bUDxvV6r0RBMmld",
     },
     {
       id: 5,
       name: "COLOUR PARTNER",
-      logo: "/temp/edition/sponsors/5.png",
+      logo: cdn("/temp/edition/sponsors/5.png"),
       href: "https://www.pantone.com/hk/en/",
     },
   ];

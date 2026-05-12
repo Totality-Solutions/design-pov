@@ -1,4 +1,5 @@
 "use client";
+import { cdn } from "@/lib/cdn";
 
 import React from "react";
 import Image from "next/image";
@@ -47,7 +48,7 @@ export default function MagazineHero() {
 
         <div className="relative z-10 w-full h-[400px] bg-black overflow-hidden">
           <MediaRenderer 
-            src="/temp/home/theme/WEBSITE_THEME BANNER_1.jpg.jpeg" 
+            src={cdn("/temp/home/theme/WEBSITE_THEME BANNER_1.jpg.jpeg")} 
             alt="Ecosystem Highlight"
             className="w-full h-full object-cover"
           />

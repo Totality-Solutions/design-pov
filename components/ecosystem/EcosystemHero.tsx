@@ -1,4 +1,5 @@
 'use client'
+import { cdn } from "@/lib/cdn";
 import React from 'react'
 import { MediaRenderer } from '@/components/common/MediaRenderer'
 import { UnderlineText } from '../common/Underlinetext'
@@ -21,7 +22,7 @@ export default function EcosystemHero() {
         {/* Main Video/Image Asset (No background visuals) */}
         <div className="relative z-10 w-full h-full bg-black overflow-hidden">
           <MediaRenderer 
-            src="/temp/ecosystem/POV.mp4" 
+            src={cdn("/temp/ecosystem/POV.mp4")} 
             alt="Ecosystem Highlight"
             className="w-full h-full object-cover"
           />

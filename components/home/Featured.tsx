@@ -1,4 +1,5 @@
 "use client";
+import { cdn } from "@/lib/cdn";
 
 import React, { useState, useEffect } from "react";
 import Image, { StaticImageData } from "next/image";
@@ -21,7 +22,7 @@ import img13  from "@/public/temp/home/core/SHROFFLEON.jpg";
 import img14  from "@/public/temp/home/core/SPARC DESIGN.jpg";
 import img15  from "@/public/temp/home/core/STUDIO ARCHOHM.jpg";
 import img16  from "@/public/temp/home/core/TALATI & PARTNER.jpg";
-const video1 = "/temp/home/core-collective/4.mp4";
+const video1 = cdn("/temp/home/core-collective/4.mp4");
 
 // Components
 import { Container } from "../common/Container";
@@ -63,12 +64,13 @@ function MediaCell({ src, type }: any) {
         muted
         loop
         playsInline
+        preload="none"
         style={{ width: "100%", height: "100%", objectFit: "cover" }}
       />
     );
   }
   return (
-    <Image src={src} alt="" fill style={{ objectFit: "cover" }} />
+    <Image src={src} alt="" fill sizes="(max-width: 1024px) 100vw, 33vw" style={{ objectFit: "cover" }} />
   );
 }
 

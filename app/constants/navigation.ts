@@ -1,3 +1,4 @@
+import { cdn } from "@/lib/cdn";
 // --- Types ---
 export type SubLink = { 
   label: string; 
@@ -30,7 +31,7 @@ export const NAV_DATA: Record<string, SubmenuContent> = {
   },
   Ecosystem: {
     mainHref: "/ecosystem",
-    image: "/temp/home/theme/WEBSITE_THEME BANNER_1.jpg.jpeg",
+    image: cdn("/temp/home/theme/WEBSITE_THEME BANNER_1.jpg.jpeg"),
     filetype: "image",
     col1Links: [
       { label: "Circle", href: "/edition/schedule" }, 

@@ -1,4 +1,5 @@
 "use client";
+import { cdn } from "@/lib/cdn";
 
 import React from 'react';
 import Image from 'next/image';
@@ -30,7 +31,7 @@ export default function ThemeIntro() {
       {/* Background Image Container */}
       <div className="absolute inset-0 z-0">
         <Image
-          src="/temp/theme/theme-bg.png"
+          src={cdn("/temp/theme/theme-bg.png")}
           alt="Theme Background"
           fill
           priority
