@@ -4,6 +4,7 @@ import React, { useRef } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
+import { cdn } from "@/lib/cdn";
 
 const ecosystemPillars = [
   {
@@ -11,8 +12,8 @@ const ecosystemPillars = [
     title: "The Core",
     description:
       "Sixteen design studios create immersive environments where ideas take spatial form.",
-    imageSrc: "/temp/home/ecosystem/N1.jpg",
-    logoSrc: "/temp/ecosystem/icons/core.png",
+    imageSrc: cdn("/temp/home/ecosystem/N1.jpg"),
+    logoSrc: cdn("/temp/ecosystem/icons/core.png"),
     href: "/edition/core",
   },
   {
@@ -20,8 +21,8 @@ const ecosystemPillars = [
     title: "Circle",
     description:
       "A live forum for dialogue—bringing together voices shaping how we think, build, and live.",
-    imageSrc: "/temp/home/ecosystem/N-3.jpg",
-    logoSrc: "/temp/ecosystem/icons/circle.png",
+    imageSrc: cdn("/temp/home/ecosystem/N-3.jpg"),
+    logoSrc: cdn("/temp/ecosystem/icons/circle.png"),
     href: "/edition/schedule",
   },
   {
@@ -29,8 +30,8 @@ const ecosystemPillars = [
     title: "Objects",
     description:
       "A collection of original, one-of-one pieces—each a distilled expression of perspective.",
-    imageSrc: "/temp/home/ecosystem/OBJECT.jpeg",
-    logoSrc: "/temp/ecosystem/icons/objects.png",
+    imageSrc: cdn("/temp/home/ecosystem/OBJECT.jpeg"),
+    logoSrc: cdn("/temp/ecosystem/icons/objects.png"),
     href: "/ecosystem/objects",
   },
   {
@@ -38,8 +39,8 @@ const ecosystemPillars = [
     title: "Elevate",
     description:
       "Curated extensions that create meaningful brand moments beyond the show floor.",
-    imageSrc: "/temp/home/ecosystem/N-2.jpg",
-    logoSrc: "/temp/ecosystem/icons/elevate.png",
+    imageSrc: cdn("/temp/home/ecosystem/N-2.jpg"),
+    logoSrc: cdn("/temp/ecosystem/icons/elevate.png"),
     href: "/ecosystem/elevate",
   },
   {
@@ -47,8 +48,8 @@ const ecosystemPillars = [
     title: "Afterhours",
     description:
       "Where the industry unwinds—a late-night program of music, culture, and networking.",
-    imageSrc: "/temp/home/ecosystem/N-4.png",
-    logoSrc: "/temp/ecosystem/icons/afterhours.png",
+    imageSrc: cdn("/temp/home/ecosystem/N-4.png"),
+    logoSrc: cdn("/temp/ecosystem/icons/afterhours.png"),
     href: "/ecosystem",
   },
 ];
