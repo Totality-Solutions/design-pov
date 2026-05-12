@@ -19,7 +19,7 @@ const navLinks = {
   Partners: {
     title: "Ecosystem",
     href: "/ecosystem",
-    img: cdn("/image1.svg"),
+    img: "/image1.svg",
     items: [
       { title: "Circle", href: "/edition/schedule" },
       { title: "Elevate", href: "/ecosystem/elevate" },
@@ -30,7 +30,7 @@ const navLinks = {
   AboutUs: {
     title: "2026 Edition",
     href: "/edition",
-    img: cdn("/image2.svg"),
+    img: "/image2.svg",
     items: [
       { title: "Theme", href: "/edition/theme" },
       { title: "Brands", href: "/edition/brands" },
@@ -42,7 +42,7 @@ const navLinks = {
   Originals: {
     title: "Quick Links",
     href: "",
-    img: cdn("/image3.svg"),
+    img: "/image3.svg",
     items: [
       { title: "About", href: "/about" },
       { title: "Home", href: "/" },
