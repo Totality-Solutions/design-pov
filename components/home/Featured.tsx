@@ -21,7 +21,7 @@ import img13  from "@/public/temp/home/core/SHROFFLEON.jpg";
 import img14  from "@/public/temp/home/core/SPARC DESIGN.jpg";
 import img15  from "@/public/temp/home/core/STUDIO ARCHOHM.jpg";
 import img16  from "@/public/temp/home/core/TALATI & PARTNER.jpg";
-const video1 = "/temp/featured/4.mp4";
+const video1 = "/temp/home/core-collective/4.mp4";
 
 // Components
 import { Container } from "../common/Container";
