@@ -15,7 +15,7 @@ export default function Edition2026() {
       <ThemeSection />
       <WhoItIsFor />
         <CoreSection />
-      <div className="w-full z-10 bg-white border-t border-b border-[#DFDFDF]">
+      <div className="w-full z-10 bg-white py-6">
         <CTAStrip
           title="Become a part of a design led platform like no other."
           ctaLabel="Apply Now"

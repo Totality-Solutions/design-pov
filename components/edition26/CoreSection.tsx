@@ -102,6 +102,7 @@ const Core2026: NextPage = () => {
         titleBold="Collective"
         sticky={false}
         isSectionHovered={isHovered}
+        
       />
       <Link href="/edition/core">
         <div className="w-full h-full">
