@@ -5,12 +5,13 @@ import React, { useEffect, useState, useRef, useMemo } from "react";
 interface MarqueeFlowProps<T> {
   items: T[];
   renderItem: (item: T, index: number, isExpanded: boolean) => React.ReactNode;
-  overlayImage?: string; // New Prop
+  overlayImage?: string;
   gap?: number;
   speed?: number;
   mobileCount?: number;
   tabletCount?: number;
   desktopCount?: number;
+  autoExpand?: boolean;
 }
 
 export default function MarqueeFlow<T>({
@@ -22,6 +23,7 @@ export default function MarqueeFlow<T>({
   mobileCount = 1,
   tabletCount = 2,
   desktopCount = 4,
+  autoExpand = true,
 }: MarqueeFlowProps<T>) {
   const containerRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
@@ -137,27 +139,21 @@ export default function MarqueeFlow<T>({
         trackRef.current.style.transform = `translateX(-${offsetRef.current}px)`;
       }
 
-      // ✅ Detect which item is at left edge (every gap + item width)
-      const itemWithGap = iw + activeGap;
-      const currentItemIndex = Math.floor(offsetRef.current / itemWithGap) % items.length;
+      if (autoExpand) {
+        const itemWithGap = iw + activeGap;
+        const currentItemIndex = Math.floor(offsetRef.current / itemWithGap) % items.length;
 
-      // Only trigger expansion when item changes
-      if (previousIndexRef.current !== currentItemIndex) {
-        previousIndexRef.current = currentItemIndex;
-        setExpandedIndex(currentItemIndex);
+        if (previousIndexRef.current !== currentItemIndex) {
+          previousIndexRef.current = currentItemIndex;
+          setExpandedIndex(currentItemIndex);
 
-        // Smooth pause animation
-        pausedRef.current = true;
-
-        // Resume after 3000ms
-        if (pauseTimeoutRef.current) {
-          clearTimeout(pauseTimeoutRef.current);
+          pausedRef.current = true;
+          if (pauseTimeoutRef.current) clearTimeout(pauseTimeoutRef.current);
+          pauseTimeoutRef.current = setTimeout(() => {
+            pausedRef.current = false;
+            lastTime = 0;
+          }, 3000);
         }
-
-        pauseTimeoutRef.current = setTimeout(() => {
-          pausedRef.current = false;
-          lastTime = 0; // Reset delta time for smooth resume
-        }, 3000);
       }
     };
 

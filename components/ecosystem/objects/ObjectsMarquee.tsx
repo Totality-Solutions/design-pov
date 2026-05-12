@@ -119,75 +119,38 @@ const ObjectsMarquee: React.FC = () => {
 
   return (
     <>
-      <section className="w-full bg-white h-[350px] md:h-[350px] lg:h-[320px] my-10">
-        <div className="w-full overflow-hidden h-[350px] md:h-[350px] lg:h-[320px] flex items-end">
+      <section className="w-full bg-white h-[350px] md:h-[350px] lg:h-[320px] my-10 overflow-hidden">
+        <div className="w-full h-full flex items-end">
           <MarqueeFlow
             items={OBJECTS}
             gap={5}
             speed={200}
             desktopCount={4}
-            renderItem={(item, _index, isExpanded) => {
-              return (
-                <button
-                  // onClick={() => setSelectedObject(item)}
-                  className="relative block w-full overflow-hidden shadow-xl text-left"
-                  style={{
-                    aspectRatio: isExpanded ? "6/5" : "10/5",
-                    transition:
-                      "aspect-ratio 2000ms cubic-bezier(0.22, 1, 0.36, 1)",
-                    transformOrigin: "bottom",
-                  }}
-                  onMouseEnter={(e) => {
-                    const el = e.currentTarget;
-
-                    el.style.aspectRatio = "6/5";
-
-                    const media =
-                      el.querySelectorAll<HTMLElement>("img");
-
-                    media.forEach((m) => {
-                      m.style.transform =
-                        "translate3d(0,0,0) scale(1)";
-                    });
-                  }}
-                  onMouseLeave={(e) => {
-                    const el = e.currentTarget;
-
-                    el.style.aspectRatio = isExpanded
-                      ? "6/5"
-                      : "10/5";
-
-                    const media =
-                      el.querySelectorAll<HTMLElement>("img");
-
-                    media.forEach((m) => {
-                      m.style.transform = isExpanded
-                        ? "translate3d(0,0,0) scale(1)"
-                        : "translate3d(0,0,0) scale(1)";
-                    });
-                  }}
-                >
-                  <Image
-                    src={item.src}
-                    alt={item.label}
-                    fill
-                    className="object-cover will-change-transform"
-                    style={{
-                      transform: isExpanded
-                        ? "translate3d(0,0,0) scale(1)"
-                        : "translate3d(0,0,0) scale(1)",
-                      transition:
-                        "transform 2000ms cubic-bezier(0.4, 0, 0.2, 1)",
-                      transformOrigin: "bottom center",
-                      backfaceVisibility: "hidden",
-                    }}
-                    sizes="(max-width: 768px) 50vw, 25vw"
-                  />
-
-                  <div className="absolute inset-0 bg-black/20" />
-                </button>
-              );
-            }}
+            renderItem={(item, _index, isExpanded) => (
+              <button
+                className="relative block w-full shadow-xl text-left"
+                style={{
+                  aspectRatio: "6/5",
+                  clipPath: isExpanded ? "inset(0% 0 0 0)" : "inset(40% 0 0 0)",
+                  transition: "clip-path 800ms cubic-bezier(0.22, 1, 0.36, 1)",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.clipPath = "inset(0% 0 0 0)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.clipPath = isExpanded ? "inset(0% 0 0 0)" : "inset(40% 0 0 0)";
+                }}
+              >
+                <Image
+                  src={item.src}
+                  alt={item.label}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 50vw, 25vw"
+                />
+                <div className="absolute inset-0 bg-black/20" />
+              </button>
+            )}
           />
         </div>
       </section>
