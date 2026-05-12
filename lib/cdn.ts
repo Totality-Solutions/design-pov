@@ -1,4 +1,4 @@
-const BASE = process.env.NEXT_PUBLIC_CDN_URL ?? "";
+const BASE = process.env.NEXT_PUBLIC_CDN_URL ?? "https://d1qlyda1dsr5ui.cloudfront.net/designpovindia.com";
 
 /**
  * Prefixes a public-folder path with the CloudFront CDN base URL.

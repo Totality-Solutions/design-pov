@@ -128,8 +128,8 @@ export default function Hero() {
               <Image
                 src={
                   isPlaying
-                    ? "/icons/play.svg"
-                    : "/icons/pause.svg"
+                    ? cdn("/icons/play.svg")
+                    : cdn("/icons/pause.svg")
                 }
                 alt="Toggle Play"
                 width={40}
@@ -147,8 +147,8 @@ export default function Hero() {
               <Image
                 src={
                   isMuted
-                    ? "/icons/volume-mute.svg"
-                    : "/icons/volume-high.svg"
+                    ? cdn("/icons/volume-mute.svg")
+                    : cdn("/icons/volume-high.svg")
                 }
                 alt="Toggle Mute"
                 width={40}
