@@ -156,6 +156,7 @@ const WhatPOV = () => {
                         <video
                           src={item.img as string}
                           autoPlay loop muted playsInline
+                          preload="none"
                           className="absolute inset-0 w-full h-full object-cover"
                         />
                       ) : (

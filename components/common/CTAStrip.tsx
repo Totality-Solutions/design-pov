@@ -100,15 +100,16 @@ const CTAStrip = ({
             showActiveState && hoverBgColor ? 'opacity-0' : 'opacity-100'
           }`}
         >
-          {bgImage && <Image src={bgImage} alt="" fill className="object-cover" />}
+          {bgImage && <Image src={bgImage} alt="" fill sizes="100vw" className="object-cover" />}
           {bgVideo && (
-            <video 
-              src={bgVideo} 
-              autoPlay 
-              loop 
-              muted 
-              playsInline 
-              className="w-full h-full object-cover" 
+            <video
+              src={bgVideo}
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="none"
+              className="w-full h-full object-cover"
             />
           )}
         </div>

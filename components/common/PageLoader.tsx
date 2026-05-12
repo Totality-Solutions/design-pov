@@ -68,23 +68,59 @@ export default function PageLoader({ children }: { children: React.ReactNode }) 
   }, []);
 
   // ── Route-change progress bar ──────────────────────────────────────────────
-  const pathname  = usePathname();
-  const [progress, setProgress] = useState(0);
+  const pathname    = usePathname();
+  const [progress, setProgress]     = useState(0);
   const [barVisible, setBarVisible] = useState(false);
-  const prevPath  = useRef(pathname);
-  const barTimer  = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const prevPath    = useRef(pathname);
+  const barTimer    = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const crawlTimer  = useRef<ReturnType<typeof setInterval> | null>(null);
 
+  // Click interceptor — bar starts the moment a nav link is clicked
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      const anchor = (e.target as HTMLElement).closest("a");
+      if (!anchor) return;
+      const href = anchor.getAttribute("href") ?? "";
+      if (
+        !href ||
+        href.startsWith("http") ||
+        href.startsWith("//") ||
+        href.startsWith("#") ||
+        href.startsWith("mailto") ||
+        href.startsWith("tel")
+      ) return;
+      if (href === prevPath.current) return;
+
+      if (crawlTimer.current) clearInterval(crawlTimer.current);
+      if (barTimer.current) clearTimeout(barTimer.current);
+
+      setBarVisible(true);
+      setProgress(8);
+      let p = 8;
+      crawlTimer.current = setInterval(() => {
+        p = Math.min(p + Math.random() * 14, 80);
+        setProgress(p);
+      }, 300);
+    };
+
+    document.addEventListener("click", handleClick, true);
+    return () => document.removeEventListener("click", handleClick, true);
+  }, []);
+
+  // Pathname changed — complete the bar
   useEffect(() => {
     if (pathname === prevPath.current) return;
     prevPath.current = pathname;
+
+    if (crawlTimer.current) clearInterval(crawlTimer.current);
     if (barTimer.current) clearTimeout(barTimer.current);
-    setProgress(20);
-    setBarVisible(true);
-    barTimer.current = setTimeout(() => setProgress(80), 120);
+
+    setProgress(100);
     barTimer.current = setTimeout(() => {
-      setProgress(100);
-      barTimer.current = setTimeout(() => { setBarVisible(false); setProgress(0); }, 300);
-    }, 400);
+      setBarVisible(false);
+      setProgress(0);
+    }, 350);
+
     return () => { if (barTimer.current) clearTimeout(barTimer.current); };
   }, [pathname]);
 

@@ -452,6 +452,7 @@ export default function Navbar() {
                   <video
                     src={NAV_DATA[activeMenu].video}
                     autoPlay muted loop playsInline
+                    preload="none"
                     className="w-full h-full object-cover opacity-80"
                   />
                 ) : NAV_DATA[activeMenu].filetype === "image" ? (

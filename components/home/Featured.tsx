@@ -63,12 +63,13 @@ function MediaCell({ src, type }: any) {
         muted
         loop
         playsInline
+        preload="none"
         style={{ width: "100%", height: "100%", objectFit: "cover" }}
       />
     );
   }
   return (
-    <Image src={src} alt="" fill style={{ objectFit: "cover" }} />
+    <Image src={src} alt="" fill sizes="(max-width: 1024px) 100vw, 33vw" style={{ objectFit: "cover" }} />
   );
 }
 
