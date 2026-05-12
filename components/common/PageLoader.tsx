@@ -58,13 +58,21 @@ export default function PageLoader({ children }: { children: React.ReactNode }) 
   }, []);
 
   useEffect(() => {
+    let done = false;
     const fadeOut = () => {
+      if (done) return;
+      done = true;
       setOverlayOpaque(false);
       setTimeout(() => setShowOverlay(false), 600);
     };
     if (document.readyState === "complete") { fadeOut(); return; }
     window.addEventListener("load", fadeOut);
-    return () => window.removeEventListener("load", fadeOut);
+    // Hard cap: never block the page more than 8 s
+    const safeguard = setTimeout(fadeOut, 8000);
+    return () => {
+      window.removeEventListener("load", fadeOut);
+      clearTimeout(safeguard);
+    };
   }, []);
 
   // ── Route-change progress bar ──────────────────────────────────────────────

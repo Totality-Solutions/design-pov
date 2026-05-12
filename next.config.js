@@ -18,6 +18,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "img.youtube.com",
       },
+      {
+        protocol: "https",
+        hostname: "d1qlyda1dsr5ui.cloudfront.net",
+      },
     ],
     domains: ["localhost"],
   },

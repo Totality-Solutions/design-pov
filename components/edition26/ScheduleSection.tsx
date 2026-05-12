@@ -1,4 +1,5 @@
 "use client";
+import { cdn } from "@/lib/cdn";
 
 import React, {
   useState,
@@ -204,7 +205,7 @@ const ScheduleSection = () => {
         <div className="absolute inset-0 z-0">
 
           <Image
-            src="/temp/edition/schedule/Banner.webp"
+            src={cdn("/temp/edition/schedule/Banner.webp")}
             alt="Background"
             fill
             className="object-cover"

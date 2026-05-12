@@ -1,17 +1,18 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { cdn } from "@/lib/cdn";
 import { Container } from "../common/Container";
 import SectionHeading from "../common/SectionHeading";
-import Link from "next/link";
+
 
 const ClientLogo = () => {
   const [isHovered, setIsHovered] = useState(false);
   const trackRef = useRef<HTMLDivElement>(null);
   const firstGroupRef = useRef<HTMLDivElement>(null);
 
-  const Client = Array.from({ length: 65 }, (_, i) => i + 1).map((id) => ({
-    src: `/temp/edition/brands/${id}.png`,
+  const Client = Array.from({ length: 64 }, (_, i) => i + 1).map((id) => ({
+    src: cdn(`/temp/edition/brands/${id}.png`),
     alt: `Client Logo ${id}`,
   }));
 

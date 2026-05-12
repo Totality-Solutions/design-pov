@@ -1,4 +1,5 @@
 import React from 'react';
+import { cdn } from "@/lib/cdn";
 import Image from 'next/image';
 import { UnderlineText } from '../../common/Underlinetext';
 
@@ -10,7 +11,7 @@ const BrandsHero = () => {
         {/* Replace with your actual image path */}
         <div className="w-full h-full bg-black relative flex items-center justify-center">
             <Image 
-              src="/temp/ecosystem/brand-hero.png"
+              src={cdn("/temp/ecosystem/brand-hero.png")}
               alt="Brand Hero" 
               fill
               className="object-cover"

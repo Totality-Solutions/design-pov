@@ -1,4 +1,5 @@
 "use client";
+import { cdn } from "@/lib/cdn";
 
 import React, { useState } from "react";
 import Image from "next/image";
@@ -9,7 +10,7 @@ import { ShowcaseModal } from "../../edition26/core/ShowcaseModal";
 const OBJECTS = [
   {
     id: 1,
-    src: "/temp/objects/1.png",
+    src: cdn("/temp/objects/1.png"),
     additionalImages: [
       "/temp/objects/2.jpg",
       "/temp/objects/3.jpg",
@@ -24,7 +25,7 @@ const OBJECTS = [
   },
   {
     id: 2,
-    src: "/temp/objects/2.png",
+    src: cdn("/temp/objects/2.png"),
     additionalImages: [
       "/temp/objects/3.jpg",
       "/temp/objects/4.jpg",
@@ -39,7 +40,7 @@ const OBJECTS = [
   },
   {
     id: 3,
-    src: "/temp/objects/3.png",
+    src: cdn("/temp/objects/3.png"),
     additionalImages: [
       "/temp/objects/4.jpg",
       "/temp/objects/5.jpg",
@@ -54,7 +55,7 @@ const OBJECTS = [
   },
   {
     id: 4,
-    src: "/temp/objects/4.png",
+    src: cdn("/temp/objects/4.png"),
     additionalImages: [
       "/temp/objects/4.jpg",
       "/temp/objects/5.jpg",
@@ -69,7 +70,7 @@ const OBJECTS = [
   },
   {
     id: 5,
-    src: "/temp/objects/5.png",
+    src: cdn("/temp/objects/5.png"),
     additionalImages: [
       "/temp/objects/4.jpg",
       "/temp/objects/5.jpg",
@@ -84,7 +85,7 @@ const OBJECTS = [
   },
   {
     id: 6,
-    src: "/temp/objects/6.png",
+    src: cdn("/temp/objects/6.png"),
     additionalImages: [
       "/temp/objects/4.jpg",
       "/temp/objects/5.jpg",
@@ -99,7 +100,7 @@ const OBJECTS = [
   },
   {
     id: 7,
-    src: "/temp/objects/7.png",
+    src: cdn("/temp/objects/7.png"),
     additionalImages: [
       "/temp/objects/4.jpg",
       "/temp/objects/5.jpg",

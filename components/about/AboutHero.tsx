@@ -1,4 +1,5 @@
 "use client";
+import { cdn } from "@/lib/cdn";
 
 import React, { useState, useEffect } from "react";
 
@@ -109,7 +110,7 @@ const DesignHero: React.FC<{}> = () => {
       {/* 3. HERO IMAGE */}
       <div className="group w-full aspect-[16/6] overflow-hidden bg-gray-100 mt-12 md:mt-0 ">
         <img
-          src="/temp/about/about-hero.jpeg"
+          src={cdn("/temp/about/about-hero.jpeg")}
           alt="Design POV"
           className="w-full h-full object-cover transition-transform duration-[2000ms] group-hover:scale-105"
         />

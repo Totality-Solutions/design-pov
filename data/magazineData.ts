@@ -1,4 +1,5 @@
 import { StaticImageData } from "next/image";
+import { cdn } from "@/lib/cdn";
 import BlogImg1 from "@/public/temp/home/blogs/blog-16.jpg";
 import BlogImg2 from "@/public/temp/home/blogs/blog-15.jpg";
 import BlogImg3 from "@/public/temp/home/blogs/blog-14.jpg";
@@ -2821,6 +2822,6 @@ export const blogs: Blog[] = [
 ];
 
 export const advertisements: Ad[] = [
-  { type: "ad", id: "ad-1", image: "/temp/ads/3.png", link: "https://www.allhome.in/", aspect: "aspect-[3/4]" },
-  { type: "ad", id: "ad-2", image: "/temp/ads/4.png", link: "https://www.essentiahome.com/?srsltid=AfmBOoqCYRZnQWfAJ8Tx74fKI-F59l2uzZUYhcKm6bUDxvV6r0RBMmld", aspect: "aspect-square" }
+  { type: "ad", id: "ad-1", image: cdn("/temp/ads/3.png"), link: "https://www.allhome.in/", aspect: "aspect-[3/4]" },
+  { type: "ad", id: "ad-2", image: cdn("/temp/ads/4.png"), link: "https://www.essentiahome.com/?srsltid=AfmBOoqCYRZnQWfAJ8Tx74fKI-F59l2uzZUYhcKm6bUDxvV6r0RBMmld", aspect: "aspect-square" }
 ];

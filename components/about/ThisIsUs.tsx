@@ -1,4 +1,5 @@
 "use client";
+import { cdn } from "@/lib/cdn";
 import React, { useState, useRef, useEffect } from 'react';
 import { Maximize2, Volume2, VolumeX, Play, Pause } from 'lucide-react';
 import SectionHeading from '../common/SectionHeading';
@@ -124,7 +125,7 @@ const ThisIsUs: React.FC = () => {
           <div className="flex flex-col gap-3">
             <div className=" w-full h-full ">
               {/* <video
-                src="/video/home.mp4"
+                src={cdn("/video/home.mp4")}
                 ref={videoRef}
                 className="w-full h-auto object-cover"
                 autoPlay
@@ -133,7 +134,7 @@ const ThisIsUs: React.FC = () => {
                 playsInline
               /> */}
               <Image
-              src="/temp/about/Founder.png"
+              src={cdn("/temp/about/Founder.png")}
               width={1000}
               style={{ objectFit: "contain", objectPosition: "center" }}
               height={200}

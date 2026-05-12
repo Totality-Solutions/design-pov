@@ -1,4 +1,5 @@
 "use client";
+import { cdn } from "@/lib/cdn";
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
@@ -6,18 +7,18 @@ import Image from "next/image";
 import { Container } from "@/components/common/Container";
 import Section from "@/components/common/Section";
 
-const img1 = "/temp/edition/elevate/1.JPG";
-const img2 = "/temp/edition/elevate/2.JPG";
-const img3 = "/temp/edition/elevate/3.JPG";
-const img4 = "/temp/edition/elevate/4.JPG";
-const img5 = "/temp/edition/elevate/5.JPG";
-const img6 = "/temp/edition/elevate/6.JPG";
-const img7 = "/temp/edition/elevate/7.JPG";
-const img8 = "/temp/edition/elevate/8.JPG";
-const img9 = "/temp/edition/elevate/9.JPG";
-const img10 = "/temp/edition/elevate/10.JPG";
-const img11 = "/temp/edition/elevate/11.JPG";
-const img12 = "/temp/edition/elevate/12.JPG";
+const img1 = cdn("/temp/edition/elevate/1.JPG");
+const img2 = cdn("/temp/edition/elevate/2.JPG");
+const img3 = cdn("/temp/edition/elevate/3.JPG");
+const img4 = cdn("/temp/edition/elevate/4.JPG");
+const img5 = cdn("/temp/edition/elevate/5.JPG");
+const img6 = cdn("/temp/edition/elevate/6.JPG");
+const img7 = cdn("/temp/edition/elevate/7.JPG");
+const img8 = cdn("/temp/edition/elevate/8.JPG");
+const img9 = cdn("/temp/edition/elevate/9.JPG");
+const img10 = cdn("/temp/edition/elevate/10.JPG");
+const img11 = cdn("/temp/edition/elevate/11.JPG");
+const img12 = cdn("/temp/edition/elevate/12.JPG");
 
 const gallery = [
   { id: 1, image: img1, thumbnail: img1 },

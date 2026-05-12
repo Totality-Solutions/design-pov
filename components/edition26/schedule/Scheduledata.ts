@@ -1,3 +1,4 @@
+import { cdn } from "@/lib/cdn";
 interface Speaker {
   name: string;
   role?: "moderator" | "speaker";
@@ -40,7 +41,7 @@ const scheduleData: DaySchedule[] = [
         endTime: "12:00 PM",
         day: 1,
         description: "Opening of the exhibition floor.",
-        image: "/temp/about/1.png"
+        image: cdn("/temp/about/1.png")
       },
       {
         id: "day1-event1",
@@ -51,7 +52,7 @@ const scheduleData: DaySchedule[] = [
         endTime: "1:00 PM",
         day: 1,
         description: "Opening address for Design POV.",
-        image: "/temp/about/1.png"
+        image: cdn("/temp/about/1.png")
       },
       {
         id: "day1-event2",
@@ -70,7 +71,7 @@ const scheduleData: DaySchedule[] = [
         day: 1,
         partners: ["Design Pataki"], // ADDED
         description: "A conversation on sourcing, curation and material storytelling in design.",
-        image: "/temp/about/2.png"
+        image: cdn("/temp/about/2.png")
       },
       {
         id: "day1-event3",
@@ -84,7 +85,7 @@ const scheduleData: DaySchedule[] = [
         endTime: "6:30 PM",
         day: 1,
         description: "An intimate walkthrough of ideas, journeys and perspectives.",
-        image: "/temp/about/3.png"
+        image: cdn("/temp/about/3.png")
       },
       {
         id: "day1-event4",
@@ -97,7 +98,7 @@ const scheduleData: DaySchedule[] = [
         isInviteOnly: true,
         inviteOnlyLink: "https://povindex.designpovindia.com/events/the-macallan-experience",
         description: "An exclusive curated experience.",
-        image: "/temp/about/4.png"
+        image: cdn("/temp/about/4.png")
       },
       {
         id: "day1-event5",
@@ -110,7 +111,7 @@ const scheduleData: DaySchedule[] = [
         isInviteOnly: true,
         inviteOnlyLink: "https://povindex.designpovindia.com/events/all-home-networking-night",
         description: "An evening of networking with the design community.",
-        image: "/temp/about/5.png"
+        image: cdn("/temp/about/5.png")
       }
     ]
   },
@@ -134,7 +135,7 @@ const scheduleData: DaySchedule[] = [
         partners: ["Epistle"], // ADDED
         categoryTag: "Epistle",
         description: "A sensory exploration of how the body interacts with space and material.",
-        image: "/temp/about/1.png"
+        image: cdn("/temp/about/1.png")
       },
       {
         id: "day2-event2",
@@ -147,7 +148,7 @@ const scheduleData: DaySchedule[] = [
         partners: ["Happy Hikkups"], // ADDED
         categoryTag: "Workshop",
         description: "Exploring rhythm and repetition as a creative process.",
-        image: "/temp/about/2.png"
+        image: cdn("/temp/about/2.png")
       },
       {
         id: "day2-event3",
@@ -166,7 +167,7 @@ const scheduleData: DaySchedule[] = [
         partners: ["Epistle"],
         categoryTag: "Epistle",
         description: "A dialogue on memory, identity and what we carry forward in design.",
-        image: "/temp/about/3.png"
+        image: cdn("/temp/about/3.png")
       },
       {
         id: "day2-event4",
@@ -179,7 +180,7 @@ const scheduleData: DaySchedule[] = [
         partners: ["Happy Hikkups"],
         categoryTag: "Workshop",
         description: "Understanding touch as a medium of expression in design.",
-        image: "/temp/about/4.png"
+        image: cdn("/temp/about/4.png")
       },
       {
         id: "day2-event5",
@@ -193,7 +194,7 @@ const scheduleData: DaySchedule[] = [
         inviteOnlyLink: "https://povindex.designpovindia.com/events/essentia-x-designpov-afterparty",
         categoryTag: "POV Elevate", // ADDED
         description: "An invite-only closing celebration with music and community.",
-        image: "/temp/about/5.png"
+        image: cdn("/temp/about/5.png")
       }
     ]
   },
@@ -212,7 +213,7 @@ const scheduleData: DaySchedule[] = [
         partners: ["Happy Hikkups"],
         categoryTag: "Workshop",
         description: "A bold exploration of contemporary visual expression.",
-        image: "/temp/about/1.png"
+        image: cdn("/temp/about/1.png")
       },
       {
         id: "day3-event2",
@@ -225,7 +226,7 @@ const scheduleData: DaySchedule[] = [
         partners: ["Happy Hikkups"],
         categoryTag: "Workshop",
         description: "Designing through intuition and the unseen.",
-        image: "/temp/about/2.png"
+        image: cdn("/temp/about/2.png")
       },
       {
         id: "day3-event3",
@@ -245,7 +246,7 @@ const scheduleData: DaySchedule[] = [
         partners: ["Epistle"],
         categoryTag: "Epistle",
         description: "Exploring how culture shapes contemporary design narratives.",
-        image: "/temp/about/3.png"
+        image: cdn("/temp/about/3.png")
       },
       {
         id: "day3-event4",
@@ -261,7 +262,7 @@ const scheduleData: DaySchedule[] = [
         partners: ["Epistle"],
         categoryTag: "Epistle",
         description: "Speculating the future of design, architecture and innovation.",
-        image: "/temp/about/4.png"
+        image: cdn("/temp/about/4.png")
       }
     ]
   }

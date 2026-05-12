@@ -1,4 +1,5 @@
 "use client";
+import { cdn } from "@/lib/cdn";
 
 import React, { useState } from "react";
 import Image from "next/image";
@@ -12,14 +13,14 @@ const ISSUE_DATA = [
     title: "Pacific Homes powers Design POV ’26 with engineered stone and surface innovation",
     author: "Design POV",
     date: "26 feb, 2026",
-    image: "/temp/ads/april-issue1.png",
+    image: cdn("/temp/ads/april-issue1.png"),
   },
   {
     category: "POV Blogs",
     title: "Acespace brings a decade of veneer expertise to Design POV ’26",
     author: "Design POV",
     date: "26 feb, 2026",
-    image: "/temp/ads/april-issue2.png",
+    image: cdn("/temp/ads/april-issue2.png"),
   },
 ];
 
@@ -117,7 +118,7 @@ const AprilIssueSection = () => {
             {/* AD IMAGE CONTAINER */}
             <div className="relative group overflow-hidden bg-gray-100 flex-grow flex flex-col justify-end min-h-[400px]">
               <Image
-                src="/temp/ads/2.png"
+                src={cdn("/temp/ads/2.png")}
                 alt="Advertisement"
                 fill
                 className="object-cover transition-transform duration-700 group-hover:scale-105"
