@@ -87,8 +87,8 @@ export default function ParticipationPopupForm({ onClose }: ParticipationPopupFo
             {/* Standard Inputs */}
             <div className="space-y-6">
               {[
-                { label: "Full Name :", name: "fullname", placeholder: "@Name" },
-                { label: "Email :", name: "email", placeholder: "info@domain.com" },
+                { label: "Full Name :", name: "fullname", placeholder: "Full Name" },
+                { label: "Email :", name: "email", placeholder: "xyz@gmail.com" },
                 { label: "Contact :", name: "contact", placeholder: "+91 XXXXX XXXXX" }
               ].map((input) => (
                 <div key={input.name} className="flex flex-col gap-1">

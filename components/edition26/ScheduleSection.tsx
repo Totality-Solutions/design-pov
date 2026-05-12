@@ -485,8 +485,8 @@ const ScheduleSection = () => {
                               layoutId="verticalLine"
                               className="absolute w-[1px] bg-white"
                               style={{
-                                top: '-600px',
-                                bottom: '-600px',
+                                top: '-158px',
+                                bottom: '-158px',
                                 left: '50%',
                               }}
                               transition={{

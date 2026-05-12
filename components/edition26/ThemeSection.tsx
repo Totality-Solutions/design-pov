@@ -12,13 +12,13 @@ const themeData = [
     id: 1, w: 320, h: 260, img: "/temp/home/theme/WEBSITE_THEME BANNER_1.jpg.jpeg",
     desktop: { top: '8%', left: '5%' },
     tablet: { top: '5%', left: '10%' }, // In-between
-    mobile: { top: '7%', left: '16%' } 
+    mobile: { top: '9%', left: '16%' } 
   },
   { 
     id: 2, w: 320, h: 320, img: "/temp/home/theme/WEBSITE_THEME BANNER_2.jpg.jpeg",
     desktop: { top: '26%', left: '70%' },
     tablet: { top: '30%', left: '62%' },
-    mobile: { top: '32%', left: '50%' } 
+    mobile: { top: '34%', left: '50%' } 
   },
   { 
     id: 3, w: 320, h: 200, img: "/temp/home/theme/WEBSITE_THEME BANNER_3.jpg.jpeg",

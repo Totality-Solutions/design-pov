@@ -7,7 +7,7 @@ import CTABtn from "../common/CTABtn";
 export default function ScrollMaskText() {
   return (
     <section className="w-full pt-5 lg:pt-20">
-      <div className=" w-full bg-black py-12 px-6 md:px-10">
+      <div className=" w-full bg-black py-6 md:py-12 px-6 md:px-10">
         <div className="flex flex-col lg:flex-row gap-8 items-center justify-between">
         {/* Left Text */}
         <div className="max-w-4xl">
@@ -23,7 +23,6 @@ export default function ScrollMaskText() {
         <div className="flex-shrink-0">
           <CTABtn
             label="Explore the Show"
-            iconType="arrow"
             btnBg="var(--primary-blue)"
             btnHoverBg="var(--primary-blue)"
             textColor="var(--color-white)"

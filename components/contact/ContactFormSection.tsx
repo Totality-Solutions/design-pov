@@ -72,12 +72,12 @@ const ContactFormSection = () => {
         {/* Right: Form Column */}
         <form
           onSubmit={handleSubmit}
-          className="w-full lg:max-w-[584px] bg-white p-6 md:p-10 flex flex-col gap-6 shadow-sm border border-gray-100"
+          className="w-full lg:max-w-[584px] bg-white p-4 md:p-10 flex flex-col gap-6"
         >
           <Input label="Name" name="name" placeholder="Full Name" value={formData.name} onChange={handleChange} required />
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Input label="Email" name="email" type="email" placeholder="info@domain.com" value={formData.email} onChange={handleChange} required />
+            <Input label="Email" name="email" type="email" placeholder="xyz@gmail.com" value={formData.email} onChange={handleChange} required />
             <Input label="Contact" name="contact" placeholder="XXXXX XXXXX" value={formData.contact} onChange={handleChange} />
           </div>
 
@@ -86,14 +86,14 @@ const ContactFormSection = () => {
           <Input label="Your Location" name="location" placeholder="Mumbai, India" value={formData.location} onChange={handleChange} />
 
           <div className="flex flex-col gap-1 w-full">
-            <label className="px-6 text-base font-medium text-[#010101]">Message</label>
+            <label className="px-0 lg:px-6 text-base font-medium text-[#010101]">Message</label>
             <textarea
               name="message"
               placeholder="How can we help you?"
               value={formData.message}
               onChange={handleChange}
               rows={4}
-              className="w-full px-6 py-2 bg-transparent border-b border-[#D9D9D9] text-sm focus:outline-none focus:border-[#0000B3] placeholder:text-black/30 font-medium resize-none"
+              className="w-full px-0 lg:px-6 py-2 bg-transparent border-b border-[#D9D9D9] text-sm focus:outline-none focus:border-[#0000B3] placeholder:text-black/30 font-medium resize-none"
             />
           </div>
 
@@ -129,7 +129,7 @@ const Input = ({
   value: string; onChange: (e: React.ChangeEvent<HTMLInputElement>) => void; required?: boolean;
 }) => (
   <div className="flex flex-col gap-1 w-full">
-    <label className="px-6 text-base font-medium text-[#010101]">{label}</label>
+    <label className="px-0 lg:px-6 text-base font-medium text-[#010101]">{label}</label>
     <input
       type={type}
       name={name}
@@ -137,7 +137,7 @@ const Input = ({
       value={value}
       onChange={onChange}
       required={required}
-      className="w-full px-6 py-1 bg-transparent border-b border-[#D9D9D9] text-sm focus:outline-none focus:border-[#0000B3] placeholder:text-black/30 font-medium"
+      className="w-full px-0 lg:px-6 py-1 bg-transparent border-b border-[#D9D9D9] text-sm focus:outline-none focus:border-[#0000B3] placeholder:text-black/30 font-medium"
     />
   </div>
 );

@@ -144,7 +144,7 @@ export const CoreShowcase = () => {
                 transition={{ duration: 0.3 }}
                 className="flex items-center justify-end gap-4 cursor-default"
               >
-                <h3 className="text-body-tab font-semibold ">{item.label}</h3>
+                <h3 className="text-body-tab font-semibold uppercase">{item.label}</h3>
                 <StatusDot isActive={activeIndex === i + 8} />
               </motion.div>
             ))}

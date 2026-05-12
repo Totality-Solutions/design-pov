@@ -135,7 +135,7 @@ export default function EcosystemCarousel() {
               md:w-1/2
               lg:w-1/4
 
-              px-6 lg:px-8
+              px-6 lg:px-10
               py-8 md:py-10
             "
           >

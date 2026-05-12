@@ -78,7 +78,7 @@ export default function FormInner({ category }: { category?: string }) {
             <label className="text-[15px] text-black/50 font-medium">Email <span className="text-red-600">*</span></label>
             <input
               type="email"
-              placeholder="info@yourdomain.com"
+              placeholder="xyz@gmail.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="border-b border-black/20 py-2 text-black outline-none text-[13px] font-medium transition-colors focus:border-primary-blue"

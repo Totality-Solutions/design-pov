@@ -31,7 +31,7 @@ export default function ParticipationForm() {
     Circle: "/temp/home/ecosystem/N-3.jpg",
     Objects: "/temp/home/ecosystem/OBJECT.jpeg",
     Elevate: "/temp/home/ecosystem/N-2.jpg",
-    Brands: "/temp/edition/brands/brand-hero.png",
+    Brands: "/temp/ecosystem/brand-hero.png",
     Partnership: "/temp/about/3.png",
   };
 
@@ -86,7 +86,7 @@ export default function ParticipationForm() {
       {/* FORM */}
       <form
         ref={formRef}
-        className="flex flex-col xl:flex-row gap-8 xl:gap-12 px-4 md:px-6 items-start w-full overflow-x-hidden"
+        className="flex flex-col xl:flex-row gap-8 xl:gap-12 px-6 md:px-10 items-start w-full overflow-x-hidden"
       >
 
         {/* LEFT SIDE */}
@@ -104,7 +104,7 @@ export default function ParticipationForm() {
                 name="fullname"
                 type="text"
                 required
-                placeholder="@Name"
+                placeholder="Full Name"
                 className="border-b border-black/20 py-2 text-[#000000] outline-none text-[13px] font-medium transition-colors w-full"
               />
             </div>
@@ -118,7 +118,7 @@ export default function ParticipationForm() {
                 name="email"
                 type="email"
                 required
-                placeholder="info@yourdomain.com"
+                placeholder="xyz@gmail.com"
                 className="border-b border-black/20 py-2 text-[#000000] outline-none text-[13px] font-medium transition-colors w-full"
               />
             </div>

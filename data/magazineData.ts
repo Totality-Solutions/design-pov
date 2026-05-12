@@ -29,6 +29,8 @@ import BlogImg27 from "@/public/temp/magazine/27/blog-27-1.jpeg";
 import BlogImg28 from "@/public/temp/magazine/28/blog-28-1.jpeg";
 import BlogImg29 from "@/public/temp/magazine/29/blog-29-1.jpg";
 import BlogImg30 from "@/public/temp/magazine/30/blog-30-1.png";
+import BlogImg31 from "@/public/temp/magazine/31/blog-31-1.png";
+import BlogImg32 from "@/public/temp/magazine/32/blog-32-1.jpeg";
 
 
 export type ContentBlock =
@@ -2130,7 +2132,7 @@ export const blogs: Blog[] = [
   "type": "blog",
   "id": 17,
   "slug": "design-as-discourse-platform-building-design-pov",
-  "category": "Spotlight",
+  "category": "POV Blogs",
   "author": "Dyumni Pandit",
   "date": "09 May 2026",
   "isFeatured": true,
@@ -2270,7 +2272,7 @@ export const blogs: Blog[] = [
     "type": "blog",
     "id": 18,
     "slug": "woven-legacy-design-pov-2026",
-    "category": "Spotlight",
+    "category": "POV Blogs",
     "author": "Design POV Editorial",
     "date": "08 May 2026",
     "isFeatured": false,
@@ -2309,7 +2311,7 @@ export const blogs: Blog[] = [
     "type": "blog",
     "id": 19,
     "slug": "kuche7-design-pov-2026",
-    "category": "Spotlight",
+    "category": "POV Blogs",
     "author": "Design POV Editorial",
     "date": "08 May 2026",
     "isFeatured": false,
@@ -2345,7 +2347,7 @@ export const blogs: Blog[] = [
     "type": "blog",
     "id": 20,
     "slug": "kstairs-design-pov-2026",
-    "category": "Spotlight",
+    "category": "POV Blogs",
     "author": "Design POV Editorial",
     "date": "08 May 2026",
     "isFeatured": false,
@@ -2380,7 +2382,7 @@ export const blogs: Blog[] = [
     "type": "blog",
     "id": 21,
     "slug": "astronea-design-pov-2026",
-    "category": "Spotlight",
+    "category": "POV Blogs",
     "author": "Design POV Editorial",
     "date": "08 May 2026",
     "isFeatured": false,
@@ -2415,7 +2417,7 @@ export const blogs: Blog[] = [
     "type": "blog",
     "id": 22,
     "slug": "sunrooof-design-pov-2026",
-    "category": "Spotlight",
+    "category": "POV Blogs",
     "author": "Design POV Editorial",
     "date": "08 May 2026",
     "isFeatured": true,
@@ -2451,7 +2453,7 @@ export const blogs: Blog[] = [
     "type": "blog",
     "id": 23,
     "slug": "pare-innovations-design-pov-2026",
-    "category": "Spotlight",
+    "category": "POV Blogs",
     "author": "Design POV Editorial",
     "date": "08 May 2026",
     "isFeatured": false,
@@ -2486,7 +2488,7 @@ export const blogs: Blog[] = [
     "type": "blog",
     "id": 24,
     "slug": "kubik-design-pov-2026",
-    "category": "Spotlight",
+    "category": "POV Blogs",
     "author": "Design POV Editorial",
     "date": "08 May 2026",
     "isFeatured": false,
@@ -2521,7 +2523,7 @@ export const blogs: Blog[] = [
     "type": "blog",
     "id": 25,
     "slug": "deluxe-veneers-design-pov-2026",
-    "category": "Spotlight",
+    "category": "POV Blogs",
     "author": "Design POV Editorial",
     "date": "08 May 2026",
     "isFeatured": false,
@@ -2556,7 +2558,7 @@ export const blogs: Blog[] = [
     "type": "blog",
     "id": 26,
     "slug": "paradigm-quartz-design-pov-2026",
-    "category": "Spotlight",
+    "category": "POV Blogs",
     "author": "Design POV Editorial",
     "date": "08 May 2026",
     "isFeatured": false,
@@ -2591,7 +2593,7 @@ export const blogs: Blog[] = [
     "type": "blog",
     "id": 27,
     "slug": "acespace-design-pov-2026",
-    "category": "Spotlight",
+    "category": "POV Blogs",
     "author": "Design POV Editorial",
     "date": "08 May 2026",
     "isFeatured": false,
@@ -2626,7 +2628,7 @@ export const blogs: Blog[] = [
     "type": "blog",
     "id": 28,
     "slug": "kajaria-design-pov-2026",
-    "category": "Spotlight",
+    "category": "POV Blogs",
     "author": "Design POV Editorial",
     "date": "08 May 2026",
     "isFeatured": true,
@@ -2661,7 +2663,7 @@ export const blogs: Blog[] = [
     "type": "blog",
     "id": 29,
     "slug": "pacific-homes-design-pov-2026",
-    "category": "Spotlight",
+    "category": "POV Blogs",
     "author": "Design POV Editorial",
     "date": "08 May 2026",
     "isFeatured": true,
@@ -2696,7 +2698,7 @@ export const blogs: Blog[] = [
   "type": "blog",
   "id": 30,
   "slug": "hybec-air-design-pov-2026",
-  "category": "Spotlight",
+  "category": "POV Blogs",
   "author": "Design POV Editorial",
   "date": "11 May 2026",
   "isFeatured": true,
@@ -2734,45 +2736,88 @@ export const blogs: Blog[] = [
   ]
 },
 
-  //   {
-  //   "type": "blog",
-  //   "id": 30,
-  //   "slug": "embelliish-design-pov-2026",
-  //   "category": "Spotlight",
-  //   "author": "Design POV Editorial",
-  //   "date": "08 May 2026",
-  //   "isFeatured": false,
-  //   image: BlogImg30,
-  //   thumbnail: BlogImg30,
-  //   "title": "Embelliish brings luxury soft furnishings and drapery expertise to Design POV ’26",
-  //   "subtitle": "The Mumbai and Hyderabad-based brand specialises in premium curtains and upholstery",
-  //   "description": "Embelliish develops luxury curtains, upholstery, blinds, and soft furnishing systems for residential and hospitality interiors.",
-  //   "featuredParagraphs": [
-  //     "Embelliish works across curtains, upholstery, and luxury window treatments.",
-  //     "The brand focuses on material specificity, texture, and custom detailing.",
-  //     "At Design POV ’26, Embelliish explores how soft furnishings shape interior atmospheres."
-  //   ],
-  //   "detailedContent": [
-  //     {
-  //       "type": "text",
-  //       "value": "Led by Hitesh and Neelam Bhanushali, Embelliish works in luxury curtains and soft furnishings with flagship stores in Mumbai and Hyderabad."
-  //     },
-  //     {
-  //       "type": "text",
-  //       "title": "Material Specificity",
-  //       "value": "The brand's approach is distinguished by the level of specificity applied to fabric selection. Every weave and detail is chosen with the finished interior in mind, covering everything from classic drapery to automated blind systems."
-  //     },
-  //     {
-  //       "type": "image",
-  //       "value": "/temp/magazine/blogs/embelliish-fabrics.jpg",
-  //       "caption": "Luxury curtains and soft furnishings that define the atmospheric quality of a space."
-  //     },
-  //     {
-  //       "type": "text",
-  //       "value": "At Design POV '26, Embelliish explores how soft furnishings shape interior atmospheres through material quality and custom detailing."
-  //     }
-  //   ]
-  // },
+  {
+    "type": "blog",
+    "id": 31,
+    "slug": "embelliish-design-pov-2026",
+    "category": "POV Blogs",
+    "author": "Design POV Editorial",
+    "date": "08 May 2026",
+    "isFeatured": false,
+    image: BlogImg31,
+    thumbnail: BlogImg31,
+    "title": "Embelliish brings luxury soft furnishings and drapery expertise to Design POV ’26",
+    "subtitle": "The Mumbai and Hyderabad-based brand specialises in premium curtains and upholstery",
+    "description": "Embelliish develops luxury curtains, upholstery, blinds, and soft furnishing systems for residential and hospitality interiors.",
+    "featuredParagraphs": [
+      "Embelliish works across curtains, upholstery, and luxury window treatments.",
+      "The brand focuses on material specificity, texture, and custom detailing.",
+      "At Design POV ’26, Embelliish explores how soft furnishings shape interior atmospheres."
+    ],
+    "detailedContent": [
+      {
+        "type": "text",
+        "value": "Led by Hitesh and Neelam Bhanushali, Embelliish works in luxury curtains and soft furnishings with flagship stores in Mumbai and Hyderabad."
+      },
+      {
+        "type": "text",
+        "title": "Material Specificity",
+        "value": "The brand's approach is distinguished by the level of specificity applied to fabric selection. Every weave and detail is chosen with the finished interior in mind, covering everything from classic drapery to automated blind systems."
+      },
+      {
+        "type": "image",
+        "value": "/temp/magazine/blogs/embelliish-fabrics.jpg",
+        "caption": "Luxury curtains and soft furnishings that define the atmospheric quality of a space."
+      },
+      {
+        "type": "text",
+        "value": "At Design POV '26, Embelliish explores how soft furnishings shape interior atmospheres through material quality and custom detailing."
+      }
+    ]
+  },
+
+  {
+  "type": "blog",
+  "id": 32,
+  "slug": "all-home-design-pov-2026",
+  "category": "POV Blogs",
+  "author": "Design POV Editorial",
+  "date": "12 May 2026",
+  "isFeatured": false,
+  image: BlogImg32,
+  thumbnail: BlogImg32,
+  "title": "AllHome joins Design POV ’26 as a Network Partner",
+  "subtitle": "The platform brings together seven brands across key categories in the built environment",
+  "description": "AllHome is a platform that brings together seven brands across key categories in the built environment: surface coatings, metal facades, architectural lighting, windows and sliding systems, bathware, architectural hardware, and handles and accessories.",
+  "featuredParagraphs": [
+    "AllHome connects seven independent brands across the built environment.",
+    "The platform spans categories from facades and lighting to bathware and architectural hardware.",
+    "At Design POV ’26, AllHome explores how spaces are felt, seen, and experienced through this year's theme, Sense and Sensibility."
+  ],
+  "detailedContent": [
+    {
+      "type": "text",
+      "value": "We're pleased to welcome AllHome to Design POV '26 as a Network Partner."
+    },
+    {
+      "type": "text",
+      "value": "AllHome is a platform that brings together seven brands across key categories in the built environment: surface coatings, metal facades, architectural lighting, windows and sliding systems, bathware, architectural hardware, and handles and accessories. Each brand operates independently within its category, and the platform uses technology to connect product discovery and specification across its network."
+    },
+    {
+      "type": "text",
+      "title": "The seven brands under the AllHome platform are:",
+      "value": "- Colour Coats, specialising in Italian-grade wood coatings, wall paints, and textured finishes across walls, furniture, and flooring.\n- Metalia, producing metal facade solutions including aluminium profiles, corten steel meshes, kinetic facades, and 3D parametric panels.\n- Ledlum, covering architectural lighting and fans across luxury residential, commercial, and hospitality spaces.\n- The Window Factory, manufacturing high-end windows and sliding systems with over 1,000 projects completed across 30 cities.\n- Fiamarc, distributing architectural and furniture hardware from over 15 international brands, spanning sliding systems, door hardware, modular hardware, and laminates.\n- House of W, carrying luxury bathware from international brands including THG Paris, Lamborghini, and House of ROHL across residential and hospitality projects.\n- Shapes, producing design-led handles and hardware since 1991 with over 1,200 designs across door, wardrobe, drawer, and bathroom categories."
+    },
+    {
+      "type": "text",
+      "value": "Together, the seven brands cover a significant portion of the material and product decisions that go into building and finishing a space, from the facade to the interior fittings."
+    },
+    {
+      "type": "text",
+      "value": "At Design POV '26, AllHome brings the full breadth of its brand network to a platform exploring how spaces are felt, seen, and experienced through this year's theme, Sense and Sensibility."
+    }
+  ]
+}
 ];
 
 export const advertisements: Ad[] = [

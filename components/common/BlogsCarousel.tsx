@@ -13,9 +13,16 @@ export default function BlogsCarousel({ filter }: CarouselProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const filteredBlogs = useMemo(() => {
-    if (filter === "Magazine") return blogs;
-    return blogs.filter(item => item.category.toLowerCase() === filter.toLowerCase());
-  }, [filter]);
+  const filtered =
+    filter === "Magazine"
+      ? [...blogs]
+      : blogs.filter(
+          item => item.category.toLowerCase() === filter.toLowerCase()
+        );
+
+  // Latest blog first (higher id = newer)
+  return filtered.sort((a, b) => b.id - a.id);
+}, [filter]);
 
   const scroll = (direction: "left" | "right") => {
     if (scrollRef.current) {

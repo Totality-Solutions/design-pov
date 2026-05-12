@@ -221,9 +221,9 @@ const Footer = () => {
               <FooterTextColumn {...navLinks.AboutUs} />
               <FooterTextColumn {...navLinks.Originals} />
             </div>
-          </div>
 
-          <div className="grid grid-cols-2 lg:hidden pointer-events-auto my-8" style={{ gap: "var(--footer-gap-links)"}}>
+          </div>          
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:hidden pointer-events-auto my-12 gap-8" >
               <FooterTextColumn {...navLinks.Partners} />
               <FooterTextColumn {...navLinks.AboutUs} />
               <FooterTextColumn {...navLinks.Originals} />
@@ -376,7 +376,7 @@ const FooterTextColumn = ({ title, href, items }: any) => (
     <div className="flex flex-col gap-2 lg:gap-[12px]">
 
       <Link href={href}>
-        <h3 className="text-white text-[16px] font-medium tracking-[0.05em] hover:opacity-70 transition-opacity cursor-pointer">
+        <h3 className="text-white text-[16px] font-normal tracking-[0.05em] hover:opacity-70 transition-opacity cursor-pointer">
           {title}
         </h3>
       </Link>
@@ -386,7 +386,7 @@ const FooterTextColumn = ({ title, href, items }: any) => (
           <li key={item.title}>
             <Link
               href={item.href}
-              className="text-white text-[14px] font-light whitespace-nowrap opacity-80 hover:opacity-100 transition-opacity"
+              className="text-white text-[15px] font-normal tracking-[0.05em] opacity-90 hover:opacity-70 transition-opacity cursor-pointer"
             >
               {item.title}
             </Link>
