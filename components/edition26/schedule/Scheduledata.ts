@@ -13,6 +13,7 @@ interface ScheduleEvent {
   endTime: string;
   day: 1 | 2 | 3;
   isInviteOnly?: boolean;
+  inviteOnlyLink?: string;
   description?: string;
   image?: string;
   partners?: string[]; // NEW (Design Pataki, Epistle, etc.)
@@ -80,7 +81,7 @@ const scheduleData: DaySchedule[] = [
         ],
         venue: "Circle",
         startTime: "5:00 PM",
-        endTime: "5:30 PM",
+        endTime: "6:30 PM",
         day: 1,
         description: "An intimate walkthrough of ideas, journeys and perspectives.",
         image: "/temp/about/3.png"
@@ -94,6 +95,7 @@ const scheduleData: DaySchedule[] = [
         endTime: "8:30 PM",
         day: 1,
         isInviteOnly: true,
+        inviteOnlyLink: "https://povindex.designpovindia.com/events/the-macallan-experience",
         description: "An exclusive curated experience.",
         image: "/temp/about/4.png"
       },
@@ -106,6 +108,7 @@ const scheduleData: DaySchedule[] = [
         endTime: "10:30 PM",
         day: 1,
         isInviteOnly: true,
+        inviteOnlyLink: "https://povindex.designpovindia.com/events/all-home-networking-night",
         description: "An evening of networking with the design community.",
         image: "/temp/about/5.png"
       }
@@ -187,6 +190,7 @@ const scheduleData: DaySchedule[] = [
         endTime: "11:59 PM",
         day: 2,
         isInviteOnly: true,
+        inviteOnlyLink: "https://povindex.designpovindia.com/events/essentia-x-designpov-afterparty",
         categoryTag: "POV Elevate", // ADDED
         description: "An invite-only closing celebration with music and community.",
         image: "/temp/about/5.png"

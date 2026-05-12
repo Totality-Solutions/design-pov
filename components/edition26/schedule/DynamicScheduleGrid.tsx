@@ -22,6 +22,7 @@ interface DetailedEvent {
   speakers: string[];
   moderator?: string;
   isInviteOnly: boolean;
+  inviteOnlyLink?: string;
   links: { ig?: string; li?: string; web?: string };
 }
 
@@ -58,6 +59,7 @@ const convertScheduleData = (): Record<string, DayData> => {
       speakers:    event.speakers.filter(s => s.role !== "moderator").map(s => s.name),
       moderator:   event.speakers.find(s => s.role === "moderator")?.name,
       isInviteOnly: event.isInviteOnly ?? false,
+      inviteOnlyLink: event.inviteOnlyLink,
       links:       { web: "#" }
     }));
 
@@ -159,9 +161,24 @@ const DynamicScheduleGrid = () => {
                     <span className="text-5xl font-semibold tracking-tighter">{event.id}</span>
                     <div>
                       <h3 className="text-2xl font-semibold text-black mb-2">{event.title}</h3>
-                      <p className="text-zinc-500 text-sm leading-relaxed max-w-[280px]">
-                        {event.subtitle}
-                      </p>
+                     <div className="flex flex-col justify-center gap-4 lg:border-r lg:border-gray-100">
+                    <div>
+                      <span className="text-[14px] font-medium text-zinc-400 block mb-1 font-['Montserrat']">Venue</span>
+                      <p className="text-sm font-medium text-primary-blue">{event.venue}</p>
+                    </div>
+                    {event.categoryTag && (
+                      <div>
+                        <span className="text-[14px] font-medium text-zinc-400 block mb-1 font-['Montserrat']">Category</span>
+                        <p className="text-sm font-medium">{event.categoryTag}</p>
+                      </div>
+                    )}
+                    {event.partners && event.partners.length > 0 && (
+                      <div>
+                        <span className="text-[14px] font-medium text-zinc-400 block mb-1 font-['Montserrat']">Partner</span>
+                        <p className="text-sm font-medium">{event.partners.join(", ")}</p>
+                      </div>
+                    )}
+                  </div>
                     </div>
                   </div>
 
@@ -194,24 +211,7 @@ const DynamicScheduleGrid = () => {
                   </div>
 
                   {/* Col 3 — Venue + Category + Partners */}
-                  <div className="px-6 py-3 lg:p-12 flex flex-col justify-center gap-4 lg:border-r lg:border-gray-100">
-                    <div>
-                      <span className="text-[14px] font-medium text-zinc-400 block mb-1 font-['Montserrat']">Venue</span>
-                      <p className="text-sm font-medium text-primary-blue">{event.venue}</p>
-                    </div>
-                    {event.categoryTag && (
-                      <div>
-                        <span className="text-[14px] font-medium text-zinc-400 block mb-1 font-['Montserrat']">Category</span>
-                        <p className="text-sm font-medium">{event.categoryTag}</p>
-                      </div>
-                    )}
-                    {event.partners && event.partners.length > 0 && (
-                      <div>
-                        <span className="text-[14px] font-medium text-zinc-400 block mb-1 font-['Montserrat']">Partner</span>
-                        <p className="text-sm font-medium">{event.partners.join(", ")}</p>
-                      </div>
-                    )}
-                  </div>
+                  
 
                   {/* Col 4 — Image (commented) + Invite Only button */}
                   <div className="px-6 py-3 lg:p-12 flex flex-col items-start lg:items-center justify-center gap-4">
@@ -242,7 +242,7 @@ const DynamicScheduleGrid = () => {
                         bottomKey2Width="12px"
                         bottomKey1Right="50px"
                         bottomKey2Right="15px"
-                        href="#"
+                        href={event.inviteOnlyLink}
                       />
                     )}
                   </div>
