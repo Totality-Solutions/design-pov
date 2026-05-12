@@ -4,19 +4,6 @@ import { Container } from '../common/Container'
 import CTABtn from '../common/CTABtn'
 import { useScroll, useTransform, useSpring } from "framer-motion"
 import MasonryGrid from './Mansonrygrid'
-import img1 from "@/public/temp/theme/1.png"
-import img2 from "@/public/temp/theme/2.png"
-import img3 from "@/public/temp/theme/3.png"
-import img4 from "@/public/temp/theme/4.png"
-import img5 from "@/public/temp/theme/5.png"
-import img6 from "@/public/temp/theme/6.png"
-import img7 from "@/public/temp/theme/7.png"
-import img8 from "@/public/temp/theme/8.png"
-import img9 from "@/public/temp/theme/9.png"
-import img10 from "@/public/temp/theme/10.png"
-import img11 from "@/public/temp/theme/11.png"
-import img12 from "@/public/temp/theme/12.png"
-import img13 from "@/public/temp/theme/13.png"
 import Section from '../common/Section'
 import { Link } from 'lucide-react'
 

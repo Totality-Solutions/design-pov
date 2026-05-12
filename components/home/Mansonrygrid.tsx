@@ -11,10 +11,6 @@ import img2 from "@/public/temp/home/theme/WEBSITE_THEME BANNER_2.jpg.jpeg";
 import img3 from "@/public/temp/home/theme/WEBSITE_THEME BANNER_3.jpg.jpeg";
 import img4 from "@/public/temp/home/theme/WEBSITE_THEME BANNER_4.jpg.jpeg";
 import Link  from "next/link";
-// import img5 from "@/public/temp/theme/5.png";
-// import img6 from "@/public/temp/theme/6.png";
-// import img7 from "@/public/temp/theme/4.png";
-// import img8 from "@/public/temp/theme/12.png";
 
 // ✅ Flexible Cell (image | video | empty for color)
 function Cell({
