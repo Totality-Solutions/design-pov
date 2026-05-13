@@ -329,9 +329,7 @@ export default function Navbar() {
       ========================== */}
       <header
         id="main-navbar"
-        className={`w-full bg-white border-b border-gray-100 transition-all duration-300 z-[2100] sticky top-0 ${
-          isSticky ? "lg:fixed lg:top-0 lg:left-0" : "lg:relative lg:top-auto"
-        }`}
+        className="fixed top-0 left-0 w-full bg-white border-b border-gray-100 transition-all duration-300 z-[2100]"
       >
         
           <div className="flex justify-between items-center px-6 lg:px-10 py-5">
