@@ -10,11 +10,11 @@ export default function EcosystemHero() {
       {/* TEXT SECTION: Clean horizontal layout with border */}
 
       <UnderlineText lineHeight={72} className="text-h2-mobile md:text-h2-tab lg:text-h2 tracking-tight font-semibold">
-          Design POV extends beyond a
+          Design POV extends beyond a singular format.
       </UnderlineText>
-      <UnderlineText lineHeight={72} className="text-h2-mobile md:text-h2-tab lg:text-h2 tracking-tight font-semibold">
+      {/* <UnderlineText lineHeight={72} className="text-h2-mobile md:text-h2-tab lg:text-h2 tracking-tight font-semibold">
           singular format.
-      </UnderlineText>
+      </UnderlineText> */}
 
       {/* MEDIA SECTION: Responsive container for Image or Video */}
       <div className="relative w-full h-[70vh] overflow-hidden flex items-center justify-center py-4">

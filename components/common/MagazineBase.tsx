@@ -156,7 +156,7 @@ export default function MagazineBase({
                 className={`flex flex-col gap-4 group cursor-pointer transition-all duration-300 ${activeBlog.id === item.id ? "opacity-100 pointer-events-none" : "opacity-100"}`}
               >
                 <div className="relative aspect-[4/3] w-full overflow-hidden">
-                  <Image src={item.image} alt={item.title} fill sizes="320px" className="object-cover group-hover:scale-110 transition-transform duration-500" />
+                  <Image src={item.image} alt={item.title} fill sizes="320px" className="object-cover group-hover:scale-110 object-top transition-transform duration-500" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-80" />
                   <div className="absolute bottom-4 left-4 right-4 z-10">
                     <span className="text-white/60 text-[10px] uppercase">{item.category}</span>

@@ -103,7 +103,7 @@ export const ShowcaseModal = ({
               scale: 0.95,
               y: 20,
             }}
-            className="relative w-full max-w-[1200px] h-[80vh] lg:h-[600px] bg-white flex flex-col lg:flex-row overflow-hidden shadow-2xl"
+            className="relative w-full max-w-[1200px] h-[90vh] lg:h-[600px] bg-white flex flex-col lg:flex-row overflow-hidden shadow-2xl"
             style={{ minHeight: "600px" }}
           >
             {/* LEFT: Carousel */}
