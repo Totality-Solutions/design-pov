@@ -3,11 +3,6 @@ import { createServerClient } from '@/lib/supabase/server';
 import { normalizeBrandPartner } from '@/lib/brandPartners';
 import type { BrandPartnerRow } from '@/types';
 
-const STATIC_FALLBACK = Array.from({ length: 64 }, (_, i) => ({
-  src: `/temp/edition/brands/${i + 1}.png`,
-  name: `Brand ${i + 1}`,
-}));
-
 export default async function Brands() {
   let logos: { src: string; name: string }[] = [];
 
@@ -27,7 +22,7 @@ export default async function Brands() {
     }
   } catch {}
 
-  if (!logos.length) logos = STATIC_FALLBACK;
+  if (!logos.length) return null;
 
   return <BrandLogo title="Brands" logos={logos} />;
 }
