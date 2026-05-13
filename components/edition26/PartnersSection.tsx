@@ -2,9 +2,38 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import SectionHeading from "../common/SectionHeading";
-import { partners as partnersData } from "@/data/partnerdData";
+import { normalizeBrandPartner } from "@/lib/brandPartners";
+import type { BrandPartnerRow } from "@/types";
 
-const CATEGORIES = [
+const TYPE_TO_CATEGORY: Record<string, string> = {
+  sponsor:                   "Partners",
+  build_partner:             "Build Partners",
+  key_execution_partner:     "Key execution Partner",
+  gifting_partner:           "Gifting Partners",
+  media_partner:             "Media Partners",
+  digital_media_partner:     "Digital Media Partners",
+  red_room_partner:          "Red Room Partner",
+  ticketing_partner:         "Ticketing Partners",
+  sensory_collaborator:      "Sensory Collaborator",
+  curatorial_partner:        "Curatorial Partner",
+  experience_partner:        "Experience Partner",
+  knowledge_partner:         "Knowledge Partner",
+  learning_partner:          "Learning Partner",
+  visual_experience_partner: "Visual Experience Partner",
+  workshop_partner:          "Workshop Partner",
+  operation_partner:         "Operation Partner",
+  community_partner:         "Community Partner",
+};
+
+const TIER_LABEL: Record<string, string> = {
+  presenting: "PRESENTING PARTNER",
+  powered_by: "POWERED BY",
+  network:    "NETWORK PARTNER",
+  lounge:     "LOUNGE PARTNER",
+  colour:     "COLOUR PARTNER",
+};
+
+const CATEGORY_ORDER = [
   "Partners",
   "Build Partners",
   "Key execution Partner",
@@ -20,269 +49,70 @@ const CATEGORIES = [
   "Learning Partner",
   "Visual Experience Partner",
   "Workshop Partner",
-
+  "Operation Partner",
+  "Community Partner",
 ];
 
+type PartnerEntry = { id: string; category: string; name: string; logo: string };
+
 const PartnersSection: React.FC = () => {
-  const [activeTab, setActiveTab] = useState("Partners");
-  const [isMobile, setIsMobile] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
+  const [allPartners, setAllPartners] = useState<PartnerEntry[]>([]);
+  const [activeTab, setActiveTab]     = useState("Partners");
+  const [isMobile, setIsMobile]       = useState(false);
+  const [isHovered, setIsHovered]     = useState(false);
 
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-  const handleTabClick = (
-    cat: string,
-    e: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    setActiveTab(cat);
-
-    const target = e.currentTarget;
-
-    target.scrollIntoView({
-      behavior: "smooth",
-      block: "nearest",
-      inline: "center",
-    });
-  };
+  useEffect(() => {
+    fetch("/api/cms/brand-partners")
+      .then((r) => r.ok ? r.json() : null)
+      .then((json) => {
+        if (!json?.data) return;
+        const mapped = (json.data as BrandPartnerRow[])
+          .filter((p) => p.type !== "brand" && p.type !== "brand_collaborator")
+          .map((p) => {
+            const item     = normalizeBrandPartner(p);
+            const category = TYPE_TO_CATEGORY[item.type] ?? item.type;
+            const name     = item.type === "sponsor"
+              ? (TIER_LABEL[item.tier ?? ""] ?? item.name)
+              : item.name;
+            return { id: item.id, category, name, logo: item.logo };
+          });
+        setAllPartners(mapped);
+      })
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
-
     checkMobile();
-
     window.addEventListener("resize", checkMobile);
-
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  // const partners = [
-  //   // MAIN PARTNERS
-  //   {
-  //     id: 1,
-  //     category: "Partners",
-  //     name: "PRESENTING PARTNER",
-  //     logo: "/temp/edition/sponsors/1.png",
-  //   },
-  //   {
-  //     id: 2,
-  //     category: "Partners",
-  //     name: "POWERED BY",
-  //     logo: "/temp/edition/sponsors/2.png",
-  //   },
-  //   {
-  //     id: 7,
-  //     category: "Partners",
-  //     name: "NETWORK PARTNER",
-  //     logo: "/temp/edition/sponsors/3.png",
-  //   },
-  //   {
-  //     id: 9,
-  //     category: "Partners",
-  //     name: "LOUNGE PARTNER",
-  //     logo: "/temp/edition/sponsors/4.png",
-  //   },
-  //   {
-  //     id: 12,
-  //     category: "Partners",
-  //     name: "COLOUR PARTNER",
-  //     logo: "/temp/edition/sponsors/5.png",
-  //   },
+  // Build ordered tab list from present categories
+  const presentCategories = new Set(allPartners.map((p) => p.category));
+  const categories = [
+    ...CATEGORY_ORDER.filter((c) => presentCategories.has(c)),
+    ...[...presentCategories].filter((c) => !CATEGORY_ORDER.includes(c)),
+  ];
 
-  //   // BUILD PARTNERS
-  //   {
-  //     id: 3,
-  //     category: "Build Partners",
-  //     logo: "/temp/edition/build-partners/1.png",
-  //   },
-  //   {
-  //     id: 10,
-  //     category: "Build Partners",
-  //     logo: "/temp/edition/build-partners/3.png",
-  //   },
-  //   {
-  //     id: 13,
-  //     category: "Build Partners",
-  //     logo: "/temp/edition/build-partners/4.png",
-  //   },
-  //   {
-  //     id: 15,
-  //     category: "Build Partners",
-  //     logo: "/temp/edition/build-partners/5.png",
-  //   },
-  //   {
-  //     id: 16,
-  //     category: "Build Partners",
-  //     logo: "/temp/edition/build-partners/6.png",
-  //   },
-  //   {
-  //     id: 17,
-  //     category: "Build Partners",
-  //     logo: "/temp/edition/build-partners/7.png",
-  //   },
-  //   {
-  //     id: 18,
-  //     category: "Build Partners",
-  //     logo: "/temp/edition/build-partners/8.png",
-  //   },
-  //   {
-  //     id: 19,
-  //     category: "Build Partners",
-  //     logo: "/temp/edition/build-partners/9.png",
-  //   },
+  // Reset activeTab if it's no longer present after data loads
+  const resolvedTab = categories.includes(activeTab) ? activeTab : (categories[0] ?? "Partners");
 
-  //   // GIFTING PARTNERS
-  //   {
-  //     id: 40,
-  //     category: "Gifting Partners",
-  //     logo: "/temp/edition/gifting-partners/1.png",
-  //   },
-  //   {
-  //     id: 41,
-  //     category: "Gifting Partners",
-  //     logo: "/temp/edition/gifting-partners/2.png",
-  //   },
-  //   {
-  //     id: 42,
-  //     category: "Gifting Partners",
-  //     logo: "/temp/edition/gifting-partners/4.png",
-  //   },
-  //   {
-  //     id: 43,
-  //     category: "Gifting Partners",
-  //     logo: "/temp/edition/sensory/12.png",
-  //   },
+  const handleTabClick = (cat: string, e: React.MouseEvent<HTMLButtonElement>) => {
+    setActiveTab(cat);
+    e.currentTarget.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+  };
 
-  //   // MEDIA PARTNERS
-  //   {
-  //     id: 50,
-  //     category: "Media Partners",
-  //     logo: "/temp/edition/media-partners/1.png",
-  //   },
-  //   {
-  //     id: 51,
-  //     category: "Media Partners",
-  //     logo: "/temp/edition/media-partners/2.png",
-  //   },
-  //   {
-  //     id: 52,
-  //     category: "Media Partners",
-  //     logo: "/temp/edition/media-partners/3.png",
-  //   },
+  const filtered = allPartners.filter((p) => p.category === resolvedTab);
+  const isMain   = resolvedTab === "Partners";
 
-  //   // DIGITAL MEDIA PARTNERS
-  //   {
-  //     id: 60,
-  //     category: "Digital Media Partner",
-  //     logo: "/temp/edition/media-partners/4.png",
-  //   },
-
-  //   {
-  //     id: 62,
-  //     category: "Red Room Partner",
-  //     logo: "/temp/edition/red-room-partner/1.png",
-  //   },
-
-  //   // TICKETING PARTNERS
-  //   {
-  //     id: 70,
-  //     category: "Ticketing Partners",
-  //     logo: "/temp/edition/ticketing-partners/1.png",
-  //   },
-  //   {
-  //     id: 71,
-  //     category: "Ticketing Partners",
-  //     logo: "/temp/edition/ticketing-partners/2.png",
-  //   },
-
-  //   // SENSORY
-  //   {
-  //     id: 80,
-  //     category: "Sensory Collaborator",
-  //     logo: "/temp/edition/sensory/12.png",
-  //   },
-
-  //   // KEY EXECUTION
-  //   {
-  //     id: 90,
-  //     category: "Key execution Partner",
-  //     logo: "/temp/edition/key-execution/1.jpg",
-  //   },
-
-  //   // CURATORIAL
-  //   {
-  //     id: 100,
-  //     category: "Curatorial Partner",
-  //     logo: "/temp/edition/curatorial-partner/1.png",
-  //   },
-
-  //   // EXPERIENCE
-  //   {
-  //     id: 110,
-  //     category: "Experience Partner",
-  //     logo: "/temp/edition/experience-partner/1.png",
-  //   },
-
-  //   // LEARNING
-  //   {
-  //     id: 120,
-  //     category: "Learning Partner",
-  //     logo: "/temp/edition/learning-partner/1.png",
-  //   },
-
-  //   // VISUAL EXPERIENCE
-  //   {
-  //     id: 130,
-  //     category: "Visual Experience Partner",
-  //     logo: "/temp/edition/visual-experience-partner/1.png",
-  //   },
-
-  //   // WORKSHOP
-  //   {
-  //     id: 140,
-  //     category: "Workshop Partner",
-  //     logo: "/temp/edition/workshop-partner/1.png",
-  //   },
-  // ];
-
-  // const partners = [...]
-
-const partners = partnersData
-  .filter((p) => p.name !== "Brand Collaborators")
-  .map((p, index) => ({
-    id: index + 1,
-    category: p.name,
-    name:
-      p.name === "Partners"
-        ? [
-            "PRESENTING PARTNER",
-            "POWERED BY",
-            "NETWORK PARTNER",
-            "LOUNGE PARTNER",
-            "COLOUR PARTNER",
-          ][index] || p.name
-        : p.name,
-    logo: p.src,
-  }));
-
-  const filtered = partners.filter(
-    (p) => p.category === activeTab
-  );
-
-  const columns = isMobile ? 1 : 1;
-
-  const remainder = filtered.length % columns;
-
-  const paddingNeeded =
-    remainder === 0 ? 0 : columns - remainder;
-
-  const displayCount =
-    filtered.length === 0
-      ? columns
-      : filtered.length + paddingNeeded;
-
-  const gridCells = Array.from({
-    length: displayCount,
-  });
+  const columns      = isMobile ? 1 : 1;
+  const remainder    = filtered.length % columns;
+  const paddingNeeded = remainder === 0 ? 0 : columns - remainder;
+  const displayCount  = filtered.length === 0 ? columns : filtered.length + paddingNeeded;
+  const gridCells     = Array.from({ length: displayCount });
 
   return (
     <section
@@ -307,92 +137,66 @@ const partners = partnersData
       </SectionHeading>
 
       <div className="px-6 lg:px-10">
-      {/* TABS */}
-      <div
-        ref={scrollContainerRef}
-        className="w-full bg-white overflow-x-auto scroll-smooth no-scrollbar"
-        style={{
-          scrollbarWidth: "none",
-          msOverflowStyle: "none",
-        }}
-      >
-        <div className="flex gap-6 md:gap-10  min-w-max">
-          {CATEGORIES.map((cat) => (
-            <button
-              key={cat}
-              onClick={(e) => handleTabClick(cat, e)}
-              className={`py-[18px] text-[15px] md:text-[18px] transition-all duration-300 border-b-2 whitespace-nowrap outline-none relative ${
-                activeTab === cat
-                  ? "border-[#E02914] text-[#E02914] font-semibold"
-                  : "border-transparent text-[#999999] hover:text-black font-medium"
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* GRID */}
-      <div className="w-full bg-white pb-12">
+        {/* TABS */}
         <div
-          className={`grid border-t border-[#EEEEEE] ${
-            activeTab === "Partners"
-              ? "grid-cols-2 md:grid-cols-3 lg:grid-cols-6"
-              : "grid-cols-2 md:grid-cols-3 lg:grid-cols-6"
-          }`}
+          ref={scrollContainerRef}
+          className="w-full bg-white overflow-x-auto scroll-smooth no-scrollbar"
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
-          {gridCells.map((_, index) => {
-            const partner = filtered[index];
-
-            const isMain =
-              activeTab === "Partners";
-
-            return (
-              <div
-                key={index}
-                className={`relative flex flex-col items-center justify-center border-b border-pov-black/30 transition-colors duration-300 hover:bg-gray-50/50 overflow-hidden ${
-                  isMain
-                    ? "aspect-[9/5] lg:aspect-[6/3] pt-4 md:pt-8 mx-4"
-                    : "aspect-[9/5] lg:aspect-[6/3] p-4 mx-4"
+          <div className="flex gap-6 md:gap-10 min-w-max">
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                onClick={(e) => handleTabClick(cat, e)}
+                className={`py-[18px] text-[15px] md:text-[18px] transition-all duration-300 border-b-2 whitespace-nowrap outline-none relative ${
+                  resolvedTab === cat
+                    ? "border-[#E02914] text-[#E02914] font-semibold"
+                    : "border-transparent text-[#999999] hover:text-black font-medium"
                 }`}
               >
-                {partner ? (
-                  <>
-                    {/* ALWAYS VISIBLE TEXT */}
-                    {isMain && (
-                      <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10 text-center w-full px-4">
-                        <h4 className="text-black text-[10px] font-medium leading-tight ">
-                          {partner.name}
-                        </h4>
-
-                        {/* <p className="text-black/50 text-[10px] md:text-xs mt-1 uppercase tracking-wide">
-                          {partner.category}
-                        </p> */}
-                      </div>
-                    )}
-
-                    {/* LOGO */}
-                    <img
-                      src={partner.logo}
-                      alt={
-                        partner.name || "Partner Logo"
-                      }
-                      className={`object-contain transition-all duration-500 ${
-                        isMain
-                          ? "max-w-[75%] h-full"
-                          : "max-w-[75%] h-full"
-                      }`}
-                    />
-                  </>
-                ) : (
-                  <div className="w-full h-full" />
-                )}
-              </div>
-            );
-          })}
+                {cat}
+              </button>
+            ))}
+          </div>
         </div>
-      </div>
+
+        {/* GRID */}
+        <div className="w-full bg-white pb-12">
+          <div className="grid border-t border-[#EEEEEE] grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
+            {gridCells.map((_, index) => {
+              const partner = filtered[index];
+              return (
+                <div
+                  key={index}
+                  className={`relative flex flex-col items-center justify-center border-b border-pov-black/30 transition-colors duration-300 hover:bg-gray-50/50 overflow-hidden ${
+                    isMain
+                      ? "aspect-9/5 lg:aspect-6/3 pt-4 md:pt-8 mx-4"
+                      : "aspect-9/5 lg:aspect-6/3 p-4 mx-4"
+                  }`}
+                >
+                  {partner ? (
+                    <>
+                      {isMain && (
+                        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10 text-center w-full px-4">
+                          <h4 className="text-black text-[10px] font-medium leading-tight">
+                            {partner.name}
+                          </h4>
+                        </div>
+                      )}
+                      <img
+                        src={partner.logo}
+                        alt={partner.name || "Partner Logo"}
+                        className="max-w-[75%] h-full object-contain transition-all duration-500"
+                      />
+                    </>
+                  ) : (
+                    <div className="w-full h-full" />
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </div>
 
       <style jsx>{`
