@@ -43,7 +43,7 @@ const HomeSponsors: React.FC = () => {
 
   return (
     <section
-      className="w-full bg-white flex flex-col font-display"
+      className="w-full bg-white flex flex-col font-display pt-6 lg:pt-0"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
