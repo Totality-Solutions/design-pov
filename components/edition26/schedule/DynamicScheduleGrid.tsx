@@ -246,9 +246,9 @@ const DynamicScheduleGrid = ({ serverEvents }: { serverEvents?: ScheduleEventRow
                       <span className="text-sm font-semibold tracking-tight">{event.time}</span>
                     </div>
 
-                    <div className="mt-0 lg:mt-8 mb-4 lg:mb-0">
+                    <div className="">
                       {event.speakers.length > 0 && (
-                        <div className="mb-4">
+                        <div className="">
                           <span className="text-[14px] font-medium text-zinc-400 block mb-1 font-['Montserrat']">
                             Speaker{event.speakers.length > 1 ? 's' : ''}
                           </span>
@@ -272,6 +272,7 @@ const DynamicScheduleGrid = ({ serverEvents }: { serverEvents?: ScheduleEventRow
                   
 
                   {/* Col 4 — Image (commented) + Invite Only button */}
+                    {event.isInviteOnly && (
                   <div className="px-6 py-3 lg:p-12 flex flex-col items-start lg:items-center justify-center gap-4">
 
                     {/* IMAGE COLUMN — commented out, do not remove
@@ -285,7 +286,6 @@ const DynamicScheduleGrid = ({ serverEvents }: { serverEvents?: ScheduleEventRow
                     </div>
                     */}
 
-                    {event.isInviteOnly && (
                       <CTABtn
                         label="Invite Only"
                         iconType="arrow"
@@ -302,8 +302,8 @@ const DynamicScheduleGrid = ({ serverEvents }: { serverEvents?: ScheduleEventRow
                         bottomKey2Right="15px"
                         href={event.inviteOnlyLink}
                       />
-                    )}
                   </div>
+                    )}
 
                 </div>
               ))
