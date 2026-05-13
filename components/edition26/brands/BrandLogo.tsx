@@ -123,7 +123,7 @@ export default function BrandLogo({
           alt={logo.name}
           width={180}
           height={80}
-          className="max-w-[180px] object-contain"
+          className="max-w-[120px] md:max-w-[180px] object-contain"
           unoptimized
         />
 

@@ -328,8 +328,6 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Grain Overlay */}
-        <div className="absolute inset-0 z-30 pointer-events-none opacity-[0.05] mix-blend-overlay bg-[url('https://res.cloudinary.com/dn7noog99/image/upload/v1711281898/noise_vms8cy.png')]" />
       </motion.footer>
     </div>
   );

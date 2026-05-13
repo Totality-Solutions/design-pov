@@ -1,4 +1,22 @@
-const faqData = [
+export interface Trigger {
+  phrase: string;
+  type: "redirect" | "form";
+  url?: string;
+  formId?: string;
+}
+
+export interface FAQItem {
+  question: string;
+  answer: string;
+  triggers?: Trigger[];
+}
+
+export interface FAQCategory {
+  category: string;
+  items: FAQItem[];
+}
+
+export const faqData: FAQCategory[] = [
   {
     category: "General",
     items: [
@@ -20,7 +38,8 @@ const faqData = [
       },
       {
         question: "How can I purchase tickets?",
-        answer: "Tickets can be purchased directly through the website. Multiple pass categories and pricing tiers are available."
+        answer: "Tickets can be purchased directly through the website. Multiple pass categories and pricing tiers are available.",
+        triggers: [{ phrase: "website", type: "redirect", url: "/tickets" }]
       },
       {
         question: "What can I expect at the show?",
@@ -53,7 +72,11 @@ const faqData = [
       },
       {
         question: "Can I apply to be part of The Core?",
-        answer: "Yes. Applications for future editions can be submitted through the Collaborate page on the website. Alternatively, you can click here to apply."
+        answer: "Yes. Applications for future editions can be submitted through the Collaborate page on the website. Alternatively, you can click here to apply.",
+        triggers: [
+          { phrase: "Collaborate page", type: "redirect", url: "/collaborate" },
+          { phrase: "click here to apply", type: "form", formId: "core-form" }
+        ]
       }
     ]
   },
@@ -62,7 +85,10 @@ const faqData = [
     items: [
       {
         question: "How can my brand participate in Design POV?",
-        answer: "Brands can participate through collaborations with Core studios, experiential installations, sponsorships, launches, and ecosystem initiatives like POV Objects."
+        answer: "Brands can participate through collaborations with Core studios, experiential installations, sponsorships, launches, and ecosystem initiatives like POV Objects.",
+        triggers: [
+          { phrase: "POV Objects", type: "form", formId: "participate-form" }
+        ]
       },
       {
         question: "Do participating brands only receive booth space?",
@@ -79,7 +105,10 @@ const faqData = [
     items: [
       {
         question: "How can I become a sponsor?",
-        answer: "Sponsorship enquiries can be submitted through the Collaborate page. Opportunities range from presenting partnerships to experiential integrations and curated programming."
+        answer: "Sponsorship enquiries can be submitted through the Collaborate page. Opportunities range from presenting partnerships to experiential integrations and curated programming.",
+        triggers: [
+          { phrase: "Collaborate page", type: "form", formId: "sponsorship-form" }
+        ]
       },
       {
         question: "Can brands collaborate on custom experiences or installations?",
@@ -87,7 +116,10 @@ const faqData = [
       },
       {
         question: "What is POV Elevate?",
-        answer: "POV Elevate is an extension of Design POV, accessible only to brands already a part of the show's ecosystem. It is designed to help brands create meaningful visibility beyond the show floor through curated events, launches, conversations, and strategic collaborations."
+        answer: "POV Elevate is an extension of Design POV, accessible only to brands already a part of the show's ecosystem. It is designed to help brands create meaningful visibility beyond the show floor through curated events, launches, conversations, and strategic collaborations.",
+        triggers: [
+          { phrase: "POV Elevate", type: "redirect", url: "/ecosystem/elevate" }
+        ]
       },
       {
         question: "How are artists and galleries integrated into the platform?",
@@ -100,7 +132,10 @@ const faqData = [
     items: [
       {
         question: "How can media publications partner with Design POV?",
-        answer: "Media houses, editorial platforms, and content creators can reach out through the Collaborate page for partnerships, coverage, walkthroughs, and editorial collaborations."
+        answer: "Media houses, editorial platforms, and content creators can reach out through the Collaborate page for partnerships, coverage, walkthroughs, and editorial collaborations.",
+        triggers: [
+          { phrase: "Collaborate page", type: "redirect", url: "/collaborate" }
+        ]
       },
       {
         question: "Can creators and influencers attend the show?",
@@ -108,7 +143,10 @@ const faqData = [
       },
       {
         question: "Who do I contact for collaborations or enquiries?",
-        answer: "All participation, sponsorship, media, and collaboration enquiries can be submitted through the Collaborate page on the website."
+        answer: "All participation, sponsorship, media, and collaboration enquiries can be submitted through the Collaborate page on the website.",
+        triggers: [
+          { phrase: "Collaborate page", type: "redirect", url: "/collaborate" }
+        ]
       }
     ]
   },
@@ -117,11 +155,17 @@ const faqData = [
     items: [
       {
         question: "What is The Circle?",
-        answer: "The Circle is Design POV's live programming platform featuring panel discussions, fireside chats, and cultural conversations across design and adjacent creative industries."
+        answer: "The Circle is Design POV's live programming platform featuring panel discussions, fireside chats, and cultural conversations across design and adjacent creative industries.",
+        triggers: [
+          { phrase: "The Circle", type: "redirect", url: "/the-circle" }
+        ]
       },
       {
         question: "Can I apply to speak at Circle?",
-        answer: "Yes. Speaker and programming recommendations can be submitted for consideration by the curatorial team. Click here to apply."
+        answer: "Yes. Speaker and programming recommendations can be submitted for consideration by the curatorial team. Click here to apply.",
+        triggers: [
+          { phrase: "click here to apply", type: "form", formId: "circle-form" }
+        ]
       }
     ]
   },
@@ -130,11 +174,17 @@ const faqData = [
     items: [
       {
         question: "What are POV Objects?",
-        answer: "POV Objects is a curated initiative inviting architects, designers, artists, and makers to create original objects, collaboratively, responding to the edition's theme."
+        answer: "POV Objects is a curated initiative inviting architects, designers, artists, and makers to create original objects, collaboratively, responding to the edition's theme.",
+        triggers: [
+          { phrase: "POV Objects", type: "redirect", url: "/objects" }
+        ]
       },
       {
         question: "What is the Design POV Magazine?",
-        answer: "The magazine is an editorial extension of the platform featuring stories, interviews, perspectives, and conversations from across the design ecosystem. Have a submission? Click here to apply."
+        answer: "The magazine is an editorial extension of the platform featuring stories, interviews, perspectives, and conversations from across the design ecosystem. Have a submission? Click here to apply.",
+        triggers: [
+          { phrase: "click here to apply", type: "form", formId: "magazine-form" }
+        ]
       }
     ]
   },

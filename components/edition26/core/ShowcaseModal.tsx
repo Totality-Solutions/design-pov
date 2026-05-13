@@ -103,7 +103,7 @@ export const ShowcaseModal = ({
               scale: 0.95,
               y: 20,
             }}
-            className="relative w-full max-w-[1200px] h-[80vh] lg:h-[600px] bg-white flex flex-col lg:flex-row overflow-hidden shadow-2xl"
+            className="relative w-full max-w-[1200px] h-[90vh] lg:h-[600px] bg-white flex flex-col lg:flex-row overflow-hidden shadow-2xl"
             style={{ minHeight: "600px" }}
           >
             {/* LEFT: Carousel */}
@@ -181,7 +181,7 @@ export const ShowcaseModal = ({
               {/* STICKY HEADER */}
               <div className="flex items-start justify-between px-8 lg:px-12 pb-4 py-2 lg:py-6 bg-white z-20">
                 <div className="flex-col">
-                  <h2 className="text-h3-mobile lg:text-h3-tab lg:text-h3 font-semibold leading-tight text-black pr-8">
+                  <h2 className="text-h3-mobile lg:text-h3-tab lg:text-h3 font-semibold uppercase leading-tight text-black pr-8">
                     {data.label}
                   </h2>
 
