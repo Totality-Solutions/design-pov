@@ -110,6 +110,37 @@ export interface PortableTextBlock {
   [key: string]: unknown;
 }
 
+// ─── DESIGN OBJECT ────────────────────────────────────────
+export interface DesignObject {
+  id: string;
+  label: string;
+  sublabel: string;
+  description: string;
+  src: string;
+  additional_images: string[];
+  website: string;
+  instagram: string;
+  logo: string;
+  sort_order: number;
+  active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+// Normalized (CDN-prefixed) version used in components
+export interface DesignObjectItem {
+  id: string;
+  label: string;
+  sublabel: string;
+  description: string;
+  src: string;
+  additionalImages: string[];
+  website: string;
+  instagram: string;
+  logo: string;
+  sort_order: number;
+}
+
 // ─── FORM ─────────────────────────────────────────────────
 export type ApplyType = "exhibit" | "ecosystem" | "partner" | "speak" | "curate" | "elevate" | "media" | "core" | "circle";
 

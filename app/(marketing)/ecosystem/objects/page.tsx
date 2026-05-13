@@ -2,7 +2,6 @@ import ObjectsForm from "@/components/ecosystem/objects/ObjectsForm";
 import ObjectsHero from "@/components/ecosystem/objects/ObjectsHero";
 import ObjectsCarousel from "@/components/ecosystem/objects/ObjectsCarousel";
 import type { Metadata } from "next";
-import ObjectsMarquee from "@/components/ecosystem/objects/ObjectsMarquee";
 
 export const metadata: Metadata = {
   title: "Objects | Design POV India",
@@ -38,8 +37,7 @@ export default function ObjectsPage() {
   return (
     <main className="w-full min-h-screen bg-white">
       <ObjectsHero />
-      {/* <ObjectsCarousel /> */}
-      <ObjectsMarquee/>
+      <ObjectsCarousel />
       <ObjectsForm />
     </main>
   );
