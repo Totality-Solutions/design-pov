@@ -80,7 +80,7 @@ const CollaborateSection = () => {
     <>
       {/* ===== SECTION ===== */}
       <div className="lg:flex">
-      <section className="w-full bg-white pt-6 lg:pt-24 lg:pb-16 px-6 md:px-10 lg:px-10">
+      <section className="w-full bg-white pt-28 lg:pt-24 lg:pb-16 px-6 md:px-10 lg:px-10">
 
         <div className="flex flex-col  justify-center h-full gap-6 lg:gap-10">
 
