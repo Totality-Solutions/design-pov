@@ -154,11 +154,9 @@ const Footer = () => {
 
         {/* MAIN CONTENT - Interaction Fix (pointer-events-auto for links) */}
         <div
-          className="relative z-20 w-full h-full flex flex-col justify-between mix-blend-difference "
+          className="relative z-20 w-full lg:py-12 py-4 h-full flex flex-col justify-between mix-blend-difference "
           style={{
             paddingLeft: "var(--footer-px)",
-            paddingTop: "70px", 
-            paddingBottom: "60px", 
           }}
         >
           {/* TOP SECTION */}

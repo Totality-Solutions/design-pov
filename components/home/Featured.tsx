@@ -199,6 +199,7 @@ export default function FeaturedDesigners() {
     <div  
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      className="pt-6 lg:pt-0"
     >
       <SectionHeading
         titleMain="Core Collective" 
