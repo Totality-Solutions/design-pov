@@ -50,7 +50,7 @@ export default function MarqueeFlow<T>({
   useEffect(() => {
     const handle = () => {
       const w = window.innerWidth;
-      if (w < 640)       { setVisibleCount(mobileCount);  setActiveGap(12); }
+      if (w < 640)       { setVisibleCount(mobileCount);  setActiveGap(0); }
       else if (w < 1024) { setVisibleCount(tabletCount);  setActiveGap(14); }
       else               { setVisibleCount(desktopCount); setActiveGap(gap); }
     };

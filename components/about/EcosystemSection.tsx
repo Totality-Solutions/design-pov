@@ -35,10 +35,10 @@ const EcosystemSection = () => {
         {/* <p className="text-sm opacity-60">View all our work</p>
         <CTABtn /> */}
       </SectionHeading>
-      <div className="w-full bg-white overflow-hidden h-[120px] md:h-[140px] py-4 flex items-end">
+      <div className="w-full bg-white overflow-hidden h-[160px] md:h-[140px] py-4 flex items-end">
         <MarqueeFlow
           items={ITEMS}
-          gap={5}
+          gap={0}
           speed={200}
           desktopCount={4}
           onExpandChange={setExpandedIndex}
@@ -48,7 +48,7 @@ const EcosystemSection = () => {
             return (
               <Link
                 href={item.href || '#'}
-                className="relative block w-full overflow-hidden border border-gray-200 hover:bg-black/10"
+                className="relative block w-full overflow-hidden border-r  border-gray-200 hover:bg-black/10"
                 style={{
                   aspectRatio:'14/4',
                   transition: "aspect-ratio 2000ms cubic-bezier(0.22, 1, 0.36, 1)",
@@ -76,7 +76,7 @@ const EcosystemSection = () => {
                     fill
                     className="object-contain will-change-transform p-2"
                     style={{
-                      transform: isExpanded ? 'translate3d(0,0,0) scale(1.05)' : 'translate3d(0,0,0) scale(1)',
+                      transform: isExpanded ? 'translate3d(0,0,0) scale(1)' : 'translate3d(0,0,0) scale(1)',
                       transition: 'transform 2000ms cubic-bezier(0.4, 0, 0.2, 1)',
                       transformOrigin: 'bottom center',
                       backfaceVisibility: 'hidden',
