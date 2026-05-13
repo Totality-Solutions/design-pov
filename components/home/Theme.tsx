@@ -59,7 +59,11 @@ const Theme = () => {
   return (
     
     
-    <div ref={containerRef} style={{ position: 'relative' }} className='h-[200vh] '>
+    <div 
+      ref={containerRef} 
+      style={{ position: 'relative' }} 
+      className='h-[150vh] lg:h-[200vh]' // Changed from 200vh to 130vh for mobile
+    >
       <div className='sticky top-20 lg:top-0 h-[100vh] overflow-hidden'>
         <div className="grid grid-cols-1 lg:grid-cols-[3fr_7fr] w-full h-full pt-6 md:pt-12 py-0 gap-10 md:gap-4">
 
