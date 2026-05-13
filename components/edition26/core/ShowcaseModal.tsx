@@ -179,7 +179,7 @@ export const ShowcaseModal = ({
               {/* STICKY HEADER */}
               <div className="flex items-start justify-between px-8 lg:px-12 pb-4 py-2 lg:py-6 bg-white z-20">
                 <div className="flex-col">
-                  <h2 className="text-h3-mobile lg:text-h3-tab lg:text-h3 font-semibold leading-tight text-black pr-8">
+                  <h2 className="text-h3-mobile lg:text-h3-tab lg:text-h3 font-semibold uppercase leading-tight text-black pr-8">
                     {data.label}
                   </h2>
 
