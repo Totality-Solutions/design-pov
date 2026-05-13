@@ -1,22 +1,20 @@
 'use client'
 import React, { useRef, useEffect, useState } from 'react'
-import { Container } from '../common/Container'
-import CTABtn from '../common/CTABtn'
 import { useScroll, useTransform, useSpring } from "framer-motion"
 import MasonryGrid from './Mansonrygrid'
-import Section from '../common/Section'
-import { Link } from 'lucide-react'
-
-
+import CTABtn from '../common/CTABtn'
 
 const Theme = () => {
   const containerRef = useRef<HTMLDivElement>(null)
   const gridRef = useRef<HTMLDivElement>(null)
-  const [scrollRange, setScrollRange] = useState(1200) // sensible default
+  const [scrollRange, setScrollRange] = useState(1200)
+  const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
-    // Measure after paint so grid heights are real
     const measure = () => {
+      // 1. Check if we are on mobile (less than 1024px)
+      setIsMobile(window.innerWidth < 1024)
+
       if (!gridRef.current) return
       const gridH = gridRef.current.scrollHeight
       const parentH = gridRef.current.parentElement?.clientHeight ?? window.innerHeight
@@ -24,17 +22,9 @@ const Theme = () => {
       if (range > 0) setScrollRange(range)
     }
 
-    // Measure immediately + after a frame to catch image load shifts
     measure()
-    const raf = requestAnimationFrame(measure)
-    const t = setTimeout(measure, 500)
     window.addEventListener('resize', measure)
-
-    return () => {
-      cancelAnimationFrame(raf)
-      clearTimeout(t)
-      window.removeEventListener('resize', measure)
-    }
+    return () => window.removeEventListener('resize', measure)
   }, [])
 
   const { scrollYProgress } = useScroll({
@@ -43,27 +33,28 @@ const Theme = () => {
   })
 
   const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 220,
-    damping: 30,
-    mass: 0.4,
-  });
+    stiffness: 400,
+    damping: 40,
+    mass: 0.1,
+  })
 
-  // y goes from 0 to -scrollRange
-  // Start at 0 so first images are visible at top of right panel
   const yRaw = useTransform(smoothProgress, [0, 1], [0, -scrollRange])
-
+  
+  // 2. Logic: If mobile, return 0 (no transform). If desktop, return the animated value.
   const y = useTransform(yRaw, (val) => {
-    return Math.max(val, -scrollRange) // 👈 prevents overscroll gap
+    if (isMobile) return 0 
+    return Math.max(val, -scrollRange)
   })
 
   return (
-    
-    
-    <div ref={containerRef} style={{ position: 'relative', height: '200vh' }}>
-      <div className='sticky top-20 lg:top-0 h-[100vh] overflow-hidden'>
+    <div 
+      ref={containerRef} 
+      className="relative h-auto lg:h-[200vh]" // h-auto on mobile lets it scroll normally
+    >
+      <div className="relative lg:sticky lg:top-0 lg:h-screen lg:overflow-hidden">
         <div className="grid grid-cols-1 lg:grid-cols-[3fr_7fr] w-full h-full pt-6 md:pt-12 py-0 gap-10 md:gap-4">
-
-          <div className="w-full h-full flex flex-col justify-end gap-4 lg:pb-12 px-6 lg:px-10">
+          
+          <div className="w-full flex flex-col justify-end gap-4 lg:pb-12 px-6 lg:px-10">
             <h1 className="text-h2-mobile md:text-h2-tab lg:text-h2 font-semibold uppercase">2026 THEME</h1>
             <p className="text-body-tab">
               A sharper focus on how spaces are experienced - through texture, sound, atmosphere, and memory.
@@ -85,7 +76,8 @@ const Theme = () => {
               size='md'
               />
           </div>
-          <div className="w-full h-full" style={{ overflow: 'hidden' }}>
+
+          <div className="w-full h-full lg:overflow-hidden">
             <MasonryGrid
               ref={gridRef}
               y={y}

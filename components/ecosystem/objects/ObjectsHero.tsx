@@ -12,9 +12,9 @@ export default function ObjectsHero() {
     <section className="w-full h-full bg-pov-white">
       {/* TEXT SECTION: Clean horizontal layout with border */}
 
-    <div className="w-full pt-10 lg:pt-20">
+    <div className="w-full pt-28 lg:pt-20">
       <UnderlineText lineHeight={72} className="text-h2-mobile md:text-h2-tab lg:text-h2 tracking-tight font-semibold">
-        A collection of original, one-of-one pieces—each a distilled expression of perspective.
+        A collection of original, one-of-one pieces-each a distilled expression of perspective.
         
       </UnderlineText>
     </div>

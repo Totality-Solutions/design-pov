@@ -56,6 +56,7 @@ const ClientLogo = () => {
     <Container
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      className="pt-6 lg:pt-0"
     >
       <div className="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-4">
         <div className="shrink-0 whitespace-nowrap">

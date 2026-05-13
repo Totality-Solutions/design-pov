@@ -108,6 +108,7 @@ const EcosystemSection = () => {
     <div
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      className='pt-6 lg:pt-0'
     >
       <SectionHeading
         titleBold="POV ECOSYSTEM"
@@ -324,7 +325,7 @@ const EcosystemSection = () => {
           </div>
 
           {/* ───────── MOBILE (Stacked) ───────── */}
-          <div className="md:hidden">
+          <div className="md:hidden ">
   {ECOSYSTEM.map((item) => {
     const isActive = activeId === item.id
 

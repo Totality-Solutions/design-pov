@@ -6,7 +6,7 @@ import { UnderlineText } from '../common/Underlinetext'
 
 export default function EcosystemHero() {
   return (
-    <section className="w-full h-fit bg-pov-white border-b border-pov-black/40 pt-20">
+    <section className="w-full h-fit bg-pov-white border-b border-pov-black/40 pt-28 lg:pt-12">
       {/* TEXT SECTION: Clean horizontal layout with border */}
 
       <UnderlineText lineHeight={72} className="text-h2-mobile md:text-h2-tab lg:text-h2 tracking-tight font-semibold">
@@ -17,7 +17,7 @@ export default function EcosystemHero() {
       </UnderlineText> */}
 
       {/* MEDIA SECTION: Responsive container for Image or Video */}
-      <div className="relative w-full h-[70vh] overflow-hidden flex items-center justify-center py-4">
+      <div className="relative w-full h-[50vh] lg:h-[70vh] overflow-hidden flex items-center justify-center py-4">
         
         {/* Main Video/Image Asset (No background visuals) */}
         <div className="relative z-10 w-full h-full bg-black overflow-hidden">

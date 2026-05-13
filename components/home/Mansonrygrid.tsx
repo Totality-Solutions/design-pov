@@ -51,7 +51,7 @@ function Cell({
   if (type === "image" && src) {
     return (
       <div className="relative w-full h-full">
-        <Image src={src} alt={alt || ""} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover" />
+        <Image src={src} alt={alt || ""} fill sizes="(max-width: 768px) 100vw, 50vw" className="bg-black object-contain md:object-cover" />
       </div>
     );
   }
@@ -67,10 +67,10 @@ interface MasonryGridProps {
 const MasonryGrid = forwardRef<HTMLDivElement, MasonryGridProps>(
   ({ y }, ref) => {
     return (
-      <div ref={ref} className="w-full overflow-hidden h-full">
+      <div ref={ref} className="w-full overflow-hidden h-fit md:h-full">
         <Link href="/edition/theme" className="cursor-pointer">
         <motion.div style={{ y }}>
-          <div className="h-full grid grid-cols-2 auto-rows-[300px] w-full">
+          <div className="h-full grid grid-cols-2 auto-rows-[100px] md:auto-rows-[300px] w-full">
 
             {/* 01 IMAGE */}
             <div className="row-span-2">
@@ -88,7 +88,7 @@ const MasonryGrid = forwardRef<HTMLDivElement, MasonryGridProps>(
             </div>
 
             {/* 04 BRAND COLOR (KEEP) */}
-            <div className="bg-[var(--primary-red)]">
+            <div className=" bg-[var(--primary-red)]">
               <Cell type="empty" />
             </div>
 

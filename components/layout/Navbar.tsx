@@ -329,7 +329,7 @@ export default function Navbar() {
       ========================== */}
       <header
         id="main-navbar"
-        className={`w-full bg-white border-b border-gray-100 transition-all duration-300 z-[2100] sticky top-0 ${
+        className={`w-full bg-white border-b border-gray-100 transition-all duration-300 z-[2100] fixed top-0 ${
           isSticky ? "lg:fixed lg:top-0 lg:left-0" : "lg:relative lg:top-auto"
         }`}
       >

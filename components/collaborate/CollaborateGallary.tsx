@@ -126,7 +126,7 @@ export default function CollaborateGallary({ Images }: { Images: string[] }) {
   const current = gallery[activeIndex];
 
   return (
-    <Container className="pb-10">
+    <Container className="pb-0">
       <Section className="!py-0">
         <div className="w-full gap-8 lg:gap-12 items-center">
 

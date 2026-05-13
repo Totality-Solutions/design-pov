@@ -90,7 +90,7 @@ export default function Hero() {
   }, [manuallyPaused]);
 
   return (
-    <Container className="w-full overflow-hidden lg:max-w-none px-0 ">
+    <Container className="w-full overflow-hidden lg:max-w-none px-0 pt-20 ">
       <div
         ref={sectionRef}
         className="
