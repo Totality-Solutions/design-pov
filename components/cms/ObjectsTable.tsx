@@ -1,0 +1,163 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import Image from "next/image";
+
+type ObjectRow = {
+  id: string;
+  label: string;
+  sublabel: string;
+  src: string;
+  sort_order: number;
+  active: boolean;
+  created_at: string;
+};
+
+export default function ObjectsTable({ initialData }: { initialData: ObjectRow[] }) {
+  const [rows, setRows]       = useState<ObjectRow[]>(initialData);
+  const [search, setSearch]   = useState("");
+  const [deleting, setDeleting] = useState<string | null>(null);
+  const [toggling, setToggling] = useState<string | null>(null);
+
+  useEffect(() => { setRows(initialData); }, [initialData]);
+
+  const filtered = rows.filter((r) => {
+    const q = search.toLowerCase();
+    return !q || r.label?.toLowerCase().includes(q) || r.sublabel?.toLowerCase().includes(q);
+  });
+
+  async function handleDelete(id: string) {
+    if (!confirm("Delete this object? This cannot be undone.")) return;
+    setDeleting(id);
+    const res = await fetch(`/api/cms/objects/${id}`, { method: "DELETE" });
+    setDeleting(null);
+    if (res.ok) setRows((prev) => prev.filter((r) => r.id !== id));
+  }
+
+  async function toggleActive(row: ObjectRow) {
+    setToggling(row.id);
+    const res = await fetch(`/api/cms/objects/${row.id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ active: !row.active }),
+    });
+    setToggling(null);
+    if (res.ok) setRows((prev) => prev.map((r) => r.id === row.id ? { ...r, active: !r.active } : r));
+  }
+
+  const active  = rows.filter((r) => r.active).length;
+  const hidden  = rows.filter((r) => !r.active).length;
+
+  return (
+    <div>
+      {/* Stats */}
+      <div className="flex gap-6 mb-6">
+        {[
+          { label: "Total",  value: rows.length },
+          { label: "Active", value: active },
+          { label: "Hidden", value: hidden },
+        ].map((s) => (
+          <div key={s.label} className="bg-white border border-black/10 px-5 py-3 min-w-[90px]">
+            <p className="text-[9px] uppercase tracking-[0.25em] text-gray-400">{s.label}</p>
+            <p className="text-xl font-semibold mt-0.5">{s.value}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* Search */}
+      <div className="mb-4">
+        <input
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search by label..."
+          className="border border-black/20 px-4 py-2 text-sm outline-none focus:border-black bg-white w-64 transition-colors"
+        />
+      </div>
+
+      {/* Table */}
+      <div className="bg-white border border-black/10 overflow-hidden">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="border-b border-black/10 bg-[#fafafa]">
+              <th className="text-left px-5 py-3 text-[10px] uppercase tracking-widest text-gray-400 font-normal w-16">Image</th>
+              <th className="text-left px-5 py-3 text-[10px] uppercase tracking-widest text-gray-400 font-normal">Label</th>
+              <th className="text-left px-5 py-3 text-[10px] uppercase tracking-widest text-gray-400 font-normal">Sublabel</th>
+              <th className="text-left px-5 py-3 text-[10px] uppercase tracking-widest text-gray-400 font-normal w-20">Order</th>
+              <th className="text-left px-5 py-3 text-[10px] uppercase tracking-widest text-gray-400 font-normal w-20">Status</th>
+              <th className="px-5 py-3 w-28" />
+            </tr>
+          </thead>
+          <tbody>
+            {filtered.length === 0 && (
+              <tr>
+                <td colSpan={6} className="px-5 py-10 text-center text-sm text-gray-400">
+                  {search ? "No objects match your search." : "No objects yet. Click \"+ New Object\" to add one."}
+                </td>
+              </tr>
+            )}
+            {filtered.map((row) => (
+              <tr key={row.id} className="border-b border-black/5 hover:bg-gray-50/60 transition-colors">
+                {/* Thumbnail */}
+                <td className="px-5 py-3">
+                  <div className="relative w-12 h-10 bg-gray-100 overflow-hidden">
+                    {row.src ? (
+                      <Image src={row.src} alt={row.label} fill className="object-cover" sizes="48px" />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-gray-300 text-xs">—</div>
+                    )}
+                  </div>
+                </td>
+
+                {/* Label */}
+                <td className="px-5 py-3">
+                  <p className="font-medium text-black">{row.label}</p>
+                </td>
+
+                {/* Sublabel */}
+                <td className="px-5 py-3 text-gray-500">{row.sublabel || "—"}</td>
+
+                {/* Sort order */}
+                <td className="px-5 py-3 text-gray-500 tabular-nums">{row.sort_order}</td>
+
+                {/* Active toggle */}
+                <td className="px-5 py-3">
+                  <button
+                    onClick={() => toggleActive(row)}
+                    disabled={toggling === row.id}
+                    className={`px-3 py-1 text-[10px] uppercase tracking-widest border transition-colors disabled:opacity-40 ${
+                      row.active
+                        ? "bg-black text-white border-black"
+                        : "border-black/20 text-gray-400 hover:border-black hover:text-black"
+                    }`}
+                  >
+                    {toggling === row.id ? "..." : row.active ? "Active" : "Hidden"}
+                  </button>
+                </td>
+
+                {/* Actions */}
+                <td className="px-5 py-3">
+                  <div className="flex items-center gap-3 justify-end">
+                    <Link
+                      href={`/cms/objects/${row.id}/edit`}
+                      className="text-[11px] uppercase tracking-widest text-gray-500 hover:text-black transition-colors"
+                    >
+                      Edit
+                    </Link>
+                    <button
+                      onClick={() => handleDelete(row.id)}
+                      disabled={deleting === row.id}
+                      className="text-[11px] uppercase tracking-widest text-gray-300 hover:text-red-500 transition-colors disabled:opacity-40"
+                    >
+                      {deleting === row.id ? "..." : "Delete"}
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}

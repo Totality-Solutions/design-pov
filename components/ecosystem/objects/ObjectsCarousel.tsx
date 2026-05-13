@@ -1,6 +1,4 @@
 "use client";
-import { cdn } from "@/lib/cdn";
-
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import dynamic from "next/dynamic";
@@ -13,7 +11,7 @@ const ShowcaseModal = dynamic(
   { ssr: false }
 );
 
-const FALLBACK_OBJECTS: DesignObjectItem[] = [
+/* const FALLBACK_OBJECTS: DesignObjectItem[] = [
   {
     id: "1",
     src: cdn("/temp/objects/1.png"),
@@ -98,12 +96,12 @@ const FALLBACK_OBJECTS: DesignObjectItem[] = [
     logo: cdn("/logo/Totality.svg"),
     sort_order: 7,
   },
-];
+]; */
 
 const ObjectsCarousel: React.FC = () => {
   const [paused, setPaused] = useState(false);
   const [selectedObject, setSelectedObject] = useState<DesignObjectItem | null>(null);
-  const [objects, setObjects] = useState<DesignObjectItem[]>(FALLBACK_OBJECTS);
+  const [objects, setObjects] = useState<DesignObjectItem[]>([]);
 
   useEffect(() => {
     fetch("/api/cms/objects")
