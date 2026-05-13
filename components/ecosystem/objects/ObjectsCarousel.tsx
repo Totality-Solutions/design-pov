@@ -152,7 +152,10 @@ const ObjectsCarousel: React.FC = () => {
         <div
           className="flex"
           style={{
-            animation: `${animName} ${duration} linear infinite`,
+            animationName: animName,
+            animationDuration: duration,
+            animationTimingFunction: "linear",
+            animationIterationCount: "infinite",
             animationPlayState: paused ? "paused" : "running",
           }}
           onMouseEnter={() => setPaused(true)}

@@ -51,6 +51,15 @@ export default function PageLoader({ children }: { children: React.ReactNode }) 
   const [showOverlay, setShowOverlay]   = useState(true);
   const [overlayOpaque, setOverlayOpaque] = useState(true);
   const [mounted, setMounted]           = useState(false);
+  const [scale, setScale]               = useState(1);
+
+  useEffect(() => {
+    // ~480px is the full width of the loader at max split; leave 32px padding
+    const update = () => setScale(Math.min(1, (window.innerWidth - 32) / 480));
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
 
   useEffect(() => {
     const raf = requestAnimationFrame(() => setMounted(true));
@@ -178,15 +187,16 @@ export default function PageLoader({ children }: { children: React.ReactNode }) 
             }
           `}</style>
 
-          {/* POV wrapper — fades + scales in on mount */}
+          {/* POV wrapper — fades + scales in on mount, scales down on mobile */}
           <div
             style={{
               display: "flex",
               gap: "10px",
               alignItems: "center",
               opacity: mounted ? 1 : 0,
-              transform: mounted ? "scale(1)" : "scale(0.92)",
+              transform: mounted ? `scale(${scale})` : `scale(${scale * 0.92})`,
               transition: "opacity 0.45s ease, transform 0.45s ease",
+              transformOrigin: "center center",
             }}
           >
             {/* ── P ── */}
