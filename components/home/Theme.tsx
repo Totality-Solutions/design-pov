@@ -43,10 +43,10 @@ const Theme = () => {
   })
 
   const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 220,
-    damping: 30,
-    mass: 0.4,
-  });
+  stiffness: 400,   // Higher = more immediate response
+  damping: 40,      // Keeps it from bouncing too much
+  mass: 0.1,        // Lower = lighter feel
+});
 
   // y goes from 0 to -scrollRange
   // Start at 0 so first images are visible at top of right panel
