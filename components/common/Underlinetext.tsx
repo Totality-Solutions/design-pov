@@ -1,5 +1,5 @@
 "use client"
-import React, {  useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 interface UnderlineTextProps {
   children: string;
@@ -25,17 +25,15 @@ export function UnderlineText({
   mobileMarginWidth?: number;
 }) {
   const [isMobile, setIsMobile] = useState(false);
- 
+
   useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
- 
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+    const mq = window.matchMedia("(max-width: 767px)");
+    setIsMobile(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
   }, []);
- 
+
   const currentLineHeight = isMobile ? mobileLineHeight : lineHeight;
   const currentThickness = isMobile ? Math.max(lineThickness - 2, 1) : lineThickness;
   const currentMarginWidth = isMobile ? mobileMarginWidth : marginWidth;
