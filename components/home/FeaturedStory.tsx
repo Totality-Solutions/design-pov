@@ -9,12 +9,11 @@ import { Container } from "../common/Container";
 import SectionHeading from "../common/SectionHeading";
 import Link from "next/link";
 
-// shared blogs data import kar rahe hain
-import { Blog, blogs } from "@/data/magazineData";
-
-const reversedBlogs = [...blogs].reverse();
+// import { Blog, blogs } from "@/data/magazineData";
+import { NormalizedBlog, normalizeDbBlog } from "@/lib/blog";
 
 export default function MarqueeCarousel() {
+  const [blogs, setBlogs] = useState<NormalizedBlog[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [prevIndex, setPrevIndex] = useState<number | null>(null);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -25,6 +24,22 @@ export default function MarqueeCarousel() {
 
   const carouselRef = useRef<HTMLDivElement>(null);
   const autoRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    fetch("/api/cms/blogs")
+      .then((r) => r.ok ? r.json() : null)
+      .then((json) => {
+        if (json?.data?.length) {
+          const published = json.data
+            .filter((b: any) => b.status === "published")
+            .map(normalizeDbBlog);
+          setBlogs(published);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  const reversedBlogs = blogs;
 
   const goTo = useCallback(
     (index: number, dir?: "up" | "down") => {
@@ -45,16 +60,18 @@ export default function MarqueeCarousel() {
   );
 
   const next = useCallback(() => {
+    if (!reversedBlogs.length) return;
     const nextIdx = (activeIndex + 1) % reversedBlogs.length;
     goTo(nextIdx, "down");
-  }, [activeIndex, goTo]);
+  }, [activeIndex, goTo, reversedBlogs.length]);
 
   useEffect(() => {
+    if (!reversedBlogs.length) return;
     autoRef.current = setTimeout(next, 4000);
     return () => {
       if (autoRef.current) clearTimeout(autoRef.current);
     };
-  }, [next]);
+  }, [next, reversedBlogs.length]);
 
   // Scroll active thumbnail into view
   useEffect(() => {
@@ -89,6 +106,8 @@ export default function MarqueeCarousel() {
       container.scrollTo({ top: offset, behavior: "smooth" });
     }
   }, [activeIndex]);
+
+  if (!reversedBlogs.length) return null;
 
   const current = reversedBlogs[activeIndex];
 
