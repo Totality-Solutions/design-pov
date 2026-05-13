@@ -329,8 +329,8 @@ export default function Navbar() {
       ========================== */}
       <header
         id="main-navbar"
-        className={`w-full bg-white border-b border-gray-100 transition-all duration-300 ${
-          isSticky ? "fixed top-0 left-0  z-[2100]" : "relative z-[2100]"
+        className={`w-full bg-white border-b border-gray-100 transition-all duration-300 z-[2100] sticky top-0 ${
+          isSticky ? "lg:fixed lg:top-0 lg:left-0" : "lg:relative lg:top-auto"
         }`}
       >
         
@@ -431,8 +431,8 @@ export default function Navbar() {
        
       </header>
 
-      {/* Spacer */}
-      {isSticky && <div className="h-[80px] lg:h-[88px] w-full" />}
+      {/* Spacer — desktop only; mobile uses sticky which doesn't need one */}
+      {isSticky && <div className="hidden lg:block h-[88px] w-full" />}
 
       {/* =========================
           DESKTOP SUBMENU
