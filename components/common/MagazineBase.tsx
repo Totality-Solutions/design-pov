@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
+import { cdn } from "@/lib/cdn";
 import Image from "next/image";
 import { FiChevronLeft, FiX } from "react-icons/fi";
 import CTABtn from "../common/CTABtn";
@@ -76,7 +77,7 @@ export default function MagazineBase({
         {/* HERO IMAGE SECTION */}
         <div className={isInnerPage ? "relative w-full h-[60vh] md:h-[80vh]" : "sticky top-20 lg:top-0 h-[50vh] lg:h-full w-full overflow-hidden z-0"}>
           <Image
-            src={activeBlog.image || "/temp/home/blogs/blog-16.jpg"}
+            src={activeBlog.image || cdn("/temp/home/blogs/blog-16.jpg")}
             alt={activeBlog.title}
             fill
             priority
@@ -155,7 +156,7 @@ export default function MagazineBase({
                 className={`flex flex-col gap-4 group cursor-pointer transition-all duration-300 ${activeBlog.id === item.id ? "opacity-100 pointer-events-none" : "opacity-100"}`}
               >
                 <div className="relative aspect-[4/3] w-full overflow-hidden">
-                  <Image src={item.image} alt={item.title} fill className="object-cover group-hover:scale-110 transition-transform duration-500" />
+                  <Image src={item.image} alt={item.title} fill sizes="320px" className="object-cover group-hover:scale-110 transition-transform duration-500" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-80" />
                   <div className="absolute bottom-4 left-4 right-4 z-10">
                     <span className="text-white/60 text-[10px] uppercase">{item.category}</span>
@@ -170,7 +171,7 @@ export default function MagazineBase({
                   <span className="text-[10px] text-black/40 uppercase font-bold tracking-widest">Advertisement</span>
                 </div>
                 <div className={`relative group overflow-hidden bg-gray-100 ${item.aspect} w-full`}>
-                  <Image src={item.image} alt="Ad" fill className="object-cover transition-transform duration-700 group-hover:scale-105" />
+                  <Image src={item.image} alt="Ad" fill sizes="320px" className="object-cover transition-transform duration-700 group-hover:scale-105" />
                   <div className="absolute inset-0 bg-linear-to-t from-black/90 via-transparent to-black/40 z-10 opacity-80" />
                 </div>
               </div>

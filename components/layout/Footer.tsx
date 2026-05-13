@@ -13,6 +13,7 @@ import { ArrowUpRight, Home } from "lucide-react";
 import FooterTablet from "./FooterTablet";
 import { Container } from "../common/Container";
 import Link from "next/link";
+import Image from "next/image";
 
 const navLinks = {
   Partners: {
@@ -164,11 +165,15 @@ const Footer = () => {
           <div className="flex justify-between items-start">
             {/* LEFT: Logo and Contact */}
             <div className="flex flex-col gap-[32px] max-w-[302px]">
-              <img
-                src="/DesignPOV.png"
-                alt="Design POV Logo"
-                className="w-full max-w-[280px]"
-              />
+              <div className="relative w-full max-w-[280px] h-14">
+                <Image
+                  src={cdn("/logo/Logo.svg")}
+                  alt="Design POV Logo"
+                  fill
+                  unoptimized
+                  className="object-contain object-left invert"
+                />
+              </div>
               <div className="text-white text-[12px] opacity-80">
                 <div className="leading-relaxed mb-4">
                   {/* <Link href="mailto:marketing@designpovindia.com">designpovindia.com</Link> */}
@@ -252,9 +257,11 @@ const Footer = () => {
                 >
                   <div className="bg-black border border-white relative">
                     <div className="p-3 flex items-center justify-center">
-                      <img
-                        src={isHiring ? "/temp/hiring.svg" : "/qr/ticket-qr.svg"}
+                      <Image
+                        src={isHiring ? cdn("/temp/hiring.svg") : cdn("/qr/ticket-qr.svg")}
                         alt={isHiring ? "Hiring" : "POV Index"}
+                        width={140}
+                        height={140}
                         className="w-[120px] lg:w-[140px] object-contain"
                       />
                     </div>

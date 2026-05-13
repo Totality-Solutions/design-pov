@@ -6,7 +6,7 @@ import { FiX } from "react-icons/fi";
 import CTABtn from "./CTABtn";
 import { cdn } from "@/lib/cdn";
 
-const SHOW_DECK_PDF = "/pdf/POV '25 Show Deck.pdf";
+const SHOW_DECK_PDF = cdn("/pdf/POV '25 Show Deck.pdf");
 
 interface PopupFormProps {
   isOpen: boolean;
@@ -71,7 +71,7 @@ export default function PopupForm({ isOpen, onClose }: PopupFormProps) {
     <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-6">
       {/* BACKDROP: Closes form when clicking outside */}
       <div 
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" 
+        className="absolute inset-0 bg-black/70 transition-opacity" 
         onClick={onClose}
       />
 

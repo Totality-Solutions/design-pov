@@ -1,4 +1,4 @@
-import { cdn } from "@/lib/cdn";
+﻿import { cdn } from "@/lib/cdn";
 export type CoreItem = {
   id: string;
   src: string;
@@ -24,7 +24,7 @@ export const coreData: CoreItem[] = [
     // additionalImages: [
     //   "/temp/home/core/ABIN_1.jpg",
     // ],
-    logo: "/temp/edition/core-logo/ads.png",
+    logo: cdn("/temp/edition/core-logo/ads.png"),
     website: "https://www.abindesignstudio.com/",
     instagram: "https://www.instagram.com/abindesign_studio?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
   },
@@ -41,7 +41,7 @@ export const coreData: CoreItem[] = [
     // additionalImages: [
     //   "/temp/home/core/ADND_1.jpg",
     // ],
-    logo: "/temp/edition/core-logo/adnd.png",
+    logo: cdn("/temp/edition/core-logo/adnd.png"),
     website: "https://www.adnd.in/",
     instagram: "https://www.instagram.com/adnd_studio/"
   },
@@ -57,7 +57,7 @@ export const coreData: CoreItem[] = [
     // additionalImages: [
     //   "/temp/home/core/ALARA_1.jpg",
     // ],
-    logo: "/temp/edition/core-logo/alara.png",
+    logo: cdn("/temp/edition/core-logo/alara.png"),
     website: "https://www.alarastudio.in/",
     instagram: "https://www.instagram.com/alarastudio/"
   },
@@ -71,7 +71,7 @@ export const coreData: CoreItem[] = [
     // additionalImages: [
     //   "/temp/home/core/BALDIWALA_logo.jpg",
     // ],
-    logo: "/temp/edition/core-logo/baldiwala.png",
+    logo: cdn("/temp/edition/core-logo/baldiwala.png"),
     website: "https://baldiwalaedge.com/",
     instagram: "https://www.instagram.com/baldiwala_edge?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
   },
@@ -85,7 +85,7 @@ export const coreData: CoreItem[] = [
     // additionalImages: [
     //   "/temp/home/core/CITYSPACE_1.jpg",
     // ],
-    logo: "/temp/edition/core-logo/cityspace82.png",
+    logo: cdn("/temp/edition/core-logo/cityspace82.png"),
     website: "https://www.cityspace82.com/",
     instagram: "https://www.instagram.com/cityspace82_architects/"
   },
@@ -99,7 +99,7 @@ export const coreData: CoreItem[] = [
     // additionalImages: [
     //   "/temp/home/core/DESIGNHEX_1.jpg",
     // ],
-    logo: "/temp/edition/core-logo/design-hex.png",
+    logo: cdn("/temp/edition/core-logo/design-hex.png"),
     website: "https://www.designhex.in/",
     instagram: "https://www.instagram.com/design_hex/"
   },
@@ -113,7 +113,7 @@ export const coreData: CoreItem[] = [
     // additionalImages: [
     //   "/temp/home/core/DSP_1.jpg",
     // ],
-    logo: "/temp/edition/core-logo/dsp.png",
+    logo: cdn("/temp/edition/core-logo/dsp.png"),
     website: "https://www.dspdesign.co/home.php",
     instagram: "https://www.instagram.com/dspdesignassociates/"
   },
@@ -127,7 +127,7 @@ export const coreData: CoreItem[] = [
     // additionalImages: [
     //   "/temp/home/core/JANNAT_1.jpg",
     // ],
-    logo: "/temp/edition/core-logo/jannat-vasi.png",
+    logo: cdn("/temp/edition/core-logo/jannat-vasi.png"),
     website: "https://www.jannatvasi.com/",
     instagram: "https://www.instagram.com/jannatvasiinteriordesign/"
   },
@@ -141,7 +141,7 @@ export const coreData: CoreItem[] = [
     // additionalImages: [
     //   "/temp/home/core/NA_1.jpg",
     // ],
-    logo: "/temp/edition/core-logo/na-arch.png",
+    logo: cdn("/temp/edition/core-logo/na-arch.png"),
     website: "https://www.naarchitects.net/",
     instagram: "https://www.instagram.com/na_architects/"
   },
@@ -155,7 +155,7 @@ export const coreData: CoreItem[] = [
     // additionalImages: [
     //   "/temp/home/core/POONAM_1.jpg",
     // ],
-    logo: "/temp/edition/core-logo/poonam-akash.png",
+    logo: cdn("/temp/edition/core-logo/poonam-akash.png"),
     website: "https://poonamakash.com/",
     instagram: "https://www.instagram.com/ampm_designs/"
   },
@@ -169,7 +169,7 @@ export const coreData: CoreItem[] = [
     // additionalImages: [
     //   "/temp/home/core/SANJAYPURI_1.jpg",
     // ],
-    logo: "/temp/edition/core-logo/sanjay-arch.png",
+    logo: cdn("/temp/edition/core-logo/sanjay-arch.png"),
     website: "https://sanjaypuriarchitects.com/",
     instagram: "https://www.instagram.com/sanjay_puri_architects/"
   },
@@ -183,7 +183,7 @@ export const coreData: CoreItem[] = [
     // additionalImages: [
     //   "/temp/home/core/SAV_1.jpg",
     // ],
-    logo:"/temp/edition/core-logo/sav.png",
+    logo:cdn("/temp/edition/core-logo/sav.png"),
     website: "https://www.studioamitavikrant.com/",
     instagram: "https://www.instagram.com/studioamitavikrant/"
   },
@@ -197,7 +197,7 @@ export const coreData: CoreItem[] = [
     // additionalImages: [
     //   "/temp/home/core/SHROFFLEON_1.jpg",
     // ],
-    logo:"/temp/edition/core-logo/shroffleon.png",
+    logo:cdn("/temp/edition/core-logo/shroffleon.png"),
     website: "https://shroffleon.com/",
     instagram: "https://www.instagram.com/shroffleon/"
   },
@@ -211,7 +211,7 @@ export const coreData: CoreItem[] = [
     // additionalImages: [
     //   "/temp/home/core/SPARC_1.jpg",
     // ],
-    logo:"/temp/edition/core-logo/sparc-design.png",
+    logo:cdn("/temp/edition/core-logo/sparc-design.png"),
     website: "https://sparcdesign.co.in/",
     instagram: "https://www.instagram.com/sparcdesignofficial/"
   },
@@ -225,7 +225,7 @@ export const coreData: CoreItem[] = [
     // additionalImages: [
     //   "/temp/home/core/ARCHOHM_1.jpg",
     // ],
-    logo:"/temp/edition/core-logo/archohm.png",
+    logo:cdn("/temp/edition/core-logo/archohm.png"),
     website: "https://www.archohm.com/",
     instagram: "https://www.instagram.com/archohm/"
   },
@@ -239,7 +239,7 @@ export const coreData: CoreItem[] = [
     // additionalImages: [
     //   "/temp/home/core/TALATI_1.jpg",
     // ],
-    logo:"/temp/edition/core-logo/talati-partners.png",
+    logo:cdn("/temp/edition/core-logo/talati-partners.png"),
     website: "https://talatiandpartners.com/",
     instagram: "https://www.instagram.com/talatiandpartners/"
   }

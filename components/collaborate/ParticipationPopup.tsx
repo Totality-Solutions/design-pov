@@ -7,7 +7,7 @@ import { X } from "lucide-react";
 
 import FormInner from "@/components/common/FormInner";
 
-import LogoImage from "@/public/logo/Logo.svg";
+import { cdn } from "@/lib/cdn";
 import ParticipationForm from "../ecosystem/ParticipationForm";
 
 interface ParticipationPopupProps {
@@ -45,7 +45,7 @@ export default function ParticipationPopup({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/70"
           />
 
           {/* MODAL */}
@@ -71,7 +71,7 @@ export default function ParticipationPopup({
               <div className="flex-grow flex items-center justify-center">
                 <div className="relative w-40 h-20 md:w-80 md:h-40 opacity-90">
                   <Image
-                    src={LogoImage}
+                    src={cdn("/logo/Logo.svg")}
                     alt="Design POV Logo"
                     fill
                     priority

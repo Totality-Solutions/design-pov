@@ -1,37 +1,4 @@
-import { StaticImageData } from "next/image";
-import { cdn } from "@/lib/cdn";
-import BlogImg1 from "@/public/temp/home/blogs/blog-16.jpg";
-import BlogImg2 from "@/public/temp/home/blogs/blog-15.jpg";
-import BlogImg3 from "@/public/temp/home/blogs/blog-14.jpg";
-import BlogImg4 from "@/public/temp/home/blogs/blog-13.jpg";
-import BlogImg5 from "@/public/temp/home/blogs/blog-12.webp";
-import BlogImg6 from "@/public/temp/home/blogs/blog-11.jpg";
-import BlogImg7 from "@/public/temp/home/blogs/blog-10.jpg";
-import BlogImg8 from "@/public/temp/home/blogs/blog-9.jpg";
-import BlogImg9 from "@/public/temp/home/blogs/blog-8.webp";
-import BlogImg10 from "@/public/temp/home/blogs/blog-7.webp";
-import BlogImg11 from "@/public/temp/home/blogs/blog-6.jpg";
-import BlogImg12 from "@/public/temp/home/blogs/blog-5.jpg";
-import BlogImg13 from "@/public/temp/home/blogs/blog-4.jpg";
-import BlogImg14 from "@/public/temp/home/blogs/blog-3.jpg";
-import BlogImg15 from "@/public/temp/home/blogs/blog-2.jpg";
-import BlogImg16 from "@/public/temp/home/blogs/blog-1.jpg";
-import BlogImg17 from "@/public/temp/magazine/17/blog-17-1.jpeg";
-import BlogImg18 from "@/public/temp/magazine/18/blog-18-1.jpg";
-import BlogImg19 from "@/public/temp/magazine/19/blog-19-1.png";
-import BlogImg20 from "@/public/temp/magazine/20/blog-20-1.jpg";
-import BlogImg21 from "@/public/temp/magazine/21/blog-21-1.jpeg";
-import BlogImg22 from "@/public/temp/magazine/22/blog-22-1.jpeg";
-import BlogImg23 from "@/public/temp/magazine/23/blog-23-1.png";
-import BlogImg24 from "@/public/temp/magazine/24/blog-24-1.png";
-import BlogImg25 from "@/public/temp/magazine/25/blog-25-1.jpeg";
-import BlogImg26 from "@/public/temp/magazine/26/blog-26-1.jpeg";
-import BlogImg27 from "@/public/temp/magazine/27/blog-27-1.jpeg";
-import BlogImg28 from "@/public/temp/magazine/28/blog-28-1.jpeg";
-import BlogImg29 from "@/public/temp/magazine/29/blog-29-1.jpg";
-import BlogImg30 from "@/public/temp/magazine/30/blog-30-1.png";
-import BlogImg31 from "@/public/temp/magazine/31/blog-31-1.png";
-import BlogImg32 from "@/public/temp/magazine/32/blog-32-1.jpeg";
+﻿import { cdn } from "@/lib/cdn";
 
 
 export type ContentBlock =
@@ -40,7 +7,7 @@ export type ContentBlock =
     title?: string; // New optional key for the title before the text
     value: string;
   }
-  | { type: "image"; value: string | StaticImageData; caption?: string }
+  | { type: "image"; value: string; caption?: string }
   | { type: "quote"; value: string };
 
 export interface Blog {
@@ -52,8 +19,8 @@ export interface Blog {
   author: string;
   date: string;
   isFeatured: boolean;
-  image: StaticImageData; // Main Hero/Sticky Image
-  thumbnail: StaticImageData; // Sidebar/Carousel Strip
+  image: string;
+  thumbnail: string;
   title: string;
   subtitle: string; // From Slides data
   description: string; // From Slides data
@@ -73,8 +40,8 @@ export const blogs: Blog[] = [
   author: "Dyumni Pandit",
   date: "17 May 2021",
   isFeatured: false,
-  image: BlogImg1,
-  thumbnail: BlogImg1,
+  image: cdn("/temp/home/blogs/blog-16.jpg"),
+  thumbnail: cdn("/temp/home/blogs/blog-16.jpg"),
   title: "The Bombay Storey-s: A carousel through the British architecture in Mumbai",
   subtitle: "A carousel through the British architecture in Mumbai",
   description: "First and foremost, let me establish that in all my twenty-one years of existence, I’ve resided in Mumbai.",
@@ -107,7 +74,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/1/blog-1-1.jpg",
+      value: cdn("/temp/magazine/1/blog-1-1.jpg"),
       caption: "The neoclassical grandeur of Bombay Town Hall with its iconic Doric columns."
     },
     {
@@ -121,7 +88,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/1/blog-1-2.jpg",
+      value: cdn("/temp/magazine/1/blog-1-2.jpg"),
       caption: "The Gothic Revival splendour of Chhatrapati Shivaji Maharaj Terminus."
     },
     {
@@ -139,7 +106,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/1/blog-1-3.jpg",
+      value: cdn("/temp/magazine/1/blog-1-3.jpg"),
       caption: "The sky-blue Victorian Gothic facade of the Knesset Eliyahoo Synagogue."
     },
     {
@@ -152,7 +119,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/1/blog-1-4.jpg",
+      value: cdn("/temp/magazine/1/blog-1-4.jpg"),
       caption: "Historic Victorian Gothic architecture across Mumbai’s academic institutions."
     },
     {
@@ -162,7 +129,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/1/blog-1-5.jpg",
+      value: cdn("/temp/magazine/1/blog-1-5.jpg"),
       caption: "The Indo-Saracenic silhouette of the Gateway of India during sunset."
     },
     {
@@ -189,8 +156,8 @@ export const blogs: Blog[] = [
   author: "Dyumni Pandit",
   date: "24 May 2021",
   isFeatured: false,
-  image: BlogImg2,
-  thumbnail: BlogImg2,
+  image: cdn("/temp/home/blogs/blog-15.jpg"),
+  thumbnail: cdn("/temp/home/blogs/blog-15.jpg"),
   title: "Splendour Living transforms an abandoned warehouse into a creative workspace",
   subtitle: "An abandoned warehouse reimagined into a contemporary creative studio",
   description: "As time passes and a city develops, its essence starts transforming.",
@@ -214,7 +181,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/2/blog-2-1.jpg",
+      value: cdn("/temp/magazine/2/blog-2-1.jpg"),
       caption: "Maraal studio preserves the industrial identity of the original warehouse while embracing contemporary design."
     },
     {
@@ -237,7 +204,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/2/blog-2-2.webp",
+      value: cdn("/temp/magazine/2/blog-2-2.webp"),
       caption: "The multi-functional warehouse combines a race shop, workshop, and experimental kitchen under one roof."
     },
     {
@@ -246,7 +213,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/2/blog-2-3.webp",
+      value: cdn("/temp/magazine/2/blog-2-3.webp"),
       caption: "Open layouts and natural light redefine the industrial warehouse into a contemporary creative workspace."
     },
     {
@@ -274,8 +241,8 @@ export const blogs: Blog[] = [
   author: "Dyumni Pandit",
   date: "17 May 2021",
   isFeatured: false,
-  image: BlogImg3,
-  thumbnail: BlogImg3,
+  image: cdn("/temp/home/blogs/blog-14.jpg"),
+  thumbnail: cdn("/temp/home/blogs/blog-14.jpg"),
   title: "Studio Camarada brings the set of Peaky Blinders to 1522 The Pub Kamanahalli",
   subtitle: "A British-Irish pub inspired by the cinematic world of Peaky Blinders",
   description: "When you walk into a watering hole, you expect to be greeted by strangers trying to speak over the blasting music, dim lights, and a bartender doing tricks at the counter.",
@@ -299,7 +266,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/3/blog-3-1.webp",
+      value: cdn("/temp/magazine/3/blog-3-1.webp"),
       caption: "The British-inspired interiors recreate the cinematic atmosphere of a vintage Peaky Blinders setting."
     },
     {
@@ -317,7 +284,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/3/blog-3-2.webp",
+      value: cdn("/temp/magazine/3/blog-3-2.webp"),
       caption: "Brick facades, arched ceilings, and warm lighting define the pub’s post-industrial atmosphere."
     },
     {
@@ -339,7 +306,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/3/blog-3-3.webp",
+      value: cdn("/temp/magazine/3/blog-3-3.webp"),
       caption: "The grand staircase acts as a dramatic architectural centerpiece within the pub."
     },
     {
@@ -357,7 +324,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/3/blog-3-4.webp",
+      value: cdn("/temp/magazine/3/blog-3-4.webp"),
       caption: "Vintage wooden frames and stained glass windows reinforce the pub’s nostalgic aesthetic."
     },
     {
@@ -371,7 +338,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/3/blog-3-5.webp",
+      value: cdn("/temp/magazine/3/blog-3-5.webp"),
       caption: "The grand staircase acts as a dramatic architectural centerpiece within the pub."
     },
     {
@@ -390,8 +357,8 @@ export const blogs: Blog[] = [
   author: "Dyumni Pandit",
   date: "17 May 2021",
   isFeatured: false,
-  image: BlogImg4,
-  thumbnail: BlogImg4,
+  image: cdn("/temp/home/blogs/blog-13.jpg"),
+  thumbnail: cdn("/temp/home/blogs/blog-13.jpg"),
   title: "The House on the Edge in Hyderabad by Quirk Studio is a lesson in eclectic art contrasting subtle hues",
   subtitle: "An eclectic Hyderabad home balancing art, texture, and muted tones",
   description: "Your home should embody you; comfort should come from the familiarity of your presence in the space more than its interior.",
@@ -415,7 +382,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/4/blog-4-1.webp",
+      value: cdn("/temp/magazine/4/blog-4-1.webp"),
       caption: "The double-height living area combines eclectic art, modern furniture, and a raw unfinished aesthetic."
     },
     {
@@ -451,12 +418,12 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/4/blog-4-3.jpg",
+      value: cdn("/temp/magazine/4/blog-4-3.jpg"),
       caption: "Muted textures and soft furnishings shape the calming atmosphere of the bedroom."
     },
     {
       type: "image",
-      value: "/temp/magazine/4/blog-4-4.webp",
+      value: cdn("/temp/magazine/4/blog-4-4.webp"),
       caption: "The living and dining areas merge under dramatic double-height volumes and artistic lighting."
     },
     {
@@ -470,7 +437,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/4/blog-4-5.webp",
+      value: cdn("/temp/magazine/4/blog-4-5.webp"),
       caption: "Abstract art and carefully curated furniture bring warmth and personality to the living spaces."
     },
     {
@@ -498,8 +465,8 @@ export const blogs: Blog[] = [
   author: "Dyumni Pandit",
   date: "17 May 2021",
   isFeatured: false,
-  image: BlogImg5,
-  thumbnail: BlogImg5,
+  image: cdn("/temp/home/blogs/blog-12.webp"),
+  thumbnail: cdn("/temp/home/blogs/blog-12.webp"),
   title: "Barbara Miolini, Marie Anna Oudejans, and Rajasthani painter Vikas Soni reunite to curate Jaipur Palladio",
   subtitle: "A whimsical red retreat nestled in the folds of the Aravalli hills",
   description: "Barbara Miolini, Marie Anna Oudejans, and Rajasthani painter Vikas Soni gather to curate an exquisite experience for patrons of the Pink City in the folds of the Aravalli hills.",
@@ -527,7 +494,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/5/blog-5-1.webp",
+      value: cdn("/temp/magazine/5/blog-5-1.webp"),
       caption: "Rich red hues and intricate detailing shape the whimsical interiors of Villa Palladio."
     },
     {
@@ -545,7 +512,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/5/blog-5-2.webp",
+      value: cdn("/temp/magazine/5/blog-5-2.webp"),
       caption: "The striking white facade and red accents frame Villa Palladio amidst the Aravalli landscape."
     },
     {
@@ -571,7 +538,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/5/blog-5-3.webp",
+      value: cdn("/temp/magazine/5/blog-5-3.webp"),
       caption: "Outdoor dining spaces immerse guests in Villa Palladio’s theatrical red palette."
     },
     {
@@ -585,7 +552,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/5/blog-5-4.webp",
+      value: cdn("/temp/magazine/5/blog-5-4.webp"),
       caption: "Patterns, arches, and vivid tones create an immersive old-world atmosphere."
     },
     {
@@ -602,7 +569,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/5/blog-5-5.webp",
+      value: cdn("/temp/magazine/5/blog-5-5.webp"),
       caption: "Bold geometry and theatrical interiors reinforce Villa Palladio’s playful fantasy."
     },
     {
@@ -630,8 +597,8 @@ export const blogs: Blog[] = [
   author: "Dyumni Pandit",
   date: "17 May 2021",
   isFeatured: false,
-  image: BlogImg6,
-  thumbnail: BlogImg6,
+  image: cdn("/temp/home/blogs/blog-11.jpg"),
+  thumbnail: cdn("/temp/home/blogs/blog-11.jpg"),
   title: "This ancestral Gujarat home by Doro is a lesson in traditional yet elegant minimalism",
   subtitle: "A restored Gujarat home balancing heritage with contemporary minimalism",
   description: "As the summer rolls in and schools take a break, parents worry about taking their children on vacation for a quaint getaway from the hassle of life.",
@@ -655,7 +622,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/6/blog-6-1.jpg",
+      value: cdn("/temp/magazine/6/blog-6-1.jpg"),
       caption: "The restored ancestral home preserves the quiet charm of Gujarat’s village architecture."
     },
     {
@@ -673,7 +640,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/6/blog-6-2.jpg",
+      value: cdn("/temp/magazine/6/blog-6-2.jpg"),
       caption: "Minimal interiors and open volumes reinterpret the ancestral home for modern living."
     },
     {
@@ -701,8 +668,8 @@ export const blogs: Blog[] = [
   author: "Dyumni Pandit",
   date: "17 May 2021",
   isFeatured: false,
-  image: BlogImg7,
-  thumbnail: BlogImg7,
+  image: cdn("/temp/home/blogs/blog-10.jpg"),
+  thumbnail: cdn("/temp/home/blogs/blog-10.jpg"),
   title: "Baker’s Arch Cafe: A Laurie Baker Legacy with a Tropical Twist",
   subtitle: "A tropical garden café rooted in Laurie Baker’s architectural philosophy",
   description: "Nestled in the heart of Thiruvananthapuram, Kerala, Baker’s Arch Cafe seamlessly blends Laurie Baker’s architectural ethos with a lush, tropical aesthetic.",
@@ -722,7 +689,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/7/blog-7-1.webp",
+      value: cdn("/temp/magazine/7/blog-7-1.webp"),
       caption: "Baker’s Arch Cafe blends Laurie Baker’s signature brick architecture with tropical design elements."
     },
     {
@@ -740,7 +707,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/7/blog-7-2.webp",
+      value: cdn("/temp/magazine/7/blog-7-2.webp"),
       caption: "Cobblestone pathways and exposed brick details preserve the original character of the building."
     },
     {
@@ -762,7 +729,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/7/blog-7-3.webp",
+      value: cdn("/temp/magazine/7/blog-7-3.webp"),
       caption: "The restored interiors balance historic charm with contemporary café functions."
     },
     {
@@ -785,7 +752,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/7/blog-7-4.webp",
+      value: cdn("/temp/magazine/7/blog-7-4.webp"),
       caption: "The Lotus Hall preserves Laurie Baker’s iconic brick arches and timeless architectural detailing."
     },
     {
@@ -821,8 +788,8 @@ export const blogs: Blog[] = [
   author: "Dyumni Pandit",
   date: "17 May 2021",
   isFeatured: false,
-  image: BlogImg8,
-  thumbnail: BlogImg8,
+  image: cdn("/temp/home/blogs/blog-9.jpg"),
+  thumbnail: cdn("/temp/home/blogs/blog-9.jpg"),
   title: "House of Grace: A Vintage Haven with Contemporary Elegance",
   subtitle: "A soulful Raipur residence blending vintage charm with contemporary sophistication",
   description: "A home often serves as a designer’s canvas—a space where creativity knows no bounds and design rules are reimagined.",
@@ -842,7 +809,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/8/blog-8-1.jpg",
+      value: cdn("/temp/magazine/8/blog-8-1.jpg"),
       caption: "Classic English influences merge with modern elegance across the monochromatic interiors."
     },
     {
@@ -856,7 +823,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/8/blog-8-2.jpg",
+      value: cdn("/temp/magazine/8/blog-8-2.jpg"),
       caption: "The grand foyer introduces the home’s balance of vintage charm and contemporary refinement."
     },
     {
@@ -878,7 +845,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/8/blog-8-3.jpg",
+      value: cdn("/temp/magazine/8/blog-8-3.jpg"),
       caption: "The dining space continues the home’s understated yet elegant monochromatic language."
     },
     {
@@ -896,7 +863,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/8/blog-8-4.jpg",
+      value: cdn("/temp/magazine/8/blog-8-4.jpg"),
       caption: "Vintage-inspired furnishings and custom detailing elevate the master suite."
     },
     {
@@ -910,7 +877,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/8/blog-8-5.jpg",
+      value: cdn("/temp/magazine/8/blog-8-5.jpg"),
       caption: "The walk-in closet channels Victorian-era luxury through patterned flooring and lacquered cabinetry."
     },
     {
@@ -924,7 +891,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/8/blog-8-6.jpg",
+      value: cdn("/temp/magazine/8/blog-8-6.jpg"),
       caption: "The walk-in closet channels Victorian-era luxury through patterned flooring and lacquered cabinetry."
     },
     {
@@ -947,8 +914,8 @@ export const blogs: Blog[] = [
   author: "Dyumni Pandit",
   date: "17 May 2021",
   isFeatured: false,
-  image: BlogImg9,
-  thumbnail: BlogImg9,
+  image: cdn("/temp/home/blogs/blog-8.webp"),
+  thumbnail: cdn("/temp/home/blogs/blog-8.webp"),
   title: "5 Ways Architects and Designers Can Benefit from Attending Design POV 2025",
   subtitle: "Why Design POV 2025 is shaping the future of architecture and interiors",
   description: "As the world of design continues to expand across continents and concepts, it becomes essential for architects and interior professionals to stay in step with the ideas shaping tomorrow.",
@@ -976,7 +943,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/9/blog-9-1.jpg",
+      value: cdn("/temp/magazine/9/blog-9-1.jpg"),
       caption: "Design POV 2025 brings together architects, designers, innovators, and creative thinkers under one roof."
     },
     {
@@ -1002,7 +969,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/9/blog-9-2.webp",
+      value: cdn("/temp/magazine/9/blog-9-2.webp"),
       caption: "Panel discussions and immersive sessions encourage deeper conversations around the future of design."
     },
     {
@@ -1024,7 +991,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/9/blog-9-3.webp",
+      value: cdn("/temp/magazine/9/blog-9-3.webp"),
       caption: "Curated networking spaces encourage collaboration across architecture, interiors, and design disciplines."
     },
     {
@@ -1046,7 +1013,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/9/blog-9-4.webp",
+      value: cdn("/temp/magazine/9/blog-9-4.webp"),
       caption: "Material showcases and interactive exhibits spotlight the future of Indian design innovation."
     },
     {
@@ -1068,7 +1035,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/9/blog-9-5.webp",
+      value: cdn("/temp/magazine/9/blog-9-5.webp"),
       caption: "International collaborations and Indian craftsmanship intersect across the Design POV experience."
     },
     {
@@ -1090,7 +1057,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/9/blog-9-6.webp",
+      value: cdn("/temp/magazine/9/blog-9-6.webp"),
       caption: "Design POV 2025 creates opportunities for unexpected conversations and meaningful collaborations."
     },
     {
@@ -1132,8 +1099,8 @@ export const blogs: Blog[] = [
   author: "Dyumni Pandit",
   date: "17 May 2021",
   isFeatured: false,
-  image: BlogImg10,
-  thumbnail: BlogImg10,
+  image: cdn("/temp/home/blogs/blog-7.webp"),
+  thumbnail: cdn("/temp/home/blogs/blog-7.webp"),
   title: "Echoes of Tomorrow — Theme 2025",
   subtitle: "Design POV 2025 explores the dialogue between memory, heritage, and the future",
   description: "Design POV is a collective mediation on design, culture, and creativity.",
@@ -1178,7 +1145,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/10/blog-10-2.webp",
+      value: cdn("/temp/magazine/10/blog-10-2.webp"),
       caption: "The theme encourages designers to reinterpret tradition through future-facing spatial experiences."
     },
     {
@@ -1204,7 +1171,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/10/blog-10-3.webp",
+      value: cdn("/temp/magazine/10/blog-10-3.webp"),
       caption: "Craftsmanship and inherited memories become integral elements within future-oriented design concepts."
     },
     {
@@ -1240,7 +1207,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/10/blog-10-4.webp",
+      value: cdn("/temp/magazine/10/blog-10-4.webp"),
       caption: "Installations explore evolving spatial identities and fluid transitions between purpose and experience."
     },
     {
@@ -1284,8 +1251,8 @@ export const blogs: Blog[] = [
   author: "Dyumni Pandit",
   date: "17 May 2021",
   isFeatured: false,
-  image: BlogImg11,
-  thumbnail: BlogImg11,
+  image: cdn("/temp/home/blogs/blog-6.jpg"),
+  thumbnail: cdn("/temp/home/blogs/blog-6.jpg"),
   title: "CREDAI-MCHI",
   subtitle: "Shaping conversations around design, luxury, and urban living at Design POV",
   description: "Design POV was thrilled to be supported by CREDAI-MCHI, the apex body representing private sector developers across the Mumbai Metropolitan Region (MMR).",
@@ -1322,7 +1289,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/11/blog-11-2.jpg",
+      value: cdn("/temp/magazine/11/blog-11-2.jpg"),
       caption: "Panel discussions explored the evolving meaning of luxury, sustainability, and liveability."
     },
     {
@@ -1336,7 +1303,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/11/blog-11-3.jpg",
+      value: cdn("/temp/magazine/11/blog-11-3.jpg"),
       caption: "Panel discussions explored the evolving meaning of luxury, sustainability, and liveability."
     },
     {
@@ -1349,7 +1316,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/11/blog-11-4.jpg",
+      value: cdn("/temp/magazine/11/blog-11-4.jpg"),
       caption: "Industry leaders reflected on the future of luxury, housing, and urban growth in India."
     },
     {
@@ -1363,7 +1330,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/11/blog-11-5.jpg",
+      value: cdn("/temp/magazine/11/blog-11-5.jpg"),
       caption: "Industry leaders reflected on the future of luxury, housing, and urban growth in India."
     },
     {
@@ -1376,7 +1343,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/11/blog-11-6.jpg",
+      value: cdn("/temp/magazine/11/blog-11-6.jpg"),
       caption: "The opening session encouraged a deeper dialogue on building cities that are sustainable, thoughtful, and future-ready."
     },
     {
@@ -1395,8 +1362,8 @@ export const blogs: Blog[] = [
   author: "Dyumni Pandit",
   date: "17 May 2021",
   isFeatured: false,
-  image: BlogImg12,
-  thumbnail: BlogImg12,
+  image: cdn("/temp/home/blogs/blog-5.jpg"),
+  thumbnail: cdn("/temp/home/blogs/blog-5.jpg"),
   title: "Bombay Founders Club",
   subtitle: "Building conversations around entrepreneurship, creativity, and innovation at Design POV 2025",
   description: "We were thrilled to have Bombay Founders’ Club (BFC) at Design POV 2025 as a Supporting Association.",
@@ -1433,7 +1400,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/12/blog-12-2.jpg",
+      value: cdn("/temp/magazine/12/blog-12-2.jpg"),
       caption: "The BFC session sparked conversations around innovation, venture-building, and creative leadership."
     },
     {
@@ -1455,7 +1422,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/12/blog-12-3.jpg",
+      value: cdn("/temp/magazine/12/blog-12-3.jpg"),
       caption: "Founders and creatives explored the evolving relationship between business, design, and innovation."
     },
     {
@@ -1477,7 +1444,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/12/blog-12-4.jpg",
+      value: cdn("/temp/magazine/12/blog-12-4.jpg"),
       caption: "Industry leaders shared insights on scaling ventures, design innovation, and sustainable growth."
     },
     {
@@ -1500,7 +1467,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/12/blog-12-5.jpg",
+      value: cdn("/temp/magazine/12/blog-12-5.jpg"),
       caption: "The BFC session encouraged emerging founders to think critically about growth, culture, and innovation."
     },
     {
@@ -1517,7 +1484,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/12/blog-12-6.jpg",
+      value: cdn("/temp/magazine/12/blog-12-6.jpg"),
       caption: "The BFC session encouraged emerging founders to think critically about growth, culture, and innovation."
     },
     {
@@ -1540,8 +1507,8 @@ export const blogs: Blog[] = [
   author: "Dyumni Pandit",
   date: "17 May 2021",
   isFeatured: false,
-  image: BlogImg13,
-  thumbnail: BlogImg13,
+  image: cdn("/temp/home/blogs/blog-4.jpg"),
+  thumbnail: cdn("/temp/home/blogs/blog-4.jpg"),
   title: "National Restaurant Association of India (NRAI)",
   subtitle: "Exploring the future of hospitality, dining, and experience design at Design POV 2025",
   description: "Design POV ’25 was thrilled to be supported by the National Restaurant Association of India (NRAI), bringing with it over four decades of advocacy for India’s vibrant food service sector.",
@@ -1578,7 +1545,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/13/blog-13-2.jpg",
+      value: cdn("/temp/magazine/13/blog-13-2.jpg"),
       caption: "The Hunger Games panel explored the changing dynamics of dining, hospitality, and restaurant design."
     },
     {
@@ -1604,7 +1571,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/13/blog-13-3.jpg",
+      value: cdn("/temp/magazine/13/blog-13-3.jpg"),
       caption: "Hospitality leaders reflected on delivery culture, dine-in experiences, and evolving customer expectations."
     },
     {
@@ -1626,7 +1593,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/13/blog-13-4.jpg",
+      value: cdn("/temp/magazine/13/blog-13-4.jpg"),
       caption: "Design was discussed as a critical tool for storytelling, branding, and customer engagement."
     },
     {
@@ -1640,7 +1607,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/13/blog-13-5.jpg",
+      value: cdn("/temp/magazine/13/blog-13-5.jpg"),
       caption: "Thoughtful hospitality design emerged as the foundation for memorable dining experiences."
     },
     {
@@ -1658,7 +1625,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/13/blog-13-6.jpg",
+      value: cdn("/temp/magazine/13/blog-13-6.jpg"),
       caption: "Thoughtful hospitality design emerged as the foundation for memorable dining experiences."
     },
     {
@@ -1685,8 +1652,8 @@ export const blogs: Blog[] = [
   author: "Dyumni Pandit",
   date: "17 May 2021",
   isFeatured: false,
-  image: BlogImg14,
-  thumbnail: BlogImg14,
+  image: cdn("/temp/home/blogs/blog-3.jpg"),
+  thumbnail: cdn("/temp/home/blogs/blog-3.jpg"),
   title: "How to Use Color Psychology in Restaurant Interiors",
   subtitle: "Using colour to shape atmosphere, appetite, and dining experiences",
   description: "The scent of freshly baked bread wafts through the air, warm and familiar, like a quiet invitation.",
@@ -1727,7 +1694,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/14/blog-2.jpg",
+      value: cdn("/temp/magazine/14/blog-2.jpg"),
       caption: "Restaurant colour palettes influence mood, energy, and spatial perception."
     },
     {
@@ -1755,7 +1722,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/14/blog-3.jpg",
+      value: cdn("/temp/magazine/14/blog-3.jpg"),
       caption: "Warm reds and oranges energize dining spaces and encourage social interaction."
     },
     {
@@ -1795,7 +1762,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/14/blog-4.jpg",
+      value: cdn("/temp/magazine/14/blog-4.jpg"),
       caption: "Muted greens and turquoise tones create calming and refreshing dining atmospheres."
     },
     {
@@ -1826,8 +1793,8 @@ export const blogs: Blog[] = [
   author: "Dyumni Pandit",
   date: "17 May 2021",
   isFeatured: false,
-  image: BlogImg15,
-  thumbnail: BlogImg15,
+  image: cdn("/temp/home/blogs/blog-2.jpg"),
+  thumbnail: cdn("/temp/home/blogs/blog-2.jpg"),
   title: "Inside Art Mumbai, From Where We Stood",
   subtitle: "A walkthrough of Art Mumbai’s third edition through the eyes of a first-time visitor",
   description: "As soon as I entered Art Mumbai, I had an overwhelming realisation of my adoration for art and design.",
@@ -1860,7 +1827,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/15/blog-15-2.jpg",
+      value: cdn("/temp/magazine/15/blog-15-2.jpg"),
       caption: "Subodh Gupta’s The Seven Colours transformed everyday kitchen tools into a striking visual commentary."
     },
     {
@@ -1870,7 +1837,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/15/blog-15-3.jpg",
+      value: cdn("/temp/magazine/15/blog-15-3.jpg"),
       caption: "Meandering Histories Intertwined layered recycled materials into a textured visual narrative."
     },
     {
@@ -1884,7 +1851,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/15/blog-15-4.png",
+      value: cdn("/temp/magazine/15/blog-15-4.png"),
       caption: "Bharat Sikka’s KOTOKUNIBITO explored solitude and displacement through quiet urban imagery."
     },
     {
@@ -1898,12 +1865,12 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/15/blog-15-5.jpg",
+      value: cdn("/temp/magazine/15/blog-15-5.jpg"),
       caption: "A. Ramachandran’s early works revealed a quieter and more intimate artistic language."
     },
     {
       type: "image",
-      value: "/temp/magazine/15/blog-15-6.jpg",
+      value: cdn("/temp/magazine/15/blog-15-6.jpg"),
       caption: "A collector’s edition display of Ramachandran’s early drawings and studies."
     },
     {
@@ -1917,7 +1884,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/15/blog-15-7.jpg",
+      value: cdn("/temp/magazine/15/blog-15-7.jpg"),
       caption: "Raghu Rai’s Trees transformed landscapes into emotional meditations on memory and time."
     },
     {
@@ -1931,7 +1898,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/15/blog-15-8.jpg",
+      value: cdn("/temp/magazine/15/blog-15-8.jpg"),
       caption: "Kanu Gandhi’s photographs documented Mahatma Gandhi through quiet and intimate moments."
     },
     {
@@ -1945,7 +1912,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/15/blog-15-9.jpg",
+      value: cdn("/temp/magazine/15/blog-15-9.jpg"),
       caption: "Roger Ballen’s surreal interiors blurred the line between fantasy and psychological reality."
     },
     {
@@ -1959,7 +1926,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/15/blog-15-10.jpg",
+      value: cdn("/temp/magazine/15/blog-15-10.jpg"),
       caption: "Dinabandhu Das’s The Looking Glass transformed forgotten interiors into surreal architectural studies."
     },
     {
@@ -1973,7 +1940,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/15/blog-15-11.jpg",
+      value: cdn("/temp/magazine/15/blog-15-11.jpg"),
       caption: "Ketaki Sheth’s Behind the Marquee documented the candid realities behind Bollywood glamour."
     },
     {
@@ -1987,7 +1954,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/15/blog-15-12.jpg",
+      value: cdn("/temp/magazine/15/blog-15-12.jpg"),
       caption: "Zaam Arif’s The Double reflected themes of identity, isolation, and existential thought."
     },
     {
@@ -2022,8 +1989,8 @@ export const blogs: Blog[] = [
   author: "Dyumni Pandit",
   date: "17 May 2021",
   isFeatured: false,
-  image: BlogImg16,
-  thumbnail: BlogImg16,
+  image: cdn("/temp/home/blogs/blog-1.jpg"),
+  thumbnail: cdn("/temp/home/blogs/blog-1.jpg"),
   title: "Cordkraft Design Studio’s LAAD-5 in Ahmedabad is a monochrome retreat defined by a handcrafted ceiling mural",
   subtitle: "A monochrome Ahmedabad home where the ceiling becomes the focal point",
   description: "Every room has a characteristic that grounds it. The sofa anchors your gaze. The artwork commands the wall. The rug defines the floor.",
@@ -2060,7 +2027,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/16/blog-16-2.jpg",
+      value: cdn("/temp/magazine/16/blog-16-2.jpg"),
       caption: "The redesigned living space creates a seamless dialogue between the interiors and the garden."
     },
     {
@@ -2078,7 +2045,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/16/blog-16-3.jpg",
+      value: cdn("/temp/magazine/16/blog-16-3.jpg"),
       caption: "Muted monochrome tones allow texture, light, and sculptural elements to take prominence."
     },
     {
@@ -2101,7 +2068,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/16/blog-16-4.jpg",
+      value: cdn("/temp/magazine/16/blog-16-4.jpg"),
       caption: "The sculptural bronze-copper floor lamp introduces warmth and rhythm into the monochrome setting."
     },
     {
@@ -2137,8 +2104,8 @@ export const blogs: Blog[] = [
   "author": "Dyumni Pandit",
   "date": "09 May 2026",
   "isFeatured": true,
-  "image": BlogImg17,
-  "thumbnail": BlogImg17,
+  "image": cdn("/temp/magazine/17/blog-17-1.jpeg"),
+  "thumbnail": cdn("/temp/magazine/17/blog-17-1.jpeg"),
   "title": "Design as Discourse: What It Takes to Build a Platform Like Design POV",
   "subtitle": "An inquiry into building a platform that resists convention and prioritizes dialogue over display.",
   "description": "We sat down with founders Asif Sataar and Gagan Bhatia to understand the trigger behind Design POV and why designing for feeling might be the only way forward.",
@@ -2163,7 +2130,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/17/blog-17-2.jpeg",
+      value: cdn("/temp/magazine/17/blog-17-2.jpeg"),
       caption: "The handcrafted ceiling mural transforms the living room into a sculptural monochrome retreat."
     },
     {
@@ -2186,7 +2153,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/17/blog-17-3.jpeg",
+      value: cdn("/temp/magazine/17/blog-17-3.jpeg"),
       caption: "The handcrafted ceiling mural transforms the living room into a sculptural monochrome retreat."
     },
     {
@@ -2205,7 +2172,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/17/blog-17-4.jpeg",
+      value: cdn("/temp/magazine/17/blog-17-4.jpeg"),
       caption: "The handcrafted ceiling mural transforms the living room into a sculptural monochrome retreat."
     },
     {
@@ -2227,7 +2194,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/17/blog-17-5.jpeg",
+      value: cdn("/temp/magazine/17/blog-17-5.jpeg"),
       caption: "The handcrafted ceiling mural transforms the living room into a sculptural monochrome retreat."
     },
     {
@@ -2246,7 +2213,7 @@ export const blogs: Blog[] = [
     },
     {
       type: "image",
-      value: "/temp/magazine/17/blog-17-6.jpeg",
+      value: cdn("/temp/magazine/17/blog-17-6.jpeg"),
       caption: "The handcrafted ceiling mural transforms the living room into a sculptural monochrome retreat."
     },
     {
@@ -2277,8 +2244,8 @@ export const blogs: Blog[] = [
     "author": "Design POV Editorial",
     "date": "08 May 2026",
     "isFeatured": false,
-    image: BlogImg18,
-    thumbnail: BlogImg18,
+    image: cdn("/temp/magazine/18/blog-18-1.jpg"),
+    thumbnail: cdn("/temp/magazine/18/blog-18-1.jpg"),
     "title": "Woven Legacy brings handcrafted rug traditions into contemporary interiors at Design POV ’26",
     "subtitle": "A Mirzapur-based rug brand redefining handcrafted luxury through materiality and craftsmanship",
     "description": "Rooted in Mirzapur, Woven Legacy creates handmade luxury rugs that bridge traditional weaving techniques with contemporary interior design.",
@@ -2316,8 +2283,8 @@ export const blogs: Blog[] = [
     "author": "Design POV Editorial",
     "date": "08 May 2026",
     "isFeatured": false,
-    image: BlogImg19,
-    thumbnail: BlogImg19,
+    image: cdn("/temp/magazine/19/blog-19-1.png"),
+    thumbnail: cdn("/temp/magazine/19/blog-19-1.png"),
     "title": "Kuche7 explores stainless steel luxury interiors at Design POV ’26",
     "subtitle": "The modular kitchen brand brings precision-engineered stainless steel systems into contemporary living",
     "description": "Kuche7 designs modular kitchens and living systems using 304 food-grade stainless steel engineered for durability and hygiene.",
@@ -2352,8 +2319,8 @@ export const blogs: Blog[] = [
     "author": "Design POV Editorial",
     "date": "08 May 2026",
     "isFeatured": false,
-    image: BlogImg20,
-    thumbnail: BlogImg20,
+    image: cdn("/temp/magazine/20/blog-20-1.jpg"),
+    thumbnail: cdn("/temp/magazine/20/blog-20-1.jpg"),
     "title": "KStairs showcases custom staircase engineering at Design POV ’26",
     "subtitle": "Over two decades of staircase manufacturing and installation expertise comes to the event",
     "description": "KStairs designs and manufactures custom staircases across residential and commercial spaces using advanced CNC fabrication technology.",
@@ -2387,8 +2354,8 @@ export const blogs: Blog[] = [
     "author": "Design POV Editorial",
     "date": "08 May 2026",
     "isFeatured": false,
-    image: BlogImg21,
-    thumbnail: BlogImg21,
+    image: cdn("/temp/magazine/21/blog-21-1.jpeg"),
+    thumbnail: cdn("/temp/magazine/21/blog-21-1.jpeg"),
     "title": "Astronea introduces Italian wardrobe systems and precision hardware at Design POV ’26",
     "subtitle": "The Mumbai-based brand combines modular design with international hardware collaborations",
     "description": "Astronea creates premium wardrobe systems and interior solutions through collaborations with leading international hardware brands.",
@@ -2422,8 +2389,8 @@ export const blogs: Blog[] = [
     "author": "Design POV Editorial",
     "date": "08 May 2026",
     "isFeatured": true,
-    image: BlogImg22,
-    thumbnail: BlogImg22,
+    image: cdn("/temp/magazine/22/blog-22-1.jpeg"),
+    thumbnail: cdn("/temp/magazine/22/blog-22-1.jpeg"),
     "title": "Sunrooof reimagines artificial lighting through sky simulation technology at Design POV ’26",
     "subtitle": "A wellness lighting system designed to recreate natural sunlight indoors",
     "description": "Founded in 2019, Sunrooof creates intelligent ceiling systems that simulate natural daylight using advanced optics and AI integration.",
@@ -2458,8 +2425,8 @@ export const blogs: Blog[] = [
     "author": "Design POV Editorial",
     "date": "08 May 2026",
     "isFeatured": false,
-    image: BlogImg23,
-    thumbnail: BlogImg23,
+    image: cdn("/temp/magazine/23/blog-23-1.png"),
+    thumbnail: cdn("/temp/magazine/23/blog-23-1.png"),
     "title": "PARÉ Innovations brings premium surface systems to Design POV ’26",
     "subtitle": "From wall panels to flooring and facade systems, the brand expands material possibilities",
     "description": "PARÉ Innovations develops premium surface materials across ceilings, walls, facades, and flooring applications.",
@@ -2493,8 +2460,8 @@ export const blogs: Blog[] = [
     "author": "Design POV Editorial",
     "date": "08 May 2026",
     "isFeatured": false,
-    image: BlogImg24,
-    thumbnail: BlogImg24,
+    image: cdn("/temp/magazine/24/blog-24-1.png"),
+    thumbnail: cdn("/temp/magazine/24/blog-24-1.png"),
     "title": "Kubik presents demountable partition systems and Porta Lino doors at Design POV ’26",
     "subtitle": "A decade of partition design and installation expertise comes to the event",
     "description": "Kubik designs and installs demountable glass partition systems that support flexible contemporary interiors.",
@@ -2528,8 +2495,8 @@ export const blogs: Blog[] = [
     "author": "Design POV Editorial",
     "date": "08 May 2026",
     "isFeatured": false,
-    image: BlogImg25,
-    thumbnail: BlogImg25,
+    image: cdn("/temp/magazine/25/blog-25-1.jpeg"),
+    thumbnail: cdn("/temp/magazine/25/blog-25-1.jpeg"),
     "title": "Deluxe Veneers brings four decades of veneer craftsmanship to Design POV ’26",
     "subtitle": "The factory-owned veneer brand showcases globally sourced natural wood collections",
     "description": "Deluxe Veneers produces A++ grade natural veneers through globally sourced timber and advanced embossing technology.",
@@ -2563,8 +2530,8 @@ export const blogs: Blog[] = [
     "author": "Design POV Editorial",
     "date": "08 May 2026",
     "isFeatured": false,
-    image: BlogImg26,
-    thumbnail: BlogImg26,
+    image: cdn("/temp/magazine/26/blog-26-1.jpeg"),
+    thumbnail: cdn("/temp/magazine/26/blog-26-1.jpeg"),
     "title": "Paradigm Quartz showcases engineered stone innovation at Design POV ’26",
     "subtitle": "Quartz, terrazzo, and artificial marble systems designed for large-format architecture",
     "description": "Paradigm Quartz manufactures engineered stone surfaces across quartz, terrazzo, and artificial marble categories.",
@@ -2598,8 +2565,8 @@ export const blogs: Blog[] = [
     "author": "Design POV Editorial",
     "date": "08 May 2026",
     "isFeatured": false,
-    image: BlogImg27,
-    thumbnail: BlogImg27,
+    image: cdn("/temp/magazine/27/blog-27-1.jpeg"),
+    thumbnail: cdn("/temp/magazine/27/blog-27-1.jpeg"),
     "title": "Acespace brings a decade of veneer expertise to Design POV ’26",
     "subtitle": "Globally sourced wood veneers crafted for contemporary architectural applications",
     "description": "Acespace develops premium veneer collections for walls, ceilings, furniture, and cabinetry across residential and commercial interiors.",
@@ -2633,8 +2600,8 @@ export const blogs: Blog[] = [
     "author": "Design POV Editorial",
     "date": "08 May 2026",
     "isFeatured": true,
-    image: BlogImg28,
-    thumbnail: BlogImg28,
+    image: cdn("/temp/magazine/28/blog-28-1.jpeg"),
+    thumbnail: cdn("/temp/magazine/28/blog-28-1.jpeg"),
     "title": "Kajaria joins Design POV ’26 as Presenting Partner",
     "subtitle": "India’s largest tile manufacturer brings over three decades of surface innovation to the event",
     "description": "Kajaria operates nine manufacturing plants across India, producing ceramic and vitrified tile collections for residential and commercial applications.",
@@ -2668,8 +2635,8 @@ export const blogs: Blog[] = [
     "author": "Design POV Editorial",
     "date": "08 May 2026",
     "isFeatured": true,
-    image: BlogImg29,
-    thumbnail: BlogImg29,
+    image: cdn("/temp/magazine/29/blog-29-1.jpg"),
+    thumbnail: cdn("/temp/magazine/29/blog-29-1.jpg"),
     "title": "Pacific Homes powers Design POV ’26 with engineered stone and surface innovation",
     "subtitle": "The exporter showcases Super Jumbo slabs and globally sourced stone collections",
     "description": "Pacific Homes manufactures quartz, granite, and engineered stone slabs using Bretonstone technology for architectural applications.",
@@ -2703,8 +2670,8 @@ export const blogs: Blog[] = [
   "author": "Design POV Editorial",
   "date": "11 May 2026",
   "isFeatured": true,
-  image: BlogImg30,
-  thumbnail: BlogImg30,
+  image: cdn("/temp/magazine/30/blog-30-1.png"),
+  thumbnail: cdn("/temp/magazine/30/blog-30-1.png"),
   "title": "HYBEC AIR",
   "subtitle": "We're pleased to welcome Hybec to Design POV '26 as a participating brand.",
   "description": "Founded in 2000 and based in Mumbai, Hybec specialises in LED lighting solutions across indoor, outdoor, facade, and landscape applications, serving luxury residences, offices, retail, and hospitality spaces across India.",
@@ -2745,8 +2712,8 @@ export const blogs: Blog[] = [
     "author": "Design POV Editorial",
     "date": "08 May 2026",
     "isFeatured": false,
-    image: BlogImg31,
-    thumbnail: BlogImg31,
+    image: cdn("/temp/magazine/31/blog-31-1.png"),
+    thumbnail: cdn("/temp/magazine/31/blog-31-1.png"),
     "title": "Embelliish brings luxury soft furnishings and drapery expertise to Design POV ’26",
     "subtitle": "The Mumbai and Hyderabad-based brand specialises in premium curtains and upholstery",
     "description": "Embelliish develops luxury curtains, upholstery, blinds, and soft furnishing systems for residential and hospitality interiors.",
@@ -2767,7 +2734,7 @@ export const blogs: Blog[] = [
       },
       {
         "type": "image",
-        "value": "/temp/magazine/blogs/embelliish-fabrics.jpg",
+        "value": cdn("/temp/magazine/blogs/embelliish-fabrics.jpg"),
         "caption": "Luxury curtains and soft furnishings that define the atmospheric quality of a space."
       },
       {
@@ -2785,8 +2752,8 @@ export const blogs: Blog[] = [
   "author": "Design POV Editorial",
   "date": "12 May 2026",
   "isFeatured": false,
-  image: BlogImg32,
-  thumbnail: BlogImg32,
+  image: cdn("/temp/magazine/32/blog-32-1.jpeg"),
+  thumbnail: cdn("/temp/magazine/32/blog-32-1.jpeg"),
   "title": "AllHome joins Design POV ’26 as a Network Partner",
   "subtitle": "The platform brings together seven brands across key categories in the built environment",
   "description": "AllHome is a platform that brings together seven brands across key categories in the built environment: surface coatings, metal facades, architectural lighting, windows and sliding systems, bathware, architectural hardware, and handles and accessories.",
@@ -2824,4 +2791,4 @@ export const blogs: Blog[] = [
 export const advertisements: Ad[] = [
   { type: "ad", id: "ad-1", image: cdn("/temp/ads/3.png"), link: "https://www.allhome.in/", aspect: "aspect-[3/4]" },
   { type: "ad", id: "ad-2", image: cdn("/temp/ads/4.png"), link: "https://www.essentiahome.com/?srsltid=AfmBOoqCYRZnQWfAJ8Tx74fKI-F59l2uzZUYhcKm6bUDxvV6r0RBMmld", aspect: "aspect-square" }
-];
+]

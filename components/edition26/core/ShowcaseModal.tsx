@@ -83,7 +83,7 @@ export const ShowcaseModal = ({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/70"
           />
 
           <motion.div
@@ -128,7 +128,9 @@ export const ShowcaseModal = ({
                       src={img}
                       alt={`${data.label} slide ${i}`}
                       fill
+                      sizes="(max-width: 1024px) 100vw, 520px"
                       priority={i === 0}
+                      loading={i === 0 ? "eager" : "lazy"}
                       className="object-contain lg:object-cover"
                     />
                   </div>

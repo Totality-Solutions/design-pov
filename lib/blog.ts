@@ -1,5 +1,6 @@
 import { StaticImageData } from "next/image";
 import type { ContentBlock, Blog } from "@/data/magazineData";
+import { cdn } from "@/lib/cdn";
 
 export interface NormalizedBlog {
   type: "blog";
@@ -49,15 +50,15 @@ export function normalizeDbBlog(row: Record<string, any>): NormalizedBlog {
     author: row.author ?? "",
     date: row.date ?? "",
     isFeatured: row.is_featured ?? false,
-    image: row.image || "/temp/home/blogs/blog-16.jpg",
-    thumbnail: row.thumbnail || row.image || "/temp/home/blogs/blog-16.jpg",
+    image: cdn(row.image || "/temp/home/blogs/blog-16.jpg"),
+    thumbnail: cdn(row.thumbnail || row.image || "/temp/home/blogs/blog-16.jpg"),
     title: row.title ?? "",
     subtitle: row.subtitle ?? "",
     description: row.description ?? "",
     featuredParagraphs: row.featured_paragraphs ?? [],
     detailedContent: (row.detailed_content ?? []).map((block: any) => ({
       type: block.type,
-      value: block.value ?? "",
+      value: block.type === "image" ? cdn(block.value ?? "") : (block.value ?? ""),
       ...(block.title   ? { title:   block.title   } : {}),
       ...(block.caption ? { caption: block.caption } : {}),
     })),

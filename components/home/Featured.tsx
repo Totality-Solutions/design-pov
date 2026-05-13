@@ -5,23 +5,6 @@ import React, { useState, useEffect } from "react";
 import Image, { StaticImageData } from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 
-// Assets
-import img1 from "@/public/temp/home/core/ADND.jpg";
-import img2 from "@/public/temp/home/core/ALARA STUDIO.jpg";
-import img3 from "@/public/temp/home/core/Abin.jpg";
-import img4 from "@/public/temp/home/core/BALDIWALA EDGE.jpg";
-import img5 from "@/public/temp/home/core/CITYSPACE.png";
-import img6 from "@/public/temp/home/core/DESIGN HEX.jpg";
-import img7 from "@/public/temp/home/core/DSP DESIGN.jpg";
-import img8 from "@/public/temp/home/core/JANNAT VASI.jpg";
-import img9 from "@/public/temp/home/core/NA ARCHITECT.jpg";
-import img10 from "@/public/temp/home/core/POONAM AKASH.jpg";
-import img11 from "@/public/temp/home/core/SANJAY PURI.jpg";
-import img12  from "@/public/temp/home/core/SAV.jpg";
-import img13  from "@/public/temp/home/core/SHROFFLEON.jpg";
-import img14  from "@/public/temp/home/core/SPARC DESIGN.jpg";
-import img15  from "@/public/temp/home/core/STUDIO ARCHOHM.jpg";
-import img16  from "@/public/temp/home/core/TALATI & PARTNER.jpg";
 const video1 = cdn("/temp/home/core-collective/4.mp4");
 
 // Components
@@ -170,15 +153,15 @@ function DesignerTile({
 
 // ─── Data ─────────────────────────
 const designers: Designer[] = [
-  { id: 1, media: [{ src: img1, name: "ADND", link: "/edition/core?designer=01" }, { src: img2, name: "Alara Studio", link: "/edition/core?designer=02" }] },
-  { id: 2, media: [{ src: img3, name: "Abin Design Studio", link: "/edition/core?designer=03" }, { src: img4, name: "Baldiwala Edge", link: "/edition/core?designer=04" }] },
+  { id: 1, media: [{ src: cdn("/temp/home/core/ADND.jpg"), name: "ADND", link: "/edition/core?designer=01" }, { src: cdn("/temp/home/core/ALARA STUDIO.jpg"), name: "Alara Studio", link: "/edition/core?designer=02" }] },
+  { id: 2, media: [{ src: cdn("/temp/home/core/Abin.jpg"), name: "Abin Design Studio", link: "/edition/core?designer=03" }, { src: cdn("/temp/home/core/BALDIWALA EDGE.jpg"), name: "Baldiwala Edge", link: "/edition/core?designer=04" }] },
   { id: 3, media: [{ src: video1, type: "video", name: "Arjun Sharma", link: "/edition/core" }] },
-  { id: 4, media: [{ src: img5, name: "Cityspace’82 Architects", link: "/edition/core?designer=05" }, { src: img6, name: "Design Hex", link: "/edition/core?designer=06" }] },
-  { id: 5, media: [{ src: img7, name: "DSP Design", link: "/edition/core?designer=07" }, { src: img8, name: "Jannat Vasi Design", link: "/edition/core?designer=08" }] },
-  { id: 6, media: [{ src: img9, name: "NA Architects", link: "/edition/core?designer=09" }, { src: img10, name: "Poonam Akash", link: "/edition/core?designer=10" }] },
-  { id: 7, media: [{ src: img11, name: "Sanjay Puri Architects", link: "/edition/core?designer=11" }, { src: img12, name: "SAV", link: "/edition/core?designer=12" }] },
-  { id: 8, media: [{ src: img13, name: "Shroffleón", link: "/edition/core?designer=13" }, { src: img14, name: "Sparc Design", link: "/edition/core?designer=14" }] },
-  { id: 9, media: [{ src: img15, name: "Studio Archohm", link: "/edition/core?designer=15" }, { src: img16, name: "Talati & Partners", link: "/edition/core?designer=16" }] },
+  { id: 4, media: [{ src: cdn("/temp/home/core/CITYSPACE.png"), name: "Cityspace’82 Architects", link: "/edition/core?designer=05" }, { src: cdn("/temp/home/core/DESIGN HEX.jpg"), name: "Design Hex", link: "/edition/core?designer=06" }] },
+  { id: 5, media: [{ src: cdn("/temp/home/core/DSP DESIGN.jpg"), name: "DSP Design", link: "/edition/core?designer=07" }, { src: cdn("/temp/home/core/JANNAT VASI.jpg"), name: "Jannat Vasi Design", link: "/edition/core?designer=08" }] },
+  { id: 6, media: [{ src: cdn("/temp/home/core/NA ARCHITECT.jpg"), name: "NA Architects", link: "/edition/core?designer=09" }, { src: cdn("/temp/home/core/POONAM AKASH.jpg"), name: "Poonam Akash", link: "/edition/core?designer=10" }] },
+  { id: 7, media: [{ src: cdn("/temp/home/core/SANJAY PURI.jpg"), name: "Sanjay Puri Architects", link: "/edition/core?designer=11" }, { src: cdn("/temp/home/core/SAV.jpg"), name: "SAV", link: "/edition/core?designer=12" }] },
+  { id: 8, media: [{ src: cdn("/temp/home/core/SHROFFLEON.jpg"), name: "Shroffleón", link: "/edition/core?designer=13" }, { src: cdn("/temp/home/core/SPARC DESIGN.jpg"), name: "Sparc Design", link: "/edition/core?designer=14" }] },
+  { id: 9, media: [{ src: cdn("/temp/home/core/STUDIO ARCHOHM.jpg"), name: "Studio Archohm", link: "/edition/core?designer=15" }, { src: cdn("/temp/home/core/TALATI & PARTNER.jpg"), name: "Talati & Partners", link: "/edition/core?designer=16" }] },
 ];
 
 // ─── Main Component ─────────────────────────

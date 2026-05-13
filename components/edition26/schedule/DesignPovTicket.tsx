@@ -2,6 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import { ExternalLink } from 'lucide-react';
 import Link from 'next/link';
+import { cdn } from '@/lib/cdn';
 
 const DesignPovTicket = () => {
   // Common data - make these props for a reusable component
@@ -10,7 +11,7 @@ const DesignPovTicket = () => {
     tagline: 'Sense & Sensibility',
     date: '15 - 16 - 17 May, 2026',
     location: 'Jio World Convention Centre',
-    qrCodeImage: '/qr/ticket-qr.svg', 
+    qrCodeImage: cdn('/qr/ticket-qr.svg'), 
   };
 
   const navLinks = [

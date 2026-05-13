@@ -1,4 +1,4 @@
-"use client"
+﻿"use client"
 
 import React, { useState, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -9,11 +9,7 @@ import { FiMinus } from 'react-icons/fi'
 import SectionHeading from '../common/SectionHeading'
 import CTAStrip from '../common/CTAStrip'
 
-import bgImage1 from '@/public/temp/home/ecosystem/N1.jpg'
-import bgImage2 from '@/public/temp/home/ecosystem/N-2.jpg'
-import bgImage3 from '@/public/temp/home/ecosystem/OBJECT.jpeg'
-import bgImage4 from '@/public/temp/home/ecosystem/N-3.jpg'
-import bgImage5 from '@/public/temp/home/blogs/blog-2.jpg'
+import { cdn } from '@/lib/cdn'
 
 interface EcosystemItem {
   id: string
@@ -32,7 +28,7 @@ const ECOSYSTEM: EcosystemItem[] = [
     id: 'core',
     label: 'THE CORE',
     tag: 'THE FOUNDATION TRACK',
-    bgImage: bgImage1.src,
+    bgImage: cdn('/temp/home/ecosystem/N1.jpg'),
     title: 'THE CORE',
     description: [
       "At the heart of Design POV are 16 design studios—each invited to interpret the theme through a fully realised spatial narrative.",
@@ -50,7 +46,7 @@ const ECOSYSTEM: EcosystemItem[] = [
     id: 'circle',
     label: 'CIRCLE',
     tag: 'THE COMMUNITY TRACK',
-    bgImage: bgImage4.src,
+    bgImage: cdn('/temp/home/ecosystem/N-3.jpg'),
     title: 'CIRCLE',
     description: ["A live space for open dialogue and powerful discourse. Curated with the same intent as the show: to question, reflect, and reconsider, these discussions brought together the voices shaping India’s cultural landscape. Unfiltered and unscripted, the platform dove deep into the ideas shaping how we live, build, and collaborate."],
     stats: [
@@ -64,7 +60,7 @@ const ECOSYSTEM: EcosystemItem[] = [
     id: 'objects',
     label: 'OBJECTS',
     tag: 'THE PUBLICATION TRACK',
-    bgImage: bgImage3.src,
+    bgImage: cdn('/temp/home/ecosystem/OBJECT.jpeg'),
     title: 'OBJECTS',
     description: ["A curated initiative where select architects, designers, product designers, and artists are invited to conceive and fabricate one original object in response to the edition's theme. Stripping away the noise to create something pure - a perspective in the form of a physical object."],
     stats: [
@@ -78,7 +74,7 @@ const ECOSYSTEM: EcosystemItem[] = [
     id: 'elevate',
     label: 'ELEVATE',
     tag: 'THE MENTORSHIP TRACK',
-    bgImage: bgImage2.src,
+    bgImage: cdn('/temp/home/ecosystem/N-2.jpg'),
     title: 'ELEVATE',
     description: ["An initiative for brand moments worth remembering. Exclusively available for the POV ecosystem, it's designed to help you create strategic visibility that goes beyond the show floor."],
     stats: [
@@ -92,7 +88,7 @@ const ECOSYSTEM: EcosystemItem[] = [
     id: 'magazine',
     label: 'MAGAZINE',
     tag: 'THE ARCHIVE TRACK',
-    bgImage: bgImage5.src,
+    bgImage: cdn('/temp/home/blogs/blog-2.jpg'),
     title: 'MAGAZINE',
     description: ["A curation of stories from those who consume and create design - from the Indian sub-continent and beyond."],
     stats: [

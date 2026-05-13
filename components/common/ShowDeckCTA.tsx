@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { cdn } from "@/lib/cdn";
 import CTAStrip from "@/components/common/CTAStrip";
 import PopupForm from "@/components/common/PopupForm";
 
@@ -17,7 +18,7 @@ const ShowDeckCTA = () => {
           hoverBgColor="#000000"
           textColor="var(--primary-red)"
           hoverTextColor="var(--color-white)"
-          floatingImage="/temp/ctastrip/3.png"
+          floatingImage={cdn("/temp/ctastrip/3.png")}
           floatingImageHeight={107}
           floatingImageWidth={200}
         />

@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useEffect, useState, useRef } from "react";
+import Image from "next/image";
+import { cdn } from "@/lib/cdn";
 import Link from "next/link";
 import {
   motion,
@@ -85,11 +87,15 @@ const FooterTablet = ({ navLinks }: Props) => {
         {/* LEFT */}
         <div className="flex flex-col gap-6">
           <div className="w-full max-w-[200px]">
-            <img
-              src="/DesignPOV.png"
-              alt="Design POV Logo"
-              className="w-full h-auto block"
-            />
+            <div className="relative w-full h-12">
+              <Image
+                src={cdn("/logo/Logo.svg")}
+                alt="Design POV Logo"
+                fill
+                unoptimized
+                className="object-contain object-left"
+              />
+            </div>
           </div>
 
           <div className="text-[13px] opacity-70 space-y-2">
