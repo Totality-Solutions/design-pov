@@ -160,7 +160,7 @@ const CollaborateSection = () => {
             {/* </div> */}
         </div>
 
-        <div className="mt-4 border-t border-neutral-200"></div>
+        {/* <div className="mt-4 border-t border-neutral-200"></div> */}
       </div>
 </div>
       {/* ===== LIGHTBOX ===== */}
