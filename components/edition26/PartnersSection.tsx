@@ -362,7 +362,7 @@ const partners = partnersData
                     {/* ALWAYS VISIBLE TEXT */}
                     {isMain && (
                       <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10 text-center w-full px-4">
-                        <h4 className="text-black text-[10px] font-medium leading-tight ">
+                        <h4 className="text-black text-[10px] font-medium uppercase leading-tight ">
                           {partner.name}
                         </h4>
 

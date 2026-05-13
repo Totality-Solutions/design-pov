@@ -43,6 +43,7 @@ const DesignPovTicket = () => {
             </div>
 
             {/* QR Code Section */}
+            <Link href="https://povindex.designpovindia.com/map">
             <div 
               className="relative p-6 md:p-8 mb-12 border-y border-white"
               style={{
@@ -67,6 +68,7 @@ const DesignPovTicket = () => {
                 className="block md:w-[250px] md:h-[250px]"
               />
             </div>
+            </Link>
 
             {/* Bottom Navigation Links */}
             <div className="w-full flex justify-center items-center gap-6 border-t border-white/20 pt-8 mt-auto">
