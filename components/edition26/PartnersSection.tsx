@@ -25,13 +25,6 @@ const TYPE_TO_CATEGORY: Record<string, string> = {
   community_partner:         "Community Partner",
 };
 
-const TIER_LABEL: Record<string, string> = {
-  presenting: "PRESENTING PARTNER",
-  powered_by: "POWERED BY",
-  network:    "NETWORK PARTNER",
-  lounge:     "LOUNGE PARTNER",
-  colour:     "COLOUR PARTNER",
-};
 
 const CATEGORY_ORDER = [
   "Partners",
@@ -73,9 +66,7 @@ const PartnersSection: React.FC = () => {
           .map((p) => {
             const item     = normalizeBrandPartner(p);
             const category = TYPE_TO_CATEGORY[item.type] ?? item.type;
-            const name     = item.type === "sponsor"
-              ? (TIER_LABEL[item.tier ?? ""] ?? item.name)
-              : item.name;
+            const name     = item.name;
             return { id: item.id, category, name, logo: item.logo };
           });
         setAllPartners(mapped);

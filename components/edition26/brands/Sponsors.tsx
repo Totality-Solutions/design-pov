@@ -3,14 +3,6 @@ import { createServerClient } from '@/lib/supabase/server';
 import { normalizeBrandPartner } from '@/lib/brandPartners';
 import type { BrandPartnerRow } from '@/types';
 
-const TIER_LABEL: Record<string, string> = {
-  presenting: "PRESENTING PARTNER",
-  powered_by: "POWERED BY",
-  network:    "NETWORK PARTNER",
-  lounge:     "LOUNGE PARTNER",
-  colour:     "COLOUR PARTNER",
-};
-
 const STATIC_FALLBACK = [
   { src: '/temp/edition/sponsors/1.png', name: 'PRESENTING PARTNER' },
   { src: '/temp/edition/sponsors/2.png', name: 'POWERED BY' },
@@ -35,7 +27,7 @@ export default async function Sponsors() {
         const item = normalizeBrandPartner(row);
         return {
           src:  item.logo,
-          name: TIER_LABEL[item.tier ?? ''] ?? item.name,
+          name: item.name,
         };
       });
     }

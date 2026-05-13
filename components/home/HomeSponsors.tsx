@@ -6,13 +6,6 @@ import Link from "next/link";
 import { normalizeBrandPartner } from "@/lib/brandPartners";
 import type { BrandPartnerRow } from "@/types";
 
-const TIER_LABEL: Record<string, string> = {
-  presenting: "PRESENTING PARTNER",
-  powered_by: "POWERED BY",
-  network:    "NETWORK PARTNER",
-  lounge:     "LOUNGE PARTNER",
-  colour:     "COLOUR PARTNER",
-};
 
 type SponsorItem = { id: string; name: string; logo: string; href: string };
 
@@ -39,7 +32,7 @@ const HomeSponsors: React.FC = () => {
             const item = normalizeBrandPartner(p);
             return {
               id:   item.id,
-              name: TIER_LABEL[item.tier ?? ""] ?? item.name,
+              name: item.name,
               logo: item.logo,
               href: item.website ?? "#",
             };
@@ -69,7 +62,7 @@ const HomeSponsors: React.FC = () => {
           {partners.map((partner) => (
             <div
               key={partner.id}
-              className="relative aspect-[9/4] lg:aspect-[6/3] flex items-center justify-center p-4 lg:p-2 transition-colors duration-300 hover:bg-gray-50/50 overflow-hidden"
+              className="relative aspect-9/4 lg:aspect-6/3 flex items-center justify-center p-4 lg:p-2 transition-colors duration-300 hover:bg-gray-50/50 overflow-hidden"
             >
               {/* LABEL */}
               <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10 text-center w-full px-4">
