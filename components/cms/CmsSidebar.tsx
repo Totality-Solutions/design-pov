@@ -12,7 +12,8 @@ const links = [
   { href: "/cms/submissions", label: "Submissions" },
   { href: "/cms/blogs",       label: "Blogs" },
   { href: "/cms/objects",         label: "Objects" },
-  { href: "/cms/brand-partners",  label: "Brand Partners" },
+  { href: "/cms/brand-partners",       label: "Brand Partners" },
+  { href: "/cms/brand-partner-types",  label: "Partner Types" },
   { href: "/cms/schedule",        label: "Schedule" },
   { href: "/cms/theme",       label: "Theme" },
 ];

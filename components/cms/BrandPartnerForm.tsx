@@ -1,13 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { cdn } from "@/lib/cdn";
 
-const PARTNER_TYPES = [
-  { value: "sponsor",                   label: "Sponsor (Partners)" },
-  { value: "brand",                     label: "Brand" },
+const SPECIAL_TYPES = [
+  { value: "sponsor", label: "Sponsor (Partners)" },
+  { value: "brand",   label: "Brand" },
+];
+
+const FALLBACK_TYPES = [
   { value: "brand_collaborator",        label: "Brand Collaborator" },
   { value: "build_partner",             label: "Build Partner" },
   { value: "gifting_partner",           label: "Gifting Partner" },
@@ -16,7 +19,7 @@ const PARTNER_TYPES = [
   { value: "ticketing_partner",         label: "Ticketing Partner" },
   { value: "sensory_collaborator",      label: "Sensory Collaborator" },
   { value: "key_execution_partner",     label: "Key Execution Partner" },
-  { value: "operation_partner",         label: "OPERATIONS PARTNER" },
+  { value: "operation_partner",         label: "Operations Partner" },
   { value: "curatorial_partner",        label: "Curatorial Partner" },
   { value: "experience_partner",        label: "Experience Partner" },
   { value: "learning_partner",          label: "Learning Partner" },
@@ -25,6 +28,8 @@ const PARTNER_TYPES = [
   { value: "workshop_partner",          label: "Workshop Partner" },
   { value: "community_partner",         label: "Community Partner" },
   { value: "red_room_partner",          label: "Red Room Partner" },
+  { value: "growth_consultant",         label: "Growth Consultants" },
+  { value: "mural_art_partner",         label: "Mural and Art Partner" },
 ];
 
 const SPONSOR_TIERS = [
@@ -59,7 +64,6 @@ const inputCls = "border border-black/20 px-3 py-2 text-sm outline-none focus:bo
 const labelCls = "block text-[10px] uppercase tracking-widest text-gray-400 mb-1";
 
 const PRESET_TIER_VALUES = new Set(SPONSOR_TIERS.map((t) => t.value));
-const PRESET_TYPE_VALUES = new Set(PARTNER_TYPES.map((t) => t.value));
 
 export default function BrandPartnerForm({
   initialData,
@@ -74,12 +78,28 @@ export default function BrandPartnerForm({
   const [form, setForm]           = useState<FormData>({ ...emptyForm, ...initialData });
   const [saving, setSaving]       = useState(false);
   const [error, setError]         = useState("");
+  const [partnerTypes, setPartnerTypes] = useState([...SPECIAL_TYPES, ...FALLBACK_TYPES]);
   const [customTier, setCustomTier] = useState(
     () => !!(initialData?.tier && !PRESET_TIER_VALUES.has(initialData.tier))
   );
-  const [customType, setCustomType] = useState(
-    () => !!(initialData?.type && !PRESET_TYPE_VALUES.has(initialData.type))
-  );
+  const [customType, setCustomType] = useState(false);
+
+  useEffect(() => {
+    fetch("/api/cms/brand-partner-types")
+      .then((r) => r.json())
+      .then(({ data }) => {
+        if (data?.length) {
+          const dbTypes = data.map((t: { type: string; title: string }) => ({ value: t.type, label: t.title }));
+          setPartnerTypes([...SPECIAL_TYPES, ...dbTypes]);
+          // If current type isn't in the list, switch to custom input
+          const allValues = new Set([...SPECIAL_TYPES, ...dbTypes].map((t) => t.value));
+          if (initialData?.type && !allValues.has(initialData.type)) {
+            setCustomType(true);
+          }
+        }
+      })
+      .catch(() => {});
+  }, [initialData?.type]);
 
   function set<K extends keyof FormData>(field: K, value: FormData[K]) {
     setForm((f) => ({ ...f, [field]: value }));
@@ -186,7 +206,7 @@ export default function BrandPartnerForm({
             onChange={(e) => set("type", e.target.value)}
             className={inputCls}
           >
-            {PARTNER_TYPES.map((t) => (
+            {partnerTypes.map((t) => (
               <option key={t.value} value={t.value}>{t.label}</option>
             ))}
           </select>

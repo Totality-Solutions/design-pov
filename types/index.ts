@@ -142,6 +142,14 @@ export interface DesignObjectItem {
 }
 
 // ─── BRAND PARTNER ────────────────────────────────────────
+export interface BrandPartnerTypeRow {
+  id: string;
+  type: string;
+  title: string;
+  sort_order: number;
+  active: boolean;
+}
+
 export interface BrandPartnerRow {
   id: string;
   name: string;

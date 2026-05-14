@@ -6,18 +6,29 @@ import { createServerClient } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
 
-async function getBrandPartners() {
-  const { data, error } = await createServerClient()
-    .from("brand_partners")
-    .select("id, name, logo, website, type, tier, sort_order, active, created_at")
-    .order("type", { ascending: true })
-    .order("sort_order", { ascending: true });
+async function getData() {
+  const supabase = createServerClient();
 
-  return { partners: data ?? [], error: error?.message ?? null };
+  const [{ data: partners, error: partnersError }, { data: types }] = await Promise.all([
+    supabase
+      .from("brand_partners")
+      .select("id, name, logo, website, type, tier, sort_order, active, created_at")
+      .order("sort_order", { ascending: true }),
+    supabase
+      .from("brand_partner_types")
+      .select("*")
+      .order("sort_order", { ascending: true }),
+  ]);
+
+  return {
+    partners: partners ?? [],
+    types: types ?? [],
+    error: partnersError?.message ?? null,
+  };
 }
 
 export default async function BrandPartnersCmsPage() {
-  const { partners, error } = await getBrandPartners();
+  const { partners, types, error } = await getData();
 
   return (
     <div className="min-h-screen bg-[#f7f7f7]">
@@ -55,7 +66,7 @@ export default async function BrandPartnersCmsPage() {
           </div>
         )}
 
-        <BrandPartnersTable initialData={partners as any} />
+        <BrandPartnersTable initialData={partners as any} types={types as any} />
       </main>
     </div>
   );

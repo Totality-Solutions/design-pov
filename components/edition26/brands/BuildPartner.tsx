@@ -1,72 +1,60 @@
 import BrandLogo from './BrandLogo';
 import { createServerClient } from '@/lib/supabase/server';
 import { normalizeBrandPartner } from '@/lib/brandPartners';
-import type { BrandPartnerRow } from '@/types';
-
-const TYPE_TITLES: Record<string, string> = {
-  brand_collaborator:        "BRAND COLLABORATORS",
-  build_partner:             "BUILD PARTNERS",
-  key_execution_partner:     "KEY EXECUTION PARTNER",
-  media_partner:             "MEDIA PARTNERS",
-  digital_media_partner:     "DIGITAL MEDIA PARTNER",
-  gifting_partner:           "GIFTING PARTNERS",
-  ticketing_partner:         "TICKETING PARTNER",
-  sensory_collaborator:      "SENSORY COLLABORATOR",
-  operation_partner:         "OPERATIONS PARTNER",
-  curatorial_partner:        "CURATORIAL PARTNER",
-  community_partner:         "COMMUNITY PARTNER",
-  experience_partner:        "EXPERIENCE PARTNER",
-  red_room_partner:          "RED ROOM PARTNER",
-  learning_partner:          "LEARNING PARTNER",
-  knowledge_partner:         "KNOWLEDGE PARTNER",
-  visual_experience_partner: "VISUAL EXPERIENCE PARTNER",
-  workshop_partner:          "WORKSHOP PARTNER",
-};
-
-const TYPE_ORDER = [
-  "brand_collaborator",
-  "build_partner",
-  "key_execution_partner",
-  "media_partner",
-  "digital_media_partner",
-  "gifting_partner",
-  "ticketing_partner",
-  "sensory_collaborator",
-  "operation_partner",
-  "curatorial_partner",
-  "community_partner",
-  "experience_partner",
-  "red_room_partner",
-  "learning_partner",
-  "knowledge_partner",
-  "visual_experience_partner",
-  "workshop_partner",
-];
+import type { BrandPartnerRow, BrandPartnerTypeRow } from '@/types';
 
 export default async function BuildPartner() {
   let grouped: Record<string, { src: string; name: string }[]> = {};
+  let cmsTypeOrder: string[] = [];
+  let cmsTitles: Record<string, string> = {};
+  const dataTypeOrder: string[] = [];
+  const suppressedTypes = new Set<string>();
 
   try {
-    const { data } = await createServerClient()
-      .from('brand_partners')
-      .select('*')
-      .neq('type', 'sponsor')
-      .neq('type', 'brand')
-      .eq('active', true)
-      .order('sort_order', { ascending: true });
+    const supabase = createServerClient();
 
-    if (data && data.length > 0) {
-      (data as BrandPartnerRow[]).forEach((row) => {
+    const [{ data: typesData }, { data: brandsData }] = await Promise.all([
+      supabase
+        .from('brand_partner_types')
+        .select('type, title, sort_order, active')
+        .order('sort_order', { ascending: true }),
+      supabase
+        .from('brand_partners')
+        .select('*')
+        .neq('type', 'sponsor')
+        .neq('type', 'brand')
+        .eq('active', true)
+        .order('sort_order', { ascending: true }),
+    ]);
+
+    if (typesData?.length) {
+      (typesData as BrandPartnerTypeRow[]).forEach((t) => {
+        if (t.active !== false) {
+          cmsTypeOrder.push(t.type);
+          cmsTitles[t.type] = t.title;
+        } else {
+          suppressedTypes.add(t.type);
+        }
+      });
+    }
+
+    if (brandsData?.length) {
+      (brandsData as BrandPartnerRow[]).forEach((row) => {
         const item = normalizeBrandPartner(row);
-        if (!grouped[item.type]) grouped[item.type] = [];
+        if (!grouped[item.type]) {
+          dataTypeOrder.push(item.type);
+          grouped[item.type] = [];
+        }
         grouped[item.type].push({ src: item.logo, name: item.name });
       });
     }
   } catch {}
 
+  // Use CMS order when available, fall back to order derived from data
+  const baseOrder = cmsTypeOrder.length ? cmsTypeOrder : dataTypeOrder;
   const orderedTypes = [
-    ...TYPE_ORDER.filter((t) => grouped[t]?.length),
-    ...Object.keys(grouped).filter((t) => !TYPE_ORDER.includes(t) && grouped[t]?.length),
+    ...baseOrder.filter((t) => grouped[t]?.length),
+    ...dataTypeOrder.filter((t) => !baseOrder.includes(t) && !suppressedTypes.has(t) && grouped[t]?.length),
   ];
 
   if (!orderedTypes.length) return null;
@@ -76,7 +64,7 @@ export default async function BuildPartner() {
       {orderedTypes.map((type) => (
         <BrandLogo
           key={type}
-          title={TYPE_TITLES[type] ?? type.replace(/_/g, " ").toUpperCase()}
+          title={cmsTitles[type] ?? type.replace(/_/g, " ").toUpperCase()}
           logos={grouped[type]}
         />
       ))}

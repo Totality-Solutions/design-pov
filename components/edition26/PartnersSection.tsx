@@ -3,75 +3,44 @@
 import React, { useState, useEffect, useRef } from "react";
 import SectionHeading from "../common/SectionHeading";
 import { normalizeBrandPartner } from "@/lib/brandPartners";
-import type { BrandPartnerRow } from "@/types";
+import type { BrandPartnerRow, BrandPartnerTypeRow } from "@/types";
 
-const TYPE_TO_CATEGORY: Record<string, string> = {
-  sponsor:                   "Partners",
-  build_partner:             "Build Partners",
-  key_execution_partner:     "Key execution Partner",
-  gifting_partner:           "Gifting Partners",
-  media_partner:             "Media Partners",
-  digital_media_partner:     "Digital Media Partner",
-  red_room_partner:          "Red Room Partner",
-  ticketing_partner:         "TICKETING PARTNER",
-  sensory_collaborator:      "Sensory Collaborator",
-  curatorial_partner:        "Curatorial Partner",
-  experience_partner:        "Experience Partner",
-  knowledge_partner:         "Knowledge Partner",
-  learning_partner:          "Learning Partner",
-  visual_experience_partner: "Visual Experience Partner",
-  workshop_partner:          "Workshop Partner",
-  operation_partner:         "OPERATIONS PARTNER",
-  community_partner:         "Community Partner",
-};
+type PartnerEntry = { id: string; type: string; name: string; logo: string };
 
-
-const CATEGORY_ORDER = [
-  "Partners",
-  "Build Partners",
-  "Key execution Partner",
-  "Gifting Partners",
-  "Media Partners",
-  "Digital Media Partner",
-  "Red Room Partner",
-  "TICKETING PARTNER",
-  "Sensory Collaborator",
-  "Curatorial Partner",
-  "Experience Partner",
-  "Knowledge Partner",
-  "Learning Partner",
-  "Visual Experience Partner",
-  "Workshop Partner",
-  "OPERATIONS PARTNER",
-  "Community Partner",
-];
-
-type PartnerEntry = { id: string; category: string; name: string; logo: string };
+const EXCLUDED_TYPES = new Set(["brand", "brand_collaborator"]);
 
 const PartnersSection: React.FC = () => {
   const [allPartners, setAllPartners] = useState<PartnerEntry[]>([]);
-  const [activeTab, setActiveTab]     = useState("Partners");
+  const [types, setTypes]             = useState<BrandPartnerTypeRow[]>([]);
+  const [suppressed, setSuppressed]   = useState<Set<string>>(new Set());
+  const [activeTab, setActiveTab]     = useState("");
   const [isMobile, setIsMobile]       = useState(false);
   const [isHovered, setIsHovered]     = useState(false);
 
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    fetch("/api/cms/brand-partners")
-      .then((r) => r.ok ? r.json() : null)
-      .then((json) => {
-        if (!json?.data) return;
-        const mapped = (json.data as BrandPartnerRow[])
-          .filter((p) => p.type !== "brand" && p.type !== "brand_collaborator")
+    Promise.all([
+      fetch("/api/cms/brand-partners").then((r) => r.ok ? r.json() : null),
+      fetch("/api/cms/brand-partner-types").then((r) => r.ok ? r.json() : null),
+    ]).then(([partnersJson, typesJson]) => {
+      if (typesJson?.data) {
+        // Only keep active types; collect inactive ones for suppression
+        const active   = (typesJson.data as BrandPartnerTypeRow[]).filter((t) => t.active !== false);
+        const inactive = new Set((typesJson.data as BrandPartnerTypeRow[]).filter((t) => t.active === false).map((t) => t.type));
+        setTypes(active);
+        setSuppressed(inactive);
+      }
+      if (partnersJson?.data) {
+        const mapped = (partnersJson.data as BrandPartnerRow[])
+          .filter((p) => !EXCLUDED_TYPES.has(p.type))
           .map((p) => {
-            const item     = normalizeBrandPartner(p);
-            const category = TYPE_TO_CATEGORY[item.type] ?? item.type;
-            const name     = item.name;
-            return { id: item.id, category, name, logo: item.logo };
+            const item = normalizeBrandPartner(p);
+            return { id: item.id, type: item.type, name: item.name, logo: item.logo };
           });
         setAllPartners(mapped);
-      })
-      .catch(() => {});
+      }
+    }).catch(() => {});
   }, []);
 
   useEffect(() => {
@@ -81,24 +50,34 @@ const PartnersSection: React.FC = () => {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  // Build ordered tab list from present categories
-  const presentCategories = new Set(allPartners.map((p) => p.category));
-  const categories = [
-    ...CATEGORY_ORDER.filter((c) => presentCategories.has(c)),
-    ...[...presentCategories].filter((c) => !CATEGORY_ORDER.includes(c)),
+  // Build label map from CMS types
+  const labelMap = Object.fromEntries(types.map((t) => [t.type, t.title]));
+  function getLabel(type: string) {
+    return labelMap[type] ?? type.replace(/_/g, " ").toUpperCase();
+  }
+
+  // Tabs ordered by brand_partner_types sort_order, then any unknown types appended
+  const presentTypes  = new Set(allPartners.map((p) => p.type));
+  const cmsTypeKeys   = types.map((t) => t.type);
+  const orderedTabs   = [
+    ...types.filter((t) => presentTypes.has(t.type) && !EXCLUDED_TYPES.has(t.type)).map((t) => t.type),
+    ...Array.from(presentTypes).filter((t) => !cmsTypeKeys.includes(t) && !EXCLUDED_TYPES.has(t) && !suppressed.has(t)),
   ];
 
-  // Reset activeTab if it's no longer present after data loads
-  const resolvedTab = categories.includes(activeTab) ? activeTab : (categories[0] ?? "Partners");
+  // Auto-select first tab once data loads
+  useEffect(() => {
+    if (orderedTabs.length && (!activeTab || !orderedTabs.includes(activeTab))) {
+      setActiveTab(orderedTabs[0]);
+    }
+  }, [orderedTabs.join(",")]);
 
-  const handleTabClick = (cat: string, e: React.MouseEvent<HTMLButtonElement>) => {
-    setActiveTab(cat);
+  const handleTabClick = (type: string, e: React.MouseEvent<HTMLButtonElement>) => {
+    setActiveTab(type);
     e.currentTarget.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
   };
 
-  const filtered = allPartners.filter((p) => p.category === resolvedTab);
-  const isMain   = resolvedTab === "Partners";
-
+  const filtered     = allPartners.filter((p) => p.type === activeTab);
+  const isFirstTab   = activeTab === orderedTabs[0];
   const columns      = isMobile ? 1 : 1;
   const remainder    = filtered.length % columns;
   const paddingNeeded = remainder === 0 ? 0 : columns - remainder;
@@ -135,17 +114,17 @@ const PartnersSection: React.FC = () => {
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           <div className="flex gap-6 md:gap-10 min-w-max">
-            {categories.map((cat) => (
+            {orderedTabs.map((type) => (
               <button
-                key={cat}
-                onClick={(e) => handleTabClick(cat, e)}
+                key={type}
+                onClick={(e) => handleTabClick(type, e)}
                 className={`py-[18px] text-[15px] md:text-[18px] transition-all duration-300 border-b-2 whitespace-nowrap outline-none relative ${
-                  resolvedTab === cat
+                  activeTab === type
                     ? "border-[#E02914] text-[#E02914] font-semibold"
                     : "border-transparent text-[#999999] hover:text-black font-medium"
                 }`}
               >
-                {cat}
+                {getLabel(type)}
               </button>
             ))}
           </div>
@@ -160,14 +139,14 @@ const PartnersSection: React.FC = () => {
                 <div
                   key={index}
                   className={`relative flex flex-col items-center justify-center border-b border-pov-black/30 transition-colors duration-300 hover:bg-gray-50/50 overflow-hidden ${
-                    isMain
+                    isFirstTab
                       ? "aspect-9/5 lg:aspect-6/3 pt-4 md:pt-8 mx-4"
                       : "aspect-9/5 lg:aspect-6/3 p-4 mx-4"
                   }`}
                 >
                   {partner ? (
                     <>
-                      {isMain && (
+                      {isFirstTab && (
                         <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10 text-center w-full px-4">
                           <h4 className="text-black text-[10px] font-medium leading-tight uppercase">
                             {partner.name}

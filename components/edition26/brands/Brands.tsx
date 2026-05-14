@@ -5,16 +5,19 @@ import type { BrandPartnerRow } from '@/types';
 
 export default async function Brands() {
   let logos: { src: string; name: string }[] = [];
+  let sectionTitle = "BRANDS";
 
   try {
-    const { data } = await createServerClient()
-      .from('brand_partners')
-      .select('*')
-      .eq('type', 'brand')
-      .eq('active', true)
-      .order('sort_order', { ascending: true });
+    const supabase = createServerClient();
 
-    if (data && data.length > 0) {
+    const [{ data: typeData }, { data }] = await Promise.all([
+      supabase.from('brand_partner_types').select('title').eq('type', 'brand').single(),
+      supabase.from('brand_partners').select('*').eq('type', 'brand').eq('active', true).order('sort_order', { ascending: true }),
+    ]);
+
+    if (typeData?.title) sectionTitle = typeData.title;
+
+    if (data?.length) {
       logos = (data as BrandPartnerRow[]).map((row) => {
         const item = normalizeBrandPartner(row);
         return { src: item.logo, name: item.name };
@@ -24,5 +27,5 @@ export default async function Brands() {
 
   if (!logos.length) return null;
 
-  return <BrandLogo title="Brands" logos={logos} />;
+  return <BrandLogo title={sectionTitle} logos={logos} />;
 }

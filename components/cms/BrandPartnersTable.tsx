@@ -4,31 +4,15 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { normalizeBrandPartner } from "@/lib/brandPartners";
-import type { BrandPartnerRow } from "@/types";
+import type { BrandPartnerRow, BrandPartnerTypeRow } from "@/types";
 
-const TYPE_LABELS: Record<string, string> = {
-  sponsor:                   "Sponsor",
-  brand:                     "Brand",
-  brand_collaborator:        "Brand Collaborator",
-  build_partner:             "Build Partner",
-  gifting_partner:           "Gifting Partner",
-  media_partner:             "Media Partner",
-  digital_media_partner:     "Digital Media Partner",
-  ticketing_partner:         "Ticketing Partner",
-  sensory_collaborator:      "Sensory Collaborator",
-  key_execution_partner:     "Key Execution Partner",
-  operation_partner:         "OPERATIONS PARTNER",
-  curatorial_partner:        "Curatorial Partner",
-  experience_partner:        "Experience Partner",
-  learning_partner:          "Learning Partner",
-  knowledge_partner:         "Knowledge Partner",
-  visual_experience_partner: "Visual Experience Partner",
-  workshop_partner:          "Workshop Partner",
-  community_partner:         "Community Partner",
-  red_room_partner:          "Red Room Partner",
-};
-
-export default function BrandPartnersTable({ initialData }: { initialData: BrandPartnerRow[] }) {
+export default function BrandPartnersTable({
+  initialData,
+  types,
+}: {
+  initialData: BrandPartnerRow[];
+  types: BrandPartnerTypeRow[];
+}) {
   const [rows, setRows]         = useState<BrandPartnerRow[]>(initialData);
   const [search, setSearch]     = useState("");
   const [typeFilter, setType]   = useState("all");
@@ -37,12 +21,31 @@ export default function BrandPartnersTable({ initialData }: { initialData: Brand
 
   useEffect(() => { setRows(initialData); }, [initialData]);
 
-  const filtered = rows.filter((r) => {
-    const q = search.toLowerCase();
-    const matchSearch = !q || r.name?.toLowerCase().includes(q);
-    const matchType   = typeFilter === "all" || r.type === typeFilter;
-    return matchSearch && matchType;
-  });
+  // Label map from CMS types — falls back to formatted key
+  const labelMap = Object.fromEntries(types.map((t) => [t.type, t.title]));
+  function getLabel(type: string) {
+    return labelMap[type] ?? type.replace(/_/g, " ").toUpperCase();
+  }
+
+  // Filter dropdown ordered by sort_order from brand_partner_types,
+  // then any types in data that aren't in the types table appended at end
+  const cmsTypeKeys = types.map((t) => t.type);
+  const extraKeys   = Array.from(new Set(rows.map((r) => r.type))).filter((t) => !cmsTypeKeys.includes(t));
+  const orderedFilterTypes = [...types, ...extraKeys.map((t) => ({ type: t, title: getLabel(t), sort_order: 999, active: true, id: t }))];
+
+  // Sort rows by type's sort_order when showing all, then by partner sort_order within each group
+  const typeOrderMap = Object.fromEntries(types.map((t) => [t.type, t.sort_order]));
+  function typeSortOrder(type: string) { return typeOrderMap[type] ?? 999; }
+
+  const filtered = rows
+    .filter((r) => {
+      const q = search.toLowerCase();
+      return (!q || r.name?.toLowerCase().includes(q)) && (typeFilter === "all" || r.type === typeFilter);
+    })
+    .sort((a, b) => {
+      const typeDiff = typeSortOrder(a.type) - typeSortOrder(b.type);
+      return typeDiff !== 0 ? typeDiff : a.sort_order - b.sort_order;
+    });
 
   async function handleDelete(id: string) {
     if (!confirm("Delete this partner? This cannot be undone.")) return;
@@ -65,8 +68,6 @@ export default function BrandPartnersTable({ initialData }: { initialData: Brand
 
   const active = rows.filter((r) => r.active).length;
   const hidden = rows.filter((r) => !r.active).length;
-
-  const uniqueTypes = Array.from(new Set(rows.map((r) => r.type))).sort();
 
   return (
     <div>
@@ -98,8 +99,8 @@ export default function BrandPartnersTable({ initialData }: { initialData: Brand
           className="border border-black/20 px-3 py-2 text-sm outline-none focus:border-black bg-white transition-colors"
         >
           <option value="all">All Types</option>
-          {uniqueTypes.map((t) => (
-            <option key={t} value={t}>{TYPE_LABELS[t] ?? t}</option>
+          {orderedFilterTypes.map((t) => (
+            <option key={t.type} value={t.type}>{t.title}</option>
           ))}
         </select>
       </div>
@@ -154,7 +155,7 @@ export default function BrandPartnersTable({ initialData }: { initialData: Brand
                   {/* Type */}
                   <td className="px-5 py-3">
                     <span className="text-[10px] uppercase tracking-widest border border-black/15 px-2 py-0.5 text-gray-600">
-                      {TYPE_LABELS[row.type] ?? row.type}
+                      {getLabel(row.type)}
                     </span>
                   </td>
 
