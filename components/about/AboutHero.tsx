@@ -1,6 +1,6 @@
 "use client";
 import { cdn } from "@/lib/cdn";
-
+import Image from "next/image";
 import React, { useState, useEffect } from "react";
 
 type Slide = {
@@ -108,11 +108,14 @@ const DesignHero: React.FC<{}> = () => {
       </div>
 
       {/* 3. HERO IMAGE */}
-      <div className="group w-full aspect-[16/6] overflow-hidden bg-gray-100 mt-12 md:mt-0 ">
-        <img
+      <div className="group w-full aspect-[16/6] overflow-hidden bg-gray-100 mt-12 md:mt-0 relative">
+        <Image
           src={cdn("/temp/about/about-hero.jpeg")}
           alt="Design POV"
-          className="w-full h-full object-cover transition-transform duration-[2000ms] group-hover:scale-105"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover transition-transform duration-2000 group-hover:scale-105"
         />
       </div>
       

@@ -95,6 +95,7 @@ const PartnersSection: React.FC = () => {
         sticky={false}
         bgColor="black"
         isSectionHovered={isHovered}
+        
       >
         <div className="flex">
           <a
@@ -148,7 +149,7 @@ const PartnersSection: React.FC = () => {
                     <>
                       {isFirstTab && (
                         <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10 text-center w-full px-4">
-                          <h4 className="text-black text-[10px] font-medium leading-tight uppercase">
+                          <h4 className="text-black text-[10px] font-medium leading-tight capitalize">
                             {partner.name}
                           </h4>
                         </div>

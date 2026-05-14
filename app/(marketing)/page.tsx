@@ -9,33 +9,9 @@ import CTAStrip from "@/components/common/CTAStrip";
 import ScrollMaskText from "@/components/home/ScrollRevealText";
 import HomeSponsors from "@/components/home/HomeSponsors";
 import ShowDeckCTA from "@/components/common/ShowDeckCTA";
-import { createServerClient } from "@/lib/supabase/server";
+export const revalidate = 3600;
 
-async function fetchHomePageData() {
-  const supabase = createServerClient();
-
-const { data, error } = await supabase
-  .from('pages')
-  .select(`
-    *,
-    blocks (*)
-  `)
-  .eq('slug', '/')
-  .order('order_index', { foreignTable: 'blocks' })
-  .maybeSingle();
-
-  return { data, error };
-}
 export default async function HomePage() {
-  const { data, error } = await fetchHomePageData();
-
-  console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-  console.log("[HomePage] Supabase fetch:");
-  if (data)  console.log(JSON.stringify(data, null, 2));
-  if (!data) console.log("  data  → null (no published page with slug \"/\")");
-  if (error) console.log("  error →", error.message);
-  console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-
   return (
     <>
       <Hero />

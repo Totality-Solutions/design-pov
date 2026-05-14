@@ -17,7 +17,7 @@ export function normalizeObject(row: DesignObject): DesignObjectItem {
 }
 
 export async function getObjects(): Promise<DesignObjectItem[]> {
-  const res = await fetch("/api/cms/objects", { cache: "no-store" });
+  const res = await fetch("/api/cms/objects", { next: { revalidate: 60 } });
   if (!res.ok) return [];
   const { data } = await res.json();
   return (data as DesignObject[]).map(normalizeObject);
