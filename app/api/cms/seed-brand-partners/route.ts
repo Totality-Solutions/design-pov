@@ -42,10 +42,10 @@ const SEED_DATA = [
   { name: "Media Partner 3", logo: "/temp/edition/media-partners/3.png", type: "media_partner", sort_order: 3, active: true },
   { name: "Media Partner 4", logo: "/temp/edition/media-partners/5.png", type: "media_partner", sort_order: 4, active: true },
 
-  // ── DIGITAL MEDIA PARTNERS ───────────────────────────────────────────────
+  // ── DIGITAL MEDIA PARTNER ───────────────────────────────────────────────
   { name: "Digital Media Partner 1", logo: "/temp/edition/media-partners/4.png", type: "digital_media_partner", sort_order: 1, active: true },
 
-  // ── TICKETING PARTNERS ───────────────────────────────────────────────────
+  // ── TICKETING PARTNER ───────────────────────────────────────────────────
   { name: "Ticketing Partner 1", logo: "/temp/edition/ticketing-partners/1.png", type: "ticketing_partner", sort_order: 1, active: true },
   { name: "Ticketing Partner 2", logo: "/temp/edition/ticketing-partners/2.png", type: "ticketing_partner", sort_order: 2, active: true },
 
@@ -58,8 +58,8 @@ const SEED_DATA = [
   // ── KEY EXECUTION PARTNER ────────────────────────────────────────────────
   { name: "Key Execution Partner", logo: "/temp/edition/key-execution/1.jpg", type: "key_execution_partner", sort_order: 1, active: true },
 
-  // ── OPERATION PARTNER ────────────────────────────────────────────────────
-  { name: "Operation Partner", logo: "/temp/edition/operation-partner/1.png", type: "operation_partner", sort_order: 1, active: true },
+  // ── OPERATIONS PARTNER ────────────────────────────────────────────────────
+  { name: "OPERATIONS PARTNER", logo: "/temp/edition/operation-partner/1.png", type: "operation_partner", sort_order: 1, active: true },
 
   // ── CURATORIAL PARTNER ───────────────────────────────────────────────────
   { name: "Curatorial Partner", logo: "/temp/edition/curatorial-partner/1.png", type: "curatorial_partner", sort_order: 1, active: true },

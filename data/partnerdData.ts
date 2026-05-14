@@ -42,12 +42,12 @@ export const partners = [
   // Red Room Partner
   { name: "Red Room Partner", src: cdn("/temp/edition/red-room-partner/1.png") },
 
-  // Digital Media Partners
-  { name: "Digital Media Partners", src: cdn("/temp/edition/media-partners/4.png") },
+  // Digital Media Partner
+  { name: "Digital Media Partner", src: cdn("/temp/edition/media-partners/4.png") },
 
-  // Ticketing Partners
-  { name: "Ticketing Partners", src: cdn("/temp/edition/ticketing-partners/1.png") },
-  { name: "Ticketing Partners", src: cdn("/temp/edition/ticketing-partners/2.png") },
+  // TICKETING PARTNER
+  { name: "Ticketing Partner", src: cdn("/temp/edition/ticketing-partners/1.png") },
+  { name: "Ticketing Partner", src: cdn("/temp/edition/ticketing-partners/2.png") },
 
   // Sensory Collaborator
   { name: "Sensory Collaborator", src: cdn("/temp/edition/sensory/12.png") },
@@ -55,8 +55,8 @@ export const partners = [
   // Key execution Partner
   { name: "Key execution Partner", src: cdn("/temp/edition/key-execution/1.jpg") },
 
-  // Operation Partner
-  { name: "Operation Partner", src: cdn("/temp/edition/operation-partner/1.png") },
+  // OPERATIONS PARTNER
+  { name: "OPERATIONS PARTNER", src: cdn("/temp/edition/operation-partner/1.png") },
 
   // Curatorial Partner
   { name: "Curatorial Partner", src: cdn("/temp/edition/curatorial-partner/1.png") },

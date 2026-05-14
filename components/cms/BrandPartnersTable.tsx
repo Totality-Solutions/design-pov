@@ -17,7 +17,7 @@ const TYPE_LABELS: Record<string, string> = {
   ticketing_partner:         "Ticketing Partner",
   sensory_collaborator:      "Sensory Collaborator",
   key_execution_partner:     "Key Execution Partner",
-  operation_partner:         "Operation Partner",
+  operation_partner:         "OPERATIONS PARTNER",
   curatorial_partner:        "Curatorial Partner",
   experience_partner:        "Experience Partner",
   learning_partner:          "Learning Partner",

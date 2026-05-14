@@ -11,9 +11,9 @@ const TYPE_TO_CATEGORY: Record<string, string> = {
   key_execution_partner:     "Key execution Partner",
   gifting_partner:           "Gifting Partners",
   media_partner:             "Media Partners",
-  digital_media_partner:     "Digital Media Partners",
+  digital_media_partner:     "Digital Media Partner",
   red_room_partner:          "Red Room Partner",
-  ticketing_partner:         "Ticketing Partners",
+  ticketing_partner:         "TICKETING PARTNER",
   sensory_collaborator:      "Sensory Collaborator",
   curatorial_partner:        "Curatorial Partner",
   experience_partner:        "Experience Partner",
@@ -21,7 +21,7 @@ const TYPE_TO_CATEGORY: Record<string, string> = {
   learning_partner:          "Learning Partner",
   visual_experience_partner: "Visual Experience Partner",
   workshop_partner:          "Workshop Partner",
-  operation_partner:         "Operation Partner",
+  operation_partner:         "OPERATIONS PARTNER",
   community_partner:         "Community Partner",
 };
 
@@ -32,9 +32,9 @@ const CATEGORY_ORDER = [
   "Key execution Partner",
   "Gifting Partners",
   "Media Partners",
-  "Digital Media Partners",
+  "Digital Media Partner",
   "Red Room Partner",
-  "Ticketing Partners",
+  "TICKETING PARTNER",
   "Sensory Collaborator",
   "Curatorial Partner",
   "Experience Partner",
@@ -42,7 +42,7 @@ const CATEGORY_ORDER = [
   "Learning Partner",
   "Visual Experience Partner",
   "Workshop Partner",
-  "Operation Partner",
+  "OPERATIONS PARTNER",
   "Community Partner",
 ];
 

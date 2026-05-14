@@ -16,7 +16,7 @@ const PARTNER_TYPES = [
   { value: "ticketing_partner",         label: "Ticketing Partner" },
   { value: "sensory_collaborator",      label: "Sensory Collaborator" },
   { value: "key_execution_partner",     label: "Key Execution Partner" },
-  { value: "operation_partner",         label: "Operation Partner" },
+  { value: "operation_partner",         label: "OPERATIONS PARTNER" },
   { value: "curatorial_partner",        label: "Curatorial Partner" },
   { value: "experience_partner",        label: "Experience Partner" },
   { value: "learning_partner",          label: "Learning Partner" },
