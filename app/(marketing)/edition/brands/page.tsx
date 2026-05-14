@@ -4,7 +4,8 @@ import BrandsHero from "@/components/edition26/brands/BrandsHero";
 import Sponsors from "@/components/edition26/brands/Sponsors";
 import BuildPartner from "@/components/edition26/brands/BuildPartner";
 import PageLoader from "@/components/common/PageLoader";
-import React from "react";
+
+export const dynamic = "force-dynamic";
 
 const BrandsPage = () => {
   return (

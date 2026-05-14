@@ -16,124 +16,96 @@ import Image from 'next/image';
 import SectionHeading from '../common/SectionHeading';
 import Link from 'next/link';
 
-// IMPORT YOUR REAL DATA
 import scheduleData from './schedule/Scheduledata';
 
-/* ---------------- CONVERT YOUR DATA ---------------- */
+/* ---------------- TYPES ---------------- */
 
-const SCHEDULE_DATA = {
+interface ScheduleEventRow {
+  id: string;
+  title: string;
+  venue: string;
+  day: number;
+  is_invite_only: boolean;
+}
 
-  "15": {
-    digit: "1",
+interface EventItem {
+  title: string;
+  status: string;
+}
 
-    dayDigit: "01",
+interface DayEntry {
+  digit: string;
+  dayDigit: string;
+  atCircle: EventItem[];
+  atWorkshop: EventItem[];
+}
 
-    atCircle: scheduleData[0].events
-      .filter(
-        (event) =>
-          event.venue === "Circle"
-      )
-      .map((event) => ({
-        title: event.title,
+type DateKey = "15" | "16" | "17";
 
-        status: event.isInviteOnly
-          ? "Invite only"
-          : "Book Now",
-      })),
+/* ---------------- CONSTANTS ---------------- */
 
-    atWorkshop: scheduleData[0].events
-      .filter(
-        (event) =>
-          event.venue === "Show floor"
-      )
-      .map((event) => ({
-        title: event.title,
+const DATES: DateKey[] = ["15", "16", "17"];
 
-        status: event.isInviteOnly
-          ? "Invite only"
-          : "Book Now",
-      })),
-  },
+const DAY_TO_DATE: Record<number, DateKey> = { 1: "15", 2: "16", 3: "17" };
 
-  "16": {
-    digit: "2",
-
-    dayDigit: "02",
-
-    atCircle: scheduleData[1].events
-      .filter(
-        (event) =>
-          event.venue === "Circle"
-      )
-      .map((event) => ({
-        title: event.title,
-
-        status: event.isInviteOnly
-          ? "Invite only"
-          : "Book Now",
-      })),
-
-    atWorkshop: scheduleData[1].events
-      .filter(
-        (event) =>
-          event.venue === "Show floor"
-      )
-      .map((event) => ({
-        title: event.title,
-
-        status: event.isInviteOnly
-          ? "Invite only"
-          : "Book Now",
-      })),
-  },
-
-  "17": {
-    digit: "3",
-
-    dayDigit: "03",
-
-    atCircle: scheduleData[2].events
-      .filter(
-        (event) =>
-          event.venue === "Circle"
-      )
-      .map((event) => ({
-        title: event.title,
-
-        status: event.isInviteOnly
-          ? "Invite only"
-          : "Book Now",
-      })),
-
-    atWorkshop: scheduleData[2].events
-      .filter(
-        (event) =>
-          event.venue === "Show floor"
-      )
-      .map((event) => ({
-        title: event.title,
-
-        status: event.isInviteOnly
-          ? "Invite only"
-          : "Book Now",
-      })),
-  },
+const EMPTY_DATA: Record<DateKey, DayEntry> = {
+  "15": { digit: "1", dayDigit: "01", atCircle: [], atWorkshop: [] },
+  "16": { digit: "2", dayDigit: "02", atCircle: [], atWorkshop: [] },
+  "17": { digit: "3", dayDigit: "03", atCircle: [], atWorkshop: [] },
 };
 
-type DateKey =
-  | "15"
-  | "16"
-  | "17";
+/* ---------------- DATA BUILDERS ---------------- */
 
-const DATES: DateKey[] = [
-  "15",
-  "16",
-  "17",
-];
+function buildFromApi(events: ScheduleEventRow[]): Record<DateKey, DayEntry> {
+  const result: Record<DateKey, DayEntry> = {
+    "15": { digit: "1", dayDigit: "01", atCircle: [], atWorkshop: [] },
+    "16": { digit: "2", dayDigit: "02", atCircle: [], atWorkshop: [] },
+    "17": { digit: "3", dayDigit: "03", atCircle: [], atWorkshop: [] },
+  };
+
+  for (const event of events) {
+    const dateKey = DAY_TO_DATE[event.day];
+    if (!dateKey) continue;
+    const item: EventItem = {
+      title: event.title,
+      status: event.is_invite_only ? "Invite only" : "Book Now",
+    };
+    if (event.venue === "Circle") result[dateKey].atCircle.push(item);
+    else if (event.venue === "Show floor") result[dateKey].atWorkshop.push(item);
+  }
+
+  return result;
+}
+
+function buildFromStatic(): Record<DateKey, DayEntry> {
+  const result: Record<DateKey, DayEntry> = {
+    "15": { digit: "1", dayDigit: "01", atCircle: [], atWorkshop: [] },
+    "16": { digit: "2", dayDigit: "02", atCircle: [], atWorkshop: [] },
+    "17": { digit: "3", dayDigit: "03", atCircle: [], atWorkshop: [] },
+  };
+
+  scheduleData.forEach((daySchedule) => {
+    const dateKey = DAY_TO_DATE[daySchedule.day];
+    if (!dateKey) return;
+
+    result[dateKey].atCircle = daySchedule.events
+      .filter((e) => e.venue === "Circle")
+      .map((e) => ({ title: e.title, status: e.isInviteOnly ? "Invite only" : "Book Now" }));
+
+    result[dateKey].atWorkshop = daySchedule.events
+      .filter((e) => e.venue === "Show floor")
+      .map((e) => ({ title: e.title, status: e.isInviteOnly ? "Invite only" : "Book Now" }));
+  });
+
+  return result;
+}
 
 /* ---------------- COMPONENT ---------------- */
 
 const ScheduleSection = () => {
+
+  const [scheduleMap, setScheduleMap] =
+    useState<Record<DateKey, DayEntry>>(EMPTY_DATA);
 
   const [activeDate, setActiveDate] =
     useState<DateKey>("15");
@@ -144,46 +116,44 @@ const ScheduleSection = () => {
   const [isHovered, setIsHovered] =
     useState(false);
 
+  /* fetch from API, fall back to static */
+  useEffect(() => {
+    fetch("/api/cms/schedule", { next: { revalidate: 60 } } as RequestInit)
+      .then((res) => res.ok ? res.json() : Promise.reject())
+      .then(({ data }: { data: ScheduleEventRow[] }) => {
+        if (data && data.length > 0) {
+          setScheduleMap(buildFromApi(data));
+        } else {
+          setScheduleMap(buildFromStatic());
+        }
+      })
+      .catch(() => {
+        setScheduleMap(buildFromStatic());
+      });
+  }, []);
+
   const nextSlide = useCallback(() => {
-
     setActiveDate((prev) => {
-
-      const currentIndex =
-        DATES.indexOf(prev);
-
-      const nextIndex =
-        (currentIndex + 1) %
-        DATES.length;
-
+      const currentIndex = DATES.indexOf(prev);
+      const nextIndex = (currentIndex + 1) % DATES.length;
       return DATES[nextIndex];
     });
-
   }, []);
 
   useEffect(() => {
-
     let interval: NodeJS.Timeout;
-
     if (isAutoPlaying) {
-
-      interval = setInterval(() => {
-        nextSlide();
-      }, 4000);
+      interval = setInterval(() => { nextSlide(); }, 4000);
     }
-
-    return () =>
-      clearInterval(interval);
-
+    return () => clearInterval(interval);
   }, [isAutoPlaying, nextSlide]);
 
-  const handleInteraction = (
-    date: DateKey
-  ) => {
-
+  const handleInteraction = (date: DateKey) => {
     setActiveDate(date);
-
     setIsAutoPlaying(false);
   };
+
+  const day = scheduleMap[activeDate];
 
   return (
     <section
@@ -249,24 +219,11 @@ const ScheduleSection = () => {
 
                     <motion.span
                       key={activeDate}
-                      initial={{
-                        opacity: 0,
-                        y: 10,
-                      }}
-                      animate={{
-                        opacity: 1,
-                        y: 0,
-                      }}
-                      exit={{
-                        opacity: 0,
-                        y: -10,
-                      }}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
                     >
-                      {
-                        SCHEDULE_DATA[
-                          activeDate
-                        ].digit
-                      }
+                      {day.digit}
                     </motion.span>
 
                   </AnimatePresence>
@@ -297,40 +254,22 @@ const ScheduleSection = () => {
                           <motion.div
                             layoutId="verticalLineMobile"
                             className="absolute w-[1px] bg-white pointer-events-none"
-                            style={{
-                              top: '-35px',
-                              bottom: '100%',
-                              left: '50%',
-                            }}
-                            transition={{
-                              type: "spring",
-                              bounce: 0,
-                              duration: 0.6,
-                            }}
+                            style={{ top: '-35px', bottom: '100%', left: '50%' }}
+                            transition={{ type: "spring", bounce: 0, duration: 0.6 }}
                           />
 
                           <motion.div
                             layoutId="activeIndicatorMobile"
                             className="absolute inset-0 bg-white"
-                            transition={{
-                              type: "spring",
-                              bounce: 0,
-                              duration: 0.6,
-                            }}
+                            transition={{ type: "spring", bounce: 0, duration: 0.6 }}
                           />
                         </>
                       )}
 
                       <button
-                        onClick={() =>
-                          handleInteraction(
-                            date
-                          )
-                        }
+                        onClick={() => handleInteraction(date)}
                         className={`relative z-10 text-[16px] lg:text-[18px] font-bold transition-colors duration-300 ${
-                          activeDate === date
-                            ? "text-black"
-                            : "text-white/40"
+                          activeDate === date ? "text-black" : "text-white/40"
                         }`}
                       >
                         {date}
@@ -355,103 +294,49 @@ const ScheduleSection = () => {
                 <AnimatePresence mode="wait">
 
                   <motion.div
-                    key={
-                      activeDate +
-                      "grid"
-                    }
-                    initial={{
-                      opacity: 0,
-                      x: 20,
-                    }}
-                    animate={{
-                      opacity: 1,
-                      x: 0,
-                    }}
-                    exit={{
-                      opacity: 0,
-                      x: -20,
-                    }}
+                    key={activeDate + "grid"}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
                     className="grid grid-cols-2 gap-x-10 gap-y-6"
                   >
 
-                    {/* CIRCLE */}
+                    {/* AT CIRCLE */}
 
-                    {/* CIRCLE */}
-
-                    {SCHEDULE_DATA[activeDate].atCircle.length > 0 && (
-                    
+                    {day.atCircle.length > 0 && (
                       <div>
-                      
                         <p className="text-md md:text-xl font-semibold mb-2 text-white/90">
                           At Circle
                         </p>
-                    
                         <ul className="space-y-2">
-                    
-                          {SCHEDULE_DATA[
-                            activeDate
-                          ].atCircle.map(
-                            (
-                              item,
-                              i
-                            ) => (
-                            
-                              <li
-                                key={i}
-                                className="flex items-center justify-between gap-6"
-                              >
-                              
-                                <span className="text-sm lg:text-lg font-regular text-white/60 mt-2">
-                                  {item.title}
-                                </span>
-                            
-                              </li>
-                            )
-                          )}
-
+                          {day.atCircle.map((item, i) => (
+                            <li key={i} className="flex items-center justify-between gap-6">
+                              <span className="text-sm lg:text-lg font-regular text-white/60 mt-2">
+                                {item.title}
+                              </span>
+                            </li>
+                          ))}
                         </ul>
-                        
                       </div>
-
                     )}
 
-                    {/* WORKSHOP */}
+                    {/* AT SHOW FLOOR */}
 
-                    {SCHEDULE_DATA[activeDate].atWorkshop.length > 0 && (
-                    
+                    {day.atWorkshop.length > 0 && (
                       <div>
-                      
                         <p className="text-md md:text-xl font-semibold mb-2 text-white/90">
-                          At Show Floor
+                          At Workshop Zone
                         </p>
-                    
                         <ul className="space-y-2">
-                    
-                          {SCHEDULE_DATA[
-                            activeDate
-                          ].atWorkshop.map(
-                            (
-                              item,
-                              i
-                            ) => (
-                            
-                              <li
-                                key={i}
-                                className="flex items-center justify-between gap-6"
-                              >
-                              
-                                <span className="text-sm lg:text-lg font-regular text-white/60 mt-2">
-                                  {item.title}
-                                </span>
-                            
-                              </li>
-                            )
-                          )}
-
+                          {day.atWorkshop.map((item, i) => (
+                            <li key={i} className="flex items-center justify-between gap-6">
+                              <span className="text-sm lg:text-lg font-regular text-white/60 mt-2">
+                                {item.title}
+                              </span>
+                            </li>
+                          ))}
                         </ul>
-                        
                       </div>
-
                     )}
 
                   </motion.div>
@@ -460,7 +345,7 @@ const ScheduleSection = () => {
 
               </div>
 
-              {/* DESKTOP DATE */}
+              {/* DESKTOP DATE PICKER */}
 
               <div className="hidden lg:flex w-[300px] items-start pl-10 justify-end relative h-full">
 
@@ -473,11 +358,7 @@ const ScheduleSection = () => {
                       <div
                         key={date}
                         className="relative flex items-center justify-center w-[32px] h-[32px]"
-                        onMouseEnter={() =>
-                          handleInteraction(
-                            date
-                          )
-                        }
+                        onMouseEnter={() => handleInteraction(date)}
                       >
 
                         {activeDate === date && (
@@ -485,35 +366,21 @@ const ScheduleSection = () => {
                             <motion.div
                               layoutId="verticalLine"
                               className="absolute w-[1px] bg-white"
-                              style={{
-                                top: '-158px',
-                                bottom: '-158px',
-                                left: '50%',
-                              }}
-                              transition={{
-                                type: "spring",
-                                bounce: 0,
-                                duration: 0.6,
-                              }}
+                              style={{ top: '-158px', bottom: '-158px', left: '50%' }}
+                              transition={{ type: "spring", bounce: 0, duration: 0.6 }}
                             />
 
                             <motion.div
                               layoutId="activeIndicator"
                               className="absolute inset-0 bg-white"
-                              transition={{
-                                type: "spring",
-                                bounce: 0,
-                                duration: 0.6,
-                              }}
+                              transition={{ type: "spring", bounce: 0, duration: 0.6 }}
                             />
                           </>
                         )}
 
                         <button
                           className={`relative z-10 text-[18px] font-semibold transition-colors ${
-                            activeDate === date
-                              ? "text-black"
-                              : "text-white/40"
+                            activeDate === date ? "text-black" : "text-white/40"
                           }`}
                         >
                           {date}

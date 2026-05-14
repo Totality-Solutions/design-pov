@@ -1,15 +1,31 @@
-import React from 'react';
-import { cdn } from '@/lib/cdn';
 import BrandLogo from './BrandLogo';
+import { createServerClient } from '@/lib/supabase/server';
+import { normalizeBrandPartner } from '@/lib/brandPartners';
+import type { BrandPartnerRow } from '@/types';
 
-export default function Sponsors() {
-  const sponsorData = [
-    { src: cdn('/temp/edition/sponsors/1.png'), name: 'PRESENTING PARTNER' },
-    { src: cdn('/temp/edition/sponsors/2.png'), name: 'POWERED BY' },
-    { src: cdn('/temp/edition/sponsors/3.png'), name: 'NETWORK PARTNER' },
-    { src: cdn('/temp/edition/sponsors/4.png'), name: 'LOUNGE PARTNER' },
-    { src: cdn('/temp/edition/sponsors/5.png'), name: 'COLOUR PARTNER' },
-  ];
+export default async function Sponsors() {
+  let logos: { src: string; name: string }[] = [];
+  let sectionTitle = "PARTNERS";
 
-  return <BrandLogo title="PARTNERS" logos={sponsorData} />;
+  try {
+    const supabase = createServerClient();
+
+    const [{ data: typeData }, { data }] = await Promise.all([
+      supabase.from('brand_partner_types').select('title').eq('type', 'sponsor').single(),
+      supabase.from('brand_partners').select('*').eq('type', 'sponsor').eq('active', true).order('sort_order', { ascending: true }),
+    ]);
+
+    if (typeData?.title) sectionTitle = typeData.title;
+
+    if (data?.length) {
+      logos = (data as BrandPartnerRow[]).map((row) => {
+        const item = normalizeBrandPartner(row);
+        return { src: item.logo, name: item.name };
+      });
+    }
+  } catch {}
+
+  if (!logos.length) return null;
+
+  return <BrandLogo title={sectionTitle} logos={logos} />;
 }

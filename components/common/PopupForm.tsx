@@ -55,7 +55,7 @@ export default function PopupForm({ isOpen, onClose }: PopupFormProps) {
     }
 
     const link = document.createElement("a");
-    link.href = SHOW_DECK_PDF;
+    link.href = "/api/download/show-deck";
     link.download = "Design-POV-Show-Deck.pdf";
     document.body.appendChild(link);
     link.click();

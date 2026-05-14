@@ -11,8 +11,10 @@ const links = [
   { href: "/cms/pov-mail",    label: "POV Mail" },
   { href: "/cms/submissions", label: "Submissions" },
   { href: "/cms/blogs",       label: "Blogs" },
-  { href: "/cms/objects",     label: "Objects" },
-  { href: "/cms/schedule",    label: "Schedule" },
+  { href: "/cms/objects",         label: "Objects" },
+  { href: "/cms/brand-partners",       label: "Brand Partners" },
+  { href: "/cms/brand-partner-types",  label: "Partner Types" },
+  { href: "/cms/schedule",        label: "Schedule" },
   { href: "/cms/theme",       label: "Theme" },
 ];
 

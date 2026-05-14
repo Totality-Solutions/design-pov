@@ -1,113 +1,73 @@
-import React from 'react';
-import { cdn } from "@/lib/cdn";
 import BrandLogo from './BrandLogo';
+import { createServerClient } from '@/lib/supabase/server';
+import { normalizeBrandPartner } from '@/lib/brandPartners';
+import type { BrandPartnerRow, BrandPartnerTypeRow } from '@/types';
 
-export default function BuildPartner() {
-  const sponsorData = [
-    { src: '/temp/edition/sponsors/2.png', name: 'Muse Create' },
-    { src: '/temp/edition/sponsors/4.png', name: 'Adobe' },
-    { src: '/temp/edition/sponsors/1.png', name: 'Chanel' },
-    { src: '/temp/edition/sponsors/3.png', name: 'Amazon' },
+export default async function BuildPartner() {
+  let grouped: Record<string, { src: string; name: string }[]> = {};
+  let cmsTypeOrder: string[] = [];
+  let cmsTitles: Record<string, string> = {};
+  const dataTypeOrder: string[] = [];
+  const suppressedTypes = new Set<string>();
+
+  try {
+    const supabase = createServerClient();
+
+    const [{ data: typesData }, { data: brandsData }] = await Promise.all([
+      supabase
+        .from('brand_partner_types')
+        .select('type, title, sort_order, active')
+        .order('sort_order', { ascending: true }),
+      supabase
+        .from('brand_partners')
+        .select('*')
+        .neq('type', 'sponsor')
+        .neq('type', 'brand')
+        .eq('active', true)
+        .order('sort_order', { ascending: true }),
+    ]);
+
+    if (typesData?.length) {
+      (typesData as BrandPartnerTypeRow[]).forEach((t) => {
+        if (t.active !== false) {
+          cmsTypeOrder.push(t.type);
+          cmsTitles[t.type] = t.title;
+        } else {
+          suppressedTypes.add(t.type);
+        }
+      });
+    }
+
+    if (brandsData?.length) {
+      (brandsData as BrandPartnerRow[]).forEach((row) => {
+        const item = normalizeBrandPartner(row);
+        if (!grouped[item.type]) {
+          dataTypeOrder.push(item.type);
+          grouped[item.type] = [];
+        }
+        grouped[item.type].push({ src: item.logo, name: item.name });
+      });
+    }
+  } catch {}
+
+  // Use CMS order when available, fall back to order derived from data
+  const baseOrder = cmsTypeOrder.length ? cmsTypeOrder : dataTypeOrder;
+  const orderedTypes = [
+    ...baseOrder.filter((t) => grouped[t]?.length),
+    ...dataTypeOrder.filter((t) => !baseOrder.includes(t) && !suppressedTypes.has(t) && grouped[t]?.length),
   ];
 
-  const partners = [
-    // Partners
-    { name: "Partners", src: cdn("/temp/edition/sponsors/2.png") },
-    { name: "Partners", src: cdn("/temp/edition/sponsors/4.png") },
-    { name: "Partners", src: cdn("/temp/edition/sponsors/1.png") },
-    { name: "Partners", src: cdn("/temp/edition/sponsors/3.png") },
-    // Brand Collaborators
-    { name: "Brand Collaborators", src: cdn("/temp/edition/brand-collaborate/1.png") },
-    { name: "Brand Collaborators", src: cdn("/temp/edition/brand-collaborate/2.png") },
-    { name: "Brand Collaborators", src: cdn("/temp/edition/brand-collaborate/3.png") },
-    { name: "Brand Collaborators", src: cdn("/temp/edition/brand-collaborate/4.png") },
-    { name: "Brand Collaborators", src: cdn("/temp/edition/brand-collaborate/5.jpeg") },
-    { name: "Brand Collaborators", src: cdn("/temp/edition/brand-collaborate/6.jpeg") },
-    { name: "Brand Collaborators", src: cdn("/temp/edition/brand-collaborate/7.png") },
-    // Build Partners
-    { name: "Build Partners", src: cdn("/temp/edition/build-partners/1.png") },
-    { name: "Build Partners", src: cdn("/temp/edition/build-partners/3.png") },
-    { name: "Build Partners", src: cdn("/temp/edition/build-partners/4.png") },
-    { name: "Build Partners", src: cdn("/temp/edition/build-partners/5.png") },
-    { name: "Build Partners", src: cdn("/temp/edition/build-partners/6.png") },
-    { name: "Build Partners", src: cdn("/temp/edition/build-partners/7.png") },
-    { name: "Build Partners", src: cdn("/temp/edition/build-partners/8.png") },
-    { name: "Build Partners", src: cdn("/temp/edition/build-partners/9.png") },
-    // Gifting Partners
-    { name: "Gifting Partners", src: cdn("/temp/edition/gifting-partners/1.png") },
-    { name: "Gifting Partners", src: cdn("/temp/edition/gifting-partners/2.png") },
-    { name: "Gifting Partners", src: cdn("/temp/edition/gifting-partners/3.png") },
-    { name: "Gifting Partners", src: cdn("/temp/edition/gifting-partners/4.png") },
-    { name: "Gifting Partners", src: cdn("/temp/edition/gifting-partners/5.png") },
-    { name: "Gifting Partners", src: cdn("/temp/edition/sensory/12.png") },
-    // Media Partners
-    { name: "Media Partners", src: cdn("/temp/edition/media-partners/1.png") },
-    { name: "Media Partners", src: cdn("/temp/edition/media-partners/2.png") },
-    { name: "Media Partners", src: cdn("/temp/edition/media-partners/3.png") },
-    { name: "Media Partners", src: cdn("/temp/edition/media-partners/5.png") },
-
-    { name: "Red Room Partner", src: cdn("/temp/edition/red-room-partner/1.png") },
-    // Digital Media Partners
-    { name: "Digital Media Partners", src: cdn("/temp/edition/media-partners/4.png") },
-    // Ticketing Partners
-    { name: "Ticketing Partners", src: cdn("/temp/edition/ticketing-partners/1.png") },
-    { name: "Ticketing Partners", src: cdn("/temp/edition/ticketing-partners/2.png") },
-    // Sensory Collaborator
-    { name: "Sensory Collaborator", src: cdn("/temp/edition/sensory/12.png") },
-    // Key execution Partner
-    { name: "Key execution Partner", src: cdn("/temp/edition/key-execution/1.jpg") },
-
-    //operation partner
-    { name: "Operation Partner", src: cdn("/temp/edition/operation-partner/1.png") },
-
-    //curatorial partner 
-    { name: "Curatorial Partner", src: cdn("/temp/edition/curatorial-partner/1.png") },
-    { name: "Experience Partner", src: cdn("/temp/edition/experience-partner/1.png") },
-    { name: "Learning Partner", src: cdn("/temp/edition/learning-partner/1.png") },
-    { name: "Knowledge Partner", src: cdn("/temp/edition/knowledge-partner/1.png") },
-    { name: "Visual Experience Partner", src: cdn("/temp/edition/visual-experience-partner/1.png") },
-    { name: "Workshop Partner", src: cdn("/temp/edition/workshop-partner/1.png") },
-    { name: "Community Partner", src: cdn("/temp/edition/community-partner/1.png") },
-    { name: "Community Partner", src: cdn("/temp/edition/community-partner/2.png") },
-  ];
-  
-const BransCollaborators = partners.filter(p => p.name === "Brand Collaborators");
-const BuildPartners = partners.filter(p => p.name === "Build Partners");
-const GiftingPartners = partners.filter(p => p.name === "Gifting Partners");
-const MediaPartners = partners.filter(p => p.name === "Media Partners");
-const DigitalMediaPartners = partners.filter(p => p.name === "Digital Media Partners");
-const TicketingPartners = partners.filter(p => p.name === "Ticketing Partners");
-const SensoryCollaborator = partners.filter(p => p.name === "Sensory Collaborator");
-const KeyExecutionPartner = partners.filter(p => p.name === "Key execution Partner");
-const OperationPartner = partners.filter(p => p.name === "Operation Partner");
-const CuratorialPartner = partners.filter(p => p.name === "Curatorial Partner");
-const CommunityPartner = partners.filter(p => p.name === "Community Partner");
-const ExperiencePartner = partners.filter(p => p.name === "Experience Partner");
-const RedRoomPartner = partners.filter(p => p.name === "Red Room Partner");
-const LearningPartner = partners.filter(p => p.name === "Learning Partner");
-const KnowledgePartner = partners.filter(p => p.name === "Knowledge Partner");
-const VisualExperiencePartner = partners.filter(p => p.name === "Visual Experience Partner");
-const WorkshopPartner = partners.filter(p => p.name === "Workshop Partner");
+  if (!orderedTypes.length) return null;
 
   return (
     <div className="py-12 space-y-12">
-      <BrandLogo title="BRAND COLLABORATORS" logos={BransCollaborators} />
-      <BrandLogo title="BUILD PARTNERS" logos={BuildPartners} />
-      <BrandLogo title="KEY EXECUTION PARTNER" logos={KeyExecutionPartner} />
-      <BrandLogo title="MEDIA PARTNERS" logos={MediaPartners} />
-      <BrandLogo title="DIGITAL MEDIA PARTNERS" logos={DigitalMediaPartners} />
-      <BrandLogo title="GIFTING PARTNERS" logos={GiftingPartners} />
-      <BrandLogo title="TICKETING PARTNERS" logos={TicketingPartners} />
-      <BrandLogo title="SENSORY COLLABORATOR" logos={SensoryCollaborator} />
-      <BrandLogo title="OPERATION PARTNER" logos={OperationPartner} />
-      <BrandLogo title="CURATORIAL PARTNER" logos={CuratorialPartner} />
-      <BrandLogo title="COMMUNITY PARTNER" logos={CommunityPartner} />
-      <BrandLogo title="EXPERIENCE PARTNER" logos={ExperiencePartner} />
-      <BrandLogo title="RED ROOM PARTNER" logos={RedRoomPartner} />
-      <BrandLogo title="LEARNING PARTNER" logos={LearningPartner} />
-      <BrandLogo title="KNOWLEDGE PARTNER" logos={KnowledgePartner} />
-      <BrandLogo title="VISUAL EXPERIENCE PARTNER" logos={VisualExperiencePartner} />
-      <BrandLogo title="WORKSHOP PARTNER" logos={WorkshopPartner} />
+      {orderedTypes.map((type) => (
+        <BrandLogo
+          key={type}
+          title={cmsTitles[type] ?? type.replace(/_/g, " ").toUpperCase()}
+          logos={grouped[type]}
+        />
+      ))}
     </div>
   );
 }

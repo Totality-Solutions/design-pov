@@ -1,0 +1,30 @@
+"use client";
+
+import { useState } from "react";
+
+export default function SeedBrandPartnersButton() {
+  const [loading, setLoading] = useState(false);
+  const [msg, setMsg]         = useState("");
+
+  async function handleSeed() {
+    setLoading(true);
+    setMsg("");
+    const res  = await fetch("/api/cms/seed-brand-partners", { method: "POST" });
+    const json = await res.json().catch(() => ({}));
+    setLoading(false);
+    setMsg(json.message ?? json.error ?? "Done");
+  }
+
+  return (
+    <div className="flex items-center gap-3">
+      <button
+        onClick={handleSeed}
+        disabled={loading}
+        className="border border-black/20 px-4 py-2.5 text-[11px] uppercase tracking-widest text-gray-600 hover:border-black hover:text-black transition-colors disabled:opacity-40"
+      >
+        {loading ? "Seeding..." : "Seed Default Data"}
+      </button>
+      {msg && <span className="text-xs text-gray-500">{msg}</span>}
+    </div>
+  );
+}

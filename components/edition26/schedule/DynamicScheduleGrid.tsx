@@ -272,7 +272,7 @@ const DynamicScheduleGrid = ({ serverEvents }: { serverEvents?: ScheduleEventRow
                   
 
                   {/* Col 4 — Image (commented) + Invite Only button */}
-                    {event.isInviteOnly && (
+                    {!event.isInviteOnly && (
                   <div className="px-6 py-3 lg:p-12 flex flex-col items-start lg:items-center justify-center gap-4">
 
                     {/* IMAGE COLUMN — commented out, do not remove

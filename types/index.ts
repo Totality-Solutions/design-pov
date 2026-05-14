@@ -141,6 +141,38 @@ export interface DesignObjectItem {
   sort_order: number;
 }
 
+// ─── BRAND PARTNER ────────────────────────────────────────
+export interface BrandPartnerTypeRow {
+  id: string;
+  type: string;
+  title: string;
+  sort_order: number;
+  active: boolean;
+}
+
+export interface BrandPartnerRow {
+  id: string;
+  name: string;
+  logo: string;
+  website: string | null;
+  type: string;
+  tier: string | null;
+  sort_order: number;
+  active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface BrandPartnerItem {
+  id: string;
+  name: string;
+  logo: string;
+  website: string | null;
+  type: string;
+  tier: string | null;
+  sort_order: number;
+}
+
 // ─── FORM ─────────────────────────────────────────────────
 export type ApplyType = "exhibit" | "ecosystem" | "partner" | "speak" | "curate" | "elevate" | "media" | "core" | "circle";
 

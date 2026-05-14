@@ -1,22 +1,36 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { cdn } from "@/lib/cdn";
 import { Container } from "../common/Container";
 import SectionHeading from "../common/SectionHeading";
-
+import { normalizeBrandPartner } from "@/lib/brandPartners";
+import type { BrandPartnerRow } from "@/types";
 
 const ClientLogo = () => {
   const [isHovered, setIsHovered] = useState(false);
-  const trackRef = useRef<HTMLDivElement>(null);
+  const [Client, setClient]       = useState<{ src: string; alt: string }[]>([]);
+  const trackRef      = useRef<HTMLDivElement>(null);
   const firstGroupRef = useRef<HTMLDivElement>(null);
 
-  const Client = Array.from({ length: 64 }, (_, i) => i + 1).map((id) => ({
-    src: cdn(`/temp/edition/brands/${id}.png`),
-    alt: `Client Logo ${id}`,
-  }));
+  useEffect(() => {
+    fetch("/api/cms/brand-partners")
+      .then((r) => r.ok ? r.json() : null)
+      .then((json) => {
+        if (!json?.data) return;
+        const brands = (json.data as BrandPartnerRow[])
+          .filter((p) => p.type === "brand")
+          .map((p) => {
+            const item = normalizeBrandPartner(p);
+            return { src: item.logo, alt: item.name };
+          });
+        if (brands.length) setClient(brands);
+      })
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
+    if (!Client.length) return;
+
     const measure = () => {
       if (!firstGroupRef.current || !trackRef.current) return;
       const w = firstGroupRef.current.offsetWidth;
@@ -27,7 +41,6 @@ const ClientLogo = () => {
 
     measure();
 
-    // Re-measure after each image loads so variable is always accurate
     const imgs = firstGroupRef.current?.querySelectorAll("img") ?? [];
     imgs.forEach((img) => {
       if (!img.complete) img.addEventListener("load", measure, { once: true });
@@ -35,7 +48,9 @@ const ClientLogo = () => {
 
     window.addEventListener("resize", measure);
     return () => window.removeEventListener("resize", measure);
-  }, []);
+  }, [Client]);
+
+  if (!Client.length) return null;
 
   return (
     <Container
@@ -52,7 +67,6 @@ const ClientLogo = () => {
             isSectionHovered={isHovered}
           />
         </div>
-        {/* overflow-hidden is on its own wrapper so the track's max-content width is not constrained by flex layout */}
         <div className="overflow-hidden flex-1 min-w-0 w-full">
           <div ref={trackRef} className="marquee-track py-6">
             <div ref={firstGroupRef} className="flex gap-8 pr-8">
