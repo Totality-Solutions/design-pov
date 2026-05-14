@@ -34,12 +34,13 @@ const NEW_ARRIVALS: ArrivalItem[] = [
 const text1 = `Design POV is a curated platform that brings together multiple disciplines to explore how design is lived, not just displayed.`
 const text2 = `Across immersive installations, collaborative spaces, and evolving narratives, it creates a setting where design moves beyond product and into experience.`
 
-function Word({ word, progress, range }: any) {
-  const opacity = useTransform(progress, range, [0.3, 1])
+function Word({ word, progress, range, isStatic }: any) {
+  // If isStatic is true, we ignore the scroll progress and show the word fully
+  const opacity = useTransform(progress, range, isStatic ? [1, 1] : [0.3, 1])
   const color = useTransform(
     progress,
     range,
-    ["rgb(156 163 175)", "rgb(0 0 0)"]
+    isStatic ? ["rgb(0 0 0)", "rgb(0 0 0)"] : ["rgb(156 163 175)", "rgb(0 0 0)"]
   )
 
   return (
@@ -49,7 +50,7 @@ function Word({ word, progress, range }: any) {
   )
 }
 
-function WordReveal({ text, progress, range }: any) {
+function WordReveal({ text, progress, range, isStatic }: any) {
   const words = text.split(" ")
   const [startRange, endRange] = range
   const step = (endRange - startRange) / words.length
@@ -65,6 +66,7 @@ function WordReveal({ text, progress, range }: any) {
             word={word}
             progress={progress}
             range={[start, end]}
+            isStatic={isStatic}
           />
         )
       })}
@@ -74,20 +76,20 @@ function WordReveal({ text, progress, range }: any) {
 
 const WhatPOV = () => {
   const scrollContainerRef = useRef<HTMLDivElement>(null)
-  const [isMobile, setIsMobile] = useState(false)
+  const [isMobileOrTab, setIsMobileOrTab] = useState(false)
   const [expandedIndex, setExpandedIndex] = useState(0)
 
-  const { scrollYProgress } = useScroll({
-    target: scrollContainerRef,
-    offset: ["start start", "end end"], // Anchored to top to keep content visible
-  })
-
   useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 768)
+    const check = () => setIsMobileOrTab(window.innerWidth < 1024)
     check()
     window.addEventListener('resize', check)
     return () => window.removeEventListener('resize', check)
   }, [])
+
+  const { scrollYProgress } = useScroll({
+    target: scrollContainerRef,
+    offset: ["start start", "end end"],
+  })
 
   const smooth = useSpring(scrollYProgress, {
     stiffness: 100,
@@ -97,33 +99,34 @@ const WhatPOV = () => {
 
   return (
     <Container>
-      {/* Container is 300vh to give plenty of room for sequential reveal */}
       <div
         ref={scrollContainerRef}
-        className="relative h-[200vh] w-full"
+        className="relative w-full h-auto lg:h-[200vh]"
       >
-        {/* We keep this sticky the ENTIRE time so it doesn't disappear */}
-        <div className="sticky top-10 pt-20 h-screen flex flex-col justify-between gap-12 overflow-hidden">
+        <div className="relative lg:sticky lg:top-10 lg:h-screen flex flex-col justify-center lg:justify-between pt-10 lg:pt-20 gap-16 md:gap-24 lg:gap-0">
           
-          {/* 🔹 TEXT REVEAL SECTION */}
-          <div className="flex items-center justify-center px-6 md:px-10">
-            <div className="space-y-8 max-w-4xl w-full text-center">
+          {/* 🔹 TEXT SECTION */}
+          <div className="flex items-justify justify-center px-6 md:px-10">
+            <div className="space-y-6 md:space-y-8 w-full text-center">
               <WordReveal 
                 text={text1} 
                 progress={smooth} 
                 range={[0, 0.4]} 
+                isStatic={isMobileOrTab}
               />
               <WordReveal 
                 text={text2} 
                 progress={smooth} 
                 range={[0.4, 0.8]} 
+                isStatic={isMobileOrTab}
               />
             </div>
           </div>
 
           {/* 🔹 MARQUEE SECTION */}
-          <div className="flex items-center justify-center">
-            <div className="w-full overflow-hidden h-[360px] md:h-[300px] lg:h-[340px] flex items-end">
+          <div className="w-full">
+            {/* Added explicit height classes for mobile to ensure visibility */}
+            <div className="w-full overflow-hidden h-[280px] sm:h-[320px] md:h-[300px] lg:h-[340px] flex items-end">
               <MarqueeFlow
                 items={NEW_ARRIVALS}
                 gap={5}
@@ -147,7 +150,6 @@ const WhatPOV = () => {
                         <video
                           src={item.img as string}
                           autoPlay loop muted playsInline
-                          preload="none"
                           className="absolute inset-0 w-full h-full object-cover"
                         />
                       ) : (

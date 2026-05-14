@@ -20,7 +20,7 @@ const ScheduleParagraph: React.FC<ScheduleParagraphProps> = ({
   description2 = "It has survived not only five centuries, but also the leap into electronic typesetting. It has survived not only five centuries, but also the leap into electronic typesetting.",
 }) => {
   return (
-    <section className="w-full bg-white pt-24 py-6 md:py-10 lg:pt-24 lg:pb-16 px-6 lg:px-10">
+    <section className="w-full bg-white pt-24 py-6 lg:py-10 lg:pt-24 lg:pb-16 px-6 lg:px-10">
       <div className=" flex flex-col gap-5 lg:gap-10">
         
         {/* Header */}

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useMemo } from "react";
+import React, { useRef, useMemo, useState, useEffect } from "react";
 import Image from "next/image";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { blogs as staticBlogs } from "@/data/magazineData";
@@ -13,6 +13,8 @@ interface CarouselProps {
 
 export default function BlogsCarousel({ filter, allBlogs }: CarouselProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
 
   const sourceBlogs: NormalizedBlog[] = allBlogs && allBlogs.length > 0
     ? allBlogs
@@ -23,6 +25,23 @@ export default function BlogsCarousel({ filter, allBlogs }: CarouselProps) {
       ? [...sourceBlogs]
       : sourceBlogs.filter(item => item.category.toLowerCase() === filter.toLowerCase());
   }, [filter, sourceBlogs]);
+
+  // Function to calculate if buttons should be enabled/disabled
+  const updateScrollButtons = () => {
+    if (scrollRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+      // Using a 1px threshold to account for sub-pixel rounding
+      setCanScrollLeft(scrollLeft > 1);
+      setCanScrollRight(scrollLeft + clientWidth < scrollWidth - 1);
+    }
+  };
+
+  // Re-check scroll buttons whenever the filter changes or component mounts
+  useEffect(() => {
+    updateScrollButtons();
+    window.addEventListener("resize", updateScrollButtons);
+    return () => window.removeEventListener("resize", updateScrollButtons);
+  }, [filteredBlogs]);
 
   const scroll = (direction: "left" | "right") => {
     if (scrollRef.current) {
@@ -39,19 +58,24 @@ export default function BlogsCarousel({ filter, allBlogs }: CarouselProps) {
 
   return (
     <section className="w-full bg-white py-6 px-6 lg:px-10">
-      <div className="relative flex items-center w-full">
+      <div className="relative flex items-center w-full group/carousel">
 
+        {/* Left Button */}
         {filteredBlogs.length > 0 && (
           <button
             onClick={() => scroll("left")}
-            className="absolute left-[-10] z-10 flex-shrink-0 w-6 h-6 lg:w-10 lg:h-10 bg-black text-white items-center justify-center flex hover:cursor-pointer transition-colors duration-300"
+            disabled={!canScrollLeft}
+            className={`absolute left-[-10px] z-10 flex-shrink-0 w-8 h-8 lg:w-10 lg:h-10 bg-black text-white items-center justify-center flex transition-all duration-300 
+              ${!canScrollLeft ? "opacity-0 cursor-default" : "opacity-100 hover:bg-red-600 cursor-pointer"}`}
           >
             <FiChevronLeft size={20} />
           </button>
         )}
 
+        {/* Scroll Container */}
         <div
           ref={scrollRef}
+          onScroll={updateScrollButtons}
           className="flex gap-6 overflow-x-auto no-scrollbar scroll-smooth w-full"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
@@ -90,10 +114,13 @@ export default function BlogsCarousel({ filter, allBlogs }: CarouselProps) {
           )}
         </div>
 
+        {/* Right Button */}
         {filteredBlogs.length > 0 && (
           <button
             onClick={() => scroll("right")}
-            className="absolute right-[-10] z-10 flex-shrink-0 w-6 h-6 lg:w-10 lg:h-10 bg-black text-white items-center justify-center flex hover:cursor-pointer transition-colors duration-300"
+            disabled={!canScrollRight}
+            className={`absolute right-[-10px] z-10 flex-shrink-0 w-8 h-8 lg:w-10 lg:h-10 bg-black text-white items-center justify-center flex transition-all duration-300 
+              ${!canScrollRight ? "opacity-0 cursor-default" : "opacity-100 hover:bg-red-600 cursor-pointer"}`}
           >
             <FiChevronRight size={20} />
           </button>

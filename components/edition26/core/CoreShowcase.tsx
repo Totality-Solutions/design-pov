@@ -86,7 +86,7 @@ export const CoreShowcase = () => {
           </div>
 
           {/* Middle Stack: Mobile (Natural) vs Desktop (Sticky) */}
-          <div className={`relative w-full lg:w-[450px] ${isMobile ? 'h-auto pt-0' : 'h-full overflow-hidden'}`}>
+          <div className={`relative w-full lg:w-[450px] ${isMobile ? 'h-auto pt-20' : 'h-full overflow-hidden'}`}>
             <motion.div 
               style={{ y: isMobile ? 0 : yTranslate }} 
               className={`flex flex-col w-full ${isMobile ? 'h-auto gap-3' : 'h-full'}`}
@@ -121,11 +121,11 @@ export const CoreShowcase = () => {
                     {/* Active Overlay for Mobile Viewport */}
                     <motion.div 
                       animate={{ opacity: isActive ? 1 : 0 }}
-                      className="absolute inset-0 flex items-center justify-center pointer-events-none"
+                      className="absolute inset-0 flex items-end pb-10 justify-center pointer-events-none"
                     >
                       <div className="border border-white/20 px-4 py-2 bg-black/60 backdrop-blur-md lg:hidden">
-                        <p className="text-[10px] text-white font-bold tracking-widest uppercase">
-                          View Designer
+                        <p className="text-[10px] text-white font-semibold tracking-wide uppercase">
+                          {item.label}
                         </p>
                       </div>
                     </motion.div>

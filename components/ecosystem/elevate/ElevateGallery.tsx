@@ -177,12 +177,12 @@ export default function ElevateGallery() {
             <div className="flex items-center text-justify">
               <div className="max-w-[480px] flex flex-col gap-4">
 
-                <div className="overflow-hidden">
+                <div className="">
                   <h2 className="text-[clamp(24px,1vw,40px)] font-bold leading-none text-black animate-[rtlIn_0.58s_cubic-bezier(0.16,1,0.3,1)_both] [animation-delay:0.12s]">
                     Light, reimagined
                   </h2>
                 </div>
-                <div className="overflow-hidden">
+                <div className="">
                   <p className="text-[15px] font-light leading-[1.3] text-black max-w-[450px] 2xl:pr-0 lg:pr-8 animate-[rtlIn_0.58s_cubic-bezier(0.16,1,0.3,1)_both]">
                     In Bengaluru, Sunrooof (@sunrooof_) unveiled their new Experience Centre - a space where natural sunlight meets intelligent technology. Guests experienced guided walkthroughs of their wellness lighting systems, live demonstrations of Al-integrated innovation, and an evening of meaningful conversations with architects, designers, and industry peers.
                     This evening also marked the beginning of POV Elevate: a new initiative by Design POV that extends our platform beyond the show floor, creating curated, design-led moments for brands within our ecosystem.

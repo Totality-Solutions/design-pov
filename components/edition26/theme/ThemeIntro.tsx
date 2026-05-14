@@ -27,7 +27,7 @@ export default function ThemeIntro() {
   };
 
   return (
-    <section className="relative w-full py-12 px-6 md:px-10 overflow-hidden font-montserrat min-h-[60vh] flex items-center">
+    <section className="relative w-full pt-32 pb-12 lg:py-12 px-6 md:px-10 overflow-hidden font-montserrat min-h-[60vh] flex items-center">
       {/* Background Image Container */}
       <div className="absolute inset-0 z-0">
         <Image
