@@ -39,7 +39,7 @@ export const faqData: FAQCategory[] = [
       {
         question: "How can I purchase tickets?",
         answer: "Tickets can be purchased directly through the website. Multiple pass categories and pricing tiers are available.",
-        triggers: [{ phrase: "website", type: "redirect", url: "/tickets" }]
+        triggers: [{ phrase: "website", type: "redirect", url: "https://tktplz.events/gjdlb5-design-pov" }]
       },
       {
         question: "What can I expect at the show?",
@@ -157,7 +157,7 @@ export const faqData: FAQCategory[] = [
         question: "What is The Circle?",
         answer: "The Circle is Design POV's live programming platform featuring panel discussions, fireside chats, and cultural conversations across design and adjacent creative industries.",
         triggers: [
-          { phrase: "The Circle", type: "redirect", url: "/the-circle" }
+          { phrase: "The Circle", type: "redirect", url: "/edition/schedule" }
         ]
       },
       {
@@ -176,7 +176,7 @@ export const faqData: FAQCategory[] = [
         question: "What are POV Objects?",
         answer: "POV Objects is a curated initiative inviting architects, designers, artists, and makers to create original objects, collaboratively, responding to the edition's theme.",
         triggers: [
-          { phrase: "POV Objects", type: "redirect", url: "/objects" }
+          { phrase: "POV Objects", type: "redirect", url: "/ecosystem/objects" }
         ]
       },
       {
