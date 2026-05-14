@@ -75,7 +75,7 @@ export const faqData: FAQCategory[] = [
         answer: "Yes. Applications for future editions can be submitted through the Collaborate page on the website. Alternatively, you can click here to apply.",
         triggers: [
           { phrase: "Collaborate page", type: "redirect", url: "/collaborate" },
-          { phrase: "click here to apply", type: "form", formId: "core-form" }
+          // { phrase: "click here to apply", type: "form", formId: "core-form" }
         ]
       }
     ]
@@ -87,7 +87,7 @@ export const faqData: FAQCategory[] = [
         question: "How can my brand participate in Design POV?",
         answer: "Brands can participate through collaborations with Core studios, experiential installations, sponsorships, launches, and ecosystem initiatives like POV Objects.",
         triggers: [
-          { phrase: "POV Objects", type: "form", formId: "participate-form" }
+          // { phrase: "POV Objects", type: "form", formId: "participate-form" }
         ]
       },
       {
@@ -107,7 +107,7 @@ export const faqData: FAQCategory[] = [
         question: "How can I become a sponsor?",
         answer: "Sponsorship enquiries can be submitted through the Collaborate page. Opportunities range from presenting partnerships to experiential integrations and curated programming.",
         triggers: [
-          { phrase: "Collaborate page", type: "form", formId: "sponsorship-form" }
+          // { phrase: "Collaborate page", type: "form", formId: "sponsorship-form" }
         ]
       },
       {
@@ -164,7 +164,7 @@ export const faqData: FAQCategory[] = [
         question: "Can I apply to speak at Circle?",
         answer: "Yes. Speaker and programming recommendations can be submitted for consideration by the curatorial team. Click here to apply.",
         triggers: [
-          { phrase: "click here to apply", type: "form", formId: "circle-form" }
+          // { phrase: "click here to apply", type: "form", formId: "circle-form" }
         ]
       }
     ]
@@ -183,7 +183,7 @@ export const faqData: FAQCategory[] = [
         question: "What is the Design POV Magazine?",
         answer: "The magazine is an editorial extension of the platform featuring stories, interviews, perspectives, and conversations from across the design ecosystem. Have a submission? Click here to apply.",
         triggers: [
-          { phrase: "click here to apply", type: "form", formId: "magazine-form" }
+          // { phrase: "click here to apply", type: "form", formId: "magazine-form" }
         ]
       }
     ]
