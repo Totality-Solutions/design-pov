@@ -2,6 +2,7 @@
 
 import React, { useRef, useMemo, useState, useEffect } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { blogs as staticBlogs } from "@/data/magazineData";
 import { NormalizedBlog, normalizeStaticBlog } from "@/lib/blog";
@@ -12,6 +13,7 @@ interface CarouselProps {
 }
 
 export default function BlogsCarousel({ filter, allBlogs }: CarouselProps) {
+  const router = useRouter();
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
@@ -84,7 +86,7 @@ export default function BlogsCarousel({ filter, allBlogs }: CarouselProps) {
               <div
                 key={item.id}
                 className="flex-shrink-0 w-full sm:w-[calc(50%-12px)] lg:w-[calc(25%-18px)] group cursor-pointer"
-                onClick={() => window.location.href = `/magazine/${item.slug}`}
+                onClick={() => router.push(`/magazine/${item.slug}`)}
               >
                 <div className="relative aspect-[4/3] w-full overflow-hidden bg-gray-100 mb-4">
                   <Image
