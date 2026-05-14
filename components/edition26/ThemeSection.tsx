@@ -10,8 +10,8 @@ import Link from 'next/link';
 // 1. Data Set with Mobile (Fixed), Tablet (New), and Desktop (Fixed)
 const themeData = [
   { 
-    id: 1, w: 320, h: 260, img: cdn("/temp/home/theme/WEBSITE_THEME BANNER_1.jpg.jpeg"),
-    desktop: { top: '8%', left: '5%' },
+    id: 1, w: 360, h: 150, img: cdn("/temp/home/theme/WEBSITE_THEME BANNER_1.jpg.jpeg"),
+    desktop: { top: '4%', left: '5%' },
     tablet: { top: '5%', left: '10%' }, // In-between
     mobile: { top: '9%', left: '16%' } 
   },
