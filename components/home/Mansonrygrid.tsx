@@ -51,7 +51,7 @@ function Cell({
   if (type === "image" && src) {
     return (
       <div className="relative w-full h-full">
-        <Image src={src} alt={alt || ""} fill sizes="(max-width: 768px) 100vw, 50vw" className="bg-black object-contain md:object-cover" />
+        <Image src={src} alt={alt || ""} fill sizes="(max-width: 768px) 100vw, 50vw" className="bg-black object-cover" />
       </div>
     );
   }
@@ -78,22 +78,22 @@ const MasonryGrid = forwardRef<HTMLDivElement, MasonryGridProps>(
             </div>
 
             {/* 02 BRAND COLOR (KEEP) */}
-            <div className="bg-[var(--primary-blue)]">
+            <div className="hidden md:block bg-[var(--primary-blue)]">
               <Cell type="empty" />
             </div>
 
             {/* 03 IMAGE */}
-            <div className="row-span-2">
+            <div className="hidden md:block row-span-2">
               <Cell type="image" src={cdn("/temp/home/theme/WEBSITE_THEME BANNER_2.jpg.jpeg")} alt="Theme 2" />
             </div>
 
             {/* 04 BRAND COLOR (KEEP) */}
-            <div className=" bg-[var(--primary-red)]">
+            <div className="hidden md:block  bg-[var(--primary-red)]">
               <Cell type="empty" />
             </div>
 
             {/* 05 IMAGE */}
-            <div className="row-span-3">
+            <div className="hidden md:block row-span-3">
               <Cell type="image" src={cdn("/temp/home/theme/WEBSITE_THEME BANNER_3.jpg.jpeg")} alt="Theme 3" />
             </div>
 
@@ -113,7 +113,7 @@ const MasonryGrid = forwardRef<HTMLDivElement, MasonryGridProps>(
             </div> */}
 
             {/* 09 BRAND BLACK (KEEP) */}
-            <div className="bg-[var(--color-black)]">
+            <div className="hidden md:block bg-[var(--color-black)]">
               <Cell type="empty" />
             </div>
 
