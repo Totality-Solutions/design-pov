@@ -47,24 +47,6 @@ export default function BrandLogo({
       );
   }, []);
 
-  // SCROLL TO SECTION ON PAGINATION
-  useEffect(() => {
-    if (
-      currentPage > 0 &&
-      sectionRef.current
-    ) {
-      const navbarOffset = 100;
-
-      const elementPosition =
-        sectionRef.current.offsetTop;
-
-      window.scrollTo({
-        top: elementPosition - navbarOffset,
-        behavior: "smooth",
-      });
-    }
-  }, [currentPage]);
-
   const totalPages = Math.ceil(
     logos.length / itemsPerPage
   );
