@@ -4,12 +4,12 @@ import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { CoreItem } from "@/data/coreData";
+import type { ModalData } from "@/types";
 
 interface ShowcaseModalProps {
   isOpen: boolean;
   onClose: () => void;
-  data: CoreItem | null;
+  data: ModalData | null;
 }
 
 export const ShowcaseModal = ({

@@ -1,12 +1,24 @@
-import React from "react";
-import ThemeCollaborators from "@/components/edition26/theme/ThemeCollaborators"; // Adjust the import path as per your folder structure
+import ThemeCollaborators from "@/components/edition26/theme/ThemeCollaborators";
 import ThemeIntro from "@/components/edition26/theme/ThemeIntro";
+import { createServerClient } from "@/lib/supabase/server";
+import { normalizeStudio } from "@/lib/studios";
 
-export default function ThemePage() {
+async function getStudios() {
+  const { data } = await createServerClient()
+    .from("studios")
+    .select("*")
+    .eq("active", true)
+    .order("sort_order", { ascending: true });
+  return (data ?? []).map(normalizeStudio);
+}
+
+export default async function ThemePage() {
+  const studios = await getStudios();
+
   return (
     <main className="min-h-screen bg-white">
       <ThemeIntro />
-      <ThemeCollaborators />
+      <ThemeCollaborators studios={studios} />
     </main>
   );
 }

@@ -15,7 +15,8 @@ const links = [
   { href: "/cms/brand-partners",       label: "Brand Partners" },
   { href: "/cms/brand-partner-types",  label: "Partner Types" },
   { href: "/cms/schedule",        label: "Schedule" },
-  { href: "/cms/theme",       label: "Theme" },
+  { href: "/cms/theme",           label: "Theme" },
+  { href: "/cms/studios",         label: "Studios" },
 ];
 
 export default function CmsSidebar() {

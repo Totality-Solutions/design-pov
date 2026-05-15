@@ -173,6 +173,56 @@ export interface BrandPartnerItem {
   sort_order: number;
 }
 
+// ─── STUDIO (Supabase) ────────────────────────────────────
+export interface StudioRow {
+  id: string;
+  label: string;
+  architects: string[];
+  logo: string;
+  website: string;
+  instagram: string;
+  core_image: string;
+  bio: string;
+  core_additional_images: string[];
+  booth_image: string;
+  concept: string;
+  booth_additional_images: string[];
+  sort_order: number;
+  active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+// CDN-normalised version used in components
+export interface StudioItem {
+  id: string;
+  label: string;
+  architects: string[];
+  logo: string;
+  website: string;
+  instagram: string;
+  core_image: string;
+  bio: string;
+  core_additional_images: string[];
+  booth_image: string;
+  concept: string;
+  booth_additional_images: string[];
+  sort_order: number;
+}
+
+// Shape passed into ShowcaseModal — context determines which image/text
+export interface ModalData {
+  id: string;
+  label: string;
+  architects?: string[];
+  src: string;
+  description: string;
+  additionalImages?: string[];
+  logo: string;
+  website: string;
+  instagram: string;
+}
+
 // ─── FORM ─────────────────────────────────────────────────
 export type ApplyType = "exhibit" | "ecosystem" | "partner" | "speak" | "curate" | "elevate" | "media" | "core" | "circle";
 

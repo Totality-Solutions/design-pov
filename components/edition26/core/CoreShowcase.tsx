@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 import { motion, useScroll, useTransform, useMotionValueEvent } from 'framer-motion';
 import { ShowcaseModal } from './ShowcaseModal';
-import { coreData, CoreItem } from "@/data/coreData";
+import type { StudioItem, ModalData } from "@/types";
 
 const StatusDot = ({ isActive }: { isActive: boolean }) => (
   <div className="relative w-[25px] h-[25px] flex items-center justify-center shrink-0">
@@ -17,20 +17,34 @@ const StatusDot = ({ isActive }: { isActive: boolean }) => (
   </div>
 );
 
-export const CoreShowcase = () => {
+function toModalData(studio: StudioItem): ModalData {
+  return {
+    id: studio.id,
+    label: studio.label,
+    architects: studio.architects,
+    src: studio.core_image,
+    description: studio.bio,
+    additionalImages: studio.core_additional_images,
+    logo: studio.logo,
+    website: studio.website,
+    instagram: studio.instagram,
+  };
+}
+
+export const CoreShowcase = ({ studios }: { studios: StudioItem[] }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
-  const [selectedDesigner, setSelectedDesigner] = useState<CoreItem | null>(null);
+  const [selectedDesigner, setSelectedDesigner] = useState<ModalData | null>(null);
   const [isMobile, setIsMobile] = useState(false);
   const searchParams = useSearchParams();
 
   useEffect(() => {
     const designerId = searchParams.get('designer');
     if (designerId) {
-      const item = coreData.find(d => d.id === designerId);
-      if (item) setSelectedDesigner(item);
+      const item = studios.find(d => d.id === designerId);
+      if (item) setSelectedDesigner(toModalData(item));
     }
-  }, [searchParams]);
+  }, [searchParams, studios]);
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 1024);
@@ -39,21 +53,21 @@ export const CoreShowcase = () => {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // --- DESKTOP SCROLL LOGIC (TOUCH NAY KARNA) ---
+  // --- DESKTOP SCROLL LOGIC ---
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"],
   });
 
-  const scrollPoints = coreData.map((_, i) => i / (coreData.length - 1));
-  const transformPoints = coreData.map((_, i) => `${25 - (i * 50)}%`);
+  const scrollPoints = studios.map((_, i) => i / Math.max(studios.length - 1, 1));
+  const transformPoints = studios.map((_, i) => `${25 - (i * 50)}%`);
   const yTranslate = useTransform(scrollYProgress, scrollPoints, transformPoints);
 
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
     if (!isMobile) {
       const index = Math.min(
-        Math.round(latest * (coreData.length - 1)),
-        coreData.length - 1
+        Math.round(latest * (studios.length - 1)),
+        studios.length - 1
       );
       if (index !== activeIndex) setActiveIndex(index);
     }
@@ -63,7 +77,8 @@ export const CoreShowcase = () => {
     <>
       <section 
         ref={containerRef} 
-        className={`relative bg-white ${isMobile ? 'h-auto py-10' : 'h-[800vh]'}`}
+        className={`relative bg-white ${isMobile ? 'h-auto py-10' : ''}`}
+        style={!isMobile ? { height: `${studios.length * 50}vh` } : undefined}
       >
         <div className={`
           w-full flex items-center justify-between px-6 md:px-20
@@ -72,7 +87,7 @@ export const CoreShowcase = () => {
           
           {/* Left Column (Desktop Only) */}
           <div className="w-[25%] hidden lg:flex flex-col gap-8">
-            {coreData.slice(0, 8).map((item, i) => (
+            {studios.slice(0, 8).map((item, i) => (
               <motion.div
                 key={item.id}
                 animate={{ opacity: activeIndex === i ? 1 : 0.15, x: activeIndex === i ? 10 : 0 }}
@@ -87,28 +102,26 @@ export const CoreShowcase = () => {
 
           {/* Middle Stack: Mobile (Natural) vs Desktop (Sticky) */}
           <div className={`relative w-full lg:w-[450px] ${isMobile ? 'h-auto pt-20' : 'h-full overflow-hidden'}`}>
-            <motion.div 
-              style={{ y: isMobile ? 0 : yTranslate }} 
+            <motion.div
+              style={{ y: isMobile ? 0 : yTranslate }}
               className={`flex flex-col w-full ${isMobile ? 'h-auto gap-3' : 'h-full'}`}
             >
-              {coreData.map((item, i) => {
+              {studios.map((item, i) => {
                 const isActive = activeIndex === i;
                 return (
-                  <motion.div 
-                    key={item.id} 
-                    // Mobile-only active detection via Viewport
+                  <motion.div
+                    key={item.id}
                     onViewportEnter={() => isMobile && setActiveIndex(i)}
                     viewport={{ amount: 0.6, margin: "-10% 0px -10% 0px" }}
-                    
                     className={`
                       relative w-full flex-shrink-0 cursor-pointer group transition-all duration-500
                       ${isMobile ? 'h-[45vh] mb-4' : 'h-1/2'}
                     `}
-                    onClick={() => setSelectedDesigner(item)}
+                    onClick={() => setSelectedDesigner(toModalData(item))}
                   >
                     <div className="relative w-full h-full p-2 md:p-8">
                       <Image
-                        src={item.src}
+                        src={item.core_image}
                         alt={item.label}
                         fill
                         sizes="(max-width: 1024px) 100vw, 450px"
@@ -117,9 +130,9 @@ export const CoreShowcase = () => {
                         }`}
                       />
                     </div>
-                    
+
                     {/* Active Overlay for Mobile Viewport */}
-                    <motion.div 
+                    <motion.div
                       animate={{ opacity: isActive ? 1 : 0 }}
                       className="absolute inset-0 flex items-end pb-10 justify-center pointer-events-none"
                     >
@@ -137,7 +150,7 @@ export const CoreShowcase = () => {
 
           {/* Right Column (Desktop Only) */}
           <div className="w-[25%] hidden lg:flex flex-col gap-8 text-right">
-            {coreData.slice(8, 16).map((item, i) => (
+            {studios.slice(8, 16).map((item, i) => (
               <motion.div
                 key={item.id}
                 animate={{ opacity: activeIndex === i + 8 ? 1 : 0.15, x: activeIndex === i + 8 ? -10 : 0 }}

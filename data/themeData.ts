@@ -1,4 +1,7 @@
-﻿import { cdn } from "@/lib/cdn";
+﻿// DEFAULT SEED DATA — migrated to Supabase `studios` table.
+// The app fetches studios from the database; these arrays exist for seeding only via /api/cms/seed-studios.
+// Do not import coreData or themeData in frontend components.
+import { cdn } from "@/lib/cdn";
 export type CoreItem = {
   id: string;
   src: string;

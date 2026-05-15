@@ -1,21 +1,33 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { themeData, CoreItem } from "@/data/themeData";
+import type { StudioItem, ModalData } from "@/types";
 import { ShowcaseModal } from "../core/ShowcaseModal";
 
+function toModalData(studio: StudioItem): ModalData {
+  return {
+    id: studio.id,
+    label: studio.label,
+    architects: studio.architects,
+    src: studio.booth_image,
+    description: studio.concept,
+    additionalImages: studio.booth_additional_images,
+    logo: studio.logo,
+    website: studio.website,
+    instagram: studio.instagram,
+  };
+}
+
 function HoverCard({
-  project,
+  studio,
   onClick,
 }: {
-  project: CoreItem;
+  studio: StudioItem;
   onClick: () => void;
 }) {
-  const architectsText = Array.isArray(project.architects)
-    ? project.architects.join(" | ")
-    : project.architects;
+  const architectsText = studio.architects?.join(" | ") ?? "";
 
   return (
     <motion.div
@@ -24,8 +36,8 @@ function HoverCard({
     >
       <div className="relative w-full aspect-[3/4] overflow-hidden bg-[#F5F5F5]">
         <Image
-          src={project.src}
-          alt={project.label}
+          src={studio.booth_image}
+          alt={studio.label}
           fill
           className="object-cover transition-transform duration-500 ease-out lg:group-hover:scale-105"
         />
@@ -33,8 +45,8 @@ function HoverCard({
 
       <div className="w-full flex items-center justify-between py-[15px]">
         <div className="font-['Montserrat'] text-[11px] lg:text-[14px] text-black uppercase font-medium">
-          {project.label}<br/>
-          <p className="font-['Montserrat'] text-[12px] lg:text-[14px] text-black/90 capitalize font-normal">{architectsText}</p>        
+          {studio.label}<br/>
+          <p className="font-['Montserrat'] text-[12px] lg:text-[14px] text-black/90 capitalize font-normal">{architectsText}</p>
         </div>
         <div className="hidden lg:flex w-[11px] h-[11px] border-[1.5px] border-black lg:group-hover:bg-primary-red lg:group-hover:border-primary-red transition-colors duration-300" />
       </div>
@@ -42,29 +54,18 @@ function HoverCard({
   );
 }
 
-export default function ThemeCollaborators() {
-  const [selectedCollaborator, setSelectedCollaborator] = useState<CoreItem | null>(null);
-  const [isDesktop, setIsDesktop] = useState(false);
-
-  useEffect(() => {
-    const checkScreen = () => setIsDesktop(window.innerWidth >= 1024);
-
-    checkScreen();
-
-    window.addEventListener("resize", checkScreen);
-
-    return () => window.removeEventListener("resize", checkScreen);
-  }, []);
+export default function ThemeCollaborators({ studios }: { studios: StudioItem[] }) {
+  const [selectedCollaborator, setSelectedCollaborator] = useState<ModalData | null>(null);
 
   return (
     <section className="w-full bg-white flex flex-col items-center select-none">
       <main className="w-full px-6 lg:px-10 pb-12">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-[50px]">
-          {themeData.map((project) => (
+          {studios.map((studio) => (
             <HoverCard
-              key={project.id}
-              project={project}
-              onClick={() => setSelectedCollaborator(project)}
+              key={studio.id}
+              studio={studio}
+              onClick={() => setSelectedCollaborator(toModalData(studio))}
             />
           ))}
         </div>
