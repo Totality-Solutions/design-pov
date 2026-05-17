@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import ThemeCollaborators from "@/components/edition26/theme/ThemeCollaborators";
 import ThemeIntro from "@/components/edition26/theme/ThemeIntro";
 import { createServerClient } from "@/lib/supabase/server";

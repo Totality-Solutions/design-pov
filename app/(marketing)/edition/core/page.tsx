@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { Suspense } from "react";
 import CTAStrip from "@/components/common/CTAStrip";
 import { CoreShowcase } from "@/components/edition26/core/CoreShowcase";
