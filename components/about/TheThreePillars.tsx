@@ -101,7 +101,7 @@ const TheThreePillars: React.FC = () => {
       <div className="relative flex flex-col md:flex-row items-start w-full">
         
         {/* DESKTOP SIDEBAR - Unchanged */}
-        <div className="hidden lg:flex w-[388px] sticky top-0 h-screen pl-[70px] py-20 flex-col justify-end pb-20 border-r border-[#DFDFDF] bg-white">
+        <div className="hidden lg:flex w-[388px] 2xl:w-[25vw] sticky top-0 h-screen pl-[70px] py-20 flex-col justify-end pb-20 border-r border-[#DFDFDF] bg-white">
           <AnimatePresence mode="wait">
             <motion.div
               key={activePillar}
@@ -111,11 +111,11 @@ const TheThreePillars: React.FC = () => {
               transition={{ duration: 0.4 }}
               className="flex flex-col gap-[40px]"
             >
-              <div className="flex flex-col gap-2.5 max-w-[288px]">
-                <h3 className="text-[22px] font-bold text-black tracking-wider uppercase">
+              <div className="flex flex-col gap-2.5 max-w-[288px] 2xl:max-w-[500px]">
+                <h3 className="text-[22px] 2xl:text-[24px] font-bold text-black tracking-wider uppercase">
                   {PILLAR_DATA[activePillar].title}
                 </h3>
-                <p className="text-base font-normal text-black opacity-70 leading-[1.3]">
+                <p className="text-base 2xl:text-[18px] font-normal text-black opacity-70 leading-[1.3]">
                   {PILLAR_DATA[activePillar].description}
                 </p>
               </div>

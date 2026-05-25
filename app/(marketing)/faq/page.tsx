@@ -5,6 +5,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import faqData, { Trigger, FAQItem, FAQCategory } from "@/components/common/faqData";
 
+// IMPORT THE NEW POPUP (Update path if needed)
+import FAQPopup from "@/components/common/FAQPopup";
+
 interface FAQItemProps extends FAQItem {
   onOpenForm: (formId: string) => void;
 }
@@ -45,7 +48,7 @@ const FAQItemComponent = ({ question, answer, triggers, onOpenForm }: FAQItemPro
               type="button"
               onClick={(e) => {
                 e.stopPropagation();
-                onOpenForm(trigger.formId!);
+                onOpenForm(trigger.formId!); // Trigger the modal to open
               }}
               className="text-black font-bold underline underline-offset-4 hover:opacity-60 transition-opacity cursor-pointer"
             >
@@ -131,9 +134,15 @@ const FAQSection = ({ category, onOpenForm }: { category: FAQCategory, onOpenFor
 };
 
 const FAQPage = () => {
+  // State to track which form is active in the modal
+  const [activeFormId, setActiveFormId] = useState<string | null>(null);
+
   const handleOpenForm = (formId: string) => {
-    console.log(`Opening form: ${formId}`);
-    // Trigger your specific form logic/modal here
+    setActiveFormId(formId);
+  };
+
+  const handleCloseModal = () => {
+    setActiveFormId(null);
   };
 
   return (
@@ -157,6 +166,13 @@ const FAQPage = () => {
           </AnimatePresence>
         </div>
       </div>
+
+      {/* RENDER THE POPUP HERE */}
+      <FAQPopup 
+        isOpen={activeFormId !== null} 
+        onClose={handleCloseModal} 
+        formId={activeFormId} 
+      />
     </div>
   );
 };

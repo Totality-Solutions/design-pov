@@ -35,7 +35,7 @@ const EcosystemSection = () => {
         {/* <p className="text-sm opacity-60">View all our work</p>
         <CTABtn /> */}
       </SectionHeading>
-      <div className="w-full bg-white overflow-hidden h-[160px] md:h-[140px] py-4 flex items-end">
+      <div className="w-full bg-white overflow-hidden h-[160px] md:h-[140px] 2xl:h-[200px] py-4 flex items-end">
         <MarqueeFlow
           items={ITEMS}
           gap={0}
