@@ -92,13 +92,13 @@ const ObjectsCarousel: React.FC = () => {
                   className="flex-shrink-0 w-[calc(50%-12px)] lg:w-[calc(25%-18px)] group cursor-pointer"
                   onClick={() => setSelectedObject(obj)}
                 >
-                  <div className="relative w-full h-40 lg:h-64 overflow-hidden bg-gray-100">
+                  <div className="relative w-full h-40 lg:h-90 overflow-hidden bg-gray-100">
                     <Image
                       src={obj.src}
                       alt={obj.label || "Design Object"}
                       fill
                       sizes="(max-width: 1024px) 50vw, 25vw"
-                      className="object-cover transition-transform duration-500 group-hover:scale-110"
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
                       loading="lazy"
                     />
                   </div>

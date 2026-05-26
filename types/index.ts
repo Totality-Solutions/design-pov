@@ -214,6 +214,7 @@ export interface StudioItem {
 export interface ModalData {
   id: string;
   label: string;
+  sublabel?:string;
   architects?: string[];
   src: string;
   description: string;

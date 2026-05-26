@@ -184,6 +184,9 @@ export const ShowcaseModal = ({
                   <h2 className="text-h3-mobile lg:text-h3-tab lg:text-h3 font-semibold uppercase leading-tight text-black pr-8">
                     {data.label}
                   </h2>
+                  <p className="text-[12px] text-body-mobile font-normal leading-tight text-black pr-8">
+                    {data.sublabel}
+                  </p>
 
                   <p className="text-[12px] text-body-mobile font-normal leading-tight text-black pr-8">
                     {architectsText}
@@ -242,11 +245,11 @@ export const ShowcaseModal = ({
                 ref={scrollContainerRef}
                 className="flex-1 overflow-y-auto px-8 lg:px-12 pb-6 custom-scrollbar min-h-0"
               >
-                <div className="text-sm lg:text-base text-zinc-700 leading-relaxed space-y-4">
+                <div className="text-sm lg:text-base text-zinc-700 leading-relaxed text-justify space-y-4">
                   {data.description
                     .split("\n")
                     .map((para, idx) => (
-                      <p key={idx}>{para}</p>
+                      <p key={idx} className="mb-4">{para}</p>
                     ))}
                 </div>
               </div>
