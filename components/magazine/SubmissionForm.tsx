@@ -172,9 +172,6 @@ export default function MagazineSubmissionForm() {
 
           </div>
         </div>
-
-
-
       </form>
     </section>
   );
