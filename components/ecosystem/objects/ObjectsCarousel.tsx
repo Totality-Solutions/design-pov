@@ -105,8 +105,8 @@ const ObjectsCarousel: React.FC = () => {
                 </div>
               ))
             ) : (
-              <div className="w-full py-20 flex flex-col items-center justify-center">
-                <p className="font-['Montserrat'] text-black/60 text-sm">Loading objects...</p>
+              <div className="w-full py-36 flex flex-col items-center justify-center">
+                <p className="font-['Montserrat'] text-black text-lg">Loading Objects</p>
               </div>
             )}
           </div>
