@@ -122,7 +122,7 @@ export const ShowcaseModal = ({
                 {images.map((img, i) => (
                   <div
                     key={i}
-                    className="relative w-full h-full flex-shrink-0 bg-black"
+                    className="relative w-full h-full flex-shrink-0"
                   >
                     <Image
                       src={img}
