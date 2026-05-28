@@ -92,7 +92,7 @@ const ObjectsCarousel: React.FC = () => {
                   className="flex-shrink-0 w-[calc(50%-12px)] lg:w-[calc(25%-18px)] group cursor-pointer"
                   onClick={() => setSelectedObject(obj)}
                 >
-                  <div className="relative w-full h-40 lg:h-90 overflow-hidden bg-gray-100">
+                  <div className="relative aspect-[3/4] overflow-hidden bg-gray-100">
                     <Image
                       src={obj.src}
                       alt={obj.label || "Design Object"}

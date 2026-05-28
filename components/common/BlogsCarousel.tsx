@@ -108,7 +108,7 @@ export default function BlogsCarousel({ filter, allBlogs }: CarouselProps) {
                   </div>
                 </div>
               </div>
-            ))
+            )) 
           ) : (
             <div className="w-full py-36 flex flex-col items-center justify-center">
               <p className="font-['Montserrat'] text-black text-lg">No Articles found in {filter}</p>
