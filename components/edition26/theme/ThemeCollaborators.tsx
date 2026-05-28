@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import type { StudioItem, ModalData } from "@/types";
 import { ShowcaseModal } from "../core/ShowcaseModal";
@@ -56,6 +57,17 @@ function HoverCard({
 
 export default function ThemeCollaborators({ studios }: { studios: StudioItem[] }) {
   const [selectedCollaborator, setSelectedCollaborator] = useState<ModalData | null>(null);
+  const searchParams = useSearchParams();
+
+  // Open modal via URL parameter (e.g., ?designer=studio-id)
+useEffect(() => {
+  const designerId = searchParams.get('designer');  // Get URL param
+  if (designerId && studios.length > 0) {           // Check if exists
+    const item = studios.find(d => d.id === designerId);  // Find match
+    if (item) setSelectedCollaborator(toModalData(item));  // Open modal
+  }
+}, [searchParams, studios]);
+  console.log("selectedCollaborator", studios)
 
   return (
     <section className="w-full bg-white flex flex-col items-center select-none">
