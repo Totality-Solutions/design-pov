@@ -62,10 +62,10 @@ export default function BrandLogo({
   return (
     <section
       ref={sectionRef}
-      className="w-full bg-white font-montserrat scroll-mt-24 px-4"
+      className="w-full bg-white font-montserrat scroll-mt-24 px-4 relative"
     >
       {/* HEADING */}
-      <div className="w-full px-2 md:px-4">
+      <div className="w-full px-2 md:px-4 sticky top-20 z-30 bg-white">
         <h2 className="text-[22px] font-bold py-4 px-1 md:px-6 uppercase border-b border-black leading-[36px] tracking-wider text-black">
           {title}
         </h2>
@@ -77,40 +77,40 @@ export default function BrandLogo({
 
           {/* LOGO GRID */}
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-  {currentLogos.map((logo, index) => (
-    <div
-      key={index}
-      /* Applied the aspect ratios from your reference */
-      className="relative aspect-[9/4] lg:aspect-[6/3] flex items-center justify-center p-4 lg:p-2 transition-colors duration-300 hover:bg-gray-50/50 overflow-hidden"
-    >
-      {/* SHOW TEXT ONLY FOR PARTNERS */}
-      {title === "PARTNERS" && (
-        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10 text-center w-full px-4">
-          <h4 className="text-black text-[9px] md:text-[11px] font-medium leading-tight tracking-wide uppercase">
-            {logo.name}
-          </h4>
-        </div>
-      )}
+            {currentLogos.map((logo, index) => (
+              <div
+                key={index}
+                /* Applied the aspect ratios from your reference */
+                className="relative aspect-[9/4] lg:aspect-[6/3] flex items-center justify-center p-4 lg:p-2 transition-colors duration-300 hover:bg-gray-50/50 overflow-hidden"
+              >
+                {/* SHOW TEXT ONLY FOR PARTNERS */}
+                {title === "PARTNERS" && (
+                  <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10 text-center w-full px-4">
+                    <h4 className="text-black text-[9px] md:text-[11px] font-medium leading-tight tracking-wide uppercase">
+                      {logo.name}
+                    </h4>
+                  </div>
+                )}
 
-      {/* LOGO CONTAINER */}
-      {/* 
+                {/* LOGO CONTAINER */}
+                {/* 
           Removed 'h-32' and used 'w-full h-full' to let the aspect ratio 
           of the parent control the dimensions. 
       */}
-      <div className="w-full h-full flex items-center justify-center border-b mx-6 border-pov-black/30">
-        <Image
-          src={logo.src}
-          alt={logo.name}
-          width={180}
-          height={80}
-          /* Added the padding and scale from your reference to match the look */
-          className="max-w-full max-h-full object-contain scale-95 transition-all px-[8px] pt-[8px] duration-500"
-          unoptimized
-        />
-      </div>
-    </div>
-  ))}
-</div>
+                <div className="w-full h-full flex items-center justify-center border-b mx-6 border-pov-black/30">
+                  <Image
+                    src={logo.src}
+                    alt={logo.name}
+                    width={180}
+                    height={80}
+                    /* Added the padding and scale from your reference to match the look */
+                    className="max-w-full max-h-full object-contain scale-95 transition-all px-[8px] pt-[8px] duration-500"
+                    unoptimized
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
 
           {/* PAGINATION */}
           {showPagination && (
