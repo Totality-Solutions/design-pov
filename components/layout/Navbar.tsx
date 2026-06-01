@@ -1,277 +1,23 @@
-
-
-// "use client";
-
-// import { useEffect, useState } from "react";
-// import React from "react";
-// import Image from "next/image";
-// import Link from "next/link";
-// 
-// import CTABtn from "../common/CTABtn";
-// import { Container } from "../common/Container";
-// import { NAV_DATA, NAV_LABELS } from "@/app/constants/navigation";
-
-// export default function Navbar() {
-//   const [activeMenu, setActiveMenu] = useState<string | null>(null);
-//   const [mobileOpen, setMobileOpen] = useState(false);
-//   const [isDesktop, setIsDesktop] = useState(false);
-//   const [isSticky, setIsSticky] = useState(false);
-
-//   useEffect(() => {
-//     const checkScreenSize = () => {
-//       const isLg = window.innerWidth >= 1024;
-//       setIsDesktop(isLg);
-//       if (isLg) setMobileOpen(false);
-//     };
-
-//     const handleScroll = () => {
-//       const adSection = document.getElementById("ad-section");
-//       if (!adSection) {
-//         setIsSticky(window.scrollY > 0);
-//         return;
-//       }
-//       const adBottom = adSection.getBoundingClientRect().bottom;
-//       // Fixed logic to prevent navbar shaking
-//       setIsSticky(adBottom <= 0);
-//     };
-
-//     checkScreenSize();
-//     handleScroll();
-//     window.addEventListener("resize", checkScreenSize);
-//     window.addEventListener("scroll", handleScroll);
-
-//     return () => {
-//       window.removeEventListener("resize", checkScreenSize);
-//       window.removeEventListener("scroll", handleScroll);
-//     };
-//   }, []);
-
-//   useEffect(() => {
-//     document.body.style.overflow = mobileOpen ? "hidden" : "";
-//   }, [mobileOpen]);
-
-//   return (
-//     <nav onMouseLeave={() => setActiveMenu(null)} className="relative w-full z-[1000]">
-//       {/* =========================
-//           TOP ADVERTISEMENT SECTION
-//       ========================== */}
-//       <div id="ad-section" className="hidden lg:flex flex-col bg-white">
-//         <div className="flex justify-center px-10 py-8">
-//           <div className="w-full max-w-[1100px]">
-//             <div className="text-[11px] text-gray-400 mb-2 uppercase tracking-wider">
-//               Advertisement
-//             </div>
-//             <div className="w-full h-[280px] border border-gray-200 bg-gray-50 flex items-center justify-center text-gray-300">
-//               Banner Space
-//             </div>
-//           </div>
-//         </div>
-//       </div>
-
-//       {/* =========================
-//           MAIN NAVBAR
-//       ========================== */}
-//       <header
-//         id="main-navbar"
-//         className={`w-full bg-white border-b border-gray-100 transition-all duration-300 ${
-//           isSticky ? "fixed top-0 left-0  z-[2100]" : "relative z-[2100]"
-//         }`}
-//       >
-//         <Container>
-//           <div className="flex justify-between items-center px-6 lg:px-10 py-5">
-            
-//             {/* Logo: Z-index 2101 ensures it is above the menu overlay (2000) */}
-//             <div className="flex-shrink-0 relative z-[2101]">
-//               <Link href="/" onClick={() => setMobileOpen(false)}>
-//                 <Image
-//                   src={Logo}
-//                   alt="Design POV"
-//                   width={220}
-//                   height={40}
-//                   className="object-contain w-[180px] lg:w-[220px]"
-//                 />
-//               </Link>
-//             </div>
-
-//             {/* Desktop Navigation */}
-//             <div className="hidden lg:flex items-center gap-10">
-//               <div className="flex items-center gap-10">
-//                 {NAV_LABELS.map((label) => (
-//                   <Link
-//                     key={label}
-//                     href={NAV_DATA[label].mainHref}
-//                     onMouseEnter={() => setActiveMenu(label)}
-//                     className="text-black text-[16px] font-medium whitespace-nowrap hover:text-primary-blue transition-colors"
-//                   >
-//                     {label}
-//                   </Link>
-//                 ))}
-//               </div>
-//               <CTABtn
-//                 label="Buy Tickets"
-//                 iconType="arrow"
-//                 btnBg="black"
-//                 btnHoverBg="var(--primary-blue)"
-//                 textColor="white"
-//                 href="#tickets"
-//               />
-//             </div>
-
-//             {/* Hamburger / Cross Button: Z-index 2101 */}
-//             <button
-//               className="lg:hidden p-2 relative z-[2101] flex flex-col justify-center items-center w-8 h-8 group"
-//               onClick={() => setMobileOpen(!mobileOpen)}
-//             >
-//               <span 
-//                 className={`block w-6 h-[2px] bg-black transition-all duration-300 ease-in-out ${
-//                   mobileOpen ? "rotate-45 translate-y-[2px]" : "-translate-y-1"
-//                 }`} 
-//               />
-//               <span 
-//                 className={`block w-6 h-[2px] bg-black transition-all duration-300 ease-in-out ${
-//                   mobileOpen ? "opacity-0" : "opacity-100"
-//                 }`} 
-//               />
-//               <span 
-//                 className={`block w-6 h-[2px] bg-black transition-all duration-300 ease-in-out ${
-//                   mobileOpen ? "-rotate-45 -translate-y-[2px]" : "translate-y-1"
-//                 }`} 
-//               />
-//             </button>
-//           </div>
-//         </Container>
-//       </header>
-
-//       {/* Spacer to prevent shaking when header becomes fixed */}
-//       {isSticky && <div className="h-[80px] lg:h-[88px] w-full" />}
-
-//       {/* =========================
-//           DESKTOP SUBMENU
-//       ========================== */}
-//       <div
-//         className={`hidden lg:block bg-white transition-all duration-300 overflow-hidden z-[1100] ${
-//           activeMenu ? "h-[450px]" : "h-0"
-//         } ${isSticky ? "fixed left-0 right-0" : "absolute left-0 right-0"}`}
-//         style={{ top: isSticky ? "80px" : "100%" }}
-//       >
-//         <Container className="h-full">
-//           {activeMenu && (
-//             <div className="flex h-full px-10 py-10 gap-16 text-black">
-//               <div className="w-[60%] h-[320px] relative overflow-hidden bg-black">
-//                 {isDesktop && (
-//                   <video
-//                     src={NAV_DATA[activeMenu].video}
-//                     autoPlay muted loop playsInline
-//                     className="w-full h-full object-cover opacity-80"
-//                   />
-//                 )}
-//               </div>
-//               <div className="w-[40%] flex flex-col justify-start">
-//                 <h3 className="text-lg font-bold mb-6">{NAV_DATA[activeMenu].col1Title}</h3>
-//                 <div className="flex flex-col gap-4">
-//                   {NAV_DATA[activeMenu].col1Links?.map((link) => (
-//                     <Link key={link.label} href={link.href} className="hover:text-blue-500 transition-colors">
-//                       {link.label}
-//                     </Link>
-//                   ))}
-//                 </div>
-//               </div>
-//             </div>
-//           )}
-//         </Container>
-//       </div>
-
-//       {/* =========================
-//           MOBILE MENU OVERLAY
-//       ========================== */}
-//       <div
-//         className={`fixed inset-0 bg-white z-[2000] transition-transform duration-500 ease-in-out lg:hidden ${
-//           mobileOpen ? "translate-y-0" : "-translate-y-full"
-//         }`}
-//       >
-//         {/* Added padding top to ensure content doesn't sit under the header */}
-//         <div className="pt-24 h-full flex flex-col">
-//           <div className="flex-1 overflow-y-auto">
-//             {NAV_LABELS.map((label) => (
-//               <div key={label} className="border-b border-gray-100">
-//                 <div className="flex items-center justify-between pr-4">
-//                   <Link
-//                     href={NAV_DATA[label].mainHref}
-//                     className="flex-1 px-8 py-6 text-left text-lg font-medium text-black"
-//                     onClick={() => setMobileOpen(false)}
-//                   >
-//                     {label}
-//                   </Link>
-//                   <button
-//                     className="p-4"
-//                     onClick={() => setActiveMenu(activeMenu === label ? null : label)}
-//                   >
-//                     <svg
-//                       className={`w-6 h-6 transition-transform duration-300 ${activeMenu === label ? "rotate-180" : ""}`}
-//                       fill="none" stroke="black" viewBox="0 0 24 24"
-//                     >
-//                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-//                     </svg>
-//                   </button>
-//                 </div>
-
-//                 <div className={`bg-gray-50 overflow-hidden transition-all duration-300 ${activeMenu === label ? "max-h-screen" : "max-h-0"}`}>
-//                   {NAV_DATA[label].col1Links?.map((link) => (
-//                     <Link
-//                       key={link.label}
-//                       href={link.href}
-//                       className="block px-12 py-4 text-sm text-gray-700 border-b border-gray-100"
-//                       onClick={() => setMobileOpen(false)}
-//                     >
-//                       {link.label}
-//                     </Link>
-//                   ))}
-//                 </div>
-//               </div>
-//             ))}
-//           </div>
-
-//           <div className="p-10 border-t bg-white">
-//             <CTABtn
-//               label="Buy Tickets"
-//               iconType="arrow"
-//               btnBg="black"
-//               btnHoverBg="#0000B3"
-//               textColor="white"
-//               href="#tickets"
-//             />
-//           </div>
-//         </div>
-//       </div>
-//     </nav>
-//   );
-// }
-
-
-
-
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { cdn } from "@/lib/cdn";
 import Image from "next/image";
 import Link from "next/link";
-import {motion, AnimatePresence} from "framer-motion";
-// 1. Import usePathname to detect current route
-import { usePathname } from "next/navigation"; 
-import Menu from "@/components/icons/Menu.svg";
-import Close from "@/components/icons/Menu-close.svg";
-
+import { motion, AnimatePresence } from "framer-motion";
+import { usePathname } from "next/navigation";
 import CTABtn from "../common/CTABtn";
 import { Container } from "../common/Container";
 import { NAV_DATA, NAV_LABELS } from "@/app/constants/navigation";
 
 export default function Navbar() {
-  const pathname = usePathname(); // 2. Get current path
+  const pathname = usePathname();
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
+
+  const hoverTimeout = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -280,15 +26,27 @@ export default function Navbar() {
       if (isLg) setMobileOpen(false);
     };
 
-    const handleScroll = () => {
+let ticking = false;
+
+const handleScroll = () => {
+  if (!ticking) {
+    window.requestAnimationFrame(() => {
       const adSection = document.getElementById("ad-section");
+
       if (!adSection) {
         setIsSticky(window.scrollY > 0);
-        return;
+      } else {
+        const adBottom =
+          adSection.offsetTop + adSection.offsetHeight;
+        setIsSticky(window.scrollY >= adBottom);
       }
-      const adBottom = adSection.getBoundingClientRect().bottom;
-      setIsSticky(adBottom <= 0);
-    };
+
+      ticking = false;
+    });
+
+    ticking = true;
+  }
+};
 
     checkScreenSize();
     handleScroll();
@@ -305,11 +63,32 @@ export default function Navbar() {
     document.body.style.overflow = mobileOpen ? "hidden" : "";
   }, [mobileOpen]);
 
+  // 🔥 Smooth hover
+const handleMouseEnter = (label: string) => {
+  if (hoverTimeout.current) clearTimeout(hoverTimeout.current);
+
+  // instant first response
+  if (!activeMenu) {
+    setActiveMenu(label);
+    return;
+  }
+
+  // small delay only when switching menus
+  hoverTimeout.current = setTimeout(() => {
+    if (activeMenu !== label) setActiveMenu(label);
+  }, 40);
+};
+
+  const handleMouseLeave = () => {
+    if (hoverTimeout.current) clearTimeout(hoverTimeout.current);
+    hoverTimeout.current = setTimeout(() => {
+      setActiveMenu(null);
+    }, 100);
+  };
+
   return (
-    <nav onMouseLeave={() => setActiveMenu(null)} className="relative w-full z-[1000]">
-      {/* =========================
-          TOP ADVERTISEMENT SECTION
-      ========================== */}
+    <nav className="relative w-full z-[1000]">
+
       <div id="ad-section" className="hidden lg:flex flex-col bg-neutral-50">
         <div className="flex justify-center px-10 py-8">
           <Link href="https://www.kajariaceramics.com/" target="_blank">
@@ -324,65 +103,60 @@ export default function Navbar() {
           </Link>
         </div>
       </div>
-      {/* =========================
-          MAIN NAVBAR
-      ========================== */}
+
+      {/* NAVBAR */}
       <header
-        id="main-navbar"
-        className={`w-full bg-white border-b border-gray-100 transition-all duration-300 z-[2100] fixed top-0 ${
-          isSticky ? "lg:fixed lg:top-0 lg:left-0" : "lg:relative lg:top-auto"
-        }`}
+        className={`w-full bg-white border-b border-gray-100 transition-all duration-300 z-[2100] fixed top-0 ${isSticky ? "lg:fixed lg:top-0 lg:left-0" : "lg:relative"
+          }`}
       >
-        
-          <div className="flex justify-between items-center px-6 lg:px-10 py-5">
-            
-            {/* Logo */}
-            <div className="flex-shrink-0 relative z-[2101]">
-              <Link href="/" onClick={() => setMobileOpen(false)}>
-                <Image
-                  src={cdn("/logo/Logo.svg")}
-                  alt="Design POV"
-                  width={220}
-                  height={40}
-                  className="object-contain w-[180px] lg:w-[220px]"
-                />
-              </Link>
+        <div className="flex justify-between items-center px-6 lg:px-10 py-5">
+
+          {/* Logo */}
+          <Link href="/">
+            <Image
+              src={cdn("/logo/Logo.svg")}
+              alt="Design POV"
+              width={220}
+              height={40}
+              className="w-[180px] lg:w-[220px]"
+            />
+          </Link>
+
+          {/* Desktop Nav */}
+          <div className="hidden lg:flex items-center gap-10">
+            <div className="flex items-center gap-10">
+              {NAV_LABELS.map((label) => {
+                const isActive = pathname === NAV_DATA[label].mainHref;
+
+                return (
+                  <Link
+                    key={label}
+                    href={NAV_DATA[label].mainHref}
+                    onMouseEnter={() =>
+                      label === "2026 Edition" || label === "Ecosystem"
+                        ? handleMouseEnter(label)
+                        : null
+                    }
+                    className={`relative text-[16px] font-medium py-1 ${isActive
+                        ? "text-primary-blue"
+                        : "text-black hover:text-primary-blue"
+                      }`}
+                  >
+                    {label}
+                  </Link>
+                );
+              })}
             </div>
 
-            {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center gap-10">
-              <div className="flex items-center gap-10">
-                {NAV_LABELS.map((label) => {
-                  // 3. Check if current link is active
-                  const isActive = pathname === NAV_DATA[label].mainHref;
-                  
-                  return (
-                    <Link
-                      key={label}
-                      href={NAV_DATA[label].mainHref}
-                      onMouseEnter={() => setActiveMenu(label === "2026 Edition" || label === "Ecosystem" ? label : null)}
-                      className={`relative text-[16px] font-medium whitespace-nowrap transition-colors py-1 group ${
-                        isActive ? "text-primary-blue" : "text-black hover:text-primary-blue"
-                      }`}
-                    >
-                      {label}
-                      {/* 4. Active Underline Span */}
-                      <span className={`absolute bottom-0 left-0 h-[2px] bg-primary-blue transition-all duration-300 ${
-                        isActive ? "w-full" : "w-0 group-hover:w-full"
-                      }`} />
-                    </Link>
-                  );
-                })}
-              </div>
-              <CTABtn
+            {/* <CTABtn
                 label="Buy Tickets"
                 iconType="arrow"
                 btnBg="transparent"
                 btnHoverBg="var(--primary-blue)"
                 textColor="black"
                 href="https://tktplz.events/gjdlb5-design-pov"
-              />
-            </div>
+              /> */}
+          </div>
 
             {/* Hamburger / Cross Button */}
             <button
@@ -431,82 +205,77 @@ export default function Navbar() {
        
       </header>
 
-      {/* Spacer — desktop only; mobile uses sticky which doesn't need one */}
-      {isSticky && <div className="hidden lg:block h-[88px] w-full" />}
+      {isSticky && <div className="hidden lg:block h-[88px]" />}
 
-      {/* =========================
-          DESKTOP SUBMENU
-      ========================== */}
+      {/* 🔥 SUBMENU */}
       <div
-        className={`hidden lg:block bg-white transition-all duration-300 overflow-hidden z-1100 ${
-          activeMenu ? "h-fit" : "h-0"
-        } ${isSticky ? "fixed left-0 right-0" : "absolute left-0 right-0"}`}
+        onMouseEnter={() => activeMenu && setActiveMenu(activeMenu)}
+        onMouseLeave={handleMouseLeave}
+        className={`hidden lg:block bg-white overflow-hidden transition-all duration-300 ${activeMenu ? "max-h-[420px] opacity-100" : "max-h-0 opacity-0"
+          } ${isSticky ? "fixed left-0 right-0" : "absolute left-0 right-0"}`}
         style={{ top: isSticky ? "80px" : "100%" }}
       >
-        <Container className="h-full">
-          {activeMenu && (
-            <div className="flex h-fit px-10 py-10 gap-16 text-black">
-              <div className="w-[60%] h-[320px] relative overflow-hidden bg-black">
-                {isDesktop && NAV_DATA[activeMenu].filetype === "video" ? (
-                  <video
-                    src={NAV_DATA[activeMenu].video}
-                    autoPlay muted loop playsInline
-                    preload="none"
-                    className="w-full h-full object-cover opacity-80"
-                  />
-                ) : NAV_DATA[activeMenu].filetype === "image" ? (
-                  <img
-                    src={NAV_DATA[activeMenu].image}
-                    alt={activeMenu}
-                    className="w-full h-full object-contain opacity-100"
-                  />
-                ) : null}
-              </div>
+        <Container>
+          <div className="flex px-10 py-10 gap-16">
 
-              {/* Two-column layout for 2026 Edition and Ecosystem */}
-              {(activeMenu === "2026 Edition" || activeMenu === "Ecosystem") ? (
-                <div className="w-[40%] flex gap-12 justify-start">
-                  <div className="flex flex-col justify-start">
-                    {NAV_DATA[activeMenu].col1Title && (
-                      <h3 className="text-lg font-bold mb-6">{NAV_DATA[activeMenu].col1Title}</h3>
-                    )}
-                    <div className="flex flex-col gap-4">
-                      {NAV_DATA[activeMenu].col1Links?.map((link) => (
-                        <Link key={link.label} href={link.href} className="hover:text-primary-blue font-normal transition-colors">
-                          {link.label}
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                  {NAV_DATA[activeMenu].col2Links && NAV_DATA[activeMenu].col2Links!.length > 0 && (
-                    <div className="flex flex-col justify-start">
-                      {NAV_DATA[activeMenu].col2Title && (
-                        <h3 className="text-lg font-bold mb-6">{NAV_DATA[activeMenu].col2Title}</h3>
-                      )}
-                      <div className="flex flex-col gap-4">
-                        {NAV_DATA[activeMenu].col2Links?.map((link) => (
-                          <Link key={link.label} href={link.href} className="hover:text-blue-500 transition-colors">
-                            {link.label}
-                          </Link>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <div className="w-[40%] flex flex-col justify-start">
-                  <h3 className="text-lg font-bold mb-6">{NAV_DATA[activeMenu].col1Title}</h3>
-                  <div className="flex flex-col gap-4">
-                    {NAV_DATA[activeMenu].col1Links?.map((link) => (
-                      <Link key={link.label} href={link.href} className="hover:text-blue-500 transition-colors">
-                        {link.label}
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              )}
+            {/* 🔥 MEDIA (FIXED HERE) */}
+            <div className="w-[60%] h-[320px] relative overflow-hidden bg-black">
+              {NAV_LABELS.map((label) => {
+                const data = NAV_DATA[label];
+
+                return (
+                  <div
+  key={label}
+  className={`absolute inset-0 transition-opacity duration-300 ${
+    activeMenu === label ? "opacity-100 z-10" : "opacity-0 z-0"
+  }`}
+>
+  {data.filetype === "image" && (
+    <Image
+      src={data.image!}
+      alt={label}
+      fill
+      priority
+      className="object-contain"
+    />
+  )}
+</div>
+                );
+              })}
             </div>
-          )}
+
+            {/* LINKS */}
+            {activeMenu && (
+              <div className="w-[40%]">
+                <h3 className="text-lg font-bold mb-6">
+                  {NAV_DATA[activeMenu].col1Title}
+                </h3>
+
+                <div className="flex flex-col gap-4">
+                  {NAV_DATA[activeMenu].col1Links?.map((link) => {
+                    const isSubActive = pathname === link.href;
+
+                    return (
+                      <Link
+                        key={link.label}
+                        href={link.href}
+                        onClick={() => setActiveMenu(null)} // ✅ close submenu
+                        className={`relative transition-colors ${isSubActive
+                            ? "text-primary-blue font-medium"
+                            : "text-black hover:text-primary-blue cursor-pointer"
+                          }`}
+                      >
+                        {link.label}
+
+                        {/* ✅ Active underline */}
+
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </div>
         </Container>
       </div>
 
@@ -514,15 +283,19 @@ export default function Navbar() {
           MOBILE MENU OVERLAY
       ========================== */}
       <div
-        className={`fixed inset-0 bg-white z-[2000] transition-transform duration-500 ease-in-out lg:hidden ${
-          mobileOpen ? "translate-y-0" : "-translate-y-full"
-        }`}
+        className={`fixed inset-0 bg-white z-[2000] transition-transform duration-500 ease-in-out lg:hidden ${mobileOpen ? "translate-y-0" : "-translate-y-full"
+          }`}
       >
         <div className="pt-24 h-full flex flex-col">
           <div className="flex-1 overflow-y-auto">
             {NAV_LABELS.map((label) => {
-              const isActive = pathname === NAV_DATA[label].mainHref;
-              
+              const isSubActive = NAV_DATA[label].col1Links?.some(
+                (link) => pathname === link.href
+              );
+
+              const isActive =
+                pathname === NAV_DATA[label].mainHref || isSubActive;
+
               return (
                 <div key={label} className="border-b border-gray-100">
                   <div className="flex items-center justify-between pr-4">
@@ -547,42 +320,47 @@ export default function Navbar() {
                           alt="toggle"
                           width={20}
                           height={20}
-                          className={`transition-transform duration-200 ease-in-out ${
-                            activeMenu === label ? "scale-75" : "scale-150"
-                          }`}
+                          className={`transition-transform duration-200 ease-in-out ${activeMenu === label ? "scale-75" : "scale-150"
+                            }`}
                         />
                       </button>
                     )}
                   </div>
 
-                  {(activeMenu === "2026 Edition" || activeMenu === "Ecosystem") && 
-                  <div className={` overflow-hidden transition-all duration-300 ${activeMenu === label ? "max-h-screen" : "max-h-0"}`}>
-                    {NAV_DATA[label].col1Links?.map((link) => (
-                      <Link
-                        key={link.label}
-                        href={link.href}
-                        className="block px-12 py-4 text-sm text-black font-normal border-b border-gray-100"
-                        onClick={() => setMobileOpen(false)}
-                      >
-                        {link.label}
-                      </Link>
-                    ))}
-                  </div>
-            }
+                  {(activeMenu === "2026 Edition" || activeMenu === "Ecosystem") &&
+                    <div className={` overflow-hidden transition-all duration-300 ${activeMenu === label ? "max-h-screen" : "max-h-0"}`}>
+                      {NAV_DATA[label].col1Links?.map((link) => (
+                        <Link
+                          key={link.label}
+                          href={link.href}
+                          onClick={() => {
+                            setMobileOpen(false);
+                            setActiveMenu(null); // ✅ close submenu
+                          }}
+                          className={`block px-12 py-4 text-sm border-b border-black/10 ${pathname === link.href
+                              ? "text-primary-blue font-medium"
+                              : "text-black"
+                            }`}
+                        >
+                          {link.label}
+                        </Link>
+                      ))}
+                    </div>
+                  }
                 </div>
               );
             })}
             <Link href="https://povindex.designpovindia.com/home" target="_blank" className="flex items-center justify-center  ">
-          <Image
-                          src={cdn("/qr/qr-ticket.png")}
-                          alt="toggle"
-                          width={1000}
-                          height={100}
-                          className={`transition-transform duration-200 ease-in-out bg-black `}
-                        />
-          </Link>
+              <Image
+                src={cdn("/qr/qr-ticket.png")}
+                alt="toggle"
+                width={1000}
+                height={100}
+                className={`transition-transform duration-200 ease-in-out bg-black `}
+              />
+            </Link>
           </div>
-          
+
           <div className="p-10 border-t bg-white">
             <CTABtn
               label="Buy Tickets"
