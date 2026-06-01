@@ -119,7 +119,7 @@ const MasonryGrid = forwardRef<HTMLDivElement, MasonryGridProps>(
 
             {/* 10 FULL WIDTH IMAGE */}
             <div className="col-span-2">
-              <Cell type="image" src={cdn("/temp/home/theme/WEBSITE_THEME BANNER_1.jpg.jpeg")} alt="Theme 6" />
+              <Cell type="image" src={cdn("/temp/home/theme/sens-sensibility.jpg")} alt="Theme 6" />
             </div>
 
           </div>

@@ -31,7 +31,7 @@ export const NAV_DATA: Record<string, SubmenuContent> = {
   },
   Ecosystem: {
     mainHref: "/ecosystem",
-    image: cdn("/temp/home/theme/WEBSITE_THEME BANNER_1.jpg.jpeg"),
+    image: cdn("/temp/home/theme/sens-sensibility.jpg"),
     filetype: "image",
     col1Links: [
       { label: "Circle", href: "/edition/schedule" }, 
@@ -44,7 +44,7 @@ export const NAV_DATA: Record<string, SubmenuContent> = {
   },
   "2026 Edition": {
     mainHref: "/edition",
-    image: cdn("/qr/Ticket.svg"),
+    image: cdn("/qr/qr-ticket.png"),
     filetype: "image",
     col1Title: "",
     col1Links: [

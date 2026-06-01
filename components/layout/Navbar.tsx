@@ -574,7 +574,7 @@ export default function Navbar() {
             })}
             <Link href="https://povindex.designpovindia.com/home" target="_blank" className="flex items-center justify-center  ">
           <Image
-                          src={cdn("/qr/Ticket.svg")}
+                          src={cdn("/qr/qr-ticket.png")}
                           alt="toggle"
                           width={1000}
                           height={100}
