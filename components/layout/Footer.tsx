@@ -14,6 +14,7 @@ import FooterTablet from "./FooterTablet";
 import { Container } from "../common/Container";
 import Link from "next/link";
 import Image from "next/image";
+import FooterPopup from "./FooterPopup";
 
 const navLinks = {
   Partners: {
@@ -59,6 +60,8 @@ const Footer = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const mouseX = useMotionValue(0);
 
+  const [showContactForm, setShowContactForm] = useState(false);
+
   const [isPastHalfway, setIsPastHalfway] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [elementWidth, setElementWidth] = useState(1600);
@@ -68,7 +71,7 @@ const Footer = () => {
 
   const [showHiringCard, setShowHiringCard] = useState(true);
 
-  const isHiring = false;
+  const isHiring = true;
 
   useEffect(() => {
     const handleResize = () => {
@@ -266,17 +269,25 @@ const Footer = () => {
                   </div>
                 </motion.div>
                 
-                <a
-                  href={
-                    isHiring
-                      ? "/contact"
-                      : "https://povindex.designpovindia.com/home"
-                  }
-                  className="relative z-20 bg-white text-black px-5 py-3 text-[14px] font-medium flex items-center justify-between w-full hover:bg-neutral-200 transition-all"
-                >
-                  {isHiring ? "Join Our Team" : "Plan Your Visit"}
-                  <ArrowUpRight size={14} strokeWidth={1.8} />
-                </a>
+                {isHiring ? (
+                  <button
+                    onClick={() => setShowContactForm(true)}
+                    className="relative z-20 bg-white text-black px-5 py-3 text-[14px] font-medium flex items-center justify-between w-full hover:bg-neutral-200 transition-all"
+                  >
+                    Join Our Team
+                    <ArrowUpRight size={14} strokeWidth={1.8} />
+                  </button>
+                ) : (
+                  <a
+                    href="https://povindex.designpovindia.com/home"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="relative z-20 bg-white text-black px-5 py-3 text-[14px] font-medium flex items-center justify-between w-full hover:bg-neutral-200 transition-all"
+                  >
+                    Plan Your Visit
+                    <ArrowUpRight size={14} strokeWidth={1.8} />
+                  </a>
+                )}
               </div>
 
               {/* Totality Branding */}
@@ -327,6 +338,10 @@ const Footer = () => {
         </div>
 
       </motion.footer>
+      <FooterPopup
+        isOpen={showContactForm}
+        onClose={() => setShowContactForm(false)}
+      />
     </div>
   );
 };
