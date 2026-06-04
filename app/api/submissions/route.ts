@@ -12,6 +12,7 @@ const ses = new SESClient({
 });
 
 const MARKETING_EMAIL = 'marketing@designpovindia.com';
+const HR_EMAIL = 'hr@totalitysolutions.com';
 const FROM_EMAIL = process.env.SES_FROM_EMAIL || 'noreply@designpovindia.com';
 
 function buildEmailHtml(fields: Record<string, string | null>) {

@@ -61,13 +61,54 @@ export default function FooterPopup({
         setIsLoading(true);
 
         try {
-            // API logic
+            // Using FormData because we have a File binary payload (the CV)
+            const formData = new FormData();
+            formData.append("name", name);
+            formData.append("email", email);
+            formData.append("phone", phone);
+            formData.append("role", role);
+            formData.append("experience", experience);
+            formData.append("portfolio", portfolio);
+            formData.append("reason", reason);
+            
+            // Context identifiers for backend tracking verification
+            formData.append("type", "career");
+            formData.append("category", "hr");
+
+            if (cv) {
+                formData.append("cv", cv);
+            }
+
+            // Connecting cleanly to your isolated new handler route folder
+            const response = await fetch("/api/career", {
+                method: "POST",
+                body: formData,
+            });
+
+            if (!response.ok) {
+                throw new Error("Something went wrong with the submission");
+            }
+
+            // Resetting form fields on a successful response
+            setName("");
+            setEmail("");
+            setPhone("");
+            setRole("");
+            setExperience("");
+            setPortfolio("");
+            setReason("");
+            setCv(null);
+            
+            alert("Application submitted successfully!");
+            onClose();
         } catch (error) {
-            console.error(error);
+            console.error("Submission failed:", error);
+            alert("Failed to submit application. Please try again.");
         } finally {
             setIsLoading(false);
         }
     };
+
     return (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-6">
             {/* BACKDROP */}
@@ -120,191 +161,191 @@ export default function FooterPopup({
                     </div>
 
                     {/* FORM */}
-                <div className="flex-1 overflow-y-auto p-8 custom-scrollbar">
-                    <form
-                        className="space-y-5 flex-grow"
-                        onSubmit={(e) => {
-                            e.preventDefault();
-                            handleSubmit();
-                        }}
-                    >
-                        {/* FULL NAME */}
-                        <div className="mb-3">
-                            <label className=" text-sm block mb-2">
-                                Full Name <span className="text-red-600">*</span>
-                            </label>
-
-                            <input
-                                type="text"
-                                value={name}
-                                onChange={(e) => setName(e.target.value)}
-                                placeholder="full name*"
-                                className="w-full bg-zinc-100 px-5 py-3 outline-none"
-                            />
-
-                            {errors.name && (
-                                <p className="text-red-600 text-xs mt-1">{errors.name}</p>
-                            )}
-                        </div>
-
-                        {/* EMAIL + PHONE */}
-                        <div className="grid md:grid-cols-2 gap-4">
+                    <div className="flex-1 overflow-y-auto p-8 custom-scrollbar">
+                        <form
+                            className="space-y-5 flex-grow"
+                            onSubmit={(e) => {
+                                e.preventDefault();
+                                handleSubmit();
+                            }}
+                        >
+                            {/* FULL NAME */}
                             <div className="mb-3">
                                 <label className=" text-sm block mb-2">
-                                    Email <span className="text-red-600">*</span>
+                                    Full Name <span className="text-red-600">*</span>
                                 </label>
 
                                 <input
-                                    type="email"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    placeholder="xyz@gmail.com"
+                                    type="text"
+                                    value={name}
+                                    onChange={(e) => setName(e.target.value)}
+                                    placeholder="full name*"
                                     className="w-full bg-zinc-100 px-5 py-3 outline-none"
                                 />
 
-                                {errors.email && (
-                                    <p className="text-red-600 text-xs mt-1">{errors.email}</p>
+                                {errors.name && (
+                                    <p className="text-red-600 text-xs mt-1">{errors.name}</p>
                                 )}
                             </div>
 
+                            {/* EMAIL + PHONE */}
+                            <div className="grid md:grid-cols-2 gap-4">
+                                <div className="mb-3">
+                                    <label className=" text-sm block mb-2">
+                                        Email <span className="text-red-600">*</span>
+                                    </label>
+
+                                    <input
+                                        type="email"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        placeholder="xyz@gmail.com"
+                                        className="w-full bg-zinc-100 px-5 py-3 outline-none"
+                                    />
+
+                                    {errors.email && (
+                                        <p className="text-red-600 text-xs mt-1">{errors.email}</p>
+                                    )}
+                                </div>
+
+                                <div className="mb-3">
+                                    <label className=" text-sm block mb-2">
+                                        Phone Number <span className="text-red-600">*</span>
+                                    </label>
+
+                                    <input
+                                        type="tel"
+                                        value={phone}
+                                        onChange={(e) => setPhone(e.target.value)}
+                                        placeholder="+91 XXXXX XXXXX"
+                                        className="w-full bg-zinc-100 px-5 py-3 outline-none"
+                                    />
+
+                                    {errors.phone && (
+                                        <p className="text-red-600 text-xs mt-1">{errors.phone}</p>
+                                    )}
+                                </div>
+                            </div>
+
+                            {/* ROLE */}
                             <div className="mb-3">
                                 <label className=" text-sm block mb-2">
-                                    Phone Number <span className="text-red-600">*</span>
+                                    Current Role / Designation
+                                    <span className="text-red-600">*</span>
                                 </label>
 
                                 <input
-                                    type="tel"
-                                    value={phone}
-                                    onChange={(e) => setPhone(e.target.value)}
-                                    placeholder="+91 XXXXX XXXXX"
+                                    type="text"
+                                    value={role}
+                                    onChange={(e) => setRole(e.target.value)}
+                                    placeholder="Role"
                                     className="w-full bg-zinc-100 px-5 py-3 outline-none"
                                 />
 
-                                {errors.phone && (
-                                    <p className="text-red-600 text-xs mt-1">{errors.phone}</p>
+                                {errors.role && (
+                                    <p className="text-red-600 text-xs mt-1">{errors.role}</p>
                                 )}
                             </div>
-                        </div>
 
-                        {/* ROLE */}
-                        <div className="mb-3">
-                            <label className=" text-sm block mb-2">
-                                Current Role / Designation
-                                <span className="text-red-600">*</span>
-                            </label>
+                            {/* EXPERIENCE */}
+                            <div className="mb-3">
+                                <label className=" text-sm block mb-2">
+                                    Years of Experience
+                                    <span className="text-red-600">*</span>
+                                </label>
 
-                            <input
-                                type="text"
-                                value={role}
-                                onChange={(e) => setRole(e.target.value)}
-                                placeholder="role"
-                                className="w-full bg-zinc-100 px-5 py-3 outline-none"
-                            />
+                                <input
+                                    type="text"
+                                    value={experience}
+                                    onChange={(e) => setExperience(e.target.value)}
+                                    placeholder="No. of years"
+                                    className="w-full bg-zinc-100 px-5 py-3 outline-none"
+                                />
 
-                            {errors.role && (
-                                <p className="text-red-600 text-xs mt-1">{errors.role}</p>
-                            )}
-                        </div>
+                                {errors.experience && (
+                                    <p className="text-red-600 text-xs mt-1">
+                                        {errors.experience}
+                                    </p>
+                                )}
+                            </div>
 
-                        {/* EXPERIENCE */}
-                        <div className="mb-3">
-                            <label className=" text-sm block mb-2">
-                                Years of Experience
-                                <span className="text-red-600">*</span>
-                            </label>
+                            {/* CV */}
+                            <div className="mb-3">
+                                <label className=" text-sm block mb-2">
+                                    CV Upload <span className="text-red-600">*</span>
+                                </label>
 
-                            <input
-                                type="text"
-                                value={experience}
-                                onChange={(e) => setExperience(e.target.value)}
-                                placeholder="3 years"
-                                className="w-full bg-zinc-100 px-5 py-3 outline-none"
-                            />
+                                <input
+                                    type="file"
+                                    accept=".pdf,.doc,.docx"
+                                    onChange={(e) => {
+                                        const file = e.target.files?.[0];
+                                        if (file) setCv(file);
+                                    }}
+                                    className="w-full border bg-white p-3"
+                                />
 
-                            {errors.experience && (
-                                <p className="text-red-600 text-xs mt-1">
-                                    {errors.experience}
+                                <p className="text-xs text-neutral-500 mt-2">
+                                    Documents: Max 10 MB
                                 </p>
-                            )}
-                        </div>
 
-                        {/* CV */}
-                        <div className="mb-3">
-                            <label className=" text-sm block mb-2">
-                                CV Upload <span className="text-red-600">*</span>
-                            </label>
+                                {errors.cv && (
+                                    <p className="text-red-600 text-xs mt-1">{errors.cv}</p>
+                                )}
+                            </div>
 
-                            <input
-                                type="file"
-                                accept=".pdf,.doc,.docx"
-                                onChange={(e) => {
-                                    const file = e.target.files?.[0];
-                                    if (file) setCv(file);
-                                }}
-                                className="w-full border bg-white p-3"
-                            />
+                            {/* PORTFOLIO - OPTIONAL */}
+                            <div className="mb-3">
+                                <label className=" text-sm block mb-2">
+                                    Portfolio Link
+                                </label>
 
-                            <p className="text-xs text-neutral-500 mt-2">
-                                Documents: Max 10 MB
-                            </p>
+                                <input
+                                    type="text"
+                                    value={portfolio}
+                                    onChange={(e) => setPortfolio(e.target.value)}
+                                    placeholder="https://xyz.com"
+                                    className="w-full bg-zinc-100 px-5 py-3 outline-none"
+                                />
+                            </div>
 
-                            {errors.cv && (
-                                <p className="text-red-600 text-xs mt-1">{errors.cv}</p>
-                            )}
-                        </div>
+                            {/* WHY */}
+                            <div className="mb-3">
+                                <label className=" text-sm block mb-2">
+                                    Why do you want to join our team?
+                                    <span className="text-red-600">*</span>
+                                </label>
 
-                        {/* PORTFOLIO - OPTIONAL */}
-                        <div className="mb-3">
-                            <label className=" text-sm block mb-2">
-                                Portfolio Link
-                            </label>
+                                <textarea
+                                    rows={4}
+                                    value={reason}
+                                    onChange={(e) => setReason(e.target.value)}
+                                    placeholder="Your Answer"
+                                    className="w-full bg-zinc-100 px-5 py-3 outline-none resize-none"
+                                />
 
-                            <input
-                                type="text"
-                                value={portfolio}
-                                onChange={(e) => setPortfolio(e.target.value)}
-                                placeholder="https://xyz.com"
-                                className="w-full bg-zinc-100 px-5 py-3 outline-none"
-                            />
-                        </div>
+                                {errors.reason && (
+                                    <p className="text-red-600 text-xs mt-1">
+                                        {errors.reason}
+                                    </p>
+                                )}
+                            </div>
 
-                        {/* WHY */}
-                        <div className="mb-3">
-                            <label className=" text-sm block mb-2">
-                                Why do you want to join our team?
-                                <span className="text-red-600">*</span>
-                            </label>
-
-                            <textarea
-                                rows={4}
-                                value={reason}
-                                onChange={(e) => setReason(e.target.value)}
-                                placeholder="one liner"
-                                className="w-full bg-zinc-100 px-5 py-3 outline-none resize-none"
-                            />
-
-                            {errors.reason && (
-                                <p className="text-red-600 text-xs mt-1">
-                                    {errors.reason}
-                                </p>
-                            )}
-                        </div>
-
-                        <div className="pt-6">
-                            <CTABtn
-                                label={isLoading ? "Submitting..." : "Apply Now"}
-                                btnBg="var(--color-black)"
-                                btnHoverBg="var(--primary-red)"
-                                textColor="var(--color-white)"
-                                borderColor="transparent"
-                                borderHoverColor="transparent"
-                                lineColor="var(--color-white)"
-                                lineHoverColor="var(--primary-red)"
-                                disabled={isLoading}
-                            />
-                        </div>
-                    </form>
-                </div>
+                            <div className="pt-6">
+                                <CTABtn
+                                    label={isLoading ? "Submitting..." : "Apply Now"}
+                                    btnBg="var(--color-black)"
+                                    btnHoverBg="var(--primary-red)"
+                                    textColor="var(--color-white)"
+                                    borderColor="transparent"
+                                    borderHoverColor="transparent"
+                                    lineColor="var(--color-white)"
+                                    lineHoverColor="var(--primary-red)"
+                                    disabled={isLoading}
+                                />
+                            </div>
+                        </form>
+                    </div>
 
                 </div>
             </div>

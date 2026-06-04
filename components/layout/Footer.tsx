@@ -8,9 +8,8 @@ import {
   useSpring,
   useTransform,
 } from "framer-motion";
-import { ArrowUpRight, Home } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 
-import FooterTablet from "./FooterTablet";
 import { Container } from "../common/Container";
 import Link from "next/link";
 import Image from "next/image";
@@ -51,7 +50,6 @@ const navLinks = {
       { title: "Magazine", href: "/magazine" },
       { title: "Contact", href: "/contact" },
       { title: "FAQs", href: "/faq" },
-      // { title: "POV Index", href: "https://povindex.designpovindia.com/" },
     ],
   },
 };
@@ -71,9 +69,25 @@ const Footer = () => {
 
   const [showHiringCard, setShowHiringCard] = useState(true);
 
-  const isHiring = true;
+  // 1. Turned isHiring into component state driven by your global configuration API
+  const [isHiring, setIsHiring] = useState(false);
 
   useEffect(() => {
+    // 2. Fetch the module visibility flag state on mount
+    async function checkHiringStatus() {
+      try {
+        const res = await fetch("/api/cms/global-settings");
+        if (res.ok) {
+          const data = await res.json();
+          setIsHiring(!!data.isHiring);
+        }
+      } catch (err) {
+        console.error("Could not sync footer hiring modules status:", err);
+      }
+    }
+    
+    checkHiringStatus();
+
     const handleResize = () => {
       const width = window.innerWidth;
       setIsMobile(width < 768);
@@ -102,14 +116,6 @@ const Footer = () => {
     mouseX.set(currentX);
     setIsPastHalfway(currentX > rect.width / 2);
   };
-
-  // if (isMobile) {
-  //   return (
-  //     <Container className="!px-0">
-  //       <FooterTablet navLinks={navLinks} />
-  //     </Container>
-  //   );
-  // }
 
   return (
     <div className="!px-0 border-t border-black/10">
@@ -155,7 +161,7 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* MAIN CONTENT - Interaction Fix (pointer-events-auto for links) */}
+        {/* MAIN CONTENT */}
         <div
           className="relative z-20 w-full lg:py-12 py-4 h-full flex flex-col justify-between mix-blend-difference "
           style={{
@@ -177,43 +183,21 @@ const Footer = () => {
               </div>
               <div className="text-white text-[12px] opacity-80">
                 <div className="leading-relaxed mb-4">
-                  {/* <Link href="mailto:marketing@designpovindia.com">designpovindia.com</Link> */}
                   <p>A design-led platform where lived spaces, ideas, and perspectives come together.</p>
                 </div>
                 <div className="flex gap-4 pointer-events-auto">
                   {[
-                    {
-                      id: "IG",
-                      href: "https://www.instagram.com/designpov.india?igsh=bnVnZTRxajRoY2g4",
-                    },
-                    {
-                      id: "FB",
-                      href: "https://www.facebook.com/share/1GiQ7sWhVw/?mibextid=wwXIfr",
-                    },
-                    {
-                      id: "IN",
-                      href: "https://www.linkedin.com/company/design-pov/",
-                    },
-                    {
-                      id: "YT",
-                      href: "https://youtube.com/@designpov?si=x8inJDuQDclsMQ9y",
-                    },
+                    { id: "IG", href: "https://www.instagram.com/designpov.india?igsh=bnVnZTRxajRoY2g4" },
+                    { id: "FB", href: "https://www.facebook.com/share/1GiQ7sWhVw/?mibextid=wwXIfr" },
+                    { id: "IN", href: "https://www.linkedin.com/company/design-pov/" },
+                    { id: "YT", href: "https://youtube.com/@designpov?si=x8inJDuQDclsMQ9y" },
                   ].map((item) => (
                     <a
                       key={item.id}
                       href={item.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="
-                        border border-white/20
-                        w-[28px] h-[28px]
-                        flex items-center justify-center
-                        text-[10px] font-bold
-                        cursor-pointer
-                        hover:bg-white
-                        hover:text-black
-                        transition-colors
-                      "
+                      className="border border-white/20 w-[28px] h-[28px] flex items-center justify-center text-[10px] font-bold cursor-pointer hover:bg-white hover:text-black transition-colors"
                     >
                       {item.id}
                     </a>
@@ -228,20 +212,20 @@ const Footer = () => {
               <FooterTextColumn {...navLinks.AboutUs} />
               <FooterTextColumn {...navLinks.Originals} />
             </div>
-
           </div>          
+          
           <div className="grid grid-cols-2 md:grid-cols-3 lg:hidden pointer-events-auto my-12 gap-8" >
-              <FooterTextColumn {...navLinks.Partners} />
-              <FooterTextColumn {...navLinks.AboutUs} />
-              <FooterTextColumn {...navLinks.Originals} />
-            </div>
+            <FooterTextColumn {...navLinks.Partners} />
+            <FooterTextColumn {...navLinks.AboutUs} />
+            <FooterTextColumn {...navLinks.Originals} />
+          </div>
 
           {/* BOTTOM SECTION */}
           <div className="flex flex-col gap-10" style={{
             paddingRight: "var(--footer-px)",
           }}>
             <div className="flex justify-between items-end lg:h-[180px]">
-              {/* Hiring Card */}
+              {/* Dynamic Hiring Card Block */}
               <div className="w-[180px] pointer-events-auto relative">
                 <motion.div
                   initial={false}
@@ -269,6 +253,7 @@ const Footer = () => {
                   </div>
                 </motion.div>
                 
+                {/* 3. Action button switches functions cleanly based on synced boolean state */}
                 {isHiring ? (
                   <button
                     onClick={() => setShowContactForm(true)}
@@ -307,11 +292,9 @@ const Footer = () => {
             <div className="w-full pointer-events-auto">
               <div className="w-full border-t border-white/80 mb-6" />
               <div className="flex flex-col md:flex-col lg:flex-row justify-between items-center gap-4 text-white text-[10px] lg:text-[14px] font-medium">
-                {/* COPYRIGHT */}
                 <p className="text-left lg:text-left">
                   © 2026 Design POV India. All rights reserved.
                 </p>
-                {/* LINKS */}
                 <div className="flex justify-center lg:justify-end gap-x-4 gap-y-2 text-right">
                   <Link href="/legal/privacy-policy">
                     <p className="cursor-pointer hover:text-neutral-400 transition">
@@ -366,7 +349,7 @@ const MagneticFollowFlare = ({ index, mouseX, imageSrc, colWidth, baseFlareWidth
     ]
   );
 
-  const smoothFlareX = useSpring(rawX, { stiffness: 80, damping: 20 }); // Slightly higher damping to prevent "stuck" feeling
+  const smoothFlareX = useSpring(rawX, { stiffness: 80, damping: 20 });
 
   return (
     <motion.div
@@ -376,6 +359,7 @@ const MagneticFollowFlare = ({ index, mouseX, imageSrc, colWidth, baseFlareWidth
       <motion.img
         src={imageSrc}
         alt="flare"
+        style={{ transformOrigin: "center center" }}
         animate={{
           mixBlendMode: isPastHalfway ? "screen" : "darken",
           opacity: isPastHalfway ? 0.7 : 0.4,
@@ -393,7 +377,6 @@ const FooterTextColumn = ({ title, href, items }: any) => (
     style={{ width: "var(--footer-col-width)" }}
   >
     <div className="flex flex-col gap-2 lg:gap-[12px]">
-
       <Link href={href}>
         <h3 className="text-white text-[16px] font-normal tracking-[0.05em] hover:opacity-70 transition-opacity cursor-pointer">
           {title}
@@ -416,4 +399,4 @@ const FooterTextColumn = ({ title, href, items }: any) => (
   </div>
 );
 
-export default Footer;  
+export default Footer;
