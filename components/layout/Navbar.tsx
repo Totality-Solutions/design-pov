@@ -5,7 +5,10 @@ import { cdn } from "@/lib/cdn";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { usePathname } from "next/navigation";
+import { usePathname } from "next/navigation"; 
+import Menu from "@/components/icons/Menu.svg";
+import Close from "@/components/icons/Menu-close.svg";
+
 import CTABtn from "../common/CTABtn";
 import { Container } from "../common/Container";
 import { NAV_DATA, NAV_LABELS } from "@/app/constants/navigation";
@@ -19,7 +22,25 @@ export default function Navbar() {
 
   const hoverTimeout = useRef<NodeJS.Timeout | null>(null);
 
+  // ─── 1. GLOBAL LAYOUT CONTROLS FROM API ──────────────────────────
+  const [hideTickets, setHideTickets] = useState(false);
+
   useEffect(() => {
+    // ─── 2. FETCH REAL-TIME TICKETING TOGGLE VALUES ────────────────
+    async function syncNavbarControls() {
+      try {
+        const res = await fetch("/api/cms/global-settings");
+        if (res.ok) {
+          const data = await res.json();
+          // Fallback assertion syntax mapping directly to your backend object fields
+          setHideTickets(!!data.hideTickets);
+        }
+      } catch (err) {
+        console.error("[Navbar] Failed to fetch layout control flags:", err);
+      }
+    }
+    syncNavbarControls();
+
     const checkScreenSize = () => {
       const isLg = window.innerWidth >= 1024;
       setIsDesktop(isLg);
@@ -92,14 +113,14 @@ const handleMouseEnter = (label: string) => {
       <div id="ad-section" className="hidden lg:flex flex-col bg-neutral-50">
         <div className="flex justify-center px-10 py-8">
           <Link href="https://www.kajariaceramics.com/" target="_blank">
-          <div className="w-fit bg-white p-5">
-            <div className="text-[10px] text-black/40 uppercase font-bold tracking-widest">
-              Advertisement
+            <div className="w-fit bg-white p-5">
+              <div className="text-[10px] text-black/40 uppercase font-bold tracking-widest">
+                Advertisement
+              </div>
+              <div className="w-full h-[280px] flex items-center justify-center text-gray-300">
+                <Image src={cdn("/temp/ads/1.png")} alt="Ad" width={1900} height={100} className="w-full h-full object-contain" />
+              </div>
             </div>
-            <div className="w-full h-[280px] flex items-center justify-center text-gray-300">
-              <Image src={cdn("/temp/ads/1.png")} alt="Ad" width={1900} height={100} className="w-full h-full object-contain" />
-            </div>
-          </div>
           </Link>
         </div>
       </div>
@@ -122,90 +143,90 @@ const handleMouseEnter = (label: string) => {
             />
           </Link>
 
-          {/* Desktop Nav */}
+            {/* <CTABtn
+          {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center gap-10">
             <div className="flex items-center gap-10">
               {NAV_LABELS.map((label) => {
                 const isActive = pathname === NAV_DATA[label].mainHref;
-
+                
                 return (
                   <Link
                     key={label}
                     href={NAV_DATA[label].mainHref}
-                    onMouseEnter={() =>
-                      label === "2026 Edition" || label === "Ecosystem"
-                        ? handleMouseEnter(label)
-                        : null
-                    }
-                    className={`relative text-[16px] font-medium py-1 ${isActive
-                        ? "text-primary-blue"
-                        : "text-black hover:text-primary-blue"
-                      }`}
+                    onMouseEnter={() => setActiveMenu(label === "2026 Edition" || label === "Ecosystem" ? label : null)}
+                    className={`relative text-[16px] font-medium whitespace-nowrap transition-colors py-1 group ${
+                      isActive ? "text-primary-blue" : "text-black hover:text-primary-blue"
+                    }`}
                   >
                     {label}
+                    <span className={`absolute bottom-0 left-0 h-[2px] bg-primary-blue transition-all duration-300 ${
+                      isActive ? "w-full" : "w-0 group-hover:w-full"
+                    }`} />
                   </Link>
                 );
               })}
             </div>
 
-            {/* <CTABtn
+            {/* ─── 3. DESKTOP TICKET BUTTON CONDITION ──────────────── */}
+            {!hideTickets && (
+              <CTABtn
                 label="Buy Tickets"
                 iconType="arrow"
                 btnBg="transparent"
                 btnHoverBg="var(--primary-blue)"
                 textColor="black"
                 href="https://tktplz.events/gjdlb5-design-pov"
-              /> */}
+              />
+            )}
           </div>
-
-            {/* Hamburger / Cross Button */}
-            <button
-              className="lg:hidden p-2 relative z-[2101] flex items-center justify-center w-10 h-10"
-              onClick={() => setMobileOpen(!mobileOpen)}
-            >
-              <div className="relative w-6 h-6">
-                <AnimatePresence mode="wait">
-                  {mobileOpen ? (
-                    <motion.div
-                      key="close"
-                      initial={{ opacity: 1, scale: 0.95 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 1, scale: 0.95 }}
-                      transition={{ duration: 0.2, ease: "easeInOut" }}
-                      className="absolute inset-0"
-                    >
-                      <Image
-                        src={cdn("/icons/Menu-close.svg")}
-                        alt="close"
-                        fill
-                        className="object-contain"
-                      />
-                    </motion.div>
-                  ) : (
-                    <motion.div
-                      key="menu"
-                      initial={{ opacity: 1, scale: 0.95 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 1, scale: 0.95 }}
-                      transition={{ duration: 0.2, ease: "easeInOut" }}
-                      className="absolute inset-0"
-                    >
-                      <Image
-                        src={cdn("/icons/Menu.svg")}
-                        alt="menu"
-                        fill
-                        className="object-contain"
-                      />
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            </button>
-          </div>
-       
+          {/* Hamburger / Cross Button */}
+          <button
+            className="lg:hidden p-2 relative z-[2101] flex items-center justify-center w-10 h-10"
+            onClick={() => setMobileOpen(!mobileOpen)}
+          >
+            <div className="relative w-6 h-6">
+              <AnimatePresence mode="wait">
+                {mobileOpen ? (
+                  <motion.div
+                    key="close"
+                    initial={{ opacity: 1, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 1, scale: 0.95 }}
+                    transition={{ duration: 0.2, ease: "easeInOut" }}
+                    className="absolute inset-0"
+                  >
+                    <Image
+                      src={cdn("/icons/Menu-close.svg")}
+                      alt="close"
+                      fill
+                      className="object-contain"
+                    />
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="menu"
+                    initial={{ opacity: 1, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 1, scale: 0.95 }}
+                    transition={{ duration: 0.2, ease: "easeInOut" }}
+                    className="absolute inset-0"
+                  >
+                    <Image
+                      src={cdn("/icons/Menu.svg")}
+                      alt="menu"
+                      fill
+                      className="object-contain"
+                    />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </button>
+        </div>
       </header>
 
-      {isSticky && <div className="hidden lg:block h-[88px]" />}
+      {isSticky && <div className="hidden lg:block h-[88px] w-full" />}
 
       {/* 🔥 SUBMENU */}
       <div
@@ -316,7 +337,7 @@ const handleMouseEnter = (label: string) => {
                         }
                       >
                         <Image
-                          src={cdn("/icons/Menu-close.svg")} // your custom icon
+                          src={cdn("/icons/Menu-close.svg")} 
                           alt="toggle"
                           width={20}
                           height={20}
@@ -327,26 +348,26 @@ const handleMouseEnter = (label: string) => {
                     )}
                   </div>
 
-                  {(activeMenu === "2026 Edition" || activeMenu === "Ecosystem") &&
-                    <div className={` overflow-hidden transition-all duration-300 ${activeMenu === label ? "max-h-screen" : "max-h-0"}`}>
-                      {NAV_DATA[label].col1Links?.map((link) => (
-                        <Link
-                          key={link.label}
-                          href={link.href}
-                          onClick={() => {
+                  {(activeMenu === "2026 Edition" || activeMenu === "Ecosystem") &&(
+                      <div className={`overflow-hidden transition-all duration-300 ${activeMenu === label ? "max-h-screen" : "max-h-0"}`}>
+                        {NAV_DATA[label].col1Links?.map((link) => (
+                          <Link
+                            key={link.label}
+                            href={link.href}
+                            onClick={() => {
                             setMobileOpen(false);
                             setActiveMenu(null); // ✅ close submenu
                           }}
                           className={`block px-12 py-4 text-sm border-b border-black/10 ${pathname === link.href
-                              ? "text-primary-blue font-medium"
+                                ? "text-primary-blue font-medium"
                               : "text-black"
                             }`}
-                        >
-                          {link.label}
-                        </Link>
-                      ))}
-                    </div>
-                  }
+                          >
+                            {link.label}
+                          </Link>
+                        ))}
+                      </div>
+                        )}
                 </div>
               );
             })}
@@ -360,16 +381,19 @@ const handleMouseEnter = (label: string) => {
               />
             </Link>
           </div>
-
-          <div className="p-10 border-t bg-white">
-            <CTABtn
-              label="Buy Tickets"
-              iconType="arrow"
-              btnBg="var(--primary-blue)"
-              textColor="white"
-              href="https://tktplz.events/gjdlb5-design-pov"
-            />
-          </div>
+          
+          {/* ─── 5. CONDITIONAL MOBILE DRAWER CTA CONTAINER ───────── */}
+          {!hideTickets && (
+            <div className="p-10 border-t bg-white">
+              <CTABtn
+                label="Buy Tickets"
+                iconType="arrow"
+                btnBg="var(--primary-blue)"
+                textColor="white"
+                href="https://tktplz.events/gjdlb5-design-pov"
+              />
+            </div>
+          )}
         </div>
       </div>
     </nav>

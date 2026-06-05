@@ -1,5 +1,7 @@
 import Link from "next/link";
 import CmsSidebar from "@/components/cms/CmsSidebar";
+import IsHiringToggle from "@/components/cms/IsHiringToggle"; 
+import HideTicketsToggle from "@/components/cms/HideTicketsToggle"; // 👈 Imported the new separate toggle
 import { createServerClient } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
@@ -35,11 +37,22 @@ export default async function Dashboard() {
       <CmsSidebar />
 
       <main className="ml-56 p-10">
-        <div className="mb-8">
-          <p className="text-[10px] uppercase tracking-[0.3em] text-gray-400 mb-1">Overview</p>
-          <h1 className="text-2xl font-semibold text-black">Dashboard</h1>
+        
+        {/* HEADER & GLOBAL CONFIGURATION ROW */}
+        <div className="mb-8 flex flex-col md:flex-row md:items-start justify-between gap-6">
+          <div>
+            <p className="text-[10px] uppercase tracking-[0.3em] text-gray-400 mb-1">Overview</p>
+            <h1 className="text-2xl font-semibold text-black">Dashboard</h1>
+          </div>
+          
+          {/* Both toggles are clean, modular, and sit side-by-side in their own structural layout block */}
+          <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto shrink-0">
+            <IsHiringToggle />
+            <HideTicketsToggle />
+          </div>
         </div>
 
+        {/* SUBMISSIONS STATS */}
         <div className="mb-2">
           <p className="text-[10px] uppercase tracking-widest text-gray-400 mb-3">Submissions</p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
@@ -50,6 +63,7 @@ export default async function Dashboard() {
           </div>
         </div>
 
+        {/* BLOGS STATS */}
         <div className="mb-8">
           <p className="text-[10px] uppercase tracking-widest text-gray-400 mb-3">Blogs</p>
           <div className="grid grid-cols-3 gap-4">
@@ -59,6 +73,7 @@ export default async function Dashboard() {
           </div>
         </div>
 
+        {/* ACTIONS PANEL */}
         <div className="bg-white border border-black/10 p-6">
           <p className="text-[10px] uppercase tracking-widest text-gray-400 mb-4">Quick Actions</p>
           <div className="flex gap-4 flex-wrap">

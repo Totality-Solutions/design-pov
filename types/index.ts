@@ -232,3 +232,10 @@ export interface HubSpotPayload {
   email: string;
   [key: string]: string;
 }
+
+// Add this directly inside your types file under the PAGE section
+export interface Page { 
+  id: string; 
+  title: string; 
+  isHiring: boolean; // 👈 Controlled globally via the dynamic toggle switch
+}
