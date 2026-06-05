@@ -74,18 +74,22 @@ const Footer = () => {
 
   useEffect(() => {
     // 2. Fetch the module visibility flag state on mount
-    async function checkHiringStatus() {
-      try {
-        const res = await fetch("/api/cms/global-settings");
-        if (res.ok) {
-          const data = await res.json();
-          setIsHiring(!!data.isHiring);
-        }
-} catch (err) {
-  console.error("Could not sync footer hiring modules status:", err);
-  setIsHiring(false); // fallback: default to "Plan Your Visit"
-}
+async function checkHiringStatus() {
+  try {
+    const res = await fetch("/api/cms/global-settings");
+
+    if (!res.ok) {
+      throw new Error(`HTTP ${res.status}`);
     }
+
+    const data = await res.json();
+    setIsHiring(!!data.isHiring);
+
+  } catch (err) {
+    console.error("Could not sync footer hiring modules status:", err);
+    setIsHiring(false);
+  }
+}
     
     checkHiringStatus();
 
