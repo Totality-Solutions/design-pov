@@ -70,26 +70,21 @@ const Footer = () => {
   const [showHiringCard, setShowHiringCard] = useState(true);
 
   // 1. Turned isHiring into component state driven by your global configuration API
-  const [isHiring, setIsHiring] = useState<boolean | null>(null);
+  const [isHiring, setIsHiring] = useState(false);
 
   useEffect(() => {
     // 2. Fetch the module visibility flag state on mount
-async function checkHiringStatus() {
-  try {
-    const res = await fetch("/api/cms/global-settings");
-
-    if (!res.ok) {
-      throw new Error(`HTTP ${res.status}`);
+    async function checkHiringStatus() {
+      try {
+        const res = await fetch("/api/cms/global-settings");
+        if (res.ok) {
+          const data = await res.json();
+          setIsHiring(!!data.isHiring);
+        }
+      } catch (err) {
+        console.error("Could not sync footer hiring modules status:", err);
+      }
     }
-
-    const data = await res.json();
-    setIsHiring(!!data.isHiring);
-
-  } catch (err) {
-    console.error("Could not sync footer hiring modules status:", err);
-    setIsHiring(false);
-  }
-}
     
     checkHiringStatus();
 
@@ -247,8 +242,6 @@ async function checkHiringStatus() {
                 >
                   <div className="bg-black border border-white relative">
                     <div className="p-3 flex items-center justify-center">
-                      {isHiring !== null && (
-
                       <Image
                         src={isHiring ? cdn("/temp/hiring.svg") : cdn("/qr/ticket-qr.svg")}
                         alt={isHiring ? "Hiring" : "POV Index"}
@@ -256,13 +249,12 @@ async function checkHiringStatus() {
                         height={140}
                         className="w-[120px] lg:w-[140px] object-contain"
                       />
-                      )}
                     </div>
                   </div>
                 </motion.div>
                 
                 {/* 3. Action button switches functions cleanly based on synced boolean state */}
-                {isHiring !== null && (isHiring ? (
+                {isHiring ? (
                   <button
                     onClick={() => setShowContactForm(true)}
                     className="relative z-20 bg-white text-black px-5 py-3 text-[14px] font-medium flex items-center justify-between w-full hover:bg-neutral-200 transition-all"
@@ -280,7 +272,7 @@ async function checkHiringStatus() {
                     Plan Your Visit
                     <ArrowUpRight size={14} strokeWidth={1.8} />
                   </a>
-                ))}
+                )}
               </div>
 
               {/* Totality Branding */}

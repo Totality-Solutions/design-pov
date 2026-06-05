@@ -23,7 +23,7 @@ export default function Navbar() {
   const hoverTimeout = useRef<NodeJS.Timeout | null>(null);
 
   // ─── 1. GLOBAL LAYOUT CONTROLS FROM API ──────────────────────────
-  const [hideTickets, setHideTickets] = useState<boolean | null>(null);
+  const [hideTickets, setHideTickets] = useState<boolean | null>(false);
 
   useEffect(() => {
     // ─── 2. FETCH REAL-TIME TICKETING TOGGLE VALUES ────────────────
@@ -334,7 +334,7 @@ const handleMouseEnter = (label: string) => {
                       <button
                         className="p-4"
                         onClick={() =>
-                          setActiveMenu(activeMenu === label ? null : label)
+                          setActiveMenu(activeMenu === label ? "" : label)
                         }
                       >
                         <Image
