@@ -23,7 +23,7 @@ export default function Navbar() {
   const hoverTimeout = useRef<NodeJS.Timeout | null>(null);
 
   // ─── 1. GLOBAL LAYOUT CONTROLS FROM API ──────────────────────────
-  const [hideTickets, setHideTickets] = useState(false);
+  const [hideTickets, setHideTickets] = useState<boolean | null>(null);
 
   useEffect(() => {
     // ─── 2. FETCH REAL-TIME TICKETING TOGGLE VALUES ────────────────
@@ -36,8 +36,9 @@ export default function Navbar() {
           setHideTickets(!!data.hideTickets);
         }
       } catch (err) {
-        console.error("[Navbar] Failed to fetch layout control flags:", err);
-      }
+  console.error("[Navbar] Failed to fetch layout control flags:", err);
+  setHideTickets(false); // fallback: show the button if API is down
+}
     }
     syncNavbarControls();
 
@@ -169,7 +170,7 @@ const handleMouseEnter = (label: string) => {
             </div>
 
             {/* ─── 3. DESKTOP TICKET BUTTON CONDITION ──────────────── */}
-            {!hideTickets && (
+            {hideTickets === false && (
               <CTABtn
                 label="Buy Tickets"
                 iconType="arrow"
@@ -383,7 +384,7 @@ const handleMouseEnter = (label: string) => {
           </div>
           
           {/* ─── 5. CONDITIONAL MOBILE DRAWER CTA CONTAINER ───────── */}
-          {!hideTickets && (
+          {hideTickets === false && (
             <div className="p-10 border-t bg-white">
               <CTABtn
                 label="Buy Tickets"
