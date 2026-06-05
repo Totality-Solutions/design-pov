@@ -49,7 +49,7 @@ export async function GET() {
 
     const { data, error } = await supabase
       .from("settings")
-      .select("is_hiring, hide_tickets")
+      .select("is_hiring, hide_tickets,ticket_button_label, ticket_button_link")
       .eq("id", "global")
       .maybeSingle();
 
@@ -57,7 +57,9 @@ export async function GET() {
 
     return NextResponse.json({ 
       isHiring: data?.is_hiring ?? false, 
-      hideTickets: data?.hide_tickets ?? false 
+      hideTickets: data?.hide_tickets ?? false,
+      ticketButtonLabel: data?.ticket_button_label ?? "Buy Tickets",
+      ticketButtonLink: data?.ticket_button_link ?? "https://tktplz.events/gjdlb5-design-pov"
     }, { status: 200 });
   } catch (error: any) {
     console.error("[Settings GET API Error]:", error);
@@ -69,7 +71,7 @@ export async function GET() {
 export async function PUT(req: Request) {
   try {
     const body = await req.json();
-    const { isHiring, hideTickets } = body;
+    const { isHiring, hideTickets, ticketButtonLabel, ticketButtonLink } = body;
     
     const supabase = createServerClient();
     await ensureSettingsTableExists(supabase);
@@ -81,6 +83,8 @@ export async function PUT(req: Request) {
 
     if (isHiring !== undefined) updateFields.is_hiring = isHiring;
     if (hideTickets !== undefined) updateFields.hide_tickets = hideTickets;
+    if (ticketButtonLabel !== undefined) updateFields.ticket_button_label = ticketButtonLabel;
+    if (ticketButtonLink !== undefined) updateFields.ticket_button_link = ticketButtonLink;
 
     const { data, error } = await supabase
       .from("settings")

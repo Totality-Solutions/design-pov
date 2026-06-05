@@ -24,6 +24,8 @@ export default function Navbar() {
 
   // ─── 1. GLOBAL LAYOUT CONTROLS FROM API ──────────────────────────
   const [hideTickets, setHideTickets] = useState<boolean | null>(null);
+  const [ticketButtonLabel, setTicketButtonLabel] = useState<string>("Buy Tickets");
+  const [ticketButtonLink, setTicketButtonLink] = useState<string>("https://tktplz.events/gjdlb5-design-pov");
 
   useEffect(() => {
     // ─── 2. FETCH REAL-TIME TICKETING TOGGLE VALUES ────────────────
@@ -34,6 +36,8 @@ export default function Navbar() {
           const data = await res.json();
           // Fallback assertion syntax mapping directly to your backend object fields
           setHideTickets(!!data.hideTickets);
+          setTicketButtonLabel(data.ticketButtonLabel);
+          setTicketButtonLink(data.ticketButtonLink);
         }
       } catch (err) {
   console.error("[Navbar] Failed to fetch layout control flags:", err);
@@ -172,12 +176,12 @@ const handleMouseEnter = (label: string) => {
             {/* ─── 3. DESKTOP TICKET BUTTON CONDITION ──────────────── */}
             {hideTickets === false && (
               <CTABtn
-                label="Buy Tickets"
+                label={ticketButtonLabel}
                 iconType="arrow"
                 btnBg="transparent"
                 btnHoverBg="var(--primary-blue)"
                 textColor="black"
-                href="https://tktplz.events/gjdlb5-design-pov"
+                href={ticketButtonLink}
               />
             )}
           </div>
@@ -387,11 +391,11 @@ const handleMouseEnter = (label: string) => {
           {hideTickets === false && (
             <div className="p-10 border-t bg-white">
               <CTABtn
-                label="Buy Tickets"
+                label={ticketButtonLabel}
                 iconType="arrow"
                 btnBg="var(--primary-blue)"
                 textColor="white"
-                href="https://tktplz.events/gjdlb5-design-pov"
+                href={ticketButtonLink}
               />
             </div>
           )}
