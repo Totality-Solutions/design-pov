@@ -142,7 +142,7 @@ const CTAStrip = ({
             alt="3D decorative element" 
             fill 
             className="object-contain object-bottom" 
-            priority
+            loading="lazy"
           />
         </button>
       )}

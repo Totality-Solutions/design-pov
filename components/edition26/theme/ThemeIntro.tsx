@@ -34,7 +34,7 @@ export default function ThemeIntro() {
           src={cdn("/temp/theme/theme-bg.png")}
           alt="Theme Background"
           fill
-          priority
+          loading="lazy"
           className="object-cover"
         />
       </div>

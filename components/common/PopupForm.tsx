@@ -94,7 +94,7 @@ export default function PopupForm({ isOpen, onClose }: PopupFormProps) {
                     src={cdn("/logo/Logo.svg")}
                     alt="Design POV Logo"
                     fill
-                    priority
+                    loading="lazy"
                     className="object-contain"
                   />
                 </div>

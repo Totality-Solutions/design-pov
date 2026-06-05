@@ -138,7 +138,7 @@ export default function MarqueeCarousel() {
                     className={`hero-img z1 ${direction === "down" ? "exit-down" : "exit-up"}`}
                     src={reversedBlogs[prevIndex].image}
                     alt=""
-                    priority
+                    loading="lazy"
                     fill
                   />
                 )}
@@ -147,7 +147,7 @@ export default function MarqueeCarousel() {
                   className={`hero-img z2 ${direction === "down" ? "enter-down" : "enter-up"}`}
                   src={current.image}
                   alt={current.title}
-                  priority
+                  loading="lazy"
                   fill
                 />
               </div>

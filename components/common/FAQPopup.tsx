@@ -86,7 +86,7 @@ export default function FAQPopup({ isOpen, onClose, formId }: FAQPopupProps) {
                 src={cdn("/logo/Logo.svg")}
                 alt="Design POV Logo"
                 fill
-                priority
+                loading="lazy"
                 className="object-contain"
               />
             </div>

@@ -140,7 +140,7 @@ export default function ElevateGallery() {
                   src={gallery[prevIndex].image}
                   alt=""
                   fill
-                  priority
+                  loading="lazy"
                   className={`object-cover z-[1]
                   ${
                     direction === "down"
@@ -156,7 +156,7 @@ export default function ElevateGallery() {
                 src={current.image}
                 alt="Gallery Image"
                 fill
-                priority
+                loading="lazy"
                 className={`object-cover z-[2]
                 ${
                   direction === "down"

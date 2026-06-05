@@ -179,7 +179,7 @@ const ScheduleSection = () => {
             alt="Background"
             fill
             className="object-cover"
-            priority
+            loading="lazy"
           />
 
         </div>

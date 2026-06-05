@@ -80,7 +80,7 @@ export default function MagazineBase({
             src={activeBlog.image || cdn("/temp/home/blogs/blog-16.jpg")}
             alt={activeBlog.title}
             fill
-            priority
+            loading="lazy"
             className="object-cover object-top"
           />
         </div>

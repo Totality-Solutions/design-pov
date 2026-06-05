@@ -136,7 +136,7 @@ export default function FooterPopup({
                                 src={cdn("/logo/Logo.svg")}
                                 alt="Design POV Logo"
                                 fill
-                                priority
+                                loading="lazy"
                                 className="object-contain"
                             />
                         </div>

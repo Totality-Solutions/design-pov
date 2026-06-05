@@ -113,7 +113,7 @@ const DesignHero: React.FC<{}> = () => {
           src={cdn("/temp/about/about-hero.jpeg")}
           alt="Design POV"
           fill
-          priority
+          loading="lazy"
           sizes="100vw"
           className="object-cover transition-transform duration-2000 group-hover:scale-105"
         />

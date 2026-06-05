@@ -178,7 +178,7 @@ const TheThreePillars: React.FC = () => {
                     src={pillar?.image} 
                     alt={pillar?.title} 
                     fill
-                    priority={index === 0}
+                    loading="lazy"
                     className="object-cover"
                   />
                 </div>

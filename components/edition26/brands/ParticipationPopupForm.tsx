@@ -62,7 +62,7 @@ export default function ParticipationPopupForm({ onClose }: ParticipationPopupFo
       {/* LEFT SIDE (Branding) */}
       <div className="hidden lg:flex flex-col relative bg-red-600 p-10 items-center justify-center">
         <div className="relative w-60 h-32 opacity-90">
-          <Image src={cdn("/logo/Logo.svg")} alt="Logo" fill className="object-contain" priority />
+          <Image src={cdn("/logo/Logo.svg")} alt="Logo" fill className="object-contain" loading="lazy" />
         </div>
         <h2 className="mt-8 text-black text-lg font-medium uppercase tracking-widest font-['Montserrat']">
           Design Done Differently

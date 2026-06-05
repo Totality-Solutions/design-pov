@@ -129,7 +129,7 @@ export const ShowcaseModal = ({
                       alt={`${data.label} slide ${i}`}
                       fill
                       sizes="(max-width: 1024px) 100vw, 520px"
-                      priority={i === 0}
+                      loading="lazy"
                       loading={i === 0 ? "eager" : "lazy"}
                       className="object-contain lg:object-cover"
                     />

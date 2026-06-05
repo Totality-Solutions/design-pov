@@ -51,22 +51,14 @@ export default function Navbar() {
 let ticking = false;
 
 const handleScroll = () => {
-  if (!ticking) {
-    window.requestAnimationFrame(() => {
-      const adSection = document.getElementById("ad-section");
+  const adSection = document.getElementById("ad-section");
 
-      if (!adSection) {
-        setIsSticky(window.scrollY > 0);
-      } else {
-        const adBottom =
-          adSection.offsetTop + adSection.offsetHeight;
-        setIsSticky(window.scrollY >= adBottom);
-      }
-
-      ticking = false;
-    });
-
-    ticking = true;
+  if (!adSection) {
+    setIsSticky(window.scrollY > 0);
+  } else {
+    const adBottom =
+      adSection.offsetTop + adSection.offsetHeight;
+    setIsSticky(window.scrollY >= adBottom);
   }
 };
 
@@ -257,7 +249,7 @@ const handleMouseEnter = (label: string) => {
       src={data.image!}
       alt={label}
       fill
-      priority
+      loading="lazy"
       className="object-contain"
     />
   )}
