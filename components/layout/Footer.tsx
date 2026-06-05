@@ -70,7 +70,7 @@ const Footer = () => {
   const [showHiringCard, setShowHiringCard] = useState(true);
 
   // 1. Turned isHiring into component state driven by your global configuration API
-  const [isHiring, setIsHiring] = useState(false);
+  const [isHiring, setIsHiring] = useState<boolean | null>(null);
 
   useEffect(() => {
     // 2. Fetch the module visibility flag state on mount
@@ -81,9 +81,10 @@ const Footer = () => {
           const data = await res.json();
           setIsHiring(!!data.isHiring);
         }
-      } catch (err) {
-        console.error("Could not sync footer hiring modules status:", err);
-      }
+} catch (err) {
+  console.error("Could not sync footer hiring modules status:", err);
+  setIsHiring(false); // fallback: default to "Plan Your Visit"
+}
     }
     
     checkHiringStatus();
@@ -242,6 +243,8 @@ const Footer = () => {
                 >
                   <div className="bg-black border border-white relative">
                     <div className="p-3 flex items-center justify-center">
+                      {isHiring !== null && (
+
                       <Image
                         src={isHiring ? cdn("/temp/hiring.svg") : cdn("/qr/ticket-qr.svg")}
                         alt={isHiring ? "Hiring" : "POV Index"}
@@ -249,12 +252,13 @@ const Footer = () => {
                         height={140}
                         className="w-[120px] lg:w-[140px] object-contain"
                       />
+                      )}
                     </div>
                   </div>
                 </motion.div>
                 
                 {/* 3. Action button switches functions cleanly based on synced boolean state */}
-                {isHiring ? (
+                {isHiring !== null && (isHiring ? (
                   <button
                     onClick={() => setShowContactForm(true)}
                     className="relative z-20 bg-white text-black px-5 py-3 text-[14px] font-medium flex items-center justify-between w-full hover:bg-neutral-200 transition-all"
@@ -272,7 +276,7 @@ const Footer = () => {
                     Plan Your Visit
                     <ArrowUpRight size={14} strokeWidth={1.8} />
                   </a>
-                )}
+                ))}
               </div>
 
               {/* Totality Branding */}
