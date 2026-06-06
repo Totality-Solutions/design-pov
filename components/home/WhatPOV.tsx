@@ -147,11 +147,25 @@ const WhatPOV = () => {
                       }}
                     >
                       {isVideo ? (
-                        <video
-                          src={item.img as string}
-                          autoPlay loop muted playsInline
-                          className="absolute inset-0 w-full h-full object-cover"
-                        />
+                        isMobileOrTab ? (
+                          <Image
+                            src={(item.img as string).replace(/\.(mp4|webm|ogg)$/i, ".jpg")}
+                            alt={item.title}
+                            fill
+                            className="object-cover"
+                            sizes="50vw"
+                          />
+                        ) : (
+                          <video
+                            src={item.img as string}
+                            autoPlay
+                            loop
+                            muted
+                            playsInline
+                            preload="metadata"
+                            className="absolute inset-0 w-full h-full object-cover"
+                          />
+                        )
                       ) : (
                         <Image
                           src={item.img}

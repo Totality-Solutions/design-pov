@@ -123,9 +123,9 @@ const Footer = () => {
     <div className="!px-0 border-t border-black/10">
       <motion.footer
         ref={containerRef}
-        onMouseMove={handleMouseMove}
+        onMouseMove={isMobile ? undefined : handleMouseMove}
         animate={{
-          backgroundColor: isPastHalfway ? "#000000" : "#ffffff",
+          backgroundColor: isMobile || isPastHalfway ? "#000000" : "#ffffff",
         }}
         transition={{
           duration: 0.5,
@@ -138,8 +138,24 @@ const Footer = () => {
         }}
       >
         {/* LAYER 1: FLARES */}
+        <div className="absolute inset-0 z-10 flex md:hidden pointer-events-none overflow-hidden opacity-35">
+          {[navLinks.Partners.img, navLinks.AboutUs.img, navLinks.Originals.img].map((imageSrc, index) => (
+            <img
+              key={imageSrc}
+              src={imageSrc}
+              alt=""
+              className="absolute h-auto w-[520px] max-w-none object-contain blur-[10px]"
+              style={{
+                top: index === 1 ? "22%" : index === 2 ? "46%" : "-8%",
+                left: index === 1 ? "22%" : index === 2 ? "-30%" : "-45%",
+                opacity: index === 1 ? 0.55 : 0.4,
+              }}
+            />
+          ))}
+        </div>
+
         <div
-          className="absolute inset-0 z-10 flex justify-end pointer-events-none overflow-hidden"
+          className="absolute inset-0 z-10 hidden md:flex justify-end pointer-events-none overflow-hidden"
           style={{ paddingLeft: "var(--footer-px)" }}
         >
           <div className="flex h-full" style={{ gap: "var(--footer-gap-links)" }}>
@@ -165,7 +181,7 @@ const Footer = () => {
 
         {/* MAIN CONTENT */}
         <div
-          className="relative z-20 w-full lg:py-12 py-4 h-full flex flex-col justify-between mix-blend-difference "
+          className="relative z-20 w-full lg:py-12 py-4 h-full flex flex-col justify-between md:mix-blend-difference"
           style={{
             paddingLeft: "var(--footer-px)",
           }}

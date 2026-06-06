@@ -15,6 +15,7 @@ import SectionHeading from "../common/SectionHeading";
 type DesignerMedia = {
   src: StaticImageData | string;
   type?: "image" | "video";
+  poster?: StaticImageData | string;
   name: string;
   link: string;
 };
@@ -37,8 +38,14 @@ const GRID_POSITIONS = [
 ];
 
 // ─── Media Cell ─────────────────────────
-function MediaCell({ src, type }: any) {
+function MediaCell({ src, type, poster, isMobile }: any) {
   if (type === "video") {
+    if (isMobile && poster) {
+      return (
+        <Image src={poster} alt="" fill sizes="100vw" style={{ objectFit: "cover" }} />
+      );
+    }
+
     return (
       <video
         src={src}
@@ -47,7 +54,7 @@ function MediaCell({ src, type }: any) {
         muted
         loop
         playsInline
-        preload="none"
+        preload="metadata"
         style={{ width: "100%", height: "100%", objectFit: "cover" }}
       />
     );
@@ -116,7 +123,12 @@ function DesignerTile({
           transition={{ duration: 0.1 }}
           style={{ position: "absolute", inset: 0 }}
         >
-          <MediaCell src={currentMedia.src} type={currentMedia.type} />
+          <MediaCell
+            src={currentMedia.src}
+            type={currentMedia.type}
+            poster={currentMedia.poster}
+            isMobile={isMobile}
+          />
         </motion.div>
       </AnimatePresence>
 
@@ -155,7 +167,7 @@ function DesignerTile({
 const designers: Designer[] = [
   { id: 1, media: [{ src: cdn("/temp/home/core/ADND.jpg"), name: "ADND", link: "/edition/core?designer=01" }, { src: cdn("/temp/home/core/ALARA STUDIO.jpg"), name: "Alara Studio", link: "/edition/core?designer=02" }] },
   { id: 2, media: [{ src: cdn("/temp/home/core/Abin.jpg"), name: "Abin Design Studio", link: "/edition/core?designer=03" }, { src: cdn("/temp/home/core/BALDIWALA EDGE.jpg"), name: "Baldiwala Edge", link: "/edition/core?designer=04" }] },
-  { id: 3, media: [{ src: video1, type: "video", name: "Arjun Sharma", link: "/edition/core" }] },
+  { id: 3, media: [{ src: video1, type: "video", poster: cdn("/temp/home/core/ADND.jpg"), name: "Arjun Sharma", link: "/edition/core" }] },
   { id: 4, media: [{ src: cdn("/temp/home/core/CITYSPACE.png"), name: "Cityspace’82 Architects", link: "/edition/core?designer=05" }, { src: cdn("/temp/home/core/DESIGN HEX.jpg"), name: "Design Hex", link: "/edition/core?designer=06" }] },
   { id: 5, media: [{ src: cdn("/temp/home/core/DSP DESIGN.jpg"), name: "DSP Design", link: "/edition/core?designer=07" }, { src: cdn("/temp/home/core/JANNAT VASI.jpg"), name: "Jannat Vasi Design", link: "/edition/core?designer=08" }] },
   { id: 6, media: [{ src: cdn("/temp/home/core/NA ARCHITECT.jpg"), name: "NA Architects", link: "/edition/core?designer=09" }, { src: cdn("/temp/home/core/POONAM AKASH.jpg"), name: "Poonam Akash", link: "/edition/core?designer=10" }] },

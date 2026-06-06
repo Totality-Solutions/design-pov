@@ -9,10 +9,20 @@ import Image from "next/image";
 export default function Hero() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
+  const mobileHeroPoster = cdn("/temp/home/section2/1.jpg");
 
   const [isPlaying, setIsPlaying] = useState(true);
   const [isMuted, setIsMuted] = useState(true);
   const [manuallyPaused, setManuallyPaused] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [mobileVideoEnabled, setMobileVideoEnabled] = useState(false);
+
+  useEffect(() => {
+    const checkViewport = () => setIsMobile(window.innerWidth < 768);
+    checkViewport();
+    window.addEventListener("resize", checkViewport);
+    return () => window.removeEventListener("resize", checkViewport);
+  }, []);
 
   // Manual Play/Pause
   const togglePlay = () => {
@@ -43,6 +53,7 @@ export default function Hero() {
 
   // Auto play/pause based on viewport visibility
   useEffect(() => {
+    if (isMobile) return;
     if (!sectionRef.current || !videoRef.current) return;
 
     const video = videoRef.current;
@@ -87,7 +98,7 @@ export default function Hero() {
     observer.observe(sectionRef.current);
 
     return () => observer.disconnect();
-  }, [manuallyPaused]);
+  }, [manuallyPaused, isMobile]);
 
   return (
     <Container className="w-full overflow-hidden lg:max-w-none px-0 pt-20 ">
@@ -104,20 +115,47 @@ export default function Hero() {
           overflow-hidden
         "
       >
-        {/* Video */}
-        <video
-          ref={videoRef}
-          src={cdn("/video/POV ad 1.mp4")}
-          preload="none"
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover"
-        />
+        {isMobile && !mobileVideoEnabled ? (
+          <button
+            type="button"
+            onClick={() => setMobileVideoEnabled(true)}
+            className="absolute inset-0 group/mobile-hero bg-black"
+            aria-label="Play Design POV hero video"
+          >
+            <Image
+              src={mobileHeroPoster}
+              alt="Design POV"
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover opacity-90"
+            />
+            <div className="absolute inset-0 bg-black/20" />
+            <div className="absolute left-6 bottom-6 flex items-center gap-3 text-white">
+              <span className="flex h-11 w-11 items-center justify-center rounded-full border border-white/70 bg-black/30 text-sm backdrop-blur-sm transition-transform group-hover/mobile-hero:scale-105">
+                ▶
+              </span>
+              <span className="text-[11px] uppercase tracking-[0.22em]">
+                Play Film
+              </span>
+            </div>
+          </button>
+        ) : (
+          <video
+            ref={videoRef}
+            src={cdn("/video/POV ad 1.mp4")}
+            poster={isMobile ? mobileHeroPoster : undefined}
+            preload={isMobile ? "none" : "metadata"}
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+        )}
 
         {/* Video Controls */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        {!isMobile && <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           <div className="flex items-center gap-3 bg-white backdrop-blur-md px-5 py-2 rounded-full border border-zinc-300">
             
             {/* Play/Pause */}
@@ -156,7 +194,7 @@ export default function Hero() {
               />
             </button>
           </div>
-        </div>
+        </div>}
 
         {/* Desktop CTA */}
         {/* <div className="hidden sm:block absolute z-10 mb-8 mr-5 bottom-0 right-0">
