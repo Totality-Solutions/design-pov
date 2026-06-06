@@ -81,6 +81,8 @@ const HomeSponsors: React.FC = () => {
                 <img
                   src={partner.logo}
                   alt={partner.name}
+                  loading="lazy"
+                  decoding="async"
                   className="max-w-full max-h-full object-contain scale-95 transition-all px-[8px] pt-[8px] duration-500"
                 />
               </Link>

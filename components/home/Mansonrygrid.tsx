@@ -22,6 +22,7 @@ function Cell({
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isMobile, setIsMobile] = useState(false);
+  const [shouldLoadVideo, setShouldLoadVideo] = useState(false);
 
   useEffect(() => {
     const checkViewport = () => setIsMobile(window.innerWidth < 768);
@@ -35,10 +36,14 @@ function Cell({
     const video = videoRef.current;
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) video.play().catch(() => {});
-        else video.pause();
+        if (entry.isIntersecting) {
+          setShouldLoadVideo(true);
+          requestAnimationFrame(() => video.play().catch(() => {}));
+        } else {
+          video.pause();
+        }
       },
-      { threshold: 0.1 }
+      { rootMargin: "200px 0px", threshold: 0.1 }
     );
     observer.observe(video);
     return () => observer.disconnect();
@@ -56,8 +61,8 @@ function Cell({
     return (
       <video
         ref={videoRef}
-        src={src}
-        preload="metadata"
+        src={shouldLoadVideo ? src : undefined}
+        preload="none"
         muted
         loop
         playsInline
@@ -130,13 +135,14 @@ const MasonryGrid = forwardRef<HTMLDivElement, MasonryGridProps>(
                 className="flex h-full transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]"
                 style={{ transform: `translateX(-${activeSlide * 100}%)` }}
               >
-                {THEME_CAROUSEL_SLIDES.map((slide) => (
+                {THEME_CAROUSEL_SLIDES.map((slide, index) => (
                   <div key={slide.src} className="relative h-full w-full shrink-0">
                     <Image
                       src={slide.src}
                       alt={slide.alt}
                       fill
                       sizes="100vw"
+                      loading={activeSlide === index ? "eager" : "lazy"}
                       className="object-cover"
                     />
                     <div className="absolute inset-0 bg-black/10" />

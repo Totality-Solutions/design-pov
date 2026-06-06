@@ -11,6 +11,7 @@ const ClientLogo = () => {
   const [Client, setClient]       = useState<{ src: string; alt: string }[]>([]);
   const trackRef      = useRef<HTMLDivElement>(null);
   const firstGroupRef = useRef<HTMLDivElement>(null);
+  const [isInView, setIsInView] = useState(true);
 
   useEffect(() => {
     fetch("/api/cms/brand-partners")
@@ -50,6 +51,19 @@ const ClientLogo = () => {
     return () => window.removeEventListener("resize", measure);
   }, [Client]);
 
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsInView(entry.isIntersecting),
+      { rootMargin: "120px 0px", threshold: 0.01 }
+    );
+
+    observer.observe(track);
+    return () => observer.disconnect();
+  }, [Client.length]);
+
   if (!Client.length) return null;
 
   return (
@@ -68,13 +82,22 @@ const ClientLogo = () => {
           />
         </div>
         <div className="overflow-hidden flex-1 min-w-0 w-full">
-          <div ref={trackRef} className="marquee-track py-6">
+          <div
+            ref={trackRef}
+            className="marquee-track py-6"
+            style={{
+              animationPlayState: isInView ? "running" : "paused",
+              willChange: isInView ? "transform" : "auto",
+            }}
+          >
             <div ref={firstGroupRef} className="flex gap-8 pr-8">
               {Client.map((logo, i) => (
                 <img
                   key={i}
                   src={logo.src}
                   alt={logo.alt}
+                  loading="lazy"
+                  decoding="async"
                   className="h-12 w-auto object-contain shrink-0"
                   draggable={false}
                 />
@@ -86,6 +109,8 @@ const ClientLogo = () => {
                   key={i}
                   src={logo.src}
                   alt={logo.alt}
+                  loading="lazy"
+                  decoding="async"
                   className="h-12 w-auto object-contain shrink-0"
                   draggable={false}
                 />

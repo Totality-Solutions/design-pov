@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import CTABtn from "./CTABtn";
 
@@ -47,8 +47,10 @@ const CTAStrip = ({
   floatingImageHeight = 160,
   className = "",
 }: CTAProps) => {
+  const sectionRef = useRef<HTMLElement>(null);
   const [isHovered, setIsHovered] = useState(false);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
+  const [shouldLoadBgVideo, setShouldLoadBgVideo] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
@@ -61,6 +63,22 @@ const CTAStrip = ({
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  useEffect(() => {
+    if (!bgVideo) return;
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) setShouldLoadBgVideo(true);
+      },
+      { rootMargin: "200px 0px", threshold: 0.01 }
+    );
+
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, [bgVideo]);
 
   const handleMouseEnter = () => {
     if (!isTouchDevice) setIsHovered(true);
@@ -88,6 +106,7 @@ const CTAStrip = ({
 
   return (
     <section
+      ref={sectionRef}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       className={`relative w-full overflow-visible transition-colors duration-500 ease-in-out ${className}`}
@@ -103,7 +122,7 @@ const CTAStrip = ({
           {bgImage && <Image src={bgImage} alt="" fill sizes="100vw" className="object-cover" />}
           {bgVideo && (
             <video
-              src={bgVideo}
+              src={shouldLoadBgVideo ? bgVideo : undefined}
               autoPlay
               loop
               muted

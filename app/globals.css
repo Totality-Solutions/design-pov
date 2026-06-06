@@ -570,7 +570,6 @@ a {
   width: max-content;
   flex-shrink: 0;
   animation: marquee 60s linear infinite;
-  will-change: transform;
 }
 
 /* Each set of logos — gap between items + padding-right creates a trailing gap
@@ -630,7 +629,6 @@ a {
   height: 100%;
   object-fit: cover;
   object-position: top;
-  will-change: transform, opacity;
 }
 
 .hero-img.z2 {
@@ -642,18 +640,22 @@ a {
 }
 
 .hero-img.enter-down {
+  will-change: transform, opacity;
   animation: heroEnterDown 0.82s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .hero-img.enter-up {
+  will-change: transform, opacity;
   animation: heroEnterUp 0.82s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .hero-img.exit-down {
+  will-change: transform, opacity;
   animation: heroExitDown 0.6s cubic-bezier(0.4, 0, 1, 1) forwards;
 }
 
 .hero-img.exit-up {
+  will-change: transform, opacity;
   animation: heroExitUp 0.6s cubic-bezier(0.4, 0, 1, 1) forwards;
 }
 

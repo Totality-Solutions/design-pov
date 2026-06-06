@@ -1,5 +1,5 @@
 'use client'
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import Image from 'next/image'
 
 interface MediaRendererProps {
@@ -11,6 +11,7 @@ interface MediaRendererProps {
 export const MediaRenderer = ({ src, alt = "", className = "" }: MediaRendererProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const isVideo = /\.(mp4|webm|ogg)$/i.test(src);
+  const [shouldLoadVideo, setShouldLoadVideo] = useState(false);
 
   useEffect(() => {
     if (!isVideo || !videoRef.current) return;
@@ -18,12 +19,13 @@ export const MediaRenderer = ({ src, alt = "", className = "" }: MediaRendererPr
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          video.play().catch(() => {});
+          setShouldLoadVideo(true);
+          requestAnimationFrame(() => video.play().catch(() => {}));
         } else {
           video.pause();
         }
       },
-      { threshold: 0.1 }
+      { rootMargin: "200px 0px", threshold: 0.1 }
     );
     observer.observe(video);
     return () => observer.disconnect();
@@ -33,7 +35,7 @@ export const MediaRenderer = ({ src, alt = "", className = "" }: MediaRendererPr
     return (
       <video
         ref={videoRef}
-        src={src}
+        src={shouldLoadVideo ? src : undefined}
         preload="none"
         loop
         muted
@@ -49,6 +51,7 @@ export const MediaRenderer = ({ src, alt = "", className = "" }: MediaRendererPr
       alt={alt}
       fill
       sizes="(max-width: 768px) 100vw, 50vw"
+      loading="lazy"
       className={`object-cover ${className}`}
     />
   );

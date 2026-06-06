@@ -37,6 +37,9 @@ export default function MarqueeFlow<T>({
   const speedRef = useRef(speed);
   const lastTsRef = useRef(0);
   const pausedRef = useRef(false);
+  const inViewRef = useRef(true);
+  const pageVisibleRef = useRef(true);
+  const reduceMotionRef = useRef(false);
   const pauseTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const expandedIndexRef = useRef(0);
   const onExpandChangeRef = useRef(onExpandChange);
@@ -45,6 +48,35 @@ export default function MarqueeFlow<T>({
   const [visibleCount, setVisibleCount] = useState(desktopCount);
   const [activeGap, setActiveGap] = useState(gap);
   const [itemWidth, setItemWidth] = useState(0);
+
+  useEffect(() => {
+    reduceMotionRef.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    pageVisibleRef.current = document.visibilityState === "visible";
+
+    const container = containerRef.current;
+    const observer = container
+      ? new IntersectionObserver(
+          ([entry]) => {
+            inViewRef.current = entry.isIntersecting;
+            if (entry.isIntersecting) lastTsRef.current = 0;
+          },
+          { rootMargin: "120px 0px" }
+        )
+      : null;
+
+    if (container && observer) observer.observe(container);
+
+    const handleVisibility = () => {
+      pageVisibleRef.current = document.visibilityState === "visible";
+      lastTsRef.current = 0;
+    };
+
+    document.addEventListener("visibilitychange", handleVisibility);
+    return () => {
+      observer?.disconnect();
+      document.removeEventListener("visibilitychange", handleVisibility);
+    };
+  }, []);
 
   // Responsive visible count
   useEffect(() => {
@@ -102,7 +134,13 @@ export default function MarqueeFlow<T>({
       const dt = lastTsRef.current ? (now - lastTsRef.current) / 1000 : 0;
       lastTsRef.current = now;
 
-      if (pausedRef.current || !dt) return;
+      if (
+        pausedRef.current ||
+        !inViewRef.current ||
+        !pageVisibleRef.current ||
+        reduceMotionRef.current ||
+        !dt
+      ) return;
 
       const iw = itemWidthRef.current;
       const g  = gapRef.current;

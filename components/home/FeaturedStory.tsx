@@ -21,7 +21,9 @@ export default function MarqueeCarousel() {
   const [textKey, setTextKey] = useState(0);
   const [direction, setDirection] = useState<"up" | "down">("down");
   const [isHovered, setIsHovered] = useState(false);
+  const [isInView, setIsInView] = useState(true);
 
+  const rootRef = useRef<HTMLDivElement>(null);
   const carouselRef = useRef<HTMLDivElement>(null);
   const autoRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -66,12 +68,33 @@ export default function MarqueeCarousel() {
   }, [activeIndex, goTo, reversedBlogs.length]);
 
   useEffect(() => {
-    if (!reversedBlogs.length) return;
+    const root = rootRef.current;
+    if (!root) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsInView(entry.isIntersecting && document.visibilityState === "visible"),
+      { rootMargin: "160px 0px", threshold: 0.01 }
+    );
+
+    const handleVisibility = () => {
+      setIsInView(document.visibilityState === "visible");
+    };
+
+    observer.observe(root);
+    document.addEventListener("visibilitychange", handleVisibility);
+    return () => {
+      observer.disconnect();
+      document.removeEventListener("visibilitychange", handleVisibility);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!reversedBlogs.length || !isInView) return;
     autoRef.current = setTimeout(next, 4000);
     return () => {
       if (autoRef.current) clearTimeout(autoRef.current);
     };
-  }, [next, reversedBlogs.length]);
+  }, [next, reversedBlogs.length, isInView]);
 
   // Scroll active thumbnail into view
   useEffect(() => {
@@ -112,11 +135,12 @@ export default function MarqueeCarousel() {
   const current = reversedBlogs[activeIndex];
 
   return (
-    <Container
-      className=""
+    <div
+      ref={rootRef}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
+    <Container className="">
       <SectionHeading
         titleMain="Magazine"
         sticky={false}
@@ -209,5 +233,6 @@ export default function MarqueeCarousel() {
         </div>
       </Section>
     </Container>
+    </div>
   );
 }

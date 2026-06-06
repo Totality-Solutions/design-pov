@@ -38,6 +38,45 @@ const GRID_POSITIONS = [
 ];
 
 // ─── Media Cell ─────────────────────────
+function LazyDesignerVideo({ src }: { src: string }) {
+  const videoRef = React.useRef<HTMLVideoElement>(null);
+  const [shouldLoad, setShouldLoad] = useState(false);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setShouldLoad(true);
+          requestAnimationFrame(() => video.play().catch(() => {}));
+        } else {
+          video.pause();
+        }
+      },
+      { rootMargin: "200px 0px", threshold: 0.1 }
+    );
+
+    observer.observe(video);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <video
+      ref={videoRef}
+      src={shouldLoad ? src : undefined}
+      aria-label="video"
+      autoPlay
+      muted
+      loop
+      playsInline
+      preload="none"
+      style={{ width: "100%", height: "100%", objectFit: "cover" }}
+    />
+  );
+}
+
 function MediaCell({ src, type, poster, isMobile }: any) {
   if (type === "video") {
     if (isMobile && poster) {
@@ -46,18 +85,7 @@ function MediaCell({ src, type, poster, isMobile }: any) {
       );
     }
 
-    return (
-      <video
-        src={src}
-        aria-label="video"
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="metadata"
-        style={{ width: "100%", height: "100%", objectFit: "cover" }}
-      />
-    );
+    return <LazyDesignerVideo src={src} />;
   }
   return (
     <Image src={src} alt="" fill sizes="(max-width: 1024px) 100vw, 33vw" style={{ objectFit: "cover" }} />
@@ -71,11 +99,12 @@ function DesignerTile({
   isFeatured,
   isMobile,
   isActiveSlide,
+  shouldAnimate = true,
 }: any) {
   const [mediaIndex, setMediaIndex] = useState(0);
   const [paused, setPaused] = useState(false);
 
-  const shouldCycle = isMobile ? !isActiveSlide : !paused;
+  const shouldCycle = shouldAnimate && (isMobile ? !isActiveSlide : !paused);
 
   useEffect(() => {
     if (!shouldCycle) return;
@@ -178,8 +207,10 @@ const designers: Designer[] = [
 
 // ─── Main Component ─────────────────────────
 export default function FeaturedDesigners() {
+  const sectionRef = React.useRef<HTMLDivElement>(null);
   const [isMobile, setIsMobile] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const [isInView, setIsInView] = useState(true);
 
   const baseSlots = designers;
   const loopedSlots = [...baseSlots, ...baseSlots, ...baseSlots];
@@ -193,12 +224,33 @@ export default function FeaturedDesigners() {
   }, []);
 
   useEffect(() => {
-    if (!isMobile) return;
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsInView(entry.isIntersecting && document.visibilityState === "visible"),
+      { rootMargin: "160px 0px", threshold: 0.01 }
+    );
+
+    const handleVisibility = () => {
+      setIsInView(document.visibilityState === "visible");
+    };
+
+    observer.observe(section);
+    document.addEventListener("visibilitychange", handleVisibility);
+    return () => {
+      observer.disconnect();
+      document.removeEventListener("visibilitychange", handleVisibility);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isMobile || !isInView) return;
     const interval = setInterval(() => {
       setActiveIndex((prev) => prev + 1);
     }, 5000);
     return () => clearInterval(interval);
-  }, [isMobile]);
+  }, [isMobile, isInView]);
 
   useEffect(() => {
     if (!isMobile) return;
@@ -209,6 +261,7 @@ export default function FeaturedDesigners() {
 
   return (
     <div  
+      ref={sectionRef}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       className="pt-6 lg:pt-0"
@@ -238,6 +291,7 @@ export default function FeaturedDesigners() {
                   isFeatured={i === 2}
                   gridPos={GRID_POSITIONS[i]}
                   isMobile={false}
+                  shouldAnimate={isInView}
                 />
               ))}
             </div>
@@ -271,6 +325,7 @@ export default function FeaturedDesigners() {
                       designer={d}
                       isMobile={true}
                       isActiveSlide={i === activeIndex}
+                      shouldAnimate={isInView}
                     />
                   </div>
                 ))}

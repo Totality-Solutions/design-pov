@@ -74,6 +74,44 @@ function WordReveal({ text, progress, range, isStatic }: any) {
   )
 }
 
+function LazyMarqueeVideo({ src }: { src: string }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [shouldLoad, setShouldLoad] = useState(false);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setShouldLoad(true);
+          requestAnimationFrame(() => video.play().catch(() => {}));
+        } else {
+          video.pause();
+        }
+      },
+      { rootMargin: "200px 0px", threshold: 0.05 }
+    );
+
+    observer.observe(video);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <video
+      ref={videoRef}
+      src={shouldLoad ? src : undefined}
+      autoPlay
+      loop
+      muted
+      playsInline
+      preload="none"
+      className="absolute inset-0 w-full h-full object-cover"
+    />
+  );
+}
+
 const WhatPOV = () => {
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const [isMobileOrTab, setIsMobileOrTab] = useState(false)
@@ -156,15 +194,7 @@ const WhatPOV = () => {
                             sizes="50vw"
                           />
                         ) : (
-                          <video
-                            src={item.img as string}
-                            autoPlay
-                            loop
-                            muted
-                            playsInline
-                            preload="metadata"
-                            className="absolute inset-0 w-full h-full object-cover"
-                          />
+                          <LazyMarqueeVideo src={item.img as string} />
                         )
                       ) : (
                         <Image
