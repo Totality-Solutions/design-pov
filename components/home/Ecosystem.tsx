@@ -1,6 +1,6 @@
 ﻿"use client"
 
-import React, { useState, useRef } from 'react'
+import React, { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Section from '../common/Section'
 import { Container } from '../common/Container'
@@ -103,6 +103,14 @@ const ECOSYSTEM: EcosystemItem[] = [
 const EcosystemSection = () => {
   const [activeId, setActiveId] = useState<string>('core')
   const [isHovered, setIsHovered] = useState(false)
+  const [isMobileViewport, setIsMobileViewport] = useState(true)
+
+  useEffect(() => {
+    const checkViewport = () => setIsMobileViewport(window.innerWidth < 768)
+    checkViewport()
+    window.addEventListener('resize', checkViewport)
+    return () => window.removeEventListener('resize', checkViewport)
+  }, [])
 
   return (
     <div
@@ -119,6 +127,7 @@ const EcosystemSection = () => {
       <Section className="!py-0 lg:!pb-8 !px-0 lg:!px-10">
         <Container>
           {/* ───────── DESKTOP (Accordion) ───────── */}
+          {!isMobileViewport && (
           <div
             className="hidden md:flex"
             style={{
@@ -157,6 +166,8 @@ const EcosystemSection = () => {
                   <motion.img
                     src={item.bgImage}
                     alt={item.title}
+                    loading="lazy"
+                    decoding="async"
                     animate={{ opacity: isActive ? 0.3 : 0 }}
                     transition={{ duration: 0.4 }}
                     style={{
@@ -323,8 +334,10 @@ const EcosystemSection = () => {
               )
             })}
           </div>
+          )}
 
           {/* ───────── MOBILE (Stacked) ───────── */}
+          {isMobileViewport && (
           <div className="md:hidden ">
   {ECOSYSTEM.map((item) => {
     const isActive = activeId === item.id
@@ -341,23 +354,28 @@ const EcosystemSection = () => {
         }}
       >
         {/* Background Image */}
-        <motion.img
-          src={item.bgImage}
-          alt={item.title}
-          animate={{
-            opacity: isActive ? 0.35 : 0,
-            scale: isActive ? 1 : 1.08,
-          }}
-          transition={{ duration: 0.4 }}
-          style={{
-            position: 'absolute',
-            inset: 0,
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            pointerEvents: 'none',
-          }}
-        />
+        {isActive && (
+          <motion.img
+            src={item.bgImage}
+            alt={item.title}
+            loading="lazy"
+            decoding="async"
+            initial={{ opacity: 0.35, scale: 1 }}
+            animate={{
+              opacity: 0.35,
+              scale: 1,
+            }}
+            transition={{ duration: 0.4 }}
+            style={{
+              position: 'absolute',
+              inset: 0,
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              pointerEvents: 'none',
+            }}
+          />
+        )}
 
         {/* Dark Overlay */}
         <div
@@ -421,6 +439,7 @@ const EcosystemSection = () => {
     )
   })}
 </div>
+          )}
         </Container>
       </Section>
 

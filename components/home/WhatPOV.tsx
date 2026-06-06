@@ -114,7 +114,7 @@ function LazyMarqueeVideo({ src }: { src: string }) {
 
 const WhatPOV = () => {
   const scrollContainerRef = useRef<HTMLDivElement>(null)
-  const [isMobileOrTab, setIsMobileOrTab] = useState(false)
+  const [isMobileOrTab, setIsMobileOrTab] = useState(true)
   const [expandedIndex, setExpandedIndex] = useState(0)
 
   useEffect(() => {

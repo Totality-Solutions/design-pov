@@ -14,7 +14,7 @@ export default function Hero() {
   const [isPlaying, setIsPlaying] = useState(true);
   const [isMuted, setIsMuted] = useState(true);
   const [manuallyPaused, setManuallyPaused] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(true);
   const [mobileVideoEnabled, setMobileVideoEnabled] = useState(false);
 
   useEffect(() => {

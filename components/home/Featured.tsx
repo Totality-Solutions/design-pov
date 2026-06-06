@@ -208,13 +208,17 @@ const designers: Designer[] = [
 // ─── Main Component ─────────────────────────
 export default function FeaturedDesigners() {
   const sectionRef = React.useRef<HTMLDivElement>(null);
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(true);
   const [isHovered, setIsHovered] = useState(false);
   const [isInView, setIsInView] = useState(true);
 
   const baseSlots = designers;
   const loopedSlots = [...baseSlots, ...baseSlots, ...baseSlots];
   const [activeIndex, setActiveIndex] = useState(baseSlots.length);
+  const shouldMountMobileSlide = (index: number) => {
+    const distance = Math.abs(index - activeIndex);
+    return distance <= 2 || distance >= loopedSlots.length - 2;
+  };
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 1024);
@@ -321,12 +325,16 @@ export default function FeaturedDesigners() {
                       flex: "0 0 100%",
                     }}
                   >
-                    <DesignerTile
-                      designer={d}
-                      isMobile={true}
-                      isActiveSlide={i === activeIndex}
-                      shouldAnimate={isInView}
-                    />
+                    {shouldMountMobileSlide(i) ? (
+                      <DesignerTile
+                        designer={d}
+                        isMobile={true}
+                        isActiveSlide={i === activeIndex}
+                        shouldAnimate={isInView}
+                      />
+                    ) : (
+                      <div style={{ width: "100%", height: "350px", background: "#0a0a0a" }} />
+                    )}
                   </div>
                 ))}
               </div>

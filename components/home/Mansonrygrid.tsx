@@ -21,7 +21,7 @@ function Cell({
   poster?: string;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(true);
   const [shouldLoadVideo, setShouldLoadVideo] = useState(false);
 
   useEffect(() => {
@@ -108,7 +108,7 @@ const THEME_CAROUSEL_SLIDES = [
 
 const MasonryGrid = forwardRef<HTMLDivElement, MasonryGridProps>(
   ({ y }, ref) => {
-    const [isMobile, setIsMobile] = useState(false);
+    const [isMobile, setIsMobile] = useState(true);
     const [activeSlide, setActiveSlide] = useState(0);
 
     useEffect(() => {

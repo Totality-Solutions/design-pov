@@ -8,7 +8,7 @@ const Theme = () => {
   const containerRef = useRef<HTMLDivElement>(null)
   const gridRef = useRef<HTMLDivElement>(null)
   const [scrollRange, setScrollRange] = useState(1200)
-  const [isMobile, setIsMobile] = useState(false)
+  const [isMobile, setIsMobile] = useState(true)
 
   useEffect(() => {
     const measure = () => {
