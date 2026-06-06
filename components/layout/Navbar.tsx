@@ -30,9 +30,10 @@ export default function Navbar() {
     async function syncNavbarControls() {
       try {
         const res = await fetch("/api/cms/global-settings");
-        if (res.ok) {
+        const contentType = res.headers.get("content-type") || "";
+
+        if (res.ok && contentType.includes("application/json")) {
           const data = await res.json();
-          // Fallback assertion syntax mapping directly to your backend object fields
           setHideTickets(!!data.hideTickets);
         }
       } catch (err) {
