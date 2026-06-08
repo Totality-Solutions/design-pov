@@ -45,9 +45,9 @@ export default async function HomePage() {
       <DeferredRender minHeight="620px">
         <FeaturedStory />
       </DeferredRender>
-      <DeferredRender minHeight="220px">
+      {/* <DeferredRender minHeight="220px"> */}
         <ShowDeckCTA />
-      </DeferredRender>
+      {/* </DeferredRender> */}
       <DeferredRender minHeight="180px">
         <ClientLogo />
       </DeferredRender>

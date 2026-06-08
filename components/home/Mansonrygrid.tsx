@@ -62,10 +62,10 @@ function Cell({
       <video
         ref={videoRef}
         src={shouldLoadVideo ? src : undefined}
-        preload="none"
         muted
         loop
         playsInline
+        preload="metadata" 
         className="w-full h-full object-cover"
       />
     );

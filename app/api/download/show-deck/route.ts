@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { cdn } from "@/lib/cdn";
 
-const SHOW_DECK_PDF = cdn("/pdf/POV '25 Show Deck.pdf");
+const SHOW_DECK_PDF = cdn("/pdf/DESIGNPOV2027SHOWDECK.pdf");
 
 export async function GET() {
   const response = await fetch(SHOW_DECK_PDF);

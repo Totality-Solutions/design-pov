@@ -36,7 +36,7 @@ export const MediaRenderer = ({ src, alt = "", className = "" }: MediaRendererPr
       <video
         ref={videoRef}
         src={shouldLoadVideo ? src : undefined}
-        preload="none"
+        preload="metadata" 
         loop
         muted
         playsInline

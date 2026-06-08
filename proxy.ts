@@ -11,7 +11,7 @@ const PUBLIC_API_ROUTES = new Set([
   "/api/cms/global-settings",
 ]);
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Public routes — never block these

@@ -62,6 +62,7 @@ const EcosystemSection = () => {
                     loop
                     muted
                     playsInline
+                    preload="metadata" 
                     className="absolute inset-0 w-full h-full object-contain will-change-transform"
                     style={{
                       transform: isExpanded ? 'translate3d(0,0,0) scale(1.15)' : 'translate3d(0,0,0) scale(1)',

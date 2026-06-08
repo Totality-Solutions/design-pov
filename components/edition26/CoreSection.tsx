@@ -107,7 +107,7 @@ const Core2026: NextPage = () => {
       />
       <Link href="/edition/core">
         <div className="w-full h-full">
-          <video src={cdn("/video/The Core 26.mp4")} autoPlay loop muted playsInline preload="none" className="w-full h-full bg-cover object-contain" />
+          <video src={cdn("/video/The Core 26.mp4")} autoPlay loop muted playsInline preload="metadata" className="w-full h-full bg-cover object-contain" />
         </div>
       </Link>
       {/* <main className="w-full max-w-[1420px] pt-[20px] px-6 lg:px-[50px] pb-20">

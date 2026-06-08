@@ -71,7 +71,7 @@ function LazyDesignerVideo({ src }: { src: string }) {
       muted
       loop
       playsInline
-      preload="none"
+      preload="metadata" 
       style={{ width: "100%", height: "100%", objectFit: "cover" }}
     />
   );

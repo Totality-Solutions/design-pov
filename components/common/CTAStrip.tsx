@@ -127,7 +127,7 @@ const CTAStrip = ({
               loop
               muted
               playsInline
-              preload="none"
+              preload="metadata" 
               className="w-full h-full object-cover"
             />
           )}
