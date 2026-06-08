@@ -1,5 +1,5 @@
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
+// import Navbar from "@/components/layout/Navbar";
+// import Footer from "@/components/layout/Footer";
 import { GlobalSettingsProvider } from "@/hooks/useGlobalSettings";
 
 export default function MarketingLayout({
@@ -9,9 +9,9 @@ export default function MarketingLayout({
 }) {
   return (
     <GlobalSettingsProvider>
-      <Navbar />
+      {/* <Navbar /> */}
       <main>{children}</main>
-      <Footer />
+      {/* <Footer /> */}
     </GlobalSettingsProvider>
   );
 }
