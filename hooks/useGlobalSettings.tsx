@@ -20,9 +20,15 @@ export function GlobalSettingsProvider({ children }: { children: ReactNode }) {
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => {
         if (cancelled || !data) return;
-        setSettings({
-          hideTickets: !!data.hideTickets,
-          isHiring: !!data.isHiring,
+        setSettings((prev) => {
+          const next = {
+            hideTickets: !!data.hideTickets,
+            isHiring: !!data.isHiring,
+          };
+          if (next.hideTickets === prev.hideTickets && next.isHiring === prev.isHiring) {
+            return prev;
+          }
+          return next;
         });
       })
       .catch(() => {});

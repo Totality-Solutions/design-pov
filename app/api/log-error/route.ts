@@ -9,3 +9,10 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: false });
   }
 }
+
+export async function GET(req: NextRequest) {
+  const msg = req.nextUrl.searchParams.get("m") || "unknown";
+  const stack = req.nextUrl.searchParams.get("s") || "";
+  console.error("[CLIENT_ERROR_IMG]", msg, stack);
+  return new Response(null, { status: 204 });
+}

@@ -46,25 +46,24 @@ export default function RootLayout({
       <body className="grain" suppressHydrationWarning>
         <script dangerouslySetInnerHTML={{
           __html: `
-            // ── Error beacon: sends crash details before the page dies ──
             window.__crashLog = [];
-            function __sendCrash(payload) {
+            function __imgLog(data) {
               try {
-                var b = new Blob([JSON.stringify(payload)], {type: "application/json"});
-                navigator.sendBeacon("/api/log-error", b);
+                var q = "?t=" + Date.now() + "&m=" + encodeURIComponent(data.msg || "") + "&s=" + encodeURIComponent((data.stack || "").slice(0,500));
+                new Image().src = "/api/log-error" + q;
               } catch(ex) {}
             }
             window.addEventListener("error", function(e) {
               var entry = { msg: e.message, file: e.filename, line: e.lineno, col: e.colno, stack: e.error && e.error.stack };
               window.__crashLog.push(entry);
-              __sendCrash(entry);
+              __imgLog(entry);
               try { localStorage.setItem("__crashLog", JSON.stringify(window.__crashLog)); } catch(ex) {}
             });
             window.addEventListener("unhandledrejection", function(e) {
               var msg = e.reason && e.reason.message ? e.reason.message : String(e.reason);
               var entry = { msg: "UnhandledRejection: " + msg, stack: e.reason && e.reason.stack };
               window.__crashLog.push(entry);
-              __sendCrash(entry);
+              __imgLog(entry);
               try { localStorage.setItem("__crashLog", JSON.stringify(window.__crashLog)); } catch(ex) {}
             });
           `
