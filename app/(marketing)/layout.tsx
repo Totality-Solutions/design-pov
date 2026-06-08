@@ -1,6 +1,6 @@
-// import Navbar from "@/components/layout/Navbar";
-// import Footer from "@/components/layout/Footer";
-import { GlobalSettingsProvider } from "@/hooks/useGlobalSettings";
+import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/Footer";
+// import { GlobalSettingsProvider } from "@/hooks/useGlobalSettings";
 
 export default function MarketingLayout({
   children,
@@ -8,10 +8,12 @@ export default function MarketingLayout({
   children: React.ReactNode;
 }) {
   return (
-    <GlobalSettingsProvider>
-      {/* <Navbar /> */}
+    <>
+    {/* // <GlobalSettingsProvider> */}
+      <Navbar />
       <main>{children}</main>
-      {/* <Footer /> */}
-    </GlobalSettingsProvider>
+      <Footer />
+    {/* // </GlobalSettingsProvider> */}
+    </>
   );
 }

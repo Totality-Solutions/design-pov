@@ -14,7 +14,7 @@ import { Container } from "../common/Container";
 import Link from "next/link";
 import Image from "next/image";
 import FooterPopup from "./FooterPopup";
-import { useGlobalSettings } from "@/hooks/useGlobalSettings";
+// import { useGlobalSettings } from "@/hooks/useGlobalSettings";
 
 const navLinks = {
   Partners: {
@@ -56,7 +56,7 @@ const navLinks = {
 };
 
 const Footer = () => {
-  const { isHiring } = useGlobalSettings();
+  // const { isHiring } = useGlobalSettings();
   const containerRef = useRef<HTMLDivElement>(null);
   const mouseX = useMotionValue(0);
 
@@ -243,8 +243,12 @@ const Footer = () => {
                   <div className="bg-black border border-white relative">
                     <div className="p-3 flex items-center justify-center">
                       <Image
-                        src={isHiring ? cdn("/temp/hiring.svg") : cdn("/qr/ticket-qr.svg")}
-                        alt={isHiring ? "Hiring" : "POV Index"}
+                        src={
+                          // isHiring ? cdn("/temp/hiring.svg") : 
+                          cdn("/qr/ticket-qr.svg")}
+                        alt={
+                          // isHiring ? "Hiring" : 
+                          "POV Index"}
                         width={140}
                         height={140}
                         className="w-[120px] lg:w-[140px] object-contain"
@@ -254,7 +258,7 @@ const Footer = () => {
                 </motion.div>
                 
                 {/* 3. Action button switches functions cleanly based on synced boolean state */}
-                {isHiring ? (
+                {/* {isHiring ? (
                   <button
                     onClick={() => setShowContactForm(true)}
                     className="relative z-20 bg-white text-black px-5 py-3 text-[14px] font-medium flex items-center justify-between w-full hover:bg-neutral-200 transition-all"
@@ -262,7 +266,7 @@ const Footer = () => {
                     Join Our Team
                     <ArrowUpRight size={14} strokeWidth={1.8} />
                   </button>
-                ) : (
+                ) : ( */}
                   <a
                     href="https://povindex.designpovindia.com/home"
                     target="_blank"
@@ -272,7 +276,7 @@ const Footer = () => {
                     Plan Your Visit
                     <ArrowUpRight size={14} strokeWidth={1.8} />
                   </a>
-                )}
+                {/* )} */}
               </div>
 
               {/* Totality Branding */}

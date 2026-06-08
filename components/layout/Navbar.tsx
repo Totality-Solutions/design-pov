@@ -12,10 +12,10 @@ import Close from "@/components/icons/Menu-close.svg";
 import CTABtn from "../common/CTABtn";
 import { Container } from "../common/Container";
 import { NAV_DATA, NAV_LABELS } from "@/app/constants/navigation";
-import { useGlobalSettings } from "@/hooks/useGlobalSettings";
+// import { useGlobalSettings } from "@/hooks/useGlobalSettings";
 
 export default function Navbar() {
-  const { hideTickets } = useGlobalSettings();
+  // const { hideTickets } = useGlobalSettings();
   const pathname = usePathname();
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -145,7 +145,7 @@ const handleMouseEnter = (label: string) => {
             </div>
 
             {/* ─── 3. DESKTOP TICKET BUTTON CONDITION ──────────────── */}
-            {hideTickets === false && (
+            {/* {hideTickets === false && ( */}
               <CTABtn
                 label="Buy Tickets"
                 iconType="arrow"
@@ -154,7 +154,7 @@ const handleMouseEnter = (label: string) => {
                 textColor="black"
                 href="https://tktplz.events/gjdlb5-design-pov"
               />
-            )}
+            {/* )} */}
           </div>
           {/* Hamburger / Cross Button */}
           <button
@@ -359,7 +359,7 @@ const handleMouseEnter = (label: string) => {
           </div>
           
           {/* ─── 5. CONDITIONAL MOBILE DRAWER CTA CONTAINER ───────── */}
-          {hideTickets === false && (
+          {/* {hideTickets === false && ( */}
             <div className="p-10 border-t bg-white">
               <CTABtn
                 label="Buy Tickets"
@@ -369,7 +369,7 @@ const handleMouseEnter = (label: string) => {
                 href="https://tktplz.events/gjdlb5-design-pov"
               />
             </div>
-          )}
+          {/* )} */}
         </div>
       </div>
     </nav>
