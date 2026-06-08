@@ -12,8 +12,10 @@ import Close from "@/components/icons/Menu-close.svg";
 import CTABtn from "../common/CTABtn";
 import { Container } from "../common/Container";
 import { NAV_DATA, NAV_LABELS } from "@/app/constants/navigation";
+import { useGlobalSettings } from "@/hooks/useGlobalSettings";
 
 export default function Navbar() {
+  const { hideTickets } = useGlobalSettings();
   const pathname = usePathname();
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -22,27 +24,7 @@ export default function Navbar() {
 
   const hoverTimeout = useRef<NodeJS.Timeout | null>(null);
 
-  // ─── 1. GLOBAL LAYOUT CONTROLS FROM API ──────────────────────────
-  const [hideTickets, setHideTickets] = useState<boolean | null>(false);
-
   useEffect(() => {
-    // ─── 2. FETCH REAL-TIME TICKETING TOGGLE VALUES ────────────────
-    async function syncNavbarControls() {
-      try {
-        const res = await fetch("/api/cms/global-settings");
-        const contentType = res.headers.get("content-type") || "";
-
-        if (res.ok && contentType.includes("application/json")) {
-          const data = await res.json();
-          setHideTickets(!!data.hideTickets);
-        }
-      } catch (err) {
-  console.error("[Navbar] Failed to fetch layout control flags:", err);
-  setHideTickets(false); // fallback: show the button if API is down
-}
-    }
-    syncNavbarControls();
-
     const checkScreenSize = () => {
       const isLg = window.innerWidth >= 1024;
       setIsDesktop(isLg);
@@ -245,9 +227,9 @@ const handleMouseEnter = (label: string) => {
     activeMenu === label ? "opacity-100 z-10" : "opacity-0 z-0"
   }`}
 >
-  {data.filetype === "image" && (
+  {data.filetype === "image" && data.image && (
     <Image
-      src={data.image!}
+      src={data.image}
       alt={label}
       fill
       loading="lazy"

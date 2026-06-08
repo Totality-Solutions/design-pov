@@ -3,13 +3,22 @@ import { SESClient, SendEmailCommand } from '@aws-sdk/client-ses';
 import { createServerClient } from '@/lib/supabase/server';
 import { getDepartment } from '@/lib/mailDepartment';
 
-const ses = new SESClient({
-  region: process.env.AWS_REGION!,
-  credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID!.trim(),
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!.trim(),
-  },
-});
+let _ses: SESClient | null = null;
+function getSesClient() {
+  if (!_ses) {
+    const region = process.env.AWS_REGION;
+    const accessKeyId = process.env.AWS_ACCESS_KEY_ID;
+    const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
+    if (!region || !accessKeyId || !secretAccessKey) {
+      throw new Error("Missing AWS SES environment variables");
+    }
+    _ses = new SESClient({
+      region,
+      credentials: { accessKeyId: accessKeyId.trim(), secretAccessKey: secretAccessKey.trim() },
+    });
+  }
+  return _ses;
+}
 
 const MARKETING_EMAIL = 'marketing@designpovindia.com';
 const HR_EMAIL = 'hr@totalitysolutions.com';
@@ -47,7 +56,7 @@ async function sendEmail(subject: string, fields: Record<string, string | null>)
     .map(([k, v]) => `${k}: ${v}`)
     .join('\n');
 
-  await ses.send(new SendEmailCommand({
+  await getSesClient().send(new SendEmailCommand({
     Source: `Design POV <${FROM_EMAIL}>`,
     Destination: { ToAddresses: [MARKETING_EMAIL] },
     Message: {

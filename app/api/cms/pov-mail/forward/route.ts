@@ -1,13 +1,22 @@
 import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
 import { NextResponse } from "next/server";
 
-const ses = new SESClient({
-  region: process.env.AWS_REGION!,
-  credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID!.trim(),
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!.trim(),
-  },
-});
+let _ses: SESClient | null = null;
+function getSesClient() {
+  if (!_ses) {
+    const region = process.env.AWS_REGION;
+    const accessKeyId = process.env.AWS_ACCESS_KEY_ID;
+    const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
+    if (!region || !accessKeyId || !secretAccessKey) {
+      throw new Error("Missing AWS SES environment variables");
+    }
+    _ses = new SESClient({
+      region,
+      credentials: { accessKeyId: accessKeyId.trim(), secretAccessKey: secretAccessKey.trim() },
+    });
+  }
+  return _ses;
+}
 
 const FROM_EMAIL = process.env.SES_FROM_EMAIL || "noreply@designpovindia.com";
 
@@ -54,7 +63,7 @@ export async function POST(req: Request) {
     </div>`;
 
   try {
-    await ses.send(new SendEmailCommand({
+    await getSesClient().send(new SendEmailCommand({
       Source: FROM_EMAIL,
       Destination: { ToAddresses: [to] },
       Message: {

@@ -1,13 +1,22 @@
 import { NextResponse } from 'next/server';
 import { SESClient, SendEmailCommand } from '@aws-sdk/client-ses';
 
-const ses = new SESClient({
-  region: process.env.AWS_REGION!,
-  credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID!.trim(),
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!.trim(),
-  },
-});
+let _ses: SESClient | null = null;
+function getSesClient() {
+  if (!_ses) {
+    const region = process.env.AWS_REGION;
+    const accessKeyId = process.env.AWS_ACCESS_KEY_ID;
+    const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
+    if (!region || !accessKeyId || !secretAccessKey) {
+      throw new Error("Missing AWS SES environment variables");
+    }
+    _ses = new SESClient({
+      region,
+      credentials: { accessKeyId: accessKeyId.trim(), secretAccessKey: secretAccessKey.trim() },
+    });
+  }
+  return _ses;
+}
 
 const FROM_EMAIL = process.env.SES_FROM_EMAIL || 'noreply@designpovindia.com';
 const HR_EMAIL = process.env.MAIL_HR || 'hr@totality.solutions';
@@ -91,7 +100,7 @@ export async function POST(req: Request) {
     // Making this await blocking guarantees that if AWS SES fails, it falls straight to the catch block
     console.log(`[careers] Attempting to route application alert email to: ${HR_EMAIL}`);
     
-    await ses.send(new SendEmailCommand({
+    await getSesClient().send(new SendEmailCommand({
       Source: `Design POV Careers <${FROM_EMAIL}>`,
       Destination: { ToAddresses: [HR_EMAIL] },
       Message: {

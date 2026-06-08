@@ -131,7 +131,7 @@ const FooterTablet = ({ navLinks }: Props) => {
 
                 {/* ITEMS */}
                 <ul className="flex flex-col gap-3">
-                  {value.items.map((item: any) => (
+                  {(value.items ?? []).map((item: any) => (
                     <li key={item.title}>
                       <Link
                         href={item.href}

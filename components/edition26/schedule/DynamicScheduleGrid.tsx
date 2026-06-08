@@ -60,25 +60,28 @@ const convertScheduleData = (): Record<string, DayData> => {
     const dateKey  = dayDateMap[daySchedule.day];
     const dayDigit = dayDigitMap[daySchedule.day];
 
-    const detailedEvents: DetailedEvent[] = daySchedule.events.map((event, index) => ({
+    const detailedEvents: DetailedEvent[] = daySchedule.events.map((event, index) => {
+      const sp = event.speakers ?? [];
+      return {
       id:          `${String(index + 1).padStart(2, '0')}.`,
       title:       event.title,
       subtitle:    event.subtitle
         ? event.subtitle
-        : event.speakers.length > 0
-          ? event.speakers.map(s => s.name).join(", ")
+        : sp.length > 0
+          ? sp.map(s => s.name).join(", ")
           : "",
       // image:    event.image ?? `/temp/about/${index + 1}.png`,   // IMAGE COLUMN — do not remove
       time:        `${event.startTime} - ${event.endTime}`,
       venue:       event.venue,
       categoryTag: event.categoryTag,
       partners:    event.partners,
-      speakers:    event.speakers.filter(s => s.role !== "moderator").map(s => s.name),
-      moderator:   event.speakers.find(s => s.role === "moderator")?.name,
+      speakers:    sp.filter(s => s.role !== "moderator").map(s => s.name),
+      moderator:   sp.find(s => s.role === "moderator")?.name,
       isInviteOnly: event.isInviteOnly ?? false,
       inviteOnlyLink: event.inviteOnlyLink,
       links:       { web: "#" }
-    }));
+    };
+    });
 
     result[dateKey] = {
       dayDigit,

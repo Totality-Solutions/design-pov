@@ -7,8 +7,13 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Invalid password" }, { status: 401 });
   }
 
+  const secret = process.env.CMS_SECRET;
+  if (!secret) {
+    return NextResponse.json({ error: "CMS secret not configured" }, { status: 500 });
+  }
+
   const response = NextResponse.json({ success: true });
-  response.cookies.set("cms_session", process.env.CMS_SECRET!, {
+  response.cookies.set("cms_session", secret, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",

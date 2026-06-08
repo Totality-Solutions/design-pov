@@ -14,6 +14,7 @@ import { Container } from "../common/Container";
 import Link from "next/link";
 import Image from "next/image";
 import FooterPopup from "./FooterPopup";
+import { useGlobalSettings } from "@/hooks/useGlobalSettings";
 
 const navLinks = {
   Partners: {
@@ -55,6 +56,7 @@ const navLinks = {
 };
 
 const Footer = () => {
+  const { isHiring } = useGlobalSettings();
   const containerRef = useRef<HTMLDivElement>(null);
   const mouseX = useMotionValue(0);
 
@@ -69,27 +71,7 @@ const Footer = () => {
 
   const [showHiringCard, setShowHiringCard] = useState(true);
 
-  // 1. Turned isHiring into component state driven by your global configuration API
-  const [isHiring, setIsHiring] = useState(false);
-
   useEffect(() => {
-    // 2. Fetch the module visibility flag state on mount
-    async function checkHiringStatus() {
-      try {
-        const res = await fetch("/api/cms/global-settings");
-        const contentType = res.headers.get("content-type") || "";
-
-        if (res.ok && contentType.includes("application/json")) {
-          const data = await res.json();
-          setIsHiring(!!data.isHiring);
-        }
-      } catch (err) {
-        console.error("Could not sync footer hiring modules status:", err);
-      }
-    }
-    
-    checkHiringStatus();
-
     const handleResize = () => {
       const width = window.innerWidth;
       setIsMobile(width < 768);
