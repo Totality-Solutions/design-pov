@@ -10,7 +10,7 @@ export default function MarketingLayout({
   return (
     <>
     {/* <GlobalSettingsProvider> */}
-      <Navbar />
+      {/* <Navbar /> */}
       <main>{children}</main>
       <Footer />
     {/* </GlobalSettingsProvider> */}
