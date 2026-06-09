@@ -1,6 +1,6 @@
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-// import { GlobalSettingsProvider } from "@/hooks/useGlobalSettings";
+import { GlobalSettingsProvider } from "@/hooks/useGlobalSettings";
 
 export default function MarketingLayout({
   children,
@@ -9,11 +9,11 @@ export default function MarketingLayout({
 }) {
   return (
     <>
-    {/* // <GlobalSettingsProvider> */}
+    <GlobalSettingsProvider>
       <Navbar />
       <main>{children}</main>
       <Footer />
-    {/* // </GlobalSettingsProvider> */}
+    </GlobalSettingsProvider>
     </>
   );
 }
