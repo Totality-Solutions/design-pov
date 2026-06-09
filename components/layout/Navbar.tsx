@@ -1,28 +1,23 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { cdn } from "@/lib/cdn";
 import Image from "next/image";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
-import { usePathname } from "next/navigation"; 
-import Menu from "@/components/icons/Menu.svg";
-import Close from "@/components/icons/Menu-close.svg";
 
 import CTABtn from "../common/CTABtn";
 import { Container } from "../common/Container";
 import { NAV_DATA, NAV_LABELS } from "@/app/constants/navigation";
-// import { useGlobalSettings } from "@/hooks/useGlobalSettings";
+import { useGlobalSettings } from "@/hooks/useGlobalSettings";
 
 export default function Navbar() {
-  // const { hideTickets } = useGlobalSettings();
+  const { hideTickets } = useGlobalSettings();
   const pathname = usePathname();
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
-
-  const hoverTimeout = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -31,19 +26,15 @@ export default function Navbar() {
       if (isLg) setMobileOpen(false);
     };
 
-let ticking = false;
-
-const handleScroll = () => {
-  const adSection = document.getElementById("ad-section");
-
-  if (!adSection) {
-    setIsSticky(window.scrollY > 0);
-  } else {
-    const adBottom =
-      adSection.offsetTop + adSection.offsetHeight;
-    setIsSticky(window.scrollY >= adBottom);
-  }
-};
+    const handleScroll = () => {
+      const adSection = document.getElementById("ad-section");
+      if (!adSection) {
+        setIsSticky(window.scrollY > 0);
+        return;
+      }
+      const adBottom = adSection.getBoundingClientRect().bottom;
+      setIsSticky(adBottom <= 0);
+    };
 
     checkScreenSize();
     handleScroll();
@@ -60,32 +51,11 @@ const handleScroll = () => {
     document.body.style.overflow = mobileOpen ? "hidden" : "";
   }, [mobileOpen]);
 
-  // 🔥 Smooth hover
-const handleMouseEnter = (label: string) => {
-  if (hoverTimeout.current) clearTimeout(hoverTimeout.current);
-
-  // instant first response
-  if (!activeMenu) {
-    setActiveMenu(label);
-    return;
-  }
-
-  // small delay only when switching menus
-  hoverTimeout.current = setTimeout(() => {
-    if (activeMenu !== label) setActiveMenu(label);
-  }, 40);
-};
-
-  const handleMouseLeave = () => {
-    if (hoverTimeout.current) clearTimeout(hoverTimeout.current);
-    hoverTimeout.current = setTimeout(() => {
-      setActiveMenu(null);
-    }, 100);
-  };
+  const isSubmenuLabel = (label: string) =>
+    label === "2026 Edition" || label === "Ecosystem";
 
   return (
-    <nav className="relative w-full z-[1000]">
-
+    <nav onMouseLeave={() => setActiveMenu(null)} className="relative w-full z-[1000]">
       <div id="ad-section" className="hidden lg:flex flex-col bg-neutral-50">
         <div className="flex justify-center px-10 py-8">
           <Link href="https://www.kajariaceramics.com/" target="_blank">
@@ -94,58 +64,66 @@ const handleMouseEnter = (label: string) => {
                 Advertisement
               </div>
               <div className="w-full h-[280px] flex items-center justify-center text-gray-300">
-                <Image src={cdn("/temp/ads/1.png")} alt="Ad" width={1900} height={100} className="w-full h-full object-contain" />
+                <Image
+                  src={cdn("/temp/ads/1.png")}
+                  alt="Ad"
+                  width={1900}
+                  height={100}
+                  className="w-full h-full object-contain"
+                />
               </div>
             </div>
           </Link>
         </div>
       </div>
 
-      {/* NAVBAR */}
       <header
-        className={`w-full bg-white border-b border-gray-100 transition-all duration-300 z-[2100] fixed top-0 ${isSticky ? "lg:fixed lg:top-0 lg:left-0" : "lg:relative"
-          }`}
+        id="main-navbar"
+        className={`w-full bg-white border-b border-gray-100 transition-all duration-300 z-[2100] fixed top-0 ${
+          isSticky ? "lg:fixed lg:top-0 lg:left-0" : "lg:relative lg:top-auto"
+        }`}
       >
         <div className="flex justify-between items-center px-6 lg:px-10 py-5">
+          <div className="flex-shrink-0 relative z-[2101]">
+            <Link href="/" onClick={() => setMobileOpen(false)}>
+              <Image
+                src={cdn("/logo/Logo.svg")}
+                alt="Design POV"
+                width={220}
+                height={40}
+                className="object-contain w-[180px] lg:w-[220px]"
+              />
+            </Link>
+          </div>
 
-          {/* Logo */}
-          <Link href="/">
-            <Image
-              src={cdn("/logo/Logo.svg")}
-              alt="Design POV"
-              width={220}
-              height={40}
-              className="w-[180px] lg:w-[220px]"
-            />
-          </Link>
-
-            {/* <CTABtn
-          {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center gap-10">
             <div className="flex items-center gap-10">
               {NAV_LABELS.map((label) => {
                 const isActive = pathname === NAV_DATA[label].mainHref;
-                
                 return (
                   <Link
                     key={label}
                     href={NAV_DATA[label].mainHref}
-                    onMouseEnter={() => setActiveMenu(label === "2026 Edition" || label === "Ecosystem" ? label : null)}
+                    onMouseEnter={() =>
+                      setActiveMenu(isSubmenuLabel(label) ? label : null)
+                    }
                     className={`relative text-[16px] font-medium whitespace-nowrap transition-colors py-1 group ${
-                      isActive ? "text-primary-blue" : "text-black hover:text-primary-blue"
+                      isActive
+                        ? "text-primary-blue"
+                        : "text-black hover:text-primary-blue"
                     }`}
                   >
                     {label}
-                    <span className={`absolute bottom-0 left-0 h-[2px] bg-primary-blue transition-all duration-300 ${
-                      isActive ? "w-full" : "w-0 group-hover:w-full"
-                    }`} />
+                    <span
+                      className={`absolute bottom-0 left-0 h-[2px] bg-primary-blue transition-all duration-300 ${
+                        isActive ? "w-full" : "w-0 group-hover:w-full"
+                      }`}
+                    />
                   </Link>
                 );
               })}
             </div>
-
-            {/* ─── 3. DESKTOP TICKET BUTTON CONDITION ──────────────── */}
-            {/* {hideTickets === false && ( */}
+            {!hideTickets && (
               <CTABtn
                 label="Buy Tickets"
                 iconType="arrow"
@@ -154,145 +132,138 @@ const handleMouseEnter = (label: string) => {
                 textColor="black"
                 href="https://tktplz.events/gjdlb5-design-pov"
               />
-            {/* )} */}
+            )}
           </div>
-          {/* Hamburger / Cross Button */}
+
           <button
-            className="lg:hidden p-2 relative z-[2101] flex items-center justify-center w-10 h-10"
+            className="lg:hidden p-2 relative z-[2101] flex flex-col justify-center items-center w-10 h-10"
             onClick={() => setMobileOpen(!mobileOpen)}
+            aria-label={mobileOpen ? "Close menu" : "Open menu"}
           >
-            <div className="relative w-6 h-6">
-              <AnimatePresence mode="wait">
-                {mobileOpen ? (
-                  <motion.div
-                    key="close"
-                    initial={{ opacity: 1, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 1, scale: 0.95 }}
-                    transition={{ duration: 0.2, ease: "easeInOut" }}
-                    className="absolute inset-0"
-                  >
-                    <Image
-                      src={cdn("/icons/Menu-close.svg")}
-                      alt="close"
-                      fill
-                      className="object-contain"
-                    />
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    key="menu"
-                    initial={{ opacity: 1, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 1, scale: 0.95 }}
-                    transition={{ duration: 0.2, ease: "easeInOut" }}
-                    className="absolute inset-0"
-                  >
-                    <Image
-                      src={cdn("/icons/Menu.svg")}
-                      alt="menu"
-                      fill
-                      className="object-contain"
-                    />
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
+            <span
+              className={`block w-6 h-[2px] bg-black transition-all duration-300 ease-in-out ${
+                mobileOpen ? "rotate-45 translate-y-[7px]" : ""
+              }`}
+            />
+            <span
+              className={`block w-6 h-[2px] bg-black transition-all duration-300 ease-in-out mt-[5px] ${
+                mobileOpen ? "opacity-0" : ""
+              }`}
+            />
+            <span
+              className={`block w-6 h-[2px] bg-black transition-all duration-300 ease-in-out mt-[5px] ${
+                mobileOpen ? "-rotate-45 -translate-y-[7px]" : ""
+              }`}
+            />
           </button>
         </div>
       </header>
 
       {isSticky && <div className="hidden lg:block h-[88px] w-full" />}
 
-      {/* 🔥 SUBMENU */}
       <div
-        onMouseEnter={() => activeMenu && setActiveMenu(activeMenu)}
-        onMouseLeave={handleMouseLeave}
-        className={`hidden lg:block bg-white overflow-hidden transition-all duration-300 ${activeMenu ? "max-h-[420px] opacity-100" : "max-h-0 opacity-0"
-          } ${isSticky ? "fixed left-0 right-0" : "absolute left-0 right-0"}`}
+        className={`hidden lg:block bg-white transition-all duration-300 overflow-hidden z-1100 ${
+          activeMenu ? "h-fit" : "h-0"
+        } ${isSticky ? "fixed left-0 right-0" : "absolute left-0 right-0"}`}
         style={{ top: isSticky ? "80px" : "100%" }}
       >
-        <Container>
-          <div className="flex px-10 py-10 gap-16">
+        <Container className="h-full">
+          {activeMenu && (
+            <div className="flex h-fit px-10 py-10 gap-16 text-black">
+              <div className="w-[60%] h-[320px] relative overflow-hidden bg-black">
+                {isDesktop && NAV_DATA[activeMenu].filetype === "video" ? (
+                  <video
+                    src={NAV_DATA[activeMenu].video}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    preload="none"
+                    className="w-full h-full object-cover opacity-80"
+                  />
+                ) : NAV_DATA[activeMenu].filetype === "image" ? (
+                  <img
+                    src={NAV_DATA[activeMenu].image}
+                    alt={activeMenu}
+                    className="w-full h-full object-contain opacity-100"
+                  />
+                ) : null}
+              </div>
 
-            {/* 🔥 MEDIA (FIXED HERE) */}
-            <div className="w-[60%] h-[320px] relative overflow-hidden bg-black">
-              {NAV_LABELS.map((label) => {
-                const data = NAV_DATA[label];
-
-                return (
-                  <div
-  key={label}
-  className={`absolute inset-0 transition-opacity duration-300 ${
-    activeMenu === label ? "opacity-100 z-10" : "opacity-0 z-0"
-  }`}
->
-  {data.filetype === "image" && data.image && (
-    <Image
-      src={data.image}
-      alt={label}
-      fill
-      loading="lazy"
-      className="object-contain"
-    />
-  )}
-</div>
-                );
-              })}
-            </div>
-
-            {/* LINKS */}
-            {activeMenu && (
-              <div className="w-[40%]">
-                <h3 className="text-lg font-bold mb-6">
-                  {NAV_DATA[activeMenu].col1Title}
-                </h3>
-
-                <div className="flex flex-col gap-4">
-                  {NAV_DATA[activeMenu].col1Links?.map((link) => {
-                    const isSubActive = pathname === link.href;
-
-                    return (
+              {isSubmenuLabel(activeMenu) ? (
+                <div className="w-[40%] flex gap-12 justify-start">
+                  <div className="flex flex-col justify-start">
+                    {NAV_DATA[activeMenu].col1Title && (
+                      <h3 className="text-lg font-bold mb-6">
+                        {NAV_DATA[activeMenu].col1Title}
+                      </h3>
+                    )}
+                    <div className="flex flex-col gap-4">
+                      {NAV_DATA[activeMenu].col1Links?.map((link) => (
+                        <Link
+                          key={link.label}
+                          href={link.href}
+                          className="hover:text-primary-blue font-normal transition-colors"
+                        >
+                          {link.label}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                  {NAV_DATA[activeMenu].col2Links &&
+                    NAV_DATA[activeMenu].col2Links!.length > 0 && (
+                      <div className="flex flex-col justify-start">
+                        {NAV_DATA[activeMenu].col2Title && (
+                          <h3 className="text-lg font-bold mb-6">
+                            {NAV_DATA[activeMenu].col2Title}
+                          </h3>
+                        )}
+                        <div className="flex flex-col gap-4">
+                          {NAV_DATA[activeMenu].col2Links?.map((link) => (
+                            <Link
+                              key={link.label}
+                              href={link.href}
+                              className="hover:text-blue-500 transition-colors"
+                            >
+                              {link.label}
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                </div>
+              ) : (
+                <div className="w-[40%] flex flex-col justify-start">
+                  <h3 className="text-lg font-bold mb-6">
+                    {NAV_DATA[activeMenu].col1Title}
+                  </h3>
+                  <div className="flex flex-col gap-4">
+                    {NAV_DATA[activeMenu].col1Links?.map((link) => (
                       <Link
                         key={link.label}
                         href={link.href}
-                        onClick={() => setActiveMenu(null)} // ✅ close submenu
-                        className={`relative transition-colors ${isSubActive
-                            ? "text-primary-blue font-medium"
-                            : "text-black hover:text-primary-blue cursor-pointer"
-                          }`}
+                        className="hover:text-blue-500 transition-colors"
                       >
                         {link.label}
-
-                        {/* ✅ Active underline */}
-
                       </Link>
-                    );
-                  })}
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
-          </div>
+              )}
+            </div>
+          )}
         </Container>
       </div>
 
-      {/* =========================
-          MOBILE MENU OVERLAY
-      ========================== */}
       <div
-        className={`fixed inset-0 bg-white z-[2000] transition-transform duration-500 ease-in-out lg:hidden ${mobileOpen ? "translate-y-0" : "-translate-y-full"
-          }`}
+        className={`fixed inset-0 bg-white z-[2000] transition-transform duration-500 ease-in-out lg:hidden ${
+          mobileOpen ? "translate-y-0" : "-translate-y-full"
+        }`}
       >
         <div className="pt-24 h-full flex flex-col">
           <div className="flex-1 overflow-y-auto">
             {NAV_LABELS.map((label) => {
-              const isSubActive = NAV_DATA[label].col1Links?.some(
-                (link) => pathname === link.href
-              );
-
-              const isActive =
-                pathname === NAV_DATA[label].mainHref || isSubActive;
-
+              const isActive = pathname === NAV_DATA[label].mainHref;
               return (
                 <div key={label} className="border-b border-gray-100">
                   <div className="flex items-center justify-between pr-4">
@@ -305,61 +276,69 @@ const handleMouseEnter = (label: string) => {
                     >
                       {label}
                     </Link>
-                    {(label === "2026 Edition" || label === "Ecosystem") && (
+                    {isSubmenuLabel(label) && (
                       <button
                         className="p-4"
                         onClick={() =>
-                          setActiveMenu(activeMenu === label ? "" : label)
+                          setActiveMenu(
+                            activeMenu === label ? null : label
+                          )
                         }
                       >
                         <Image
-                          src={cdn("/icons/Menu-close.svg")} 
+                          src={cdn("/icons/Menu-close.svg")}
                           alt="toggle"
                           width={20}
                           height={20}
-                          className={`transition-transform duration-200 ease-in-out ${activeMenu === label ? "scale-75" : "scale-150"
-                            }`}
+                          className={`transition-transform duration-200 ease-in-out ${
+                            activeMenu === label
+                              ? "scale-75"
+                              : "scale-150"
+                          }`}
                         />
                       </button>
                     )}
                   </div>
 
-                  {(activeMenu === "2026 Edition" || activeMenu === "Ecosystem") &&(
-                      <div className={`overflow-hidden transition-all duration-300 ${activeMenu === label ? "max-h-screen" : "max-h-0"}`}>
-                        {NAV_DATA[label].col1Links?.map((link) => (
-                          <Link
-                            key={link.label}
-                            href={link.href}
-                            onClick={() => {
-                            setMobileOpen(false);
-                            setActiveMenu(null); // ✅ close submenu
-                          }}
-                          className={`block px-12 py-4 text-sm border-b border-black/10 ${pathname === link.href
-                                ? "text-primary-blue font-medium"
-                              : "text-black"
-                            }`}
-                          >
-                            {link.label}
-                          </Link>
-                        ))}
-                      </div>
-                        )}
+                  {isSubmenuLabel(label) && (
+                    <div
+                      className={`overflow-hidden transition-all duration-300 ${
+                        activeMenu === label
+                          ? "max-h-screen"
+                          : "max-h-0"
+                      }`}
+                    >
+                      {NAV_DATA[label].col1Links?.map((link) => (
+                        <Link
+                          key={link.label}
+                          href={link.href}
+                          className="block px-12 py-4 text-sm text-black font-normal border-b border-gray-100"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {link.label}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
                 </div>
               );
             })}
-            <Link href="https://povindex.designpovindia.com/home" target="_blank" className="flex items-center justify-center  ">
+            <Link
+              href="https://povindex.designpovindia.com/home"
+              target="_blank"
+              className="flex items-center justify-center"
+            >
               <Image
                 src={cdn("/qr/qr-ticket.png")}
                 alt="toggle"
                 width={1000}
                 height={100}
-                className={`transition-transform duration-200 ease-in-out bg-black `}
+                className="transition-transform duration-200 ease-in-out bg-black"
               />
             </Link>
           </div>
-          
-          {/* ─── 5. CONDITIONAL MOBILE DRAWER CTA CONTAINER ───────── */}
-          {/* {hideTickets === false && ( */}
+
+          {!hideTickets && (
             <div className="p-10 border-t bg-white">
               <CTABtn
                 label="Buy Tickets"
@@ -369,7 +348,7 @@ const handleMouseEnter = (label: string) => {
                 href="https://tktplz.events/gjdlb5-design-pov"
               />
             </div>
-          {/* )} */}
+          )}
         </div>
       </div>
     </nav>
