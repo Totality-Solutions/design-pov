@@ -261,18 +261,21 @@ import { usePathname } from "next/navigation";
 import CTABtn from "../common/CTABtn";
 import { Container } from "../common/Container";
 import { NAV_ITEMS, SUBMENU_NAV_ITEMS, type NavItem } from "@/app/constants/navigation";
-// ↑ No more NAV_DATA / NAV_LABELS — everything lives in NAV_ITEMS
 
 export default function Navbar() {
   const pathname  = usePathname();
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isSticky,   setIsSticky]   = useState(false);
-  const leaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const leaveTimer  = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Track scroll position for iOS body-lock fix
+  const scrollY     = useRef(0);
 
-  // Preload submenu images at mount.
-  // SUBMENU_NAV_ITEMS is SubmenuNavItem[] → item.image is always string, no guard needed.
+  // FIX 2 — Only preload submenu images on desktop.
+  // On mobile the submenu never renders — loading these wastes
+  // memory and is the second half of the crash combination.
   useEffect(() => {
+    if (window.innerWidth < 1024) return;
     SUBMENU_NAV_ITEMS.forEach((item) => {
       const img = new window.Image();
       img.src = item.image;
@@ -298,12 +301,37 @@ export default function Navbar() {
     };
   }, []);
 
+  // FIX 3 — iOS Safari body scroll lock.
+  // overflow:hidden on <body> is ignored by iOS Safari — the page keeps
+  // scrolling behind the overlay which causes continuous repaint → tab crash.
+  // Fix: capture scroll position, fix <body> in place at that offset,
+  // then restore on close.
   useEffect(() => {
-    document.body.style.overflow = mobileOpen ? "hidden" : "";
+    if (mobileOpen) {
+      scrollY.current = window.scrollY;
+      document.body.style.position   = "fixed";
+      document.body.style.top        = `-${scrollY.current}px`;
+      document.body.style.left       = "0";
+      document.body.style.right      = "0";
+      document.body.style.overflow   = "hidden";
+    } else {
+      document.body.style.position   = "";
+      document.body.style.top        = "";
+      document.body.style.left       = "";
+      document.body.style.right      = "";
+      document.body.style.overflow   = "";
+      // Restore scroll position silently
+      window.scrollTo(0, scrollY.current);
+    }
+    return () => {
+      document.body.style.position   = "";
+      document.body.style.top        = "";
+      document.body.style.left       = "";
+      document.body.style.right      = "";
+      document.body.style.overflow   = "";
+    };
   }, [mobileOpen]);
 
-  // Accepts the full NavItem — no string lookup, no cast.
-  // The discriminant (item.type) does the narrowing.
   const handleNavEnter = useCallback((item: NavItem) => {
     if (leaveTimer.current) clearTimeout(leaveTimer.current);
     setActiveMenu(item.type === "submenu" ? item.label : null);
@@ -352,7 +380,6 @@ export default function Navbar() {
       >
         <div className="flex justify-between items-center px-6 lg:px-10 py-5">
 
-          {/* Logo */}
           <div className="flex-shrink-0 relative z-[2101]">
             <Link href="/" onClick={() => setMobileOpen(false)}>
               <Image
@@ -366,27 +393,24 @@ export default function Navbar() {
             </Link>
           </div>
 
-          {/* Desktop nav links */}
           <div className="hidden lg:flex items-center gap-10">
             <div className="flex items-center gap-10">
               {NAV_ITEMS.map((item) => {
                 const isActive = pathname === item.href;
                 return (
                   <Link
-  key={item.label}
-  href={item.href}
-  onMouseEnter={() => handleNavEnter(item)}
-  className={`relative text-[16px] font-medium whitespace-nowrap transition-colors py-1 group ${
-    isActive ? "text-primary-blue" : "text-black hover:text-primary-blue"
-  }`}
->
-  {item.label}
-  <span
-    className={`absolute bottom-0 left-0 h-[2px] bg-primary-blue transition-[width] duration-300 ${
-      isActive ? "w-full" : "w-0 group-hover:w-full"
-    }`}
-  />
-</Link>
+                    key={item.label}
+                    href={item.href}
+                    onMouseEnter={() => handleNavEnter(item)}
+                    className={`relative text-[16px] font-medium whitespace-nowrap transition-colors py-1 group ${
+                      isActive ? "text-primary-blue" : "text-black hover:text-primary-blue"
+                    }`}
+                  >
+                    {item.label}
+                    <span className={`absolute bottom-0 left-0 h-[2px] bg-primary-blue transition-[width] duration-300 ${
+                      isActive ? "w-full" : "w-0 group-hover:w-full"
+                    }`} />
+                  </Link>
                 );
               })}
             </div>
@@ -400,7 +424,6 @@ export default function Navbar() {
             />
           </div>
 
-          {/* Hamburger */}
           <button
             className="lg:hidden p-2 relative z-[2101] flex items-center justify-center w-10 h-10"
             onClick={() => setMobileOpen((v) => !v)}
@@ -432,11 +455,19 @@ export default function Navbar() {
 
       {isSticky && <div className="hidden lg:block h-[88px] w-full" />}
 
-      {/* ── DESKTOP SUBMENU ───────────────────────── */}
+      {/* ── DESKTOP SUBMENU ───────────────────────────────────────────────
+          FIX 1 — removed will-change-[transform,opacity].
+          will-change was forcing GPU layer allocation on mobile devices
+          even though this element is display:none below lg breakpoint,
+          combining with the image preload to cause OOM crashes.
+          opacity + translateY transitions are still GPU-composited by the
+          browser automatically — will-change is only needed when the browser
+          can't figure that out on its own, which is not the case here.
+      ──────────────────────────────────────────────────────────────────── */}
       <div
         onMouseEnter={cancelLeave}
         onMouseLeave={handleNavLeave}
-        className={`hidden lg:block bg-white z-[1100] will-change-[transform,opacity]
+        className={`hidden lg:block bg-white z-[1100]
           transition-[opacity,transform] duration-150 ease-out
           ${activeMenu
             ? "opacity-100 translate-y-0 pointer-events-auto"
@@ -446,17 +477,15 @@ export default function Navbar() {
         style={{ top: isSticky ? "80px" : "100%" }}
       >
         <Container>
-
           {SUBMENU_NAV_ITEMS.map((item) => (
             <div
               key={item.label}
-className={`flex h-fit px-10 py-10 gap-16 text-black transition-all duration-200 ${
-  activeMenu === item.label
-    ? "opacity-100 relative"
-    : "opacity-0 absolute pointer-events-none"
-}`}
+              className={`flex h-fit px-10 py-10 gap-16 text-black transition-opacity duration-100 ${
+                activeMenu === item.label
+                  ? "opacity-100"
+                  : "opacity-0 absolute pointer-events-none"
+              }`}
             >
-              {/* Submenu image — image is string, no assertion needed */}
               <div className="w-[60%] h-[320px] relative overflow-hidden bg-black">
                 <img
                   src={item.image}
@@ -467,7 +496,6 @@ className={`flex h-fit px-10 py-10 gap-16 text-black transition-all duration-200
                 />
               </div>
 
-              {/* Link columns */}
               <div className="w-[40%] flex gap-12 justify-start">
                 <div className="flex flex-col justify-start">
                   {item.col1Title && (
@@ -509,27 +537,26 @@ className={`flex h-fit px-10 py-10 gap-16 text-black transition-all duration-200
         mobileOpen ? "translate-y-0" : "-translate-y-full"
       }`}>
         <div className="pt-24 h-full flex flex-col">
-          <div className="flex-1 overflow-y-auto">
+          <div className="flex-1 overflow-y-auto overscroll-contain">
             {NAV_ITEMS.map((item) => {
-              const isActive = pathname === item.href;
-              const hasSubmenu = item.type === "submenu";
+              const isActive    = pathname === item.href;
+              const hasSubmenu  = item.type === "submenu";
               return (
                 <div key={item.label} className="border-b border-gray-100">
                   <div className="flex items-center justify-between pr-4">
                     <Link
-  href={item.href}
-  className={`flex-1 px-8 py-6 text-left text-lg font-medium transition-colors
-    border-l-[3px] ${
-      isActive
-        ? "text-primary-blue border-primary-blue"      // ← active: colored left border
-        : "text-black border-transparent"              // ← inactive: invisible border (holds layout)
-    }`}
-  onClick={() => setMobileOpen(false)}
->
-  {item.label}
-</Link>
+                      href={item.href}
+                      className={`flex-1 px-8 py-6 text-left text-lg font-medium transition-colors
+                        border-l-[3px] ${
+                          isActive
+                            ? "text-primary-blue border-primary-blue"
+                            : "text-black border-transparent"
+                        }`}
+                      onClick={() => setMobileOpen(false)}
+                    >
+                      {item.label}
+                    </Link>
 
-                    {/* Toggle button — only rendered for submenu items */}
                     {hasSubmenu && (
                       <button
                         className="p-4"
@@ -548,10 +575,12 @@ className={`flex h-fit px-10 py-10 gap-16 text-black transition-all duration-200
                     )}
                   </div>
 
-                  {/* Expandable submenu links — only for submenu items */}
+                  {/* FIX 4 — transition-[max-height] instead of transition-all.
+                      transition-all reflows every CSS property on every frame.
+                      Scoping to max-height limits reflow to one property only. */}
                   {hasSubmenu && (
-                    <div className={`overflow-hidden transition-all duration-300 ${
-                      activeMenu === item.label ? "max-h-screen" : "max-h-0"
+                    <div className={`overflow-hidden transition-[max-height] duration-300 ease-in-out ${
+                      activeMenu === item.label ? "max-h-96" : "max-h-0"
                     }`}>
                       {item.col1Links.map((link) => (
                         <Link
@@ -571,8 +600,15 @@ className={`flex h-fit px-10 py-10 gap-16 text-black transition-all duration-200
 
             <Link href="https://povindex.designpovindia.com/home" target="_blank"
               className="flex items-center justify-center">
-              <Image src={cdn("/qr/qr-ticket.png")} alt="QR ticket"
-                width={1000} height={100} className="bg-black" />
+              {/* FIX 5 — sized for mobile viewport, not 1000px.
+                  Next.js was serving a 1000px image on a ~390px screen. */}
+              <Image
+                src={cdn("/qr/qr-ticket.png")}
+                alt="QR ticket"
+                width={390}
+                height={390}
+                className="w-full bg-black"
+              />
             </Link>
           </div>
 
