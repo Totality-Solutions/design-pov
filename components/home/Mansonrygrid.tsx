@@ -1,7 +1,7 @@
 "use client";
 import { cdn } from "@/lib/cdn";
 
-import { forwardRef, useRef, useEffect, useState } from "react";
+import { forwardRef, useRef, useEffect } from "react";
 import { motion, MotionValue } from "framer-motion";
 import Image from "next/image";
 
@@ -13,59 +13,36 @@ function Cell({
   type = "image",
   src,
   alt,
-  poster,
 }: {
   type?: "image" | "video" | "empty";
   src?: any;
   alt?: string;
-  poster?: string;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [isMobile, setIsMobile] = useState(true);
-  const [shouldLoadVideo, setShouldLoadVideo] = useState(false);
 
   useEffect(() => {
-    const checkViewport = () => setIsMobile(window.innerWidth < 768);
-    checkViewport();
-    window.addEventListener("resize", checkViewport);
-    return () => window.removeEventListener("resize", checkViewport);
-  }, []);
-
-  useEffect(() => {
-    if (type !== "video" || isMobile || !videoRef.current) return;
+    if (type !== "video" || !videoRef.current) return;
     const video = videoRef.current;
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setShouldLoadVideo(true);
-          requestAnimationFrame(() => video.play().catch(() => {}));
-        } else {
-          video.pause();
-        }
+        if (entry.isIntersecting) video.play().catch(() => {});
+        else video.pause();
       },
-      { rootMargin: "200px 0px", threshold: 0.1 }
+      { threshold: 0.1 }
     );
     observer.observe(video);
     return () => observer.disconnect();
-  }, [type, isMobile]);
+  }, [type]);
 
   if (type === "video" && src) {
-    if (isMobile && poster) {
-      return (
-        <div className="relative w-full h-full">
-          <Image src={poster} alt={alt || ""} fill sizes="100vw" className="bg-black object-cover" />
-        </div>
-      );
-    }
-
     return (
       <video
         ref={videoRef}
-        src={shouldLoadVideo ? src : undefined}
+        src={src}
+        preload="none"
         muted
         loop
         playsInline
-        preload="metadata" 
         className="w-full h-full object-cover"
       />
     );
@@ -87,88 +64,8 @@ interface MasonryGridProps {
   y: MotionValue<number>;
 }
 
-const THEME_CAROUSEL_SLIDES = [
-  {
-    src: cdn("/temp/home/theme/WEBSITE_THEME BANNER_4.jpg.jpeg"),
-    alt: "Theme 1",
-  },
-  {
-    src: cdn("/temp/home/theme/WEBSITE_THEME BANNER_2.jpg.jpeg"),
-    alt: "Theme 2",
-  },
-  {
-    src: cdn("/temp/home/theme/WEBSITE_THEME BANNER_3.jpg.jpeg"),
-    alt: "Theme 3",
-  },
-  {
-    src: cdn("/temp/home/theme/sens-sensibility.jpg"),
-    alt: "Theme 6",
-  },
-];
-
 const MasonryGrid = forwardRef<HTMLDivElement, MasonryGridProps>(
   ({ y }, ref) => {
-    const [isMobile, setIsMobile] = useState(true);
-    const [activeSlide, setActiveSlide] = useState(0);
-
-    useEffect(() => {
-      const checkViewport = () => setIsMobile(window.innerWidth < 768);
-      checkViewport();
-      window.addEventListener("resize", checkViewport);
-      return () => window.removeEventListener("resize", checkViewport);
-    }, []);
-
-    useEffect(() => {
-      if (!isMobile) return;
-      const interval = setInterval(() => {
-        setActiveSlide((current) => (current + 1) % THEME_CAROUSEL_SLIDES.length);
-      }, 3500);
-      return () => clearInterval(interval);
-    }, [isMobile]);
-
-    if (isMobile) {
-      return (
-        <div ref={ref} className="w-full overflow-hidden">
-          <div className="relative h-[360px] w-full overflow-hidden bg-black">
-            <Link href="/edition/theme" className="block h-full cursor-pointer">
-              <div
-                className="flex h-full transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]"
-                style={{ transform: `translateX(-${activeSlide * 100}%)` }}
-              >
-                {THEME_CAROUSEL_SLIDES.map((slide, index) => (
-                  <div key={slide.src} className="relative h-full w-full shrink-0">
-                    <Image
-                      src={slide.src}
-                      alt={slide.alt}
-                      fill
-                      sizes="100vw"
-                      loading={activeSlide === index ? "eager" : "lazy"}
-                      className="object-cover"
-                    />
-                    <div className="absolute inset-0 bg-black/10" />
-                  </div>
-                ))}
-              </div>
-            </Link>
-
-            <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2">
-              {THEME_CAROUSEL_SLIDES.map((slide, index) => (
-                <button
-                  key={slide.src}
-                  type="button"
-                  aria-label={`Show theme image ${index + 1}`}
-                  onClick={() => setActiveSlide(index)}
-                  className={`h-1.5 rounded-full transition-all ${
-                    activeSlide === index ? "w-8 bg-white" : "w-1.5 bg-white/45"
-                  }`}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
-      );
-    }
-
     return (
       <div ref={ref} className="w-full overflow-hidden h-fit md:h-full">
         <Link href="/edition/theme" className="cursor-pointer">
@@ -202,12 +99,7 @@ const MasonryGrid = forwardRef<HTMLDivElement, MasonryGridProps>(
 
             {/* 06 VIDEO EXAMPLE */}
             <div className="row-span-2">
-              <Cell
-                type="video"
-                src={cdn("/temp/home/theme/WEBSITE1.mp4")}
-                poster={cdn("/temp/home/theme/WEBSITE_THEME BANNER_2.jpg.jpeg")}
-                alt="Theme video"
-              />
+              <Cell type="video" src={cdn("/temp/home/theme/WEBSITE1.mp4")} />
             </div>
 
             {/* 07 IMAGE */}

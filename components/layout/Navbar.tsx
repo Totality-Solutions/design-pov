@@ -304,6 +304,15 @@ export default function Navbar() {
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? "hidden" : "";
   }, [mobileOpen]);
+  useEffect(() => {
+  NAV_LABELS.forEach((label) => {
+    const data = NAV_DATA[label];
+    if (data.filetype === "image" && data.image) {
+      const img = new window.Image();
+      img.src = data.image;
+    }
+  });
+}, []);
 
   return (
     <nav onMouseLeave={() => setActiveMenu(null)} className="relative w-full z-[1000]">
@@ -438,29 +447,31 @@ export default function Navbar() {
           DESKTOP SUBMENU
       ========================== */}
       <div
-        className={`hidden lg:block bg-white transition-all duration-300 overflow-hidden z-1100 ${
-          activeMenu ? "h-fit" : "h-0"
-        } ${isSticky ? "fixed left-0 right-0" : "absolute left-0 right-0"}`}
+        // AFTER — use max-h with a fixed value instead of h-fit
+className={`hidden lg:block bg-white overflow-hidden z-[1100]
+  transition-[max-height,opacity] duration-200 ease-out
+  ${activeMenu ? "max-h-[450px] opacity-100" : "max-h-0 opacity-0"}
+  ${isSticky ? "fixed left-0 right-0" : "absolute left-0 right-0"}`}
         style={{ top: isSticky ? "80px" : "100%" }}
       >
         <Container className="h-full">
           {activeMenu && (
             <div className="flex h-fit px-10 py-10 gap-16 text-black">
               <div className="w-[60%] h-[320px] relative overflow-hidden bg-black">
-                {isDesktop && NAV_DATA[activeMenu].filetype === "video" ? (
+                {/* {isDesktop && NAV_DATA[activeMenu].filetype === "video" ? (
                   <video
                     src={NAV_DATA[activeMenu].video}
                     autoPlay muted loop playsInline
-                    preload="none"
+                    preload="metadata"
                     className="w-full h-full object-cover opacity-80"
                   />
-                ) : NAV_DATA[activeMenu].filetype === "image" ? (
+                ) : NAV_DATA[activeMenu].filetype === "image" ? ( */}
                   <img
                     src={NAV_DATA[activeMenu].image}
                     alt={activeMenu}
                     className="w-full h-full object-contain opacity-100"
                   />
-                ) : null}
+                {/* // ) : null} */}
               </div>
 
               {/* Two-column layout for 2026 Edition and Ecosystem */}
