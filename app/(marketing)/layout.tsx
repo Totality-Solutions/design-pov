@@ -9,11 +9,11 @@ export default function MarketingLayout({
 }) {
   return (
     <>
-    <GlobalSettingsProvider>
-      <Navbar />
+    {/* <GlobalSettingsProvider> */}
+      {/* <Navbar /> */}
       <main>{children}</main>
       <Footer />
-    </GlobalSettingsProvider>
+    {/* </GlobalSettingsProvider> */}
     </>
   );
 }
