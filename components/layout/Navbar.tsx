@@ -247,9 +247,8 @@ export default function Navbar() {
                 <Image
                   src={item.image}
                   alt={item.label}
-                  loading="eager"
-                  decoding="async"
-                  className="w-full h-full object-contain"
+                  fill
+                  className="object-contain"
                 />
               </div>
 
