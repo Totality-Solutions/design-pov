@@ -1,92 +1,79 @@
 import { cdn } from "@/lib/cdn";
-// --- Types ---
-export type SubLink = { 
-  label: string; 
-  href: string 
+
+// ── Types ──────────────────────────────────────────────────────────────────
+
+type NavLink = { label: string; href: string };
+
+/** A plain top-level link — no panel, no image. */
+type SimpleNavItem = {
+  type: "simple";
+  label: string;
+  href: string;
 };
 
-export type SubmenuContent = {
-  mainHref: string; // Added: The link for the main header item itself
-  video?: string;
-  image?: string;
-  filetype?: string;
+/** A top-level link that opens a submenu panel with an image + link columns. */
+type SubmenuNavItem = {
+  type: "submenu";
+  label: string;
+  href: string;
+  image: string;          // required — what makes it a submenu item
   col1Title?: string;
-  col1Links?: SubLink[];
+  col1Links: NavLink[];
   col2Title?: string;
-  col2Links?: SubLink[];
+  col2Links?: NavLink[];
 };
 
-// --- Navigation Data ---
-export const NAV_DATA: Record<string, SubmenuContent> = {
-  About: {
-    mainHref: "/about",
-    col1Title: "",
-    col1Links: [],
-    col2Title: "Impact",
-    col2Links: [
-      { label: "Sustainability", href: "/impact/sustainability" }, 
-      { label: "Community", href: "/impact/community" }, 
-      { label: "Report", href: "/impact/report" }
-    ],
+export type NavItem = SimpleNavItem | SubmenuNavItem;
+
+// ── Data ───────────────────────────────────────────────────────────────────
+// Order here drives render order in the navbar.
+
+export const NAV_ITEMS: NavItem[] = [
+  {
+    type: "simple",
+    label: "About",
+    href: "/about",
   },
-  Ecosystem: {
-    mainHref: "/ecosystem",
+  {
+    type: "submenu",
+    label: "Ecosystem",
+    href: "/ecosystem",
     image: cdn("/temp/home/theme/sens-sensibility.jpg"),
-    filetype: "image",
     col1Links: [
-      { label: "Circle", href: "/edition/schedule" }, 
-      { label: "Elevate", href: "/ecosystem/elevate" }, 
+      { label: "Circle",  href: "/edition/schedule" },
+      { label: "Elevate", href: "/ecosystem/elevate" },
       { label: "Objects", href: "/ecosystem/objects" },
       { label: "Contact", href: "/contact" },
-
-      // { label: "Afterhours", href: "/ecosystem/afterhours" }
     ],
   },
-  "2026 Edition": {
-    mainHref: "/edition",
+  {
+    type: "submenu",
+    label: "2026 Edition",
+    href: "/edition",
     image: cdn("/qr/qr-ticket.png"),
-    filetype: "image",
-    col1Title: "",
     col1Links: [
-      { label: "Theme", href: "/edition/theme" }, 
-      { label: "Brands", href: "/edition/brands" }, 
-      { label: "Core", href: "/edition/core" },
+      { label: "Theme",    href: "/edition/theme" },
+      { label: "Brands",   href: "/edition/brands" },
+      { label: "Core",     href: "/edition/core" },
       { label: "Schedule", href: "/edition/schedule" },
-      { label: "Contact", href: "/contact" },
-      // { label: "Art", href: "/edition/art" },
+      { label: "Contact",  href: "/contact" },
     ],
   },
-  Collaborate: {
-    mainHref: "/collaborate",
-    col1Title: "Partnerships",
-    col1Links: [
-      { label: "Brands", href: "/collaborate/brands" }, 
-      { label: "Agencies", href: "/collaborate/agencies" }, 
-      { label: "Creators", href: "/collaborate/creators" }
-    ],
-    col2Title: "Opportunities",
-    col2Links: [
-      { label: "Sponsorship", href: "/collaborate/sponsorship" }, 
-      { label: "Exhibit", href: "/collaborate/exhibit" }, 
-      { label: "Press Kit", href: "/collaborate/press" }
-    ],
+  {
+    type: "simple",
+    label: "Collaborate",
+    href: "/collaborate",
   },
-  Magazine: {
-    mainHref: "/magazine",
-    col1Title: "Content",
-    col1Links: [
-      { label: "Latest Issue", href: "/magazine/latest" }, 
-      { label: "Interviews", href: "/magazine/interviews" }, 
-      { label: "Archive", href: "/magazine/archive" }
-    ],
-    col2Title: "Contribute",
-    col2Links: [
-      { label: "Submissions", href: "/magazine/submissions" }, 
-      { label: "Guidelines", href: "/magazine/guidelines" }, 
-      { label: "Work With Us", href: "/magazine/jobs" }
-    ],
+  {
+    type: "simple",
+    label: "Magazine",
+    href: "/magazine",
   },
-  
-};
+];
 
-export const NAV_LABELS = Object.keys(NAV_DATA);
+// ── Derived slices — no manual lists, no casts, always in sync ─────────────
+
+/** All items that have a submenu panel. Typed as SubmenuNavItem[]. */
+export const SUBMENU_NAV_ITEMS = NAV_ITEMS.filter(
+  (item): item is SubmenuNavItem => item.type === "submenu"
+);
