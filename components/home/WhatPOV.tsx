@@ -181,28 +181,31 @@ const WhatPOV = () => {
                         transformOrigin: 'bottom',
                       }}
                     >
-                      {isVideo ? (
-                        isMobileOrTab ? (
+                      <div className="absolute inset-0 w-full h-full">
+                        {isVideo ? (
+                          isMobileOrTab ? (
+                            <Image
+                              src={(item.img as string).replace(/\.(mp4|webm|ogg)$/i, ".jpg")}
+                              alt={item.title}
+                              fill
+                              className="object-cover"
+                              sizes="50vw"
+                              loading="lazy"
+                            />
+                          ) : (
+                            <LazyMarqueeVideo src={item.img as string} />
+                          )
+                        ) : (
                           <Image
-                            src={(item.img as string).replace(/\.(mp4|webm|ogg)$/i, ".jpg")}
+                            src={item.img}
                             alt={item.title}
                             fill
                             className="object-cover"
-                            sizes="50vw"
-                            
+                            sizes="(max-width: 768px) 50vw, 25vw"
+                            loading="lazy"
                           />
-                        ) : (
-                          <LazyMarqueeVideo src={item.img as string} />
-                        )
-                      ) : (
-                        <Image
-                          src={item.img}
-                          alt={item.title}
-                          fill
-                          className="object-cover"
-                          sizes="(max-width: 768px) 50vw, 25vw"
-                        />
-                      )}
+                        )}
+                      </div>
                     </Link>
                   );
                 }}

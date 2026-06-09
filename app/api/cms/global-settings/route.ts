@@ -45,7 +45,6 @@ async function ensureSettingsTableExists(supabase: any) {
 export async function GET() {
   try {
     const supabase = createServerClient();
-    await ensureSettingsTableExists(supabase);
 
     const { data, error } = await supabase
       .from("settings")

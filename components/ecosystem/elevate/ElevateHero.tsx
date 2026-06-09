@@ -67,43 +67,37 @@ const ElevateHero = () => {
     restDelta: 0.001,
   });
 
-  // MOBILE VIEW: Simple, non-sticky, plain text
-  if (isMobile) {
-    return (
-      <Container>
-        <section className="pt-32 pb-16 px-6 text-center">
-          <div className="max-w-5xl space-y-10">
-            <p className="text-h3-mobile font-medium leading-[1.3] text-justify text-neutral-900 pb-4">
-              {text1}
-            </p>
-            <p className="text-h3-mobile font-medium leading-[1.3] text-justify text-neutral-900">
-              {text2}
-            </p>
-          </div>
-        </section>
-      </Container>
-    );
-  }
-
-  // DESKTOP VIEW: Sticky, animated reveal
   return (
     <Container>
-      <section ref={containerRef} className="relative h-[200vh] w-full">
-        <div className="sticky top-0 h-screen flex flex-col items-center justify-center overflow-hidden">
-          <div className="px-10 text-center ">
-            <WordReveal
-              text={text1}
-              progress={smoothProgress}
-              range={[0, 0.45]}
-            />
-            <div className="h-4" aria-hidden="true" />
-            <WordReveal
-              text={text2}
-              progress={smoothProgress}
-              range={[0.45, 0.9]}
-            />
+      <section ref={containerRef} className={isMobile ? "relative py-16 px-6" : "relative h-[200vh] w-full"}>
+        {isMobile ? (
+          <div className="pt-32 pb-16 px-6 text-center">
+            <div className="max-w-5xl space-y-10">
+              <p className="text-h3-mobile font-medium leading-[1.3] text-justify text-neutral-900 pb-4">
+                {text1}
+              </p>
+              <p className="text-h3-mobile font-medium leading-[1.3] text-justify text-neutral-900">
+                {text2}
+              </p>
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className="sticky top-0 h-screen flex flex-col items-center justify-center overflow-hidden">
+            <div className="px-10 text-center ">
+              <WordReveal
+                text={text1}
+                progress={smoothProgress}
+                range={[0, 0.45]}
+              />
+              <div className="h-4" aria-hidden="true" />
+              <WordReveal
+                text={text2}
+                progress={smoothProgress}
+                range={[0.45, 0.9]}
+              />
+            </div>
+          </div>
+        )}
       </section>
     </Container>
   );

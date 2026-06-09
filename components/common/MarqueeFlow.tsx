@@ -48,6 +48,7 @@ export default function MarqueeFlow<T>({
   const [visibleCount, setVisibleCount] = useState(desktopCount);
   const [activeGap, setActiveGap] = useState(gap);
   const [itemWidth, setItemWidth] = useState(0);
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
     reduceMotionRef.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -116,6 +117,7 @@ export default function MarqueeFlow<T>({
         if (btn) btn.style.clipPath = isExp ? "inset(0% 0 0 0)" : "inset(40% 0 0 0)";
       });
 
+      setReady(true);
       onExpandChangeRef.current?.(expandedIndexRef.current);
     };
 
@@ -220,7 +222,7 @@ export default function MarqueeFlow<T>({
         className="relative w-full h-full"
         style={{ willChange: "transform" }}
       >
-        {items.map((item, i) => (
+        {ready && items.map((item, i) => (
           <div
             key={i}
             ref={(el) => { itemRefs.current[i] = el; }}

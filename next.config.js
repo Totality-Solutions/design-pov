@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  allowedDevOrigins: ['192.168.1.34'],
   compress: true,
   images: {
     formats: ["image/avif", "image/webp"],

@@ -42,7 +42,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning className={montserrat.variable}>
+    <html lang="en" suppressHydrationWarning className={montserrat.variable} data-scroll-behavior="smooth">
       <body className="grain" suppressHydrationWarning>
         <script dangerouslySetInnerHTML={{
           __html: `
