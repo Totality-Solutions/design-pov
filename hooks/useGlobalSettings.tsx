@@ -1,8 +1,8 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { createContext, useContext, type ReactNode } from "react";
 
-interface GlobalSettings {
+export interface GlobalSettings {
   hideTickets: boolean;
   isHiring: boolean;
 }
@@ -11,30 +11,15 @@ const defaults: GlobalSettings = { hideTickets: false, isHiring: false };
 
 const GlobalSettingsContext = createContext<GlobalSettings>(defaults);
 
-export function GlobalSettingsProvider({ children }: { children: ReactNode }) {
-  const [settings, setSettings] = useState<GlobalSettings>(defaults);
-
-  useEffect(() => {
-    let cancelled = false;
-    fetch("/api/cms/global-settings")
-      .then((r) => (r.ok ? r.json() : null))
-      .then((data) => {
-        if (cancelled || !data) return;
-        setSettings((prev) => {
-          const next = {
-            hideTickets: !!data.hideTickets,
-            isHiring: !!data.isHiring,
-          };
-          if (next.hideTickets === prev.hideTickets && next.isHiring === prev.isHiring) {
-            return prev;
-          }
-          return next;
-        });
-      })
-      .catch(() => {});
-    return () => { cancelled = true; };
-  }, []);
-
+// Receives data as props — no fetch, no useEffect, no state.
+// Data is already resolved by the time this mounts.
+export function GlobalSettingsProvider({
+  children,
+  settings,
+}: {
+  children: ReactNode;
+  settings: GlobalSettings;
+}) {
   return (
     <GlobalSettingsContext.Provider value={settings}>
       {children}
