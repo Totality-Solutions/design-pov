@@ -244,7 +244,7 @@ export default function Navbar() {
               }`}
             >
               <div className="w-[60%] h-[320px] relative overflow-hidden bg-black">
-                <img
+                <Image
                   src={item.image}
                   alt={item.label}
                   loading="eager"
