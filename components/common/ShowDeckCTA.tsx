@@ -12,7 +12,7 @@ const ShowDeckCTA = () => {
     <>
       <div className="w-full z-10 bg-white border-t border-b border-black/20">
         <CTAStrip
-          title="Highlights: Design POV 2025"
+          title="Highlights: Design POV 2026"
           ctaLabel="Download Show Deck"
           onClick={() => setIsFormOpen(true)}
           hoverBgColor="#000000"

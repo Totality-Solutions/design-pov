@@ -403,7 +403,7 @@ export default function Navbar() {
               className="flex items-center justify-center"
             >
               <img
-                src={cdn("/qr/qr-ticket.png")}
+                src={cdn("/qr/Ticket-2027.png")}
                 alt="QR ticket"
                 width={390}
                 height={390}

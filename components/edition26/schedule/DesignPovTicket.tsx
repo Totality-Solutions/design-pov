@@ -8,8 +8,8 @@ const DesignPovTicket = () => {
   // Common data - make these props for a reusable component
   const eventData = {
     title: 'DESIGN POV Index',
-    tagline: 'Sense & Sensibility',
-    date: '15 - 16 - 17 May, 2026',
+    tagline: '',
+    date: '02 - 03 - 04 May, 2027',
     location: 'Jio World Convention Centre',
     qrCodeImage: cdn('/qr/ticket-qr.svg'), 
   };

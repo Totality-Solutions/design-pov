@@ -41,7 +41,7 @@ export const NAV_DATA: Record<string, SubmenuContent> = {
   },
   "2026 Edition": {
     mainHref: "/edition",
-    image: cdn("/qr/qr-ticket.png"),
+    image: cdn("/qr/Ticket-2027.png"),
     filetype: "image",
     col1Links: [
       { label: "Theme",    href: "/edition/theme" },

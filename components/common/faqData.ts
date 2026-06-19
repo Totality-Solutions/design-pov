@@ -25,8 +25,8 @@ export const faqData: FAQCategory[] = [
         answer: "Design POV is a curated platform that brings together architecture, interiors, art, material innovation, and cultural dialogue through immersive spatial experiences and collaborations."
       },
       {
-        question: "When and where is Design POV '26 taking place?",
-        answer: "Design POV '26 will take place from 15–17 May 2026 at Jio World Convention Centre. Show timings are from 11am to 8pm on all three days."
+        question: "When and where is Design POV '27 taking place?",
+        answer: "Design POV '27 will take place from 02-04 May 2027 at Jio World Convention Centre. Show timings are from 11am to 8pm on all three days."
       },
       {
         question: "Who is Design POV for?",
