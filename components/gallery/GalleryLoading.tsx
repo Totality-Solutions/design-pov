@@ -17,7 +17,7 @@ export default function GalleryLoading() {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.4, ease: "easeInOut" }}
     >
-      <div className="w-full max-w-[1440px] mx-auto px-[23px] pt-[140px] pb-[60px]">
+      <div className="w-full px-[23px] pt-[140px] pb-[60px]">
         <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-[10px]">
           {galleryItems.map((item, index) => {
             const gradient = GRADIENTS[index % GRADIENTS.length];

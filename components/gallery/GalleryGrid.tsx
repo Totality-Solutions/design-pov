@@ -1,134 +1,98 @@
 "use client";
 
-import { useState, useMemo, useCallback } from "react";
-import { motion } from "framer-motion";
+import { useState, useMemo, useCallback, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { galleryItems } from "./galleryData";
 import GalleryCard from "./GalleryCard";
 import GalleryHero from "./GalleryHero";
-import GalleryFeatured from "./GalleryFeatured";
 import type { GalleryItem } from "./types";
 
 export default function GalleryGrid() {
   const [activeCategory, setActiveCategory] = useState("all");
-  const [selectedItem, setSelectedItem] = useState<GalleryItem | null>(null);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [shuffledGallery, setShuffledGallery] = useState<GalleryItem[]>([]);
 
-  const handleSelect = useCallback((item: GalleryItem) => {
-    setSelectedItem(item);
+  useEffect(() => {
+    const shuffled = [...galleryItems];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    setShuffledGallery(shuffled);
   }, []);
 
-  const handleBack = useCallback(() => {
-    setSelectedItem(null);
+  const displayItems = useMemo(() => {
+    const source = shuffledGallery.length > 0 ? shuffledGallery : galleryItems;
+    if (activeCategory === "all") return source;
+    return source.filter((item) => item.category === activeCategory);
+  }, [activeCategory, shuffledGallery]);
+
+  const selectedItem = useMemo(
+    () => displayItems.find((item) => item.id === selectedId) ?? null,
+    [displayItems, selectedId]
+  );
+
+  const handleSelect = useCallback((item: GalleryItem) => {
+    setSelectedId(item.id);
+  }, []);
+
+  const handleClose = useCallback(() => {
+    setSelectedId(null);
   }, []);
 
   const handleCategoryChange = useCallback((cat: string) => {
     setActiveCategory(cat);
-    setSelectedItem(null);
+    setSelectedId(null);
   }, []);
 
-  const relatedItems = useMemo(
-    () => {
-      if (!selectedItem) return [];
-      return galleryItems.filter(
-        (item) =>
-          item.category === selectedItem.category &&
-          item.id !== selectedItem.id
-      );
-    },
-    [selectedItem]
-  );
+  const handleBack = useCallback(() => {
+    setSelectedId(null);
+  }, []);
 
-  const rightSideItems = useMemo(
-    () => relatedItems.slice(0, 3),
-    [relatedItems]
-  );
-
-  const bottomItems = useMemo(
-    () => relatedItems.slice(3),
-    [relatedItems]
-  );
-
-  const displayItems = useMemo(
-    () => {
-      const items =
-        activeCategory === "all"
-          ? galleryItems
-          : galleryItems.filter((item) => item.category === activeCategory);
-      if (!selectedItem) return items;
-      const excludedIds = new Set([
-        selectedItem.id,
-        ...relatedItems.map((r) => r.id),
-      ]);
-      return items.filter((item) => !excludedIds.has(item.id));
-    },
-    [activeCategory, selectedItem, relatedItems]
-  );
+  const handleToggleForm = useCallback(() => {
+    setIsFormOpen((prev) => !prev);
+  }, []);
 
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 0.6, delay: 0.2 }}
+      transition={{ duration: 0.4 }}
     >
       <GalleryHero
         activeCategory={activeCategory}
         onCategoryChange={handleCategoryChange}
         selectedItem={selectedItem}
         onBack={handleBack}
+        isFormOpen={isFormOpen}
+        onToggleForm={handleToggleForm}
       />
-      <div className="w-full max-w-[1440px] mx-auto px-[23px] py-[30px]">
-        {selectedItem && (
-          <div className="mb-[10px]">
-            <div className="flex flex-col xl:flex-row gap-[10px]">
-              <div className="xl:w-[70%]">
-                <GalleryFeatured key="featured" item={selectedItem} />
-              </div>
-              {rightSideItems.length > 0 && (
-                <div className="xl:w-[30%]">
-                  <div className="columns-1 gap-[10px]">
-                    {rightSideItems.map((item, index) => (
-                      <GalleryCard
-                        key={item.id}
-                        item={item}
-                        index={index}
-                        onSelect={handleSelect}
-                      />
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-            {bottomItems.length > 0 && (
-              <div
-                className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 mt-[10px]"
-                style={{ columnGap: "10px" }}
-              >
-                {bottomItems.map((item, index) => (
-                  <GalleryCard
-                    key={item.id}
-                    item={item}
-                    index={index}
-                    onSelect={handleSelect}
-                  />
-                ))}
-              </div>
-            )}
-          </div>
-        )}
-        {!selectedItem && (
-          <div
-            className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4"
-            style={{ columnGap: "10px" }}
-          >
+      
+      <div className="w-full px-[23px] py-[30px]">
+        <motion.div 
+          layout
+          className="relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 grid-flow-dense place-content-start items-start w-full"
+          style={{ 
+            display: "grid",
+            gridAutoRows: "10px", 
+            gap: "10px" 
+          }}
+        >
+          {/* mode="popLayout" pulls exiting items out of the flow immediately */}
+          <AnimatePresence mode="popLayout">
             {displayItems.map((item, index) => (
               <GalleryCard
                 key={item.id}
                 item={item}
                 index={index}
+                isExpanded={selectedId === item.id}
                 onSelect={handleSelect}
+                onClose={handleClose}
               />
             ))}
-          </div>
-        )}
+          </AnimatePresence>
+        </motion.div>
       </div>
     </motion.div>
   );
