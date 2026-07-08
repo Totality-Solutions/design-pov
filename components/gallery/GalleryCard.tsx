@@ -118,10 +118,10 @@ const handleDownload = useCallback(
         gridRowEnd: `span ${rowSpan}`,
         height: "100%" 
       }}
-      className={`bg-white overflow-hidden border border-[#EFEFEF] transform-gpu origin-center w-full ${
+      className={` overflow-hidden border border-[#EFEFEF] transform-gpu origin-center w-full ${
         isExpanded 
-          ? "col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-2 z-10" 
-          : "col-span-1 z-0"
+          ? "col-span-2 sm:col-span-2 lg:col-span-2 xl:col-span-2 z-10 bg-black" 
+          : "col-span-1 z-0 bg-white"
       }`}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
@@ -137,7 +137,7 @@ const handleDownload = useCallback(
             className={`${
         isExpanded 
           ? "object-contain" 
-          : "object-cover"
+          : "object-cover object-top"
       }`}
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 70vw"
             priority
@@ -183,12 +183,12 @@ const handleDownload = useCallback(
       ) : (
         <motion.div layout className="flex flex-col h-full w-full">
           <div className="relative flex-1 p-[10px] min-h-0">
-            <div className="relative w-full h-full  overflow-hidden bg-gray-50">
+            <div className="relative w-full h-full  overflow-hidden">
               <Image
                 src={item.imageSrc}
                 alt={item.title}
                 fill
-                className="object-cover"
+                className="object-cover object-top"
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
               />
             </div>

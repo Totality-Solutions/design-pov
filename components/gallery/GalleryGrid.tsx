@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useCallback, useEffect } from "react";
+import { useState, useMemo, useCallback, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { galleryItems } from "./galleryData";
 import GalleryCard from "./GalleryCard";
@@ -12,6 +12,8 @@ export default function GalleryGrid() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [shuffledGallery, setShuffledGallery] = useState<GalleryItem[]>([]);
+  const [page, setPage] = useState(1);
+  const sentinelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const shuffled = [...galleryItems];
@@ -22,15 +24,45 @@ export default function GalleryGrid() {
     setShuffledGallery(shuffled);
   }, []);
 
-  const displayItems = useMemo(() => {
+  useEffect(() => {
+    const sentinel = sentinelRef.current;
+    if (!sentinel) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setPage((p) => p + 1);
+        }
+      },
+      { rootMargin: "400px" }
+    );
+
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, []);
+
+  const baseItems = useMemo(() => {
     const source = shuffledGallery.length > 0 ? shuffledGallery : galleryItems;
     if (activeCategory === "all") return source;
     return source.filter((item) => item.category === activeCategory);
   }, [activeCategory, shuffledGallery]);
 
+  const displayItems = useMemo(() => {
+    const items: GalleryItem[] = [];
+    for (let i = 0; i < page; i++) {
+      baseItems.forEach((item) => {
+        items.push({ ...item, id: `${item.id}-page-${i}` });
+      });
+    }
+    return items;
+  }, [baseItems, page]);
+
   const selectedItem = useMemo(
-    () => displayItems.find((item) => item.id === selectedId) ?? null,
-    [displayItems, selectedId]
+    () =>
+      displayItems.find((item) => item.id === selectedId) ??
+      shuffledGallery.find((item) => item.id === selectedId) ??
+      null,
+    [displayItems, shuffledGallery, selectedId]
   );
 
   const handleSelect = useCallback((item: GalleryItem) => {
@@ -44,6 +76,7 @@ export default function GalleryGrid() {
   const handleCategoryChange = useCallback((cat: string) => {
     setActiveCategory(cat);
     setSelectedId(null);
+    setPage(1);
   }, []);
 
   const handleBack = useCallback(() => {
@@ -69,10 +102,10 @@ export default function GalleryGrid() {
         onToggleForm={handleToggleForm}
       />
       
-      <div className="w-full px-[23px] py-[30px]">
+      <div className="w-full px-[23px] py-[30px] pt-[100px] sm:pt-[30px]">
         <motion.div 
           layout
-          className="relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 grid-flow-dense place-content-start items-start w-full"
+          className="relative grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 grid-flow-dense place-content-start items-start w-full"
           style={{ 
             display: "grid",
             gridAutoRows: "10px", 
@@ -93,6 +126,7 @@ export default function GalleryGrid() {
             ))}
           </AnimatePresence>
         </motion.div>
+        <div ref={sentinelRef} className="h-px w-full" />
       </div>
     </motion.div>
   );
