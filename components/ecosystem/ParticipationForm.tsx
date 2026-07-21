@@ -73,6 +73,7 @@ export default function ParticipationForm() {
 
   return (
     <section
+      id="participate"
       className="w-full bg-white font-display pb-20 overflow-x-hidden"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
