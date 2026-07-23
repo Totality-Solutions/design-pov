@@ -5,6 +5,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { galleryItems } from "./galleryData";
 import GalleryCard from "./GalleryCard";
 import GalleryHero from "./GalleryHero";
+import Toast from "./Toast";
+import type { ToastData } from "./Toast";
 import type { GalleryItem } from "./types";
 
 export default function GalleryGrid() {
@@ -13,7 +15,9 @@ export default function GalleryGrid() {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [shuffledGallery, setShuffledGallery] = useState<GalleryItem[]>([]);
   const [page, setPage] = useState(1);
+  const [toast, setToast] = useState<ToastData | null>(null);
   const sentinelRef = useRef<HTMLDivElement>(null);
+  const toastIdRef = useRef(0);
 
   useEffect(() => {
     const shuffled = [...galleryItems];
@@ -87,47 +91,76 @@ export default function GalleryGrid() {
     setIsFormOpen((prev) => !prev);
   }, []);
 
+  const handleFormSuccess = useCallback(() => {
+    setIsFormOpen(false);
+    toastIdRef.current += 1;
+    setToast({
+      id: `toast-${toastIdRef.current}`,
+      message: "Thank you! Your project has been submitted successfully.",
+      type: "success",
+    });
+  }, []);
+
+  const handleFormError = useCallback((message: string) => {
+    toastIdRef.current += 1;
+    setToast({
+      id: `toast-${toastIdRef.current}`,
+      message,
+      type: "error",
+    });
+  }, []);
+
+  const handleDismissToast = useCallback((id: string) => {
+    setToast((prev) => (prev?.id === id ? null : prev));
+  }, []);
+
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.4 }}
-    >
-      <GalleryHero
-        activeCategory={activeCategory}
-        onCategoryChange={handleCategoryChange}
-        selectedItem={selectedItem}
-        onBack={handleBack}
-        isFormOpen={isFormOpen}
-        onToggleForm={handleToggleForm}
-      />
-      
-      <div className="w-full px-[23px] py-[30px] pt-[100px] sm:pt-[30px]">
-        <motion.div 
-          layout
-          className="relative grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 grid-flow-dense place-content-start items-start w-full"
-          style={{ 
-            display: "grid",
-            gridAutoRows: "10px", 
-            gap: "10px" 
-          }}
-        >
-          {/* mode="popLayout" pulls exiting items out of the flow immediately */}
-          <AnimatePresence mode="popLayout">
-            {displayItems.map((item, index) => (
-              <GalleryCard
-                key={item.id}
-                item={item}
-                index={index}
-                isExpanded={selectedId === item.id}
-                onSelect={handleSelect}
-                onClose={handleClose}
-              />
-            ))}
-          </AnimatePresence>
-        </motion.div>
-        <div ref={sentinelRef} className="h-px w-full" />
-      </div>
-    </motion.div>
+    <>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.4 }}
+      >
+        <GalleryHero
+          activeCategory={activeCategory}
+          onCategoryChange={handleCategoryChange}
+          selectedItem={selectedItem}
+          onBack={handleBack}
+          isFormOpen={isFormOpen}
+          onToggleForm={handleToggleForm}
+          onFormSuccess={handleFormSuccess}
+          onFormError={handleFormError}
+        />
+        
+        <div className="w-full px-[23px] py-[30px] pt-[100px] sm:pt-[30px]">
+          <motion.div 
+            layout
+            className="relative grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 grid-flow-dense place-content-start items-start w-full"
+            style={{ 
+              display: "grid",
+              gridAutoRows: "10px", 
+              gap: "10px" 
+            }}
+          >
+            {/* mode="popLayout" pulls exiting items out of the flow immediately */}
+            <AnimatePresence mode="popLayout">
+              {displayItems.map((item, index) => (
+                <GalleryCard
+                  key={item.id}
+                  item={item}
+                  index={index}
+                  isExpanded={selectedId === item.id}
+                  onSelect={handleSelect}
+                  onClose={handleClose}
+                />
+              ))}
+            </AnimatePresence>
+          </motion.div>
+          <div ref={sentinelRef} className="h-px w-full" />
+        </div>
+      </motion.div>
+
+      <Toast toast={toast} onDismiss={handleDismissToast} />
+    </>
   );
 }
