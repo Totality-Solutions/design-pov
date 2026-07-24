@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import CTABtn from "../common/CTABtn";
+import { isValidEmail, isValidName } from "@/lib/validation";
 
 type FormData = {
   name: string;
@@ -21,6 +22,7 @@ const ContactFormSection = () => {
   const [formData, setFormData] = useState<FormData>(EMPTY);
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
+  const submittingRef = useRef(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -28,8 +30,20 @@ const ContactFormSection = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.name || !formData.email) return;
+    if (submittingRef.current) return;
 
+    if (!isValidName(formData.name)) {
+      setStatus("error");
+      setErrorMsg("Please enter your full name.");
+      return;
+    }
+    if (!isValidEmail(formData.email)) {
+      setStatus("error");
+      setErrorMsg("Please enter a valid email address.");
+      return;
+    }
+
+    submittingRef.current = true;
     setStatus("loading");
     setErrorMsg("");
 
@@ -49,6 +63,8 @@ const ContactFormSection = () => {
     } catch (err: any) {
       setStatus("error");
       setErrorMsg(err.message || "Failed to send. Please try again.");
+    } finally {
+      submittingRef.current = false;
     }
   };
 
@@ -108,6 +124,7 @@ const ContactFormSection = () => {
 
           <CTABtn
             label={status === "loading" ? "Sending..." : "Talk to Us"}
+            disabled={status === "loading"}
           />
         </form>
       </div>

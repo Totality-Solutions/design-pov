@@ -3,6 +3,7 @@
 import React, { useState, useRef } from 'react';
 import SectionHeading from '../common/SectionHeading';
 import CTABtn from '../common/CTABtn';
+import { isValidEmail, isValidPhone, isValidName } from '@/lib/validation';
 
 export default function MagazineSubmissionForm() {
   const [name, setName] = useState("");
@@ -16,6 +17,7 @@ export default function MagazineSubmissionForm() {
   const [errorMsg, setErrorMsg] = useState("");
 
   const formRef = useRef<HTMLFormElement>(null);
+  const submittingRef = useRef(false);
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>, type: 'doc' | 'img') {
     const file = e.target.files?.[0];
@@ -27,12 +29,26 @@ export default function MagazineSubmissionForm() {
 
   async function handleSubmit(e?: React.MouseEvent) {
     if (e) e.preventDefault();
+    if (submittingRef.current) return;
 
-    if (!name.trim() || !email.trim() || !phone.trim() || !docName?.trim()) {
-      setErrorMsg("Please fill in all required fields.");
+    if (!isValidName(name)) {
+      setErrorMsg("Please enter your full name.");
+      return;
+    }
+    if (!isValidEmail(email)) {
+      setErrorMsg("Please enter a valid email address.");
+      return;
+    }
+    if (!isValidPhone(phone)) {
+      setErrorMsg("Please enter a valid phone number.");
+      return;
+    }
+    if (!docName?.trim()) {
+      setErrorMsg("Please upload the required document.");
       return;
     }
     setErrorMsg("");
+    submittingRef.current = true;
     setIsLoading(true);
 
     try {
@@ -61,6 +77,7 @@ export default function MagazineSubmissionForm() {
     } catch (err: any) {
       setErrorMsg(err.message || "Something went wrong. Please try again.");
     } finally {
+      submittingRef.current = false;
       setIsLoading(false);
     }
   }

@@ -271,6 +271,8 @@ export default function PovMailInbox({ initialMails }: { initialMails: Mail[] })
   );
 }
 
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 function ForwardModal({ mail, onClose }: { mail: Mail; onClose: () => void }) {
   const [to, setTo]         = useState("");
   const [sending, setSending] = useState(false);
@@ -278,13 +280,18 @@ function ForwardModal({ mail, onClose }: { mail: Mail; onClose: () => void }) {
   const [error, setError]    = useState("");
 
   async function send() {
-    if (!to) return;
+    const trimmed = to.trim();
+    if (!trimmed) return;
+    if (!EMAIL_RE.test(trimmed)) {
+      setError("Enter a complete email address (e.g. name@example.com)");
+      return;
+    }
     setSending(true);
     setError("");
     const res = await fetch("/api/cms/pov-mail/forward", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ to, mail }),
+      body: JSON.stringify({ to: trimmed, mail }),
     });
     setSending(false);
     if (res.ok) { setSent(true); setTimeout(onClose, 1500); }

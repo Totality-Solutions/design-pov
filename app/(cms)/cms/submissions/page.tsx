@@ -1,6 +1,7 @@
 import CmsSidebar from "@/components/cms/CmsSidebar";
 import SubmissionsTable from "@/components/cms/SubmissionsTable";
 import { createServerClient } from "@/lib/supabase/server";
+import { getToEmail } from "@/lib/mailDepartment";
 
 export const dynamic = "force-dynamic";
 
@@ -10,7 +11,7 @@ async function getSubmissions() {
     .select("*")
     .order("created_at", { ascending: false });
 
-  return data ?? [];
+  return (data ?? []).map((row) => ({ ...row, to_email: getToEmail(row.type, row.category) }));
 }
 
 export default async function SubmissionsPage() {

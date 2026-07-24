@@ -1,35 +1,46 @@
-export type Department = "marketing" | "sales" | "hr";
+export type Department = "marketing" | "sales" | "core" | "rsvp";
 
-const SALES_KEYS = ["core", "partner", "partnership"];
-// Add keywords that should route to the HR department
-const HR_KEYS = ["hr", "career", "job", "resume", "hiring", "recruit"];
+const RSVP_KEYS = ["rsvp", "ticket"];
+const CORE_KEYS = ["core"];
+const SALES_KEYS = ["partner", "partnership", "sponsor", "sponsorship", "brand"];
 
-export function getDepartment(type = "", category = ""): Department {
-  const t = type.toLowerCase();
-  const c = category.toLowerCase();
+export function getDepartment(type?: string | null, category?: string | null): Department {
+  const t = (type || "").toLowerCase();
+  const c = (category || "").toLowerCase();
 
-  // 1. Check for Sales
+  // 1. Check for RSVP
+  if (RSVP_KEYS.some((k) => t.includes(k) || c.includes(k))) {
+    return "rsvp";
+  }
+
+  // 2. Check for Core
+  if (CORE_KEYS.some((k) => t.includes(k) || c.includes(k))) {
+    return "core";
+  }
+
+  // 3. Check for Sales
   if (SALES_KEYS.some((k) => t.includes(k) || c.includes(k))) {
     return "sales";
   }
-  
-  // 2. Check for HR
-  if (HR_KEYS.some((k) => t.includes(k) || c.includes(k))) {
-    return "hr";
-  }
 
-  // 3. Default to Marketing
+  // 4. Default to Marketing
   return "marketing";
 }
 
 export const DEPARTMENT_LABELS: Record<Department, string> = {
   marketing: "Marketing",
   sales: "Sales",
-  hr: "HR",
+  core: "Core",
+  rsvp: "RSVP",
 };
 
 export const DEPARTMENT_EMAILS: Record<Department, string> = {
   marketing: process.env.MAIL_MARKETING || "marketing@designpovindia.com",
   sales:     process.env.MAIL_SALES     || "sales@designpovindia.com",
-  hr:        process.env.MAIL_HR        || "hr@totality.solutions",
+  core:      process.env.MAIL_CORE      || "core@designpovindia.com",
+  rsvp:      process.env.MAIL_RSVP      || "rsvp@designpovindia.com",
 };
+
+export function getToEmail(type?: string | null, category?: string | null): string {
+  return DEPARTMENT_EMAILS[getDepartment(type, category)];
+}

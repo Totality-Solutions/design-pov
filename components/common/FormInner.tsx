@@ -1,6 +1,7 @@
 "use client";
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import CTABtn from './CTABtn';
+import { isValidEmail, isValidPhone, isValidName } from '@/lib/validation';
 
 export default function FormInner({ category }: { category?: string }) {
   const [name, setName] = useState("");
@@ -11,6 +12,7 @@ export default function FormInner({ category }: { category?: string }) {
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+  const submittingRef = useRef(false);
 
   const isElevate = category?.toLowerCase() === "elevate";
 
@@ -20,11 +22,22 @@ export default function FormInner({ category }: { category?: string }) {
   }
 
   async function handleSubmit() {
-    if (!name.trim() || !email.trim() || !phone.trim()) {
-      setErrorMsg("Please fill in all required fields.");
+    if (submittingRef.current) return;
+
+    if (!isValidName(name)) {
+      setErrorMsg("Please enter your full name.");
+      return;
+    }
+    if (!isValidEmail(email)) {
+      setErrorMsg("Please enter a valid email address.");
+      return;
+    }
+    if (!isValidPhone(phone)) {
+      setErrorMsg("Please enter a valid phone number.");
       return;
     }
     setErrorMsg("");
+    submittingRef.current = true;
     setIsLoading(true);
 
     try {
@@ -53,6 +66,7 @@ export default function FormInner({ category }: { category?: string }) {
     } catch (err: any) {
       setErrorMsg(err.message || "Something went wrong. Please try again.");
     } finally {
+      submittingRef.current = false;
       setIsLoading(false);
     }
   }

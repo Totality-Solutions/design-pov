@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { SESClient, SendEmailCommand } from '@aws-sdk/client-ses';
 import { createServerClient } from '@/lib/supabase/server';
-import { getDepartment } from '@/lib/mailDepartment';
+import { getDepartment, DEPARTMENT_EMAILS } from '@/lib/mailDepartment';
 
 let _ses: SESClient | null = null;
 function getSesClient() {
@@ -20,8 +20,6 @@ function getSesClient() {
   return _ses;
 }
 
-const MARKETING_EMAIL = 'marketing@designpovindia.com';
-const HR_EMAIL = 'hr@totalitysolutions.com';
 const FROM_EMAIL = process.env.SES_FROM_EMAIL || 'noreply@designpovindia.com';
 
 function buildEmailHtml(fields: Record<string, string | null>) {
@@ -50,7 +48,7 @@ function buildEmailHtml(fields: Record<string, string | null>) {
     </div>`;
 }
 
-async function sendEmail(subject: string, fields: Record<string, string | null>) {
+async function sendEmail(to: string, subject: string, fields: Record<string, string | null>) {
   const plainText = Object.entries(fields)
     .filter(([, v]) => v != null)
     .map(([k, v]) => `${k}: ${v}`)
@@ -58,7 +56,7 @@ async function sendEmail(subject: string, fields: Record<string, string | null>)
 
   await getSesClient().send(new SendEmailCommand({
     Source: `Design POV <${FROM_EMAIL}>`,
-    Destination: { ToAddresses: [MARKETING_EMAIL] },
+    Destination: { ToAddresses: [to] },
     Message: {
       Subject: { Data: subject, Charset: 'UTF-8' },
       Body: {
@@ -77,6 +75,9 @@ export async function POST(req: Request) {
     const supabase = createServerClient();
 
     // 1. Save to submissions table
+    const department = getDepartment(type, category);
+    const toEmail = DEPARTMENT_EMAILS[department];
+
     const { data, error } = await supabase
       .from('submissions')
       .insert([{
@@ -99,7 +100,6 @@ export async function POST(req: Request) {
     console.log('[submissions] Saved to Supabase:', data);
 
     // 2. Dual-write to pov_mails (non-blocking)
-    const department = getDepartment(type, category);
     supabase.from('pov_mails').insert([{
       department,
       form_type: type,
@@ -119,7 +119,7 @@ export async function POST(req: Request) {
     });
 
     // 3. Send SES email (non-blocking)
-    sendEmail(`New Submission: ${category || type || 'Form'}`, {
+    sendEmail(toEmail, `New Submission: ${category || type || 'Form'}`, {
       Category: category || type || null,
       Name: name || null,
       Email: email || null,

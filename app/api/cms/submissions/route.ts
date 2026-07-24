@@ -1,5 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 import { NextResponse } from "next/server";
+import { getToEmail } from "@/lib/mailDepartment";
 
 function getClient() {
   return createClient(
@@ -22,7 +23,8 @@ export async function GET(req: Request) {
   const { data, error } = await query;
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
-  return NextResponse.json({ data });
+  const withToEmail = (data ?? []).map((row) => ({ ...row, to_email: getToEmail(row.type, row.category) }));
+  return NextResponse.json({ data: withToEmail });
 }
 
 export async function DELETE(req: Request) {
