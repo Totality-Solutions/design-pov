@@ -1,5 +1,5 @@
 import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
-import { NextResponse } from "next/server";
+import { NextResponse, after } from "next/server";
 import { createServerClient } from "@/lib/supabase/server";
 
 let _ses: SESClient | null = null;
@@ -52,22 +52,24 @@ export async function POST(req: Request) {
       console.log('[contact] Saved to Supabase:', data);
     }
 
-    // 2. Dual-write to pov_mails (non-blocking)
-    supabase.from('pov_mails').insert([{
-      department: 'marketing',
-      form_type: 'contact',
-      category: 'Contact Page',
-      subject: `Contact Enquiry from ${name}`,
-      from_name: name,
-      from_email: email,
-      from_phone: contact || null,
-      message: message || null,
-      extra_data: {
-        ...(organization && { organization }),
-        ...(designation && { designation }),
-        ...(location && { location }),
-      },
-    }]).then(({ data: mailData, error: mailErr }) => {
+    // 2. Dual-write to pov_mails — deferred via after() so it reliably
+    // completes instead of being silently dropped once the response is sent.
+    after(async () => {
+      const { data: mailData, error: mailErr } = await supabase.from('pov_mails').insert([{
+        department: 'marketing',
+        form_type: 'contact',
+        category: 'Contact Page',
+        subject: `Contact Enquiry from ${name}`,
+        from_name: name,
+        from_email: email,
+        from_phone: contact || null,
+        message: message || null,
+        extra_data: {
+          ...(organization && { organization }),
+          ...(designation && { designation }),
+          ...(location && { location }),
+        },
+      }]);
       if (mailErr) {
         console.error('[contact] pov_mails write error:', mailErr);
       } else {

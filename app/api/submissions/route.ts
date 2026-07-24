@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { NextResponse, after } from 'next/server';
 import { SESClient, SendEmailCommand } from '@aws-sdk/client-ses';
 import { createServerClient } from '@/lib/supabase/server';
 import { getDepartment, DEPARTMENT_EMAILS } from '@/lib/mailDepartment';
@@ -99,35 +99,39 @@ export async function POST(req: Request) {
 
     console.log('[submissions] Saved to Supabase:', data);
 
-    // 2. Dual-write to pov_mails (non-blocking)
-    supabase.from('pov_mails').insert([{
-      department,
-      form_type: type,
-      category,
-      subject: `New Submission: ${category || type || 'Form'}`,
-      from_name: name || null,
-      from_email: email || null,
-      from_phone: contact || null,
-      message: message || null,
-      extra_data: fileName ? { file_name: fileName } : {},
-    }]).then(({ data: mailData, error: mailErr }) => {
+    // 2 & 3. pov_mails dual-write + SES email — deferred via after() so the
+    // response returns immediately, but Vercel keeps the function alive until
+    // these actually finish instead of silently dropping them mid-flight.
+    after(async () => {
+      const { data: mailData, error: mailErr } = await supabase.from('pov_mails').insert([{
+        department,
+        form_type: type,
+        category,
+        subject: `New Submission: ${category || type || 'Form'}`,
+        from_name: name || null,
+        from_email: email || null,
+        from_phone: contact || null,
+        message: message || null,
+        extra_data: fileName ? { file_name: fileName } : {},
+      }]);
       if (mailErr) {
         console.error('[submissions] pov_mails write error:', mailErr);
       } else {
         console.log('[submissions] Saved to pov_mails:', mailData);
       }
-    });
 
-    // 3. Send SES email (non-blocking)
-    sendEmail(toEmail, `New Submission: ${category || type || 'Form'}`, {
-      Category: category || type || null,
-      Name: name || null,
-      Email: email || null,
-      Phone: contact || null,
-      Message: message || null,
-      'File Name': fileName || null,
-    }).catch((emailErr) => {
-      console.error('[submissions] SES email error (non-fatal):', emailErr);
+      try {
+        await sendEmail(toEmail, `New Submission: ${category || type || 'Form'}`, {
+          Category: category || type || null,
+          Name: name || null,
+          Email: email || null,
+          Phone: contact || null,
+          Message: message || null,
+          'File Name': fileName || null,
+        });
+      } catch (emailErr) {
+        console.error('[submissions] SES email error (non-fatal):', emailErr);
+      }
     });
 
     return NextResponse.json({ success: true, data }, { status: 200 });
