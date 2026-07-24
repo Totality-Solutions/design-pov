@@ -16,6 +16,8 @@ type Mail = {
   message: string;
   extra_data: Record<string, any>;
   is_read: boolean;
+  to_email: string | null;
+  mail_sent: boolean;
   created_at: string;
 };
 
@@ -89,7 +91,7 @@ export default function PovMailInbox({ initialMails }: { initialMails: Mail[] })
       `From: ${mail.from_name || "—"} <${mail.from_email || "—"}>`,
       `Phone: ${mail.from_phone || "—"}`,
       `Category: ${mail.category || "—"}`,
-      `Date: ${new Date(mail.created_at).toLocaleString("en-IN")}`,
+      `Date: ${new Date(mail.created_at).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}`,
       mail.message ? `\nMessage:\n${mail.message}` : "",
       ...Object.entries(mail.extra_data || {}).map(([k, v]) => `${k}: ${v}`),
     ].filter(Boolean).join("\n");
@@ -168,7 +170,7 @@ export default function PovMailInbox({ initialMails }: { initialMails: Mail[] })
                     {mail.department}
                   </span>
                   <span className="text-[10px] text-gray-400 whitespace-nowrap">
-                    {new Date(mail.created_at).toLocaleDateString("en-IN")}
+                    {new Date(mail.created_at).toLocaleDateString("en-IN", { timeZone: "Asia/Kolkata" })}
                   </span>
                 </div>
               </div>
@@ -193,7 +195,10 @@ export default function PovMailInbox({ initialMails }: { initialMails: Mail[] })
                   {activeMail.department}
                 </span>
                 <h2 className="text-base font-semibold mt-2">{activeMail.subject || activeMail.category || "No Subject"}</h2>
-                <p className="text-[11px] text-gray-400 mt-0.5">{new Date(activeMail.created_at).toLocaleString("en-IN")}</p>
+                <p className="text-[11px] text-gray-400 mt-0.5">{new Date(activeMail.created_at).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}</p>
+                {activeMail.mail_sent && activeMail.to_email && (
+                  <p className="text-[11px] text-green-600 mt-0.5">mail sent: {activeMail.to_email}</p>
+                )}
               </div>
             </div>
 

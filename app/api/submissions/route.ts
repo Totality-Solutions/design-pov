@@ -112,8 +112,10 @@ export async function POST(req: Request) {
         from_email: email || null,
         from_phone: contact || null,
         message: message || null,
+        to_email: toEmail,
+        mail_sent: false,
         extra_data: fileName ? { file_name: fileName } : {},
-      }]);
+      }]).select().single();
       if (mailErr) {
         console.error('[submissions] pov_mails write error:', mailErr);
       } else {
@@ -129,6 +131,9 @@ export async function POST(req: Request) {
           Message: message || null,
           'File Name': fileName || null,
         });
+        if (mailData) {
+          await supabase.from('pov_mails').update({ mail_sent: true }).eq('id', mailData.id);
+        }
       } catch (emailErr) {
         console.error('[submissions] SES email error (non-fatal):', emailErr);
       }

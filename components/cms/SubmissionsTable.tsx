@@ -79,7 +79,7 @@ export default function SubmissionsTable({ initialData }: { initialData: Submiss
           r.contact,
           r.to_email,
           r.file_name,
-          new Date(r.created_at).toLocaleDateString("en-IN"),
+          new Date(r.created_at).toLocaleDateString("en-IN", { timeZone: "Asia/Kolkata" }),
         ]
           .map((v) => `"${v ?? ""}"`)
           .join(",")
@@ -160,7 +160,7 @@ export default function SubmissionsTable({ initialData }: { initialData: Submiss
               {filtered.map((row) => (
                 <tr key={row.id} className="border-b border-black/5 hover:bg-gray-50 transition-colors">
                   <td className="px-4 py-3 text-gray-500 whitespace-nowrap">
-                    {new Date(row.created_at).toLocaleDateString("en-IN")}
+                    {new Date(row.created_at).toLocaleDateString("en-IN", { timeZone: "Asia/Kolkata" })}
                   </td>
                   <td className="px-4 py-3">
                     <span className="bg-black/5 px-2 py-0.5 text-[10px] uppercase tracking-wider">
