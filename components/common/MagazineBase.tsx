@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import { cdn } from "@/lib/cdn";
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
 import { FiChevronLeft, FiX } from "react-icons/fi";
 import CTABtn from "../common/CTABtn";
 import { advertisements } from "@/data/magazineData";
@@ -24,6 +24,7 @@ export default function MagazineBase({
   const sectionRef = useRef<HTMLElement>(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [lightboxImage, setLightboxImage] = useState<string | StaticImageData | null>(null);
 
   const sortedBlogs: NormalizedBlog[] = allBlogs && allBlogs.length > 0
     ? allBlogs
@@ -44,11 +45,19 @@ export default function MagazineBase({
     return () => { if (sectionRef.current) observer.unobserve(sectionRef.current); };
   }, []);
 
-  // Lock Body Scroll when Mobile Sidebar is open
+  // Lock Body Scroll when Mobile Sidebar or Lightbox is open
   useEffect(() => {
-    document.body.style.overflow = isSidebarOpen ? "hidden" : "auto";
+    document.body.style.overflow = (isSidebarOpen || lightboxImage) ? "hidden" : "auto";
     return () => { document.body.style.overflow = "auto"; };
-  }, [isSidebarOpen]);
+  }, [isSidebarOpen, lightboxImage]);
+
+  // Close Lightbox on Escape
+  useEffect(() => {
+    if (!lightboxImage) return;
+    const onKeyDown = (e: KeyboardEvent) => { if (e.key === "Escape") setLightboxImage(null); };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [lightboxImage]);
 
   const displayBlogs = isInnerPage
     ? sortedBlogs.filter(b => b.id !== activeBlog.id).slice(0, 4)
@@ -75,15 +84,21 @@ export default function MagazineBase({
       <div className="flex flex-col h-full  bg-white">
         
         {/* HERO IMAGE SECTION */}
-        <div className={isInnerPage ? "relative w-full h-[60vh] md:h-[80vh]" : "sticky top-20 lg:top-0 h-[50vh] lg:h-full w-full overflow-hidden z-0"}>
+        <button
+          type="button"
+          onClick={() => setLightboxImage(activeBlog.image || cdn("/temp/home/blogs/blog-16.jpg"))}
+          className={`${isInnerPage ? "relative" : "sticky top-20 lg:top-0 z-0"} w-full h-auto overflow-hidden bg-neutral-100 cursor-zoom-in block text-left`}
+        >
           <Image
             src={activeBlog.image || cdn("/temp/home/blogs/blog-16.jpg")}
             alt={activeBlog.title}
-            fill
+            width={1920}
+            height={1080}
             loading="lazy"
-            className="object-cover object-top"
+            sizes="(max-width: 1024px) 100vw, 70vw"
+            className="w-full h-auto object-contain"
           />
-        </div>
+        </button>
 
         {/* BLOG CONTENT */}
         <div className="relative z-10 bg-white py-6 px-4 md:p-8 flex flex-col gap-6">
@@ -110,9 +125,21 @@ export default function MagazineBase({
 
                   {block.type === "image" && (
                     <div className="flex flex-col gap-2 py-2">
-                      <div className="relative w-full h-auto">
-                        <Image src={block.value} alt="Mag Detail" width={1200} height={800} className="w-full h-[400px] lg:h-[600px] object-contain " />
-                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setLightboxImage(block.value)}
+                        className="relative w-full h-auto cursor-zoom-in"
+                        aria-label="View full size image"
+                      >
+                        <Image
+                          src={block.value}
+                          alt="Mag Detail"
+                          width={1200}
+                          height={800}
+                          sizes="100vw"
+                          className="w-full h-auto object-contain"
+                        />
+                      </button>
                       {/* {block.caption && <span className="text-sm font-normal text-black/80">{block.caption}</span>} */}
                     </div>
                   )}
@@ -180,6 +207,32 @@ export default function MagazineBase({
           ))}
         </div>
       </aside>
+
+      {/* IMAGE LIGHTBOX */}
+      {lightboxImage && (
+        <div
+          className="fixed inset-0 z-[9991] bg-black/90 flex items-center justify-center p-4 md:p-10"
+          onClick={() => setLightboxImage(null)}
+        >
+          <button
+            type="button"
+            onClick={() => setLightboxImage(null)}
+            className="absolute top-4 right-4 md:top-6 md:right-6 text-white/80 hover:text-white p-2 z-10"
+            aria-label="Close"
+          >
+            <FiX size={28} />
+          </button>
+          <div className="relative w-full h-full max-w-6xl" onClick={(e) => e.stopPropagation()}>
+            <Image
+              src={lightboxImage}
+              alt="Full size view"
+              fill
+              sizes="100vw"
+              className="object-contain"
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -4,6 +4,7 @@ import { NormalizedBlog, normalizeDbBlog } from "@/lib/blog";
 // import { normalizeStaticBlog } from "@/lib/blog";
 // import { blogs as staticBlogs } from "@/data/magazineData";
 import { notFound } from "next/navigation";
+import { Container } from "@/components/common/Container";
 
 export const dynamic = "force-dynamic";
 
@@ -48,9 +49,9 @@ export default async function InnerMagazinePage({
 
   if (dbResult) {
     return (
-      <main className="w-full bg-white px-6 md:px-14 py-12">
+      <Container className="w-full bg-white px-6 md:px-14 py-20 lg:py-12 ">
         <MagazineBase activeBlog={dbResult.blog} isInnerPage allBlogs={dbResult.allBlogs} />
-      </main>
+      </Container>
     );
   }
 
