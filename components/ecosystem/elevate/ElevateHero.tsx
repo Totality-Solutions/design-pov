@@ -10,7 +10,7 @@ import {
 import { Container } from "@/components/common/Container";
 
 const text1 =
-  `Design POV has always believed that meaningful visibility comes from intent, context, and reaching the right audience. POV Elevate extends this philosophy beyond the show floor as an exclusive initiative for brands within the ecosystem, helping create lasting impressions and meaningful relationships.`;
+  `Design POV has always believed that meaningful visibility comes from intent, context, and reaching the right audience. POV Elevate extends this philosophy beyond the show floor as an exclusive initiative for home and lifestyle brands, helping create lasting impressions and meaningful relationships.`;
 
 const text2 =
   `Through curated offline events, tailored programming, access to discerning audiences, media and F&B partnerships, and strategic online amplification, brands are positioned in front of the people who matter. POV Elevate enables collaboration with Design POV beyond the traditional playbook.`;
