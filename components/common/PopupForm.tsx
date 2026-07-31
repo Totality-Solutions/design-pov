@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Image from "next/image";
 import { FiX } from "react-icons/fi";
 import CTABtn from "./CTABtn";
 import { cdn } from "@/lib/cdn";
+import { isValidEmail, isValidPhone, isValidName } from "@/lib/validation";
 
 const SHOW_DECK_PDF = cdn("/pdf/DESIGNPOV2027SHOWDECK.pdf");
 
@@ -19,20 +20,23 @@ export default function PopupForm({ isOpen, onClose }: PopupFormProps) {
   const [phone, setPhone] = useState("");
   const [errors, setErrors] = useState<{ name?: string; email?: string; phone?: string }>({});
   const [isLoading, setIsLoading] = useState(false);
+  const submittingRef = useRef(false);
 
   if (!isOpen) return null;
 
   const validate = () => {
     const next: typeof errors = {};
-    if (!name.trim()) next.name = "Full name is required";
-    if (!email.trim()) next.email = "Email is required";
-    if (!phone.trim()) next.phone = "Phone number is required";
+    if (!isValidName(name)) next.name = "Please enter your full name";
+    if (!isValidEmail(email)) next.email = "Please enter a valid email address";
+    if (!isValidPhone(phone)) next.phone = "Please enter a valid phone number";
     setErrors(next);
     return Object.keys(next).length === 0;
   };
 
   const handleSubmit = async () => {
+    if (submittingRef.current) return;
     if (!validate()) return;
+    submittingRef.current = true;
     setIsLoading(true);
 
     try {
@@ -51,6 +55,7 @@ export default function PopupForm({ isOpen, onClose }: PopupFormProps) {
     } catch {
       // Proceed to download even if API fails
     } finally {
+      submittingRef.current = false;
       setIsLoading(false);
     }
 

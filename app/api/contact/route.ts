@@ -52,8 +52,9 @@ export async function POST(req: Request) {
       console.log('[contact] Saved to Supabase:', data);
     }
 
-    // 2. Dual-write to pov_mails (non-blocking)
-    supabase.from('pov_mails').insert([{
+    // 2. Dual-write to pov_mails — awaited so we have the row's id ready to
+    // mark mail_sent once the SES send below actually succeeds.
+    const { data: mailData, error: mailErr } = await supabase.from('pov_mails').insert([{
       department: 'marketing',
       form_type: 'contact',
       category: 'Contact Page',
@@ -62,18 +63,19 @@ export async function POST(req: Request) {
       from_email: email,
       from_phone: contact || null,
       message: message || null,
+      to_email: TO_EMAIL,
+      mail_sent: false,
       extra_data: {
         ...(organization && { organization }),
         ...(designation && { designation }),
         ...(location && { location }),
       },
-    }]).then(({ data: mailData, error: mailErr }) => {
-      if (mailErr) {
-        console.error('[contact] pov_mails write error:', mailErr);
-      } else {
-        console.log('[contact] Saved to pov_mails:', mailData);
-      }
-    });
+    }]).select().single();
+    if (mailErr) {
+      console.error('[contact] pov_mails write error:', mailErr);
+    } else {
+      console.log('[contact] Saved to pov_mails:', mailData);
+    }
 
     // 3. Send SES email
     const fields: [string, string | undefined][] = [
@@ -130,6 +132,10 @@ export async function POST(req: Request) {
         },
       })
     );
+
+    if (mailData) {
+      await supabase.from('pov_mails').update({ mail_sent: true }).eq('id', mailData.id);
+    }
 
     return NextResponse.json({ success: true });
   } catch (err: any) {
