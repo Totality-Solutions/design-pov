@@ -4,13 +4,15 @@ import { useEffect } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { Plus, X } from "lucide-react";
-import { GALLERY_CATEGORIES } from "./galleryData";
+import { GALLERY_CATEGORIES, GALLERY_YEARS } from "./galleryData";
 import type { GalleryItem } from "./types";
 import GallerySubmissionForm from "./GallerySubmissionForm";
 
 interface GalleryHeroProps {
   activeCategory: string;
   onCategoryChange: (category: string) => void;
+  activeYear: string;
+  onYearChange: (year: string) => void;
   selectedItem?: GalleryItem | null;
   onBack?: () => void;
   isFormOpen: boolean;
@@ -22,6 +24,8 @@ interface GalleryHeroProps {
 export default function GalleryHero({
   activeCategory,
   onCategoryChange,
+  activeYear,
+  onYearChange,
   selectedItem,
   onBack,
   isFormOpen,
@@ -93,6 +97,22 @@ export default function GalleryHero({
             {cat.label}
           </button>
         ))}
+
+        <div className="ml-auto flex items-center gap-1 pb-3 shrink-0 pl-4">
+          {GALLERY_YEARS.map((year) => (
+            <button
+              key={year.id}
+              onClick={() => onYearChange(year.id)}
+              className={`px-3 py-1 text-[13px] font-(family-name:--font-family) leading-5 border transition-all duration-200 cursor-pointer ${
+                activeYear === year.id
+                  ? "bg-black text-white border-black"
+                  : "border-black/20 text-black/60 hover:border-black hover:text-black"
+              }`}
+            >
+              {year.label}
+            </button>
+          ))}
+        </div>
       </div>
 
       <GallerySubmissionForm isOpen={isFormOpen} onClose={onToggleForm} onSuccess={onFormSuccess} onError={onFormError} />

@@ -11,6 +11,7 @@ import type { GalleryItem } from "./types";
 
 export default function GalleryGrid() {
   const [activeCategory, setActiveCategory] = useState("all");
+  const [activeYear, setActiveYear] = useState("all");
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [shuffledGallery, setShuffledGallery] = useState<GalleryItem[]>([]);
@@ -47,9 +48,12 @@ export default function GalleryGrid() {
 
   const baseItems = useMemo(() => {
     const source = shuffledGallery.length > 0 ? shuffledGallery : galleryItems;
-    if (activeCategory === "all") return source;
-    return source.filter((item) => item.category === activeCategory);
-  }, [activeCategory, shuffledGallery]);
+    return source.filter(
+      (item) =>
+        (activeCategory === "all" || item.category === activeCategory) &&
+        (activeYear === "all" || item.year?.toString() === activeYear)
+    );
+  }, [activeCategory, activeYear, shuffledGallery]);
 
   const displayItems = useMemo(() => {
     const items: GalleryItem[] = [];
@@ -79,6 +83,12 @@ export default function GalleryGrid() {
 
   const handleCategoryChange = useCallback((cat: string) => {
     setActiveCategory(cat);
+    setSelectedId(null);
+    setPage(1);
+  }, []);
+
+  const handleYearChange = useCallback((year: string) => {
+    setActiveYear(year);
     setSelectedId(null);
     setPage(1);
   }, []);
@@ -124,6 +134,8 @@ export default function GalleryGrid() {
         <GalleryHero
           activeCategory={activeCategory}
           onCategoryChange={handleCategoryChange}
+          activeYear={activeYear}
+          onYearChange={handleYearChange}
           selectedItem={selectedItem}
           onBack={handleBack}
           isFormOpen={isFormOpen}
@@ -133,17 +145,10 @@ export default function GalleryGrid() {
         />
         
         <div className="w-full px-[23px] py-[30px] pt-[100px] sm:pt-[30px]">
-          <motion.div 
-            layout
-            className="relative grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 grid-flow-dense place-content-start items-start w-full"
-            style={{ 
-              display: "grid",
-              gridAutoRows: "10px", 
-              gap: "10px" 
-            }}
+          <motion.div
+            className="relative columns-2 sm:columns-3 lg:columns-4 xl:columns-5 gap-[10px]"
           >
-            {/* mode="popLayout" pulls exiting items out of the flow immediately */}
-            <AnimatePresence mode="popLayout">
+            <AnimatePresence>
               {displayItems.map((item, index) => (
                 <GalleryCard
                   key={item.id}

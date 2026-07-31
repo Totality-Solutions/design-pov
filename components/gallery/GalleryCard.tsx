@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useCallback, useMemo, useState, useRef, useEffect } from "react";
+import { memo, useCallback, useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Download, Share2, X } from "lucide-react";
@@ -107,18 +107,6 @@ function GalleryCard({ item, index, isExpanded, onSelect, onClose }: GalleryCard
     [item]
   );
 
-  const rowSpan = useMemo(() => {
-    if (isExpanded) {
-      return Math.round((500 + 10) / 20);
-    }
-    const width = item.imageWidth || 800;
-    const height = item.imageHeight || 600;
-    const aspectRatio = height / width;
-    const estimatedImageHeight = 300 * aspectRatio;
-    const targetHeight = estimatedImageHeight + 70;
-    return Math.round((targetHeight + 10) / 20);
-  }, [item.imageWidth, item.imageHeight, isExpanded]);
-
   return (
     <motion.article
       layout
@@ -128,13 +116,12 @@ function GalleryCard({ item, index, isExpanded, onSelect, onClose }: GalleryCard
       exit={{ opacity: 0, scale: 0.95 }}
       transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
       style={{
-        gridRowEnd: `span ${rowSpan}`,
-        height: "100%",
+        columnSpan: isExpanded ? "all" : "none",
       }}
-      className={`overflow-hidden border border-[#EFEFEF] transform-gpu origin-center w-full ${
+      className={`overflow-hidden border border-[#EFEFEF] break-inside-avoid mb-[10px] transform-gpu origin-center w-full ${
         isExpanded
-          ? "col-span-2 sm:col-span-2 lg:col-span-2 xl:col-span-2 z-10 bg-black"
-          : "col-span-1 z-0 bg-white"
+          ? "z-10 bg-black"
+          : "z-0 bg-white"
       }`}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
@@ -142,17 +129,22 @@ function GalleryCard({ item, index, isExpanded, onSelect, onClose }: GalleryCard
       tabIndex={0}
     >
       {isExpanded ? (
-        <motion.div layout className="relative h-full w-full">
-          <Image
-            src={item.imageSrc}
-            alt={item.title}
-            fill
-            className={`${
-              isExpanded ? "object-contain" : "object-cover object-top"
-            }`}
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 70vw"
-            priority
-          />
+        <motion.div layout className="relative w-full">
+          <div
+            className="relative w-full overflow-hidden"
+            style={{
+              aspectRatio: `${item.imageWidth || 800} / ${item.imageHeight || 600}`,
+            }}
+          >
+            <Image
+              src={item.imageSrc}
+              alt={item.title}
+              fill
+              className="object-contain"
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 70vw"
+              priority
+            />
+          </div>
           <button
             onClick={handleClose}
             className="absolute top-[14px] right-[14px] w-[32px] h-[32px] flex items-center justify-center bg-black/50 rounded-full hover:bg-black/70 transition-colors cursor-pointer z-10"
@@ -185,13 +177,21 @@ function GalleryCard({ item, index, isExpanded, onSelect, onClose }: GalleryCard
           </div>
         </motion.div>
       ) : (
-        <motion.div layout className="flex flex-col h-full w-full">
-          <div className="relative flex-1 p-[10px] min-h-0">
-            <div className="relative w-full h-full overflow-hidden">
+        <motion.div layout className="flex flex-col w-full">
+          <div className="p-[10px]">
+            <div
+              className="relative w-full overflow-hidden"
+              style={{
+                aspectRatio: `${item.imageWidth || 800} / ${item.imageHeight || 600}`,
+              }}
+            >
               <Image
                 src={item.imageSrc}
                 alt={item.title}
                 fill
+                loading="lazy"
+                decoding="async"
+                quality={75}
                 className="object-cover object-top"
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
               />
