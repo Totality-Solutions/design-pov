@@ -9,12 +9,15 @@ import Toast from "./Toast";
 import type { ToastData } from "./Toast";
 import type { GalleryItem } from "./types";
 
+const INITIAL_BATCH = 10;
+const LOAD_BATCH = 8;
+
 export default function GalleryGrid() {
   const [activeCategory, setActiveCategory] = useState("all");
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [shuffledGallery, setShuffledGallery] = useState<GalleryItem[]>([]);
-  const [page, setPage] = useState(1);
+  const [visibleCount, setVisibleCount] = useState(INITIAL_BATCH);
   const [toast, setToast] = useState<ToastData | null>(null);
   const sentinelRef = useRef<HTMLDivElement>(null);
   const toastIdRef = useRef(0);
@@ -35,7 +38,7 @@ export default function GalleryGrid() {
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
-          setPage((p) => p + 1);
+          setVisibleCount((c) => c + LOAD_BATCH);
         }
       },
       { rootMargin: "400px" }
@@ -51,15 +54,20 @@ export default function GalleryGrid() {
     return source.filter((item) => item.category === activeCategory);
   }, [activeCategory, shuffledGallery]);
 
+  // Reveals items in small batches as the user scrolls (see the
+  // IntersectionObserver above) instead of rendering the whole gallery at
+  // once. Cycles back through baseItems to keep the scroll feeling infinite.
   const displayItems = useMemo(() => {
+    if (baseItems.length === 0) return [];
+    const count = Math.min(visibleCount, baseItems.length * 50);
     const items: GalleryItem[] = [];
-    for (let i = 0; i < page; i++) {
-      baseItems.forEach((item) => {
-        items.push({ ...item, id: `${item.id}-page-${i}` });
-      });
+    for (let i = 0; i < count; i++) {
+      const base = baseItems[i % baseItems.length];
+      const cycle = Math.floor(i / baseItems.length);
+      items.push({ ...base, id: `${base.id}-${cycle}` });
     }
     return items;
-  }, [baseItems, page]);
+  }, [baseItems, visibleCount]);
 
   const selectedItem = useMemo(
     () =>
@@ -80,7 +88,7 @@ export default function GalleryGrid() {
   const handleCategoryChange = useCallback((cat: string) => {
     setActiveCategory(cat);
     setSelectedId(null);
-    setPage(1);
+    setVisibleCount(INITIAL_BATCH);
   }, []);
 
   const handleBack = useCallback(() => {

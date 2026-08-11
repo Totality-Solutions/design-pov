@@ -193,7 +193,8 @@ function GalleryCard({ item, index, isExpanded, onSelect, onClose }: GalleryCard
                 alt={item.title}
                 fill
                 className="object-cover object-top"
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
+                sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, 20vw"
+                loading="lazy"
               />
             </div>
           </div>
