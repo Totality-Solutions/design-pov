@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import { Download, Eye, RotateCw, Share2, X } from "lucide-react";
+import { Component as LumaSpin } from "@/components/ui/luma-spin";
 import type { GalleryItem } from "./types";
 
 interface LightboxProps {
@@ -144,6 +145,13 @@ export default function Lightbox({ item, onClose }: LightboxProps) {
                 quality={90}
                 priority
               />
+              {!imageLoaded && (
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
+                  <div className="scale-50 sm:scale-75">
+                    <LumaSpin />
+                  </div>
+                </div>
+              )}
             </div>
 
             <button
@@ -154,7 +162,7 @@ export default function Lightbox({ item, onClose }: LightboxProps) {
               <X className="w-[18px] h-[18px] text-white" strokeWidth={2} />
             </button>
 
-            <div className="absolute top-0 left-0 sm:-top-4 right-[52px] bg-black/60 rounded-full px-3.5 py-1.5">
+            <div className="absolute top-0 left-0 sm:-top-4 max-w-[calc(100%-60px)] w-fit bg-black/60 rounded-full px-4 py-1.5">
               <span className="text-white text-[14px] font-(family-name:--font-family) font-medium leading-5 truncate block">
                 {item.title}
               </span>

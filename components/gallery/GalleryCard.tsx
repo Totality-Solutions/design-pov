@@ -4,6 +4,7 @@ import { memo, useCallback, useMemo, useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Download, Eye, RotateCw, Share2, X } from "lucide-react";
+import { Component as LumaSpin } from "@/components/ui/luma-spin";
 import type { GalleryItem } from "./types";
 
 interface GalleryCardProps {
@@ -111,14 +112,6 @@ function GalleryCard({ item, index, isExpanded, onExpand, onCollapse, onView }: 
     e.stopPropagation();
     setRotation((prev) => (prev + 90) % 360);
   }, []);
-
-  const handleViewFull = useCallback(
-    (e: React.MouseEvent) => {
-      e.stopPropagation();
-      window.open(item.imageSrc, "_blank", "noopener,noreferrer");
-    },
-    [item]
-  );
 
   const handleShare = useCallback(
     async (e: React.MouseEvent) => {
@@ -235,7 +228,14 @@ function GalleryCard({ item, index, isExpanded, onExpand, onCollapse, onView }: 
           >
             <X className="w-[18px] h-[18px] text-white" strokeWidth={2} />
           </button>
-          <div className="absolute top-[14px] left-[14px] right-[56px] bg-black/50 rounded-full px-3.5 py-1.5">
+          {!expandedImageLoaded && (
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
+              <div className="scale-50 sm:scale-75">
+                <LumaSpin />
+              </div>
+            </div>
+          )}
+          <div className="absolute top-[14px] left-[14px] max-w-[calc(100%-70px)] w-fit bg-black/50 rounded-full px-4 py-1.5">
             <span className="text-white text-[14px] font-(family-name:--font-family) font-medium leading-5 truncate block drop-shadow-md">
               {item.title}
             </span>
@@ -251,9 +251,9 @@ function GalleryCard({ item, index, isExpanded, onExpand, onCollapse, onView }: 
               </button>
               <button
                 type="button"
-                onClick={handleViewFull}
+                onClick={handleView}
                 className="text-white hover:opacity-80 transition cursor-pointer"
-                aria-label="View full image"
+                aria-label="Open in lightbox"
               >
                 <Eye className="w-5 h-5" strokeWidth={2} />
               </button>
