@@ -7,9 +7,15 @@ export interface GalleryItem {
   gradientFrom?: string;
   gradientTo?: string;
   category: string;
+  year?: number;
 }
 
 export interface GalleryCategory {
+  id: string;
+  label: string;
+}
+
+export interface GalleryYear {
   id: string;
   label: string;
 }

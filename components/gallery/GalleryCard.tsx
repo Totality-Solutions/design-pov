@@ -3,21 +3,51 @@
 import { memo, useCallback, useMemo, useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Download, Share2, X } from "lucide-react";
+import { Download, Eye, Share2, X } from "lucide-react";
 import type { GalleryItem } from "./types";
 
 interface GalleryCardProps {
   item: GalleryItem;
   index: number;
   isExpanded: boolean;
-  onSelect: (item: GalleryItem) => void;
-  onClose: () => void;
+  onExpand: (item: GalleryItem) => void;
+  onCollapse: () => void;
+  onView: (item: GalleryItem) => void;
 }
 
-function GalleryCard({ item, index, isExpanded, onSelect, onClose }: GalleryCardProps) {
+// Curated display ratios cycled by position so the masonry always shows real
+// height variety, independent of the source photos' actual aspect ratios
+// (most of this gallery's photos share the same 3:2 ratio).
+const DISPLAY_RATIOS = [4 / 5, 1, 3 / 4, 4 / 3, 3 / 5, 1, 4 / 5, 5 / 4, 3 / 4];
+
+function GalleryCard({ item, index, isExpanded, onExpand, onCollapse, onView }: GalleryCardProps) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [expandedImageLoaded, setExpandedImageLoaded] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
-  const dotsRef = useRef<HTMLDivElement>(null);
+  const dotsRef = useRef<HTMLButtonElement>(null);
+  const expandedImgRef = useRef<HTMLImageElement>(null);
+  const thumbImgRef = useRef<HTMLImageElement>(null);
+
+  // next/image's onLoad can miss cached images that finish loading before
+  // React attaches the listener, leaving the spinner/skeleton stuck forever.
+  // Fall back to checking the native <img>'s `complete` flag on mount.
+  useEffect(() => {
+    if (!isExpanded) return;
+    if (expandedImgRef.current?.complete) {
+      setExpandedImageLoaded(true);
+      return;
+    }
+    // Last-resort safety net so the spinner can never spin forever.
+    const timer = setTimeout(() => setExpandedImageLoaded(true), 10000);
+    return () => clearTimeout(timer);
+  }, [isExpanded]);
+
+  useEffect(() => {
+    if (thumbImgRef.current?.complete) {
+      setImageLoaded(true);
+    }
+  }, []);
 
   useEffect(() => {
     if (!menuOpen) return;
@@ -36,31 +66,44 @@ function GalleryCard({ item, index, isExpanded, onSelect, onClose }: GalleryCard
   }, [menuOpen]);
 
   const handleClick = useCallback(() => {
-    onSelect(item);
-  }, [item, onSelect]);
-
-  const handleClose = useCallback(
-    (e: React.MouseEvent) => {
-      e.stopPropagation();
-      onClose();
-    },
-    [onClose]
-  );
+    if (isExpanded) {
+      onCollapse();
+    } else {
+      onExpand(item);
+    }
+  }, [isExpanded, item, onExpand, onCollapse]);
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
-        onSelect(item);
+        handleClick();
       }
     },
-    [item, onSelect]
+    [handleClick]
   );
 
   const toggleMenu = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();
     setMenuOpen((prev) => !prev);
   }, []);
+
+  const handleView = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+      setMenuOpen(false);
+      onView(item);
+    },
+    [item, onView]
+  );
+
+  const handleClose = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+      onCollapse();
+    },
+    [onCollapse]
+  );
 
   const handleShare = useCallback(
     async (e: React.MouseEvent) => {
@@ -107,22 +150,22 @@ function GalleryCard({ item, index, isExpanded, onSelect, onClose }: GalleryCard
     [item]
   );
 
+  const displayRatio = DISPLAY_RATIOS[index % DISPLAY_RATIOS.length];
+
+  // Same technique as the original grid: a small gridAutoRows increment on
+  // the parent means a card's real pixel height is `rowSpan * rowUnit`, so
+  // items pack tightly instead of leaving gaps like grid-cols-only masonry.
   const rowSpan = useMemo(() => {
     if (isExpanded) {
       return Math.round((500 + 10) / 20);
     }
-    const width = item.imageWidth || 800;
-    const height = item.imageHeight || 600;
-    const aspectRatio = height / width;
-    const estimatedImageHeight = 300 * aspectRatio;
-    const targetHeight = estimatedImageHeight + 70;
-    return Math.round((targetHeight + 10) / 20);
-  }, [item.imageWidth, item.imageHeight, isExpanded]);
+    const estimatedImageHeight = 300 * displayRatio;
+    return Math.round((estimatedImageHeight + 10) / 20);
+  }, [isExpanded, displayRatio]);
 
   return (
     <motion.article
       layout
-      layoutId={item.id}
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.95 }}
@@ -131,10 +174,10 @@ function GalleryCard({ item, index, isExpanded, onSelect, onClose }: GalleryCard
         gridRowEnd: `span ${rowSpan}`,
         height: "100%",
       }}
-      className={`overflow-hidden border border-[#EFEFEF] transform-gpu origin-center w-full ${
+      className={`overflow-hidden  w-full transform-gpu origin-center transition-shadow ${
         isExpanded
           ? "col-span-2 sm:col-span-2 lg:col-span-2 xl:col-span-2 z-10 bg-black"
-          : "col-span-1 z-0 bg-white"
+          : "col-span-1 z-0 bg-white hover:shadow-lg"
       }`}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
@@ -142,13 +185,20 @@ function GalleryCard({ item, index, isExpanded, onSelect, onClose }: GalleryCard
       tabIndex={0}
     >
       {isExpanded ? (
-        <motion.div layout className="relative h-full w-full">
+        <div className="relative h-full w-full">
+          {!expandedImageLoaded && (
+            <div className="absolute inset-0 flex items-center justify-center bg-black">
+              <div className="w-9 h-9 border-2 border-white/25 border-t-white rounded-full animate-spin" />
+            </div>
+          )}
           <Image
+            ref={expandedImgRef}
             src={item.imageSrc}
             alt={item.title}
             fill
-            className={`${
-              isExpanded ? "object-contain" : "object-cover object-top"
+            onLoad={() => setExpandedImageLoaded(true)}
+            className={`object-contain transition-opacity duration-300 ${
+              expandedImageLoaded ? "opacity-100" : "opacity-0"
             }`}
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 70vw"
             priority
@@ -183,73 +233,74 @@ function GalleryCard({ item, index, isExpanded, onSelect, onClose }: GalleryCard
               </button>
             </div>
           </div>
-        </motion.div>
+        </div>
       ) : (
-        <motion.div layout className="flex flex-col h-full w-full">
-          <div className="relative flex-1 p-[10px] min-h-0">
-            <div className="relative w-full h-full overflow-hidden">
-              <Image
-                src={item.imageSrc}
-                alt={item.title}
-                fill
-                className="object-cover object-top"
-                sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, 20vw"
-                loading="lazy"
-              />
-            </div>
-          </div>
-          <div className="shrink-0 px-5 pb-3 pt-0.5 flex items-center justify-between">
-            <span className="text-black text-[16px] font-(family-name:--font-family) font-medium leading-5 truncate">
-              {item.title}
-            </span>
-            <div className="relative flex items-center shrink-0 ml-2">
-              <div
-                ref={dotsRef}
-                onClick={toggleMenu}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    setMenuOpen((prev) => !prev);
-                  }
-                }}
-                role="button"
-                tabIndex={0}
-                aria-label="Image options"
-                className="flex gap-1.25 items-center cursor-pointer px-1 py-1 hover:opacity-60 transition-opacity"
-              >
-                <span className="w-1 h-1 bg-black rounded-full" />
-                <span className="w-1 h-1 bg-black rounded-full" />
-                <span className="w-1 h-1 bg-black rounded-full" />
-              </div>
+        <div className="relative h-full w-full overflow-hidden bg-[#F2F2F2]">
+          {!imageLoaded && (
+            <div className="absolute inset-0 w-full h-full rounded-none animate-pulse bg-[#F2F2F2]" />
+          )}
+          <Image
+            ref={thumbImgRef}
+            src={item.imageSrc}
+            alt={item.title}
+            fill
+            loading="lazy"
+            decoding="async"
+            quality={75}
+            onLoad={() => setImageLoaded(true)}
+            className={`object-cover object-top transition-opacity duration-300 ${
+              imageLoaded ? "opacity-100" : "opacity-0"
+            }`}
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, 20vw"
+          />
 
-              {menuOpen && (
-                <div
-                  ref={menuRef}
-                  className="absolute bottom-full right-0 mb-1 z-20 bg-white border border-gray-200 shadow-lg min-w-[140px]"
-                  onClick={(e) => e.stopPropagation()}
+          <div className="absolute top-2 right-2 z-10">
+            <button
+              ref={dotsRef}
+              type="button"
+              onClick={toggleMenu}
+              aria-label="Image options"
+              className="w-7 h-7 flex items-center justify-center rounded-full bg-white/90 hover:bg-white shadow-sm cursor-pointer transition-colors"
+            >
+              <span className="w-1 h-1 bg-black rounded-full mx-[1px]" />
+              <span className="w-1 h-1 bg-black rounded-full mx-[1px]" />
+              <span className="w-1 h-1 bg-black rounded-full mx-[1px]" />
+            </button>
+
+            {menuOpen && (
+              <div
+                ref={menuRef}
+                className="absolute top-full right-0 mt-1 z-20 bg-white border border-gray-200 shadow-lg min-w-[140px]"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <button
+                  type="button"
+                  onClick={handleView}
+                  className="w-full flex items-center gap-2.5 px-4 py-2.5 text-sm text-black hover:bg-gray-100 transition-colors"
                 >
-                  <button
-                    type="button"
-                    onClick={handleDownload}
-                    className="w-full flex items-center gap-2.5 px-4 py-2.5 text-sm text-black hover:bg-gray-100 transition-colors"
-                  >
-                    <Download size={15} strokeWidth={1.5} />
-                    Download
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleShare}
-                    className="w-full flex items-center gap-2.5 px-4 py-2.5 text-sm text-black hover:bg-gray-100 transition-colors"
-                  >
-                    <Share2 size={15} strokeWidth={1.5} />
-                    Share
-                  </button>
-                </div>
-              )}
-            </div>
+                  <Eye size={15} strokeWidth={1.5} />
+                  View
+                </button>
+                <button
+                  type="button"
+                  onClick={handleDownload}
+                  className="w-full flex items-center gap-2.5 px-4 py-2.5 text-sm text-black hover:bg-gray-100 transition-colors"
+                >
+                  <Download size={15} strokeWidth={1.5} />
+                  Download
+                </button>
+                <button
+                  type="button"
+                  onClick={handleShare}
+                  className="w-full flex items-center gap-2.5 px-4 py-2.5 text-sm text-black hover:bg-gray-100 transition-colors"
+                >
+                  <Share2 size={15} strokeWidth={1.5} />
+                  Share
+                </button>
+              </div>
+            )}
           </div>
-        </motion.div>
+        </div>
       )}
     </motion.article>
   );

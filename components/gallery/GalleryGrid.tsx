@@ -5,16 +5,19 @@ import { motion, AnimatePresence } from "framer-motion";
 import { galleryItems } from "./galleryData";
 import GalleryCard from "./GalleryCard";
 import GalleryHero from "./GalleryHero";
+import Lightbox from "./Lightbox";
 import Toast from "./Toast";
 import type { ToastData } from "./Toast";
 import type { GalleryItem } from "./types";
 
-const INITIAL_BATCH = 10;
-const LOAD_BATCH = 8;
+const INITIAL_BATCH = 12;
+const LOAD_BATCH = 12;
 
 export default function GalleryGrid() {
   const [activeCategory, setActiveCategory] = useState("all");
+  const [activeYear, setActiveYear] = useState("all");
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [expandedId, setExpandedId] = useState<string | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [shuffledGallery, setShuffledGallery] = useState<GalleryItem[]>([]);
   const [visibleCount, setVisibleCount] = useState(INITIAL_BATCH);
@@ -50,16 +53,19 @@ export default function GalleryGrid() {
 
   const baseItems = useMemo(() => {
     const source = shuffledGallery.length > 0 ? shuffledGallery : galleryItems;
-    if (activeCategory === "all") return source;
-    return source.filter((item) => item.category === activeCategory);
-  }, [activeCategory, shuffledGallery]);
+    return source.filter(
+      (item) =>
+        (activeCategory === "all" || item.category === activeCategory) &&
+        (activeYear === "all" || item.year?.toString() === activeYear)
+    );
+  }, [activeCategory, activeYear, shuffledGallery]);
 
   // Reveals items in small batches as the user scrolls (see the
   // IntersectionObserver above) instead of rendering the whole gallery at
   // once. Cycles back through baseItems to keep the scroll feeling infinite.
   const displayItems = useMemo(() => {
     if (baseItems.length === 0) return [];
-    const count = Math.min(visibleCount, baseItems.length * 50);
+    const count = visibleCount;
     const items: GalleryItem[] = [];
     for (let i = 0; i < count; i++) {
       const base = baseItems[i % baseItems.length];
@@ -77,7 +83,7 @@ export default function GalleryGrid() {
     [displayItems, shuffledGallery, selectedId]
   );
 
-  const handleSelect = useCallback((item: GalleryItem) => {
+  const handleView = useCallback((item: GalleryItem) => {
     setSelectedId(item.id);
   }, []);
 
@@ -85,9 +91,25 @@ export default function GalleryGrid() {
     setSelectedId(null);
   }, []);
 
+  const handleExpand = useCallback((item: GalleryItem) => {
+    setExpandedId(item.id);
+  }, []);
+
+  const handleCollapse = useCallback(() => {
+    setExpandedId(null);
+  }, []);
+
   const handleCategoryChange = useCallback((cat: string) => {
     setActiveCategory(cat);
     setSelectedId(null);
+    setExpandedId(null);
+    setVisibleCount(INITIAL_BATCH);
+  }, []);
+
+  const handleYearChange = useCallback((year: string) => {
+    setActiveYear(year);
+    setSelectedId(null);
+    setExpandedId(null);
     setVisibleCount(INITIAL_BATCH);
   }, []);
 
@@ -132,6 +154,8 @@ export default function GalleryGrid() {
         <GalleryHero
           activeCategory={activeCategory}
           onCategoryChange={handleCategoryChange}
+          activeYear={activeYear}
+          onYearChange={handleYearChange}
           selectedItem={selectedItem}
           onBack={handleBack}
           isFormOpen={isFormOpen}
@@ -141,13 +165,13 @@ export default function GalleryGrid() {
         />
         
         <div className="w-full px-[23px] py-[30px] pt-[100px] sm:pt-[30px]">
-          <motion.div 
+          <motion.div
             layout
             className="relative grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 grid-flow-dense place-content-start items-start w-full"
-            style={{ 
+            style={{
               display: "grid",
-              gridAutoRows: "10px", 
-              gap: "10px" 
+              gridAutoRows: "10px",
+              gap: "10px"
             }}
           >
             {/* mode="popLayout" pulls exiting items out of the flow immediately */}
@@ -157,9 +181,10 @@ export default function GalleryGrid() {
                   key={item.id}
                   item={item}
                   index={index}
-                  isExpanded={selectedId === item.id}
-                  onSelect={handleSelect}
-                  onClose={handleClose}
+                  isExpanded={expandedId === item.id}
+                  onExpand={handleExpand}
+                  onCollapse={handleCollapse}
+                  onView={handleView}
                 />
               ))}
             </AnimatePresence>
@@ -167,6 +192,8 @@ export default function GalleryGrid() {
           <div ref={sentinelRef} className="h-px w-full" />
         </div>
       </motion.div>
+
+      <Lightbox item={selectedItem} onClose={handleClose} />
 
       <Toast toast={toast} onDismiss={handleDismissToast} />
     </>
