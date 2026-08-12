@@ -31,20 +31,30 @@ export default function Lightbox({ item, onClose }: LightboxProps) {
     window.open(item.imageSrc, "_blank", "noopener,noreferrer");
   }, [item]);
 
-  // next/image's onLoad can miss cached images that finish loading before
-  // React attaches the listener, leaving the spinner stuck forever. Fall
-  // back to checking the native <img>'s `complete` flag once mounted.
+  // React's onLoad prop on next/image isn't reliably firing here — attach a
+  // native listener directly to the <img> DOM node instead, which doesn't
+  // depend on React's synthetic event system picking it up in time.
   useEffect(() => {
     if (!item) return;
-    const id = requestAnimationFrame(() => {
-      if (imgRef.current?.complete) setImageLoaded(true);
-    });
-    // Last-resort safety net so the spinner can never spin forever.
-    const timer = setTimeout(() => setImageLoaded(true), 10000);
-    return () => {
-      cancelAnimationFrame(id);
-      clearTimeout(timer);
+    const startedAt = performance.now();
+    const img = imgRef.current;
+
+    const markLoaded = (source: string) => {
+      console.log(`[lightbox] loaded via ${source} after ${(performance.now() - startedAt).toFixed(0)}ms`);
+      setImageLoaded(true);
     };
+
+    if (img?.complete && img.naturalWidth > 0) {
+      markLoaded("already-complete");
+      return;
+    }
+
+    img?.addEventListener("load", () => markLoaded("native-load-event"));
+    img?.addEventListener("error", () => markLoaded("native-error-event"));
+
+    // Last-resort safety net so the spinner can never spin forever.
+    const timer = setTimeout(() => markLoaded("10s-timeout-fallback"), 10000);
+    return () => clearTimeout(timer);
   }, [item?.id]);
 
   useEffect(() => {

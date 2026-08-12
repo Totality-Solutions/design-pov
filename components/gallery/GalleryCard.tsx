@@ -31,18 +31,30 @@ function GalleryCard({ item, index, isExpanded, onExpand, onCollapse, onView }: 
   const expandedImgRef = useRef<HTMLImageElement>(null);
   const thumbImgRef = useRef<HTMLImageElement>(null);
 
-  // next/image's onLoad can miss cached images that finish loading before
-  // React attaches the listener, leaving the spinner/skeleton stuck forever.
-  // Fall back to checking the native <img>'s `complete` flag on mount.
+  // React's onLoad prop on next/image isn't reliably firing here — attach a
+  // native listener directly to the <img> DOM node instead, which doesn't
+  // depend on React's synthetic event system picking it up in time.
   useEffect(() => {
     if (!isExpanded) return;
     setRotation(0);
-    if (expandedImgRef.current?.complete) {
+    const startedAt = performance.now();
+    const img = expandedImgRef.current;
+
+    const markLoaded = (source: string) => {
+      console.log(`[gallery-expand] loaded via ${source} after ${(performance.now() - startedAt).toFixed(0)}ms`);
       setExpandedImageLoaded(true);
+    };
+
+    if (img?.complete && img.naturalWidth > 0) {
+      markLoaded("already-complete");
       return;
     }
+
+    img?.addEventListener("load", () => markLoaded("native-load-event"));
+    img?.addEventListener("error", () => markLoaded("native-error-event"));
+
     // Last-resort safety net so the spinner can never spin forever.
-    const timer = setTimeout(() => setExpandedImageLoaded(true), 10000);
+    const timer = setTimeout(() => markLoaded("10s-timeout-fallback"), 10000);
     return () => clearTimeout(timer);
   }, [isExpanded]);
 
