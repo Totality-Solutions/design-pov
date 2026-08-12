@@ -10,7 +10,7 @@ const ACCEPTED_TYPES = [
   "image/webp",
 ];
 
-const MAX_TOTAL_SIZE = 20 * 1024 * 1024;
+const MAX_TOTAL_SIZE = 100 * 1024 * 1024;
 const MIN_IMAGES = 2;
 const MAX_IMAGES = 10;
 
@@ -41,7 +41,7 @@ export function validateFiles(
   }
 
   if (totalSize > MAX_TOTAL_SIZE) {
-    errors.push("Total upload size exceeds 20 MB.");
+    errors.push("Total upload size exceeds 100 MB.");
   }
 
   return { valid, errors };

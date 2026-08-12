@@ -35,17 +35,6 @@ export default function GalleryHero({
   const filterButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    if (isFormOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [isFormOpen]);
-
-  useEffect(() => {
     if (!filterOpen) return;
     const handleClickOutside = (e: MouseEvent) => {
       if (
@@ -66,42 +55,42 @@ export default function GalleryHero({
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
-      className="sticky top-20 z-30"
+      className="fixed bottom-0 left-0 right-0 sm:sticky sm:bottom-auto sm:top-20 sm:left-auto sm:right-auto z-30"
     >
-      <div className="w-full bg-white border-b border-black px-6 lg:px-20 pt-4 flex items-start gap-10">
+      <div className="w-full bg-black px-6 lg:px-20 py-2.5 flex items-center gap-10">
         {GALLERY_YEARS.map((year) => (
           <button
             key={year.id}
             onClick={() => onYearChange(year.id)}
-            className={`pb-3 text-[15px] font-(family-name:--font-family) leading-6 whitespace-nowrap cursor-pointer transition-all duration-200 ${
+            className={`pb-1 text-[14px] font-(family-name:--font-family) leading-5 whitespace-nowrap cursor-pointer transition-all duration-200 border-b-2 ${
               activeYear === year.id
-                ? "text-black border-b-2 border-black font-medium"
-                : "text-black/50 border-b-2 border-transparent"
+                ? "text-white border-white font-medium"
+                : "text-white/50 border-transparent"
             }`}
           >
             {year.label}
           </button>
         ))}
 
-        <div className="ml-auto flex items-center gap-2 pb-3 shrink-0 pl-4">
+        <div className="ml-auto flex items-center gap-2 shrink-0 pl-4">
           <div className="relative">
             <button
               ref={filterButtonRef}
               onClick={() => setFilterOpen((prev) => !prev)}
-              className={`w-[40px] h-[40px] flex items-center justify-center border transition-colors cursor-pointer ${
+              className={`w-8 h-8 flex items-center justify-center border transition-colors cursor-pointer ${
                 activeCategory !== "all" || filterOpen
-                  ? "bg-black text-white border-black"
-                  : "border-black/20 text-black/60 hover:border-black hover:text-black"
+                  ? "bg-white text-black border-white"
+                  : "border-white/20 text-white/60 hover:border-white hover:text-white"
               }`}
               aria-label="Filter by category"
             >
-              <Filter className="w-4.5 h-4.5" strokeWidth={2} />
+              <Filter className="w-4 h-4" strokeWidth={2} />
             </button>
 
             {filterOpen && (
               <div
                 ref={filterRef}
-                className="absolute top-full right-0 mt-2 z-20 bg-white border border-gray-200 shadow-lg min-w-[160px] py-1"
+                className="absolute bottom-full right-0 mb-2 sm:bottom-auto sm:top-full sm:mb-0 sm:mt-2 z-20 bg-white border border-gray-200 shadow-lg min-w-[160px] py-1"
               >
                 {GALLERY_CATEGORIES.map((cat) => (
                   <button
@@ -125,13 +114,13 @@ export default function GalleryHero({
 
           <button
             onClick={onToggleForm}
-            className="w-[40px] h-[40px] flex items-center justify-center border border-black/20 text-black/60 hover:border-black hover:text-black transition-colors cursor-pointer"
+            className="w-8 h-8 flex items-center justify-center border border-white/20 text-white/60 hover:border-white hover:text-white transition-colors cursor-pointer"
             aria-label={isFormOpen ? "Close form" : "Open form"}
           >
             {isFormOpen ? (
-              <X className="w-4.5 h-4.5" strokeWidth={2} />
+              <X className="w-4 h-4" strokeWidth={2} />
             ) : (
-              <Plus className="w-4.5 h-4.5" strokeWidth={2} />
+              <Plus className="w-4 h-4" strokeWidth={2} />
             )}
           </button>
         </div>

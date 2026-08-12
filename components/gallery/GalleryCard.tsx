@@ -3,7 +3,7 @@
 import { memo, useCallback, useMemo, useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Download, Eye, Share2, X } from "lucide-react";
+import { Download, Eye, RotateCw, Share2, X } from "lucide-react";
 import type { GalleryItem } from "./types";
 
 interface GalleryCardProps {
@@ -24,6 +24,7 @@ function GalleryCard({ item, index, isExpanded, onExpand, onCollapse, onView }: 
   const [menuOpen, setMenuOpen] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [expandedImageLoaded, setExpandedImageLoaded] = useState(false);
+  const [rotation, setRotation] = useState(0);
   const menuRef = useRef<HTMLDivElement>(null);
   const dotsRef = useRef<HTMLButtonElement>(null);
   const expandedImgRef = useRef<HTMLImageElement>(null);
@@ -34,6 +35,7 @@ function GalleryCard({ item, index, isExpanded, onExpand, onCollapse, onView }: 
   // Fall back to checking the native <img>'s `complete` flag on mount.
   useEffect(() => {
     if (!isExpanded) return;
+    setRotation(0);
     if (expandedImgRef.current?.complete) {
       setExpandedImageLoaded(true);
       return;
@@ -103,6 +105,19 @@ function GalleryCard({ item, index, isExpanded, onExpand, onCollapse, onView }: 
       onCollapse();
     },
     [onCollapse]
+  );
+
+  const handleRotate = useCallback((e: React.MouseEvent) => {
+    e.stopPropagation();
+    setRotation((prev) => (prev + 90) % 360);
+  }, []);
+
+  const handleViewFull = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+      window.open(item.imageSrc, "_blank", "noopener,noreferrer");
+    },
+    [item]
   );
 
   const handleShare = useCallback(
@@ -186,18 +201,28 @@ function GalleryCard({ item, index, isExpanded, onExpand, onCollapse, onView }: 
     >
       {isExpanded ? (
         <div className="relative h-full w-full">
-          {!expandedImageLoaded && (
-            <div className="absolute inset-0 flex items-center justify-center bg-black">
-              <div className="w-9 h-9 border-2 border-white/25 border-t-white rounded-full animate-spin" />
-            </div>
-          )}
+          {/* Tiny low-res placeholder — loads almost instantly and gets
+              replaced by the full image once it finishes loading. */}
+          <Image
+            src={item.imageSrc}
+            alt=""
+            aria-hidden
+            fill
+            quality={30}
+            sizes="128px"
+            style={{ transform: `rotate(${rotation}deg)` }}
+            className={`object-contain transition-opacity duration-500 ${
+              expandedImageLoaded ? "opacity-0" : "opacity-100"
+            }`}
+          />
           <Image
             ref={expandedImgRef}
             src={item.imageSrc}
             alt={item.title}
             fill
             onLoad={() => setExpandedImageLoaded(true)}
-            className={`object-contain transition-opacity duration-300 ${
+            style={{ transform: `rotate(${rotation}deg)` }}
+            className={`object-contain transition-[opacity,transform] duration-500 ${
               expandedImageLoaded ? "opacity-100" : "opacity-0"
             }`}
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 70vw"
@@ -215,6 +240,22 @@ function GalleryCard({ item, index, isExpanded, onExpand, onCollapse, onView }: 
               {item.title}
             </span>
             <div className="flex items-center gap-3.5 shrink-0 ml-2">
+              <button
+                type="button"
+                onClick={handleRotate}
+                className="text-white hover:opacity-80 transition cursor-pointer"
+                aria-label="Rotate image"
+              >
+                <RotateCw className="w-5 h-5" strokeWidth={2} />
+              </button>
+              <button
+                type="button"
+                onClick={handleViewFull}
+                className="text-white hover:opacity-80 transition cursor-pointer"
+                aria-label="View full image"
+              >
+                <Eye className="w-5 h-5" strokeWidth={2} />
+              </button>
               <button
                 type="button"
                 onClick={handleShare}

@@ -164,7 +164,7 @@ export default function GalleryGrid() {
           onFormError={handleFormError}
         />
         
-        <div className="w-full px-[23px] py-[30px] pt-[100px] sm:pt-[30px]">
+        <div className="w-full px-[23px] pt-[100px] pb-24 sm:pt-[30px] sm:pb-[30px]">
           <motion.div
             layout
             className="relative grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 grid-flow-dense place-content-start items-start w-full"

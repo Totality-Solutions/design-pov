@@ -221,22 +221,29 @@
             initial={{ opacity: 0, scaleY: 0 }}
             animate={{ opacity: 1, scaleY: 1 }}
             exit={{ opacity: 0, scaleY: 0 }}
-            transition={{
-              duration: 0.45,
-              ease: [0.22, 1, 0.36, 1],
-            }}
-            style={{
-              top: "100%",
-              transformOrigin: "top",
-            }}
-            className="absolute left-0 right-0 z-40 p-6 bg-white border-b border-black"
+            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+            className="absolute left-0 right-0 bottom-full sm:bottom-auto sm:top-full origin-bottom sm:origin-top z-40 bg-white border-t sm:border-t-0 sm:border-b border-black shadow-lg"
           >
+            <button
+              type="button"
+              onClick={onClose}
+              className="absolute top-4 right-4 w-9 h-9 flex items-center justify-center bg-black text-white hover:bg-black/80 transition-colors cursor-pointer z-10"
+              aria-label="Close form"
+            >
+              <X className="w-4.5 h-4.5" strokeWidth={2} />
+            </button>
+                {/* Scrolling happens on this inner div, not the animated
+                    (transformed) motion.div above — touch scroll gestures
+                    are unreliable on an element that also has an active
+                    transform. */}
+                <div className="max-h-[80vh] sm:max-h-[75vh] overflow-y-auto custom-scrollbar">
             <form
               onSubmit={handleSubmit(onSubmit)}
               onKeyDown={handleKeyDown}
               noValidate
+              className="p-4 sm:p-6"
             >
-              <div className="px-20 py-8">
+              <div className="px-2 py-4 sm:px-20 sm:py-8">
                 <h2 className="text-2xl font-bold text-black mb-2 flex items-center gap-2">
                   <span className="text-black">•</span> Get Featured on Design POV
                 </h2>
@@ -295,7 +302,7 @@
 
                         <div className="mt-6 flex flex-col items-center gap-2 text-xs text-gray-400">
                           <p>Upload 2–10 images for review.</p>
-                          <p>Max total upload size: 20 MB.</p>
+                          <p>Max total upload size: 100 MB.</p>
                         </div>
                       </>
                     ) : (
@@ -566,6 +573,7 @@
                 </div>
               </div>
             </form>
+                </div>
           </motion.div>
         )}
       </AnimatePresence>

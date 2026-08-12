@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
-import { Download, Share2, X } from "lucide-react";
+import { Download, Eye, RotateCw, Share2, X } from "lucide-react";
 import type { GalleryItem } from "./types";
 
 interface LightboxProps {
@@ -13,11 +13,22 @@ interface LightboxProps {
 
 export default function Lightbox({ item, onClose }: LightboxProps) {
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [rotation, setRotation] = useState(0);
   const imgRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
     setImageLoaded(false);
+    setRotation(0);
   }, [item?.id]);
+
+  const handleRotate = useCallback(() => {
+    setRotation((prev) => (prev + 90) % 360);
+  }, []);
+
+  const handleViewFull = useCallback(() => {
+    if (!item) return;
+    window.open(item.imageSrc, "_blank", "noopener,noreferrer");
+  }, [item]);
 
   // next/image's onLoad can miss cached images that finish loading before
   // React attaches the listener, leaving the spinner stuck forever. Fall
@@ -105,18 +116,28 @@ export default function Lightbox({ item, onClose }: LightboxProps) {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="relative w-full flex-1 min-h-0">
-              {!imageLoaded && (
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-9 h-9 border-2 border-white/25 border-t-white rounded-full animate-spin" />
-                </div>
-              )}
+              {/* Tiny low-res placeholder — loads almost instantly and gets
+                  replaced by the full image once it finishes loading. */}
+              <Image
+                src={item.imageSrc}
+                alt=""
+                aria-hidden
+                fill
+                quality={30}
+                sizes="128px"
+                style={{ transform: `rotate(${rotation}deg)` }}
+                className={`object-contain transition-opacity duration-500 ${
+                  imageLoaded ? "opacity-0" : "opacity-100"
+                }`}
+              />
               <Image
                 ref={imgRef}
                 src={item.imageSrc}
                 alt={item.title}
                 fill
                 onLoad={() => setImageLoaded(true)}
-                className={`object-contain transition-opacity duration-300 ${
+                style={{ transform: `rotate(${rotation}deg)` }}
+                className={`object-contain transition-[opacity,transform] duration-500 ${
                   imageLoaded ? "opacity-100" : "opacity-0"
                 }`}
                 sizes="90vw"
@@ -138,6 +159,22 @@ export default function Lightbox({ item, onClose }: LightboxProps) {
                 {item.title}
               </span>
               <div className="flex items-center gap-3.5 shrink-0 ml-2">
+                <button
+                  type="button"
+                  onClick={handleRotate}
+                  className="text-white hover:opacity-80 transition cursor-pointer"
+                  aria-label="Rotate image"
+                >
+                  <RotateCw className="w-5 h-5" strokeWidth={2} />
+                </button>
+                <button
+                  type="button"
+                  onClick={handleViewFull}
+                  className="text-white hover:opacity-80 transition cursor-pointer"
+                  aria-label="View full image"
+                >
+                  <Eye className="w-5 h-5" strokeWidth={2} />
+                </button>
                 <button
                   type="button"
                   onClick={handleShare}
