@@ -235,11 +235,12 @@ function GalleryCard({ item, index, isExpanded, onExpand, onCollapse, onView }: 
           >
             <X className="w-[18px] h-[18px] text-white" strokeWidth={2} />
           </button>
-          <div className="absolute bg-black/90 bottom-0 left-0 right-0 flex items-center justify-between px-4 py-3.5">
-            <span className="text-white text-[16px] font-(family-name:--font-family) font-medium leading-5 truncate drop-shadow-md">
+          <div className="absolute top-[14px] left-[14px] right-[56px] bg-black/50 rounded-full px-3.5 py-1.5">
+            <span className="text-white text-[14px] font-(family-name:--font-family) font-medium leading-5 truncate block drop-shadow-md">
               {item.title}
             </span>
-            <div className="flex items-center gap-3.5 shrink-0 ml-2">
+          </div>
+          <div className="absolute bg-black/90 bottom-0 left-0 right-0 flex items-center justify-center gap-7 sm:gap-6 py-5 sm:py-3.5">
               <button
                 type="button"
                 onClick={handleRotate}
@@ -272,7 +273,6 @@ function GalleryCard({ item, index, isExpanded, onExpand, onCollapse, onView }: 
               >
                 <Download className="w-5 h-5" strokeWidth={2} />
               </button>
-            </div>
           </div>
         </div>
       ) : (

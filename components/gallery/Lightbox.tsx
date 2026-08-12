@@ -154,11 +154,13 @@ export default function Lightbox({ item, onClose }: LightboxProps) {
               <X className="w-[18px] h-[18px] text-white" strokeWidth={2} />
             </button>
 
-            <div className="w-full flex items-center justify-between px-4 py-3.5 mt-3 bg-black/60">
-              <span className="text-white text-[16px] font-(family-name:--font-family) font-medium leading-5 truncate">
+            <div className="absolute top-0 left-0 sm:-top-4 right-[52px] bg-black/60 rounded-full px-3.5 py-1.5">
+              <span className="text-white text-[14px] font-(family-name:--font-family) font-medium leading-5 truncate block">
                 {item.title}
               </span>
-              <div className="flex items-center gap-3.5 shrink-0 ml-2">
+            </div>
+
+            <div className="w-full flex items-center justify-center gap-7 sm:gap-6 py-5 sm:py-3.5 mt-3 bg-black/60">
                 <button
                   type="button"
                   onClick={handleRotate}
@@ -191,7 +193,6 @@ export default function Lightbox({ item, onClose }: LightboxProps) {
                 >
                   <Download className="w-5 h-5" strokeWidth={2} />
                 </button>
-              </div>
             </div>
           </motion.div>
         </motion.div>
