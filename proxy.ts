@@ -7,6 +7,7 @@ const PUBLIC_API_ROUTES = new Set([
   "/api/cms/brand-partner-types",
   "/api/cms/objects",
   "/api/cms/blogs",
+  "/api/cms/gallery",
   "/api/cms/studios",
   "/api/cms/global-settings",
 ]);

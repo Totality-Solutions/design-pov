@@ -16,6 +16,7 @@ export const GALLERY_CATEGORIES: GalleryCategory[] = [
 export const GALLERY_YEARS: GalleryYear[] = [
   { id: "all", label: "All" },
   { id: "2026", label: "2026" },
+  { id: "2025", label: "2025" },
 ];
 
 export const galleryItems: GalleryItem[] = [

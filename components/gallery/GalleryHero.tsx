@@ -3,11 +3,12 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Filter, Plus, X } from "lucide-react";
-import { GALLERY_CATEGORIES, GALLERY_YEARS } from "./galleryData";
-import type { GalleryItem } from "./types";
+import type { GalleryItem, GalleryCategory, GalleryYear } from "./types";
 import GallerySubmissionForm from "./GallerySubmissionForm";
 
 interface GalleryHeroProps {
+  categories: GalleryCategory[];
+  years: GalleryYear[];
   activeCategory: string;
   onCategoryChange: (category: string) => void;
   activeYear: string;
@@ -21,6 +22,8 @@ interface GalleryHeroProps {
 }
 
 export default function GalleryHero({
+  categories,
+  years,
   activeCategory,
   onCategoryChange,
   activeYear,
@@ -58,7 +61,7 @@ export default function GalleryHero({
       className="fixed bottom-0 left-0 right-0 sm:sticky sm:bottom-auto sm:top-20 sm:left-auto sm:right-auto z-30"
     >
       <div className="w-full bg-black px-6 lg:px-20 py-2.5 flex items-center gap-10">
-        {GALLERY_YEARS.map((year) => (
+        {years.map((year) => (
           <button
             key={year.id}
             onClick={() => onYearChange(year.id)}
@@ -92,7 +95,7 @@ export default function GalleryHero({
                 ref={filterRef}
                 className="absolute bottom-full right-0 mb-2 sm:bottom-auto sm:top-full sm:mb-0 sm:mt-2 z-20 bg-white border border-gray-200 shadow-lg min-w-[160px] py-1"
               >
-                {GALLERY_CATEGORIES.map((cat) => (
+                {categories.map((cat) => (
                   <button
                     key={cat.id}
                     onClick={() => {
@@ -114,7 +117,7 @@ export default function GalleryHero({
 
           <button
             onClick={onToggleForm}
-            className="w-8 h-8 flex items-center justify-center border border-white/20 text-white/60 hover:border-white hover:text-white transition-colors cursor-pointer"
+            className="w-8 h-8 flex items-center justify-center border hover:border-white hover:text-white hover:bg-transparent bg-white text-black transition-colors cursor-pointer"
             aria-label={isFormOpen ? "Close form" : "Open form"}
           >
             {isFormOpen ? (

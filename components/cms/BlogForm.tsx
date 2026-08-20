@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import ImageUploadField from "./ImageUploadField";
 
 type TextBlock = { type: "text"; title?: string; value: string };
 type ImageBlock = { type: "image"; value: string; caption?: string };
@@ -214,13 +215,23 @@ export default function BlogForm({ initialData, blogId }: { initialData?: Partia
       {/* ── Images ── */}
       <Section title="Images">
         <div className="grid grid-cols-2 gap-4">
-          <Field label="Cover Image URL (image)">
-            <input value={form.image} onChange={(e) => setField("image", e.target.value)} className={input} placeholder="https://... or /temp/..." />
-            {form.image && <img src={form.image} alt="cover" className="mt-2 h-28 w-full object-cover border border-black/10" />}
+          <Field label="Cover Image">
+            <ImageUploadField
+              value={form.image}
+              onChange={(url) => setField("image", url)}
+              folder={`blog/${form.slug || "misc"}`}
+              className={input}
+              previewClassName="mt-2 h-28 w-full object-cover border border-black/10"
+            />
           </Field>
-          <Field label="Thumbnail URL">
-            <input value={form.thumbnail} onChange={(e) => setField("thumbnail", e.target.value)} className={input} placeholder="https://... or /temp/..." />
-            {form.thumbnail && <img src={form.thumbnail} alt="thumb" className="mt-2 h-28 w-full object-cover border border-black/10" />}
+          <Field label="Thumbnail">
+            <ImageUploadField
+              value={form.thumbnail}
+              onChange={(url) => setField("thumbnail", url)}
+              folder={`blog/${form.slug || "misc"}`}
+              className={input}
+              previewClassName="mt-2 h-28 w-full object-cover border border-black/10"
+            />
           </Field>
         </div>
       </Section>
@@ -292,11 +303,12 @@ export default function BlogForm({ initialData, blogId }: { initialData?: Partia
               {/* Image block */}
               {block.type === "image" && (
                 <div className="space-y-2">
-                  <input
+                  <ImageUploadField
                     value={block.value}
-                    onChange={(e) => updateBlock(i, { value: e.target.value })}
+                    onChange={(url) => updateBlock(i, { value: url })}
+                    folder={`blog/${form.slug || "misc"}`}
                     className={input}
-                    placeholder="Image URL — https://... or /temp/..."
+                    previewClassName="mt-1 h-40 w-full object-cover border border-black/10"
                   />
                   <input
                     value={(block as ImageBlock).caption ?? ""}
@@ -304,9 +316,6 @@ export default function BlogForm({ initialData, blogId }: { initialData?: Partia
                     className={input}
                     placeholder="Caption (optional)"
                   />
-                  {block.value && (
-                    <img src={block.value} alt="preview" className="mt-1 h-40 w-full object-cover border border-black/10" />
-                  )}
                 </div>
               )}
 

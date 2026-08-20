@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useCallback, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { galleryItems } from "./galleryData";
+import { getGalleryItems, deriveCategories, deriveYears } from "@/lib/gallery";
 import GalleryCard from "./GalleryCard";
 import GalleryHero from "./GalleryHero";
 import Lightbox from "./Lightbox";
@@ -19,6 +19,7 @@ export default function GalleryGrid() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [galleryItems, setGalleryItems] = useState<GalleryItem[]>([]);
   const [shuffledGallery, setShuffledGallery] = useState<GalleryItem[]>([]);
   const [visibleCount, setVisibleCount] = useState(INITIAL_BATCH);
   const [toast, setToast] = useState<ToastData | null>(null);
@@ -26,13 +27,21 @@ export default function GalleryGrid() {
   const toastIdRef = useRef(0);
 
   useEffect(() => {
+    getGalleryItems().then(setGalleryItems);
+  }, []);
+
+  useEffect(() => {
+    if (galleryItems.length === 0) return;
     const shuffled = [...galleryItems];
     for (let i = shuffled.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
     }
     setShuffledGallery(shuffled);
-  }, []);
+  }, [galleryItems]);
+
+  const categories = useMemo(() => deriveCategories(galleryItems), [galleryItems]);
+  const years = useMemo(() => deriveYears(galleryItems), [galleryItems]);
 
   useEffect(() => {
     const sentinel = sentinelRef.current;
@@ -152,6 +161,8 @@ export default function GalleryGrid() {
         transition={{ duration: 0.4 }}
       >
         <GalleryHero
+          categories={categories}
+          years={years}
           activeCategory={activeCategory}
           onCategoryChange={handleCategoryChange}
           activeYear={activeYear}
