@@ -2,9 +2,11 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
-import { cdn } from "@/lib/cdn";
 import { useToast } from "./ToastProvider";
+import ImageUploadField from "./ImageUploadField";
+import { extractFolderNumber } from "@/lib/mediaFolder";
+
+const BASE_PATH = "/temp/brand-partners";
 
 const SPECIAL_TYPES = [
   { value: "sponsor", label: "Sponsor (Partners)" },
@@ -69,15 +71,22 @@ const PRESET_TIER_VALUES = new Set(SPONSOR_TIERS.map((t) => t.value));
 export default function BrandPartnerForm({
   initialData,
   partnerId,
+  defaultImageFolder,
 }: {
   initialData?: Partial<FormData>;
   partnerId?: string;
+  /** e.g. "/temp/brand-partners/9/" — pre-fills the logo field so uploads land in the same folder */
+  defaultImageFolder?: string;
 }) {
   const router  = useRouter();
   const { showSuccess, showError } = useToast();
   const isEdit  = !!partnerId;
 
-  const [form, setForm]           = useState<FormData>({ ...emptyForm, ...initialData });
+  const [form, setForm]           = useState<FormData>({
+    ...emptyForm,
+    ...(defaultImageFolder && !isEdit ? { logo: defaultImageFolder } : {}),
+    ...initialData,
+  });
   const [saving, setSaving]       = useState(false);
   const [error, setError]         = useState("");
   const [partnerTypes, setPartnerTypes] = useState([...SPECIAL_TYPES, ...FALLBACK_TYPES]);
@@ -102,6 +111,14 @@ export default function BrandPartnerForm({
       })
       .catch(() => {});
   }, [initialData?.type]);
+
+  // Keep every upload in this partner's folder, whatever the current logo path is
+  const uploadFolder =
+    extractFolderNumber(BASE_PATH, form.logo) != null
+      ? `temp/brand-partners/${extractFolderNumber(BASE_PATH, form.logo)}`
+      : defaultImageFolder
+        ? defaultImageFolder.replace(/^\/+|\/+$/g, "")
+        : "brand-partners/misc";
 
   function set<K extends keyof FormData>(field: K, value: FormData[K]) {
     setForm((f) => ({ ...f, [field]: value }));
@@ -139,8 +156,6 @@ export default function BrandPartnerForm({
     router.refresh();
   }
 
-  const previewSrc = form.logo ? cdn(form.logo) : "";
-
   return (
     <div className="max-w-xl space-y-6">
       {/* Name */}
@@ -156,18 +171,14 @@ export default function BrandPartnerForm({
 
       {/* Logo path + preview */}
       <div>
-        <label className={labelCls}>Logo Path *</label>
-        <input
+        <label className={labelCls}>Logo *</label>
+        <ImageUploadField
           value={form.logo}
-          onChange={(e) => set("logo", e.target.value)}
-          placeholder="/temp/edition/sponsors/1.png"
+          onChange={(url) => set("logo", url)}
+          folder={uploadFolder}
           className={inputCls}
+          previewClassName="mt-2 h-24 w-40 object-contain bg-gray-50 border border-black/10 p-2"
         />
-        {previewSrc && (
-          <div className="mt-2 relative w-40 h-20 bg-gray-50 border border-black/10 overflow-hidden">
-            <Image src={previewSrc} alt="Logo preview" fill className="object-contain p-2" sizes="160px" unoptimized />
-          </div>
-        )}
       </div>
 
       {/* Website */}

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createServerClient } from "@/lib/supabase/server";
+import { resolveS3KeyFromCdnValue, deleteObjectsFromS3 } from "@/lib/s3";
 
 export async function GET(
   _req: Request,
@@ -39,7 +40,34 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  const { error } = await createServerClient()
+  const supabase = createServerClient();
+
+  const { data: object } = await supabase
+    .from("objects")
+    .select("src, additional_images")
+    .eq("id", id)
+    .single();
+
+  if (object) {
+    // Note: "logo" is intentionally excluded — it's usually a shared default asset
+    // (e.g. /logo/Totality.svg), not a per-object upload, so it must never be deleted here.
+    const values = [object.src, ...(object.additional_images ?? [])];
+    const keys = values.map(resolveS3KeyFromCdnValue).filter((k): k is string => !!k);
+
+    if (keys.length > 0) {
+      try {
+        await deleteObjectsFromS3(keys);
+      } catch (s3Error: any) {
+        console.error("[objects] Failed to delete S3 images for object", id, s3Error);
+        return NextResponse.json(
+          { error: s3Error.message || "Failed to delete images. Object was not deleted." },
+          { status: 500 }
+        );
+      }
+    }
+  }
+
+  const { error } = await supabase
     .from("objects")
     .delete()
     .eq("id", id);

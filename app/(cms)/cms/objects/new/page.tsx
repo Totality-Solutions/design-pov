@@ -1,7 +1,24 @@
 import CmsSidebar from "@/components/cms/CmsSidebar";
 import ObjectForm from "@/components/cms/ObjectForm";
+import { createServerClient } from "@/lib/supabase/server";
+import { getNextFolderNumber } from "@/lib/mediaFolder";
 
-export default function NewObjectPage() {
+export const dynamic = "force-dynamic";
+
+const BASE_PATH = "/temp/objects";
+
+export default async function NewObjectPage() {
+  const { data } = await createServerClient().from("objects").select("src, additional_images");
+
+  const values: Array<string | null | undefined> = [];
+  (data ?? []).forEach((row) => {
+    values.push(row.src);
+    (row.additional_images ?? []).forEach((img: string) => values.push(img));
+  });
+
+  const nextFolder = getNextFolderNumber(BASE_PATH, values);
+  const defaultImageFolder = `${BASE_PATH}/${nextFolder}/`;
+
   return (
     <div className="min-h-screen bg-[#f7f7f7]">
       <CmsSidebar />
@@ -13,7 +30,7 @@ export default function NewObjectPage() {
         </div>
 
         <div className="bg-white border border-black/10 p-8">
-          <ObjectForm />
+          <ObjectForm defaultImageFolder={defaultImageFolder} />
         </div>
       </main>
     </div>

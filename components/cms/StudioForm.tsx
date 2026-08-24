@@ -5,6 +5,10 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { cdn } from "@/lib/cdn";
 import { useToast } from "./ToastProvider";
+import ImageUploadField from "./ImageUploadField";
+import { extractFolderNumber } from "@/lib/mediaFolder";
+
+const BASE_PATH = "/temp/studios";
 
 type FormData = {
   label: string;
@@ -14,10 +18,10 @@ type FormData = {
   instagram: string;
   core_image: string;
   bio: string;
-  core_additional_images: string;
+  core_additional_images: string[];
   booth_image: string;
   concept: string;
-  booth_additional_images: string;
+  booth_additional_images: string[];
   sort_order: number;
   active: boolean;
 };
@@ -30,10 +34,10 @@ const emptyForm: FormData = {
   instagram: "",
   core_image: "",
   bio: "",
-  core_additional_images: "",
+  core_additional_images: [""],
   booth_image: "",
   concept: "",
-  booth_additional_images: "",
+  booth_additional_images: [""],
   sort_order: 0,
   active: true,
 };
@@ -50,20 +54,49 @@ function parseLines(raw: string): string[] {
 export default function StudioForm({
   initialData,
   studioId,
+  defaultImageFolder,
 }: {
   initialData?: Partial<FormData>;
   studioId?: string;
+  /** e.g. "/temp/studios/12/" — pre-fills the core image so uploads land in the same folder */
+  defaultImageFolder?: string;
 }) {
   const router = useRouter();
   const { showSuccess, showError } = useToast();
   const isEdit = !!studioId;
 
-  const [form, setForm]     = useState<FormData>({ ...emptyForm, ...initialData });
+  const [form, setForm]     = useState<FormData>({
+    ...emptyForm,
+    ...(defaultImageFolder && !isEdit ? { core_image: defaultImageFolder, booth_image: defaultImageFolder } : {}),
+    ...initialData,
+  });
   const [saving, setSaving] = useState(false);
   const [error, setError]   = useState("");
 
+  // Keep every upload in this studio's folder, whatever the current image paths are
+  const uploadFolder =
+    (extractFolderNumber(BASE_PATH, form.core_image) ?? extractFolderNumber(BASE_PATH, form.booth_image)) != null
+      ? `temp/studios/${extractFolderNumber(BASE_PATH, form.core_image) ?? extractFolderNumber(BASE_PATH, form.booth_image)}`
+      : defaultImageFolder
+        ? defaultImageFolder.replace(/^\/+|\/+$/g, "")
+        : "studios/misc";
+
   function set<K extends keyof FormData>(field: K, value: FormData[K]) {
     setForm((f) => ({ ...f, [field]: value }));
+  }
+
+  function updateImg(key: "core_additional_images" | "booth_additional_images", i: number, value: string) {
+    setForm((f) => {
+      const arr = [...f[key]];
+      arr[i] = value;
+      return { ...f, [key]: arr };
+    });
+  }
+  function addImg(key: "core_additional_images" | "booth_additional_images") {
+    setForm((f) => ({ ...f, [key]: [...f[key], ""] }));
+  }
+  function removeImg(key: "core_additional_images" | "booth_additional_images", i: number) {
+    setForm((f) => ({ ...f, [key]: f[key].filter((_, idx) => idx !== i) }));
   }
 
   async function handleSave() {
@@ -80,10 +113,10 @@ export default function StudioForm({
       instagram: form.instagram.trim(),
       core_image: form.core_image.trim(),
       bio: form.bio.trim(),
-      core_additional_images: parseLines(form.core_additional_images),
+      core_additional_images: form.core_additional_images.map((s) => s.trim()).filter(Boolean),
       booth_image: form.booth_image.trim(),
       concept: form.concept.trim(),
-      booth_additional_images: parseLines(form.booth_additional_images),
+      booth_additional_images: form.booth_additional_images.map((s) => s.trim()).filter(Boolean),
       sort_order: form.sort_order,
       active: form.active,
     };
@@ -158,13 +191,14 @@ export default function StudioForm({
 
         <div className="space-y-4">
           <div>
-            <label className={labelCls}>Core Image Path *</label>
-            <input value={form.core_image} onChange={(e) => set("core_image", e.target.value)} placeholder="/temp/home/core/Abin.jpg" className={inputCls} />
-            {form.core_image && (
-              <div className="mt-2 relative w-40 h-28 bg-gray-50 border border-black/10 overflow-hidden">
-                <Image src={cdn(form.core_image)} alt="Core image preview" fill className="object-cover" sizes="160px" unoptimized />
-              </div>
-            )}
+            <label className={labelCls}>Core Image *</label>
+            <ImageUploadField
+              value={form.core_image}
+              onChange={(url) => set("core_image", url)}
+              folder={uploadFolder}
+              className={inputCls}
+              previewClassName="mt-2 h-32 w-full object-cover border border-black/10"
+            />
           </div>
 
           <div>
@@ -179,14 +213,36 @@ export default function StudioForm({
           </div>
 
           <div>
-            <label className={labelCls}>Core Additional Images (one path per line)</label>
-            <textarea
-              value={form.core_additional_images}
-              onChange={(e) => set("core_additional_images", e.target.value)}
-              rows={3}
-              placeholder={"/temp/home/core/ABIN_1.jpg\n/temp/home/core/ABIN_2.jpg"}
-              className={inputCls}
-            />
+            <label className={labelCls}>Core Additional Images</label>
+            <div className="space-y-2 mt-1.5">
+              {form.core_additional_images.map((img, i) => (
+                <div key={i} className="flex gap-2 items-start">
+                  <div className="flex-1">
+                    <ImageUploadField
+                      value={img}
+                      onChange={(url) => updateImg("core_additional_images", i, url)}
+                      folder={uploadFolder}
+                      className={inputCls}
+                      previewClassName="mt-1 h-20 w-full object-cover border border-black/10"
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => removeImg("core_additional_images", i)}
+                    className="mt-0.5 w-8 h-8 flex items-center justify-center text-gray-400 hover:text-red-500 border border-black/10 hover:border-red-300 transition-colors shrink-0 text-xs"
+                  >
+                    ✕
+                  </button>
+                </div>
+              ))}
+            </div>
+            <button
+              type="button"
+              onClick={() => addImg("core_additional_images")}
+              className="mt-3 border border-black/20 px-4 py-2 text-[11px] uppercase tracking-widest text-gray-600 hover:border-black hover:text-black transition-colors"
+            >
+              + Add Image
+            </button>
           </div>
         </div>
       </div>
@@ -197,13 +253,14 @@ export default function StudioForm({
 
         <div className="space-y-4">
           <div>
-            <label className={labelCls}>Booth Image Path *</label>
-            <input value={form.booth_image} onChange={(e) => set("booth_image", e.target.value)} placeholder="/temp/home/core/Abin_booth.jpg" className={inputCls} />
-            {form.booth_image && (
-              <div className="mt-2 relative w-40 h-28 bg-gray-50 border border-black/10 overflow-hidden">
-                <Image src={cdn(form.booth_image)} alt="Booth image preview" fill className="object-cover" sizes="160px" unoptimized />
-              </div>
-            )}
+            <label className={labelCls}>Booth Image *</label>
+            <ImageUploadField
+              value={form.booth_image}
+              onChange={(url) => set("booth_image", url)}
+              folder={uploadFolder}
+              className={inputCls}
+              previewClassName="mt-2 h-32 w-full object-cover border border-black/10"
+            />
           </div>
 
           <div>
@@ -218,14 +275,36 @@ export default function StudioForm({
           </div>
 
           <div>
-            <label className={labelCls}>Booth Additional Images (one path per line)</label>
-            <textarea
-              value={form.booth_additional_images}
-              onChange={(e) => set("booth_additional_images", e.target.value)}
-              rows={3}
-              placeholder={"/temp/home/core/ABIN_booth_1.jpg\n/temp/home/core/ABIN_booth_2.jpg"}
-              className={inputCls}
-            />
+            <label className={labelCls}>Booth Additional Images</label>
+            <div className="space-y-2 mt-1.5">
+              {form.booth_additional_images.map((img, i) => (
+                <div key={i} className="flex gap-2 items-start">
+                  <div className="flex-1">
+                    <ImageUploadField
+                      value={img}
+                      onChange={(url) => updateImg("booth_additional_images", i, url)}
+                      folder={uploadFolder}
+                      className={inputCls}
+                      previewClassName="mt-1 h-20 w-full object-cover border border-black/10"
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => removeImg("booth_additional_images", i)}
+                    className="mt-0.5 w-8 h-8 flex items-center justify-center text-gray-400 hover:text-red-500 border border-black/10 hover:border-red-300 transition-colors shrink-0 text-xs"
+                  >
+                    ✕
+                  </button>
+                </div>
+              ))}
+            </div>
+            <button
+              type="button"
+              onClick={() => addImg("booth_additional_images")}
+              className="mt-3 border border-black/20 px-4 py-2 text-[11px] uppercase tracking-widest text-gray-600 hover:border-black hover:text-black transition-colors"
+            >
+              + Add Image
+            </button>
           </div>
         </div>
       </div>

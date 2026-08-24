@@ -28,10 +28,10 @@ export default async function EditStudioPage({
     instagram:                data.instagram,
     core_image:               data.core_image,
     bio:                      data.bio,
-    core_additional_images:   (data.core_additional_images ?? []).join("\n"),
+    core_additional_images:   data.core_additional_images?.length ? data.core_additional_images : [""],
     booth_image:              data.booth_image,
     concept:                  data.concept,
-    booth_additional_images:  (data.booth_additional_images ?? []).join("\n"),
+    booth_additional_images:  data.booth_additional_images?.length ? data.booth_additional_images : [""],
     sort_order:               data.sort_order,
     active:                   data.active,
   };

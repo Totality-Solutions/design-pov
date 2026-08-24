@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createServerClient } from "@/lib/supabase/server";
+import { resolveS3KeyFromCdnValue, deleteObjectsFromS3 } from "@/lib/s3";
 
 export async function GET(
   _req: Request,
@@ -39,7 +40,31 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  const { error } = await createServerClient()
+  const supabase = createServerClient();
+
+  const { data: item } = await supabase
+    .from("gallery_items")
+    .select("image_src")
+    .eq("id", id)
+    .single();
+
+  if (item) {
+    const keys = [resolveS3KeyFromCdnValue(item.image_src)].filter((k): k is string => !!k);
+
+    if (keys.length > 0) {
+      try {
+        await deleteObjectsFromS3(keys);
+      } catch (s3Error: any) {
+        console.error("[gallery] Failed to delete S3 image for item", id, s3Error);
+        return NextResponse.json(
+          { error: s3Error.message || "Failed to delete image. Item was not deleted." },
+          { status: 500 }
+        );
+      }
+    }
+  }
+
+  const { error } = await supabase
     .from("gallery_items")
     .delete()
     .eq("id", id);

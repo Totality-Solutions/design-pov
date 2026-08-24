@@ -2,8 +2,11 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { cdn } from "@/lib/cdn";
 import { useToast } from "./ToastProvider";
+import ImageUploadField from "./ImageUploadField";
+import { extractFolderNumber } from "@/lib/mediaFolder";
+
+const BASE_PATH = "/temp/objects";
 
 type ObjectFormData = {
   label: string;
@@ -34,17 +37,32 @@ const emptyForm: ObjectFormData = {
 export default function ObjectForm({
   initialData,
   objectId,
+  defaultImageFolder,
 }: {
   initialData?: Partial<ObjectFormData>;
   objectId?: string;
+  /** e.g. "/temp/objects/43/" — pre-fills the main image field so uploads land in the same folder */
+  defaultImageFolder?: string;
 }) {
   const router = useRouter();
   const { showSuccess, showError } = useToast();
   const isEdit = !!objectId;
 
-  const [form, setForm] = useState<ObjectFormData>({ ...emptyForm, ...initialData });
+  const [form, setForm] = useState<ObjectFormData>({
+    ...emptyForm,
+    ...(defaultImageFolder && !isEdit ? { src: defaultImageFolder } : {}),
+    ...initialData,
+  });
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+
+  // Keep every upload in this object's folder, whatever the current image path is
+  const uploadFolder =
+    extractFolderNumber(BASE_PATH, form.src) != null
+      ? `temp/objects/${extractFolderNumber(BASE_PATH, form.src)}`
+      : defaultImageFolder
+        ? defaultImageFolder.replace(/^\/+|\/+$/g, "")
+        : "objects/misc";
 
   function setField<K extends keyof ObjectFormData>(field: K, value: ObjectFormData[K]) {
     setForm((f) => ({ ...f, [field]: value }));
@@ -169,18 +187,14 @@ export default function ObjectForm({
 
       {/* ── Images ── */}
       <Section title="Images">
-        <Field label="Main Image Path *">
-          <input
-            required
+        <Field label="Main Image *">
+          <ImageUploadField
             value={form.src}
-            onChange={(e) => setField("src", e.target.value)}
+            onChange={(url) => setField("src", url)}
+            folder={uploadFolder}
             className={input}
-            placeholder="/temp/objects/1.png"
+            previewClassName="mt-2 h-32 w-full object-cover border border-black/10"
           />
-          {form.src && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={cdn(form.src)} alt="preview" className="mt-2 h-32 w-full object-cover border border-black/10" />
-          )}
         </Field>
 
         <div>
@@ -188,17 +202,14 @@ export default function ObjectForm({
           <div className="space-y-2 mt-1.5">
             {form.additional_images.map((img, i) => (
               <div key={i} className="flex gap-2 items-start">
-                <div className="flex-1 space-y-1">
-                  <input
+                <div className="flex-1">
+                  <ImageUploadField
                     value={img}
-                    onChange={(e) => updateImage(i, e.target.value)}
+                    onChange={(url) => updateImage(i, url)}
+                    folder={uploadFolder}
                     className={input}
-                    placeholder={`/temp/objects/${i + 2}.jpg`}
+                    previewClassName="mt-1 h-20 w-full object-cover border border-black/10"
                   />
-                  {img && (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={cdn(img)} alt={`additional ${i}`} className="h-20 w-full object-cover border border-black/10" />
-                  )}
                 </div>
                 <button
                   type="button"

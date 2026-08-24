@@ -1,6 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { cdn } from "@/lib/cdn";
+import { extractFolderNumber, getNextFolderNumber } from "@/lib/mediaFolder";
+import ImageUploadField from "./ImageUploadField";
+
+const BASE_PATH = "/temp/theme";
 
 type Social = { name: string; link: string };
 
@@ -46,8 +51,18 @@ export default function ThemeEditor({
   const [page, setPage]       = useState(initialPage);
   const [blocks, setBlocks]   = useState<Block[]>(initialBlocks.filter((b) => b.section_key === "theme_detail"));
   const [savingTitle, setSavingTitle] = useState(false);
-  const [modal, setModal]     = useState<{ mode: "create" | "edit"; block?: Block } | null>(null);
+  const [modal, setModal]     = useState<{ mode: "create" | "edit"; block?: Block; defaultImageFolder?: string } | null>(null);
   const [deleting, setDeleting] = useState<string | null>(null);
+
+  function computeDefaultImageFolder() {
+    const values: Array<string | null | undefined> = [];
+    blocks.forEach((b) => {
+      values.push(b.data.logo);
+      (b.data.themeImages ?? []).forEach((v) => values.push(v));
+      (b.data.coreImages ?? []).forEach((v) => values.push(v));
+    });
+    return `${BASE_PATH}/${getNextFolderNumber(BASE_PATH, values)}/`;
+  }
 
   // ── Title ────────────────────────────────────────────────
   async function saveTitle() {
@@ -149,7 +164,7 @@ export default function ThemeEditor({
             <p className="text-xs text-gray-400 mt-0.5">{blocks.length} total</p>
           </div>
           <button
-            onClick={() => setModal({ mode: "create" })}
+            onClick={() => setModal({ mode: "create", defaultImageFolder: computeDefaultImageFolder() })}
             className="bg-black text-white px-5 py-2.5 text-[11px] uppercase tracking-widest hover:bg-neutral-800 transition-colors"
           >
             + Add Collaborator
@@ -180,7 +195,7 @@ export default function ThemeEditor({
                       <td className="px-4 py-3 text-gray-400 text-[11px]">{i + 1}</td>
                       <td className="px-4 py-3">
                         {d.logo ? (
-                          <img src={d.logo} alt="" className="h-8 w-16 object-contain" />
+                          <img src={cdn(d.logo)} alt="" className="h-8 w-16 object-contain" />
                         ) : (
                           <span className="text-gray-300 text-xs">—</span>
                         )}
@@ -235,6 +250,7 @@ export default function ThemeEditor({
         <ThemeDetailModal
           mode={modal.mode}
           initial={modal.block?.data ?? empty}
+          defaultImageFolder={modal.defaultImageFolder}
           onClose={() => setModal(null)}
           onSave={(data) =>
             modal.mode === "create"
@@ -251,17 +267,32 @@ export default function ThemeEditor({
 function ThemeDetailModal({
   mode,
   initial,
+  defaultImageFolder,
   onClose,
   onSave,
 }: {
   mode: "create" | "edit";
   initial: ThemeDetail;
+  /** e.g. "/temp/theme/7/" — pre-fills the logo field on create so uploads land in the same folder */
+  defaultImageFolder?: string;
   onClose: () => void;
   onSave: (d: ThemeDetail) => Promise<void>;
 }) {
-  const [form, setForm] = useState<ThemeDetail>(JSON.parse(JSON.stringify(initial)));
+  const [form, setForm] = useState<ThemeDetail>(() => {
+    const base = JSON.parse(JSON.stringify(initial));
+    if (mode === "create" && defaultImageFolder) base.logo = defaultImageFolder;
+    return base;
+  });
   const [saving, setSaving] = useState(false);
   const [activeTab, setActiveTab] = useState<"basic" | "images" | "content" | "socials">("basic");
+
+  // Keep every upload in this collaborator's folder, whatever the current logo path is
+  const uploadFolder =
+    extractFolderNumber(BASE_PATH, form.logo) != null
+      ? `temp/theme/${extractFolderNumber(BASE_PATH, form.logo)}`
+      : defaultImageFolder
+        ? defaultImageFolder.replace(/^\/+|\/+$/g, "")
+        : "theme/misc";
 
   function set<K extends keyof ThemeDetail>(key: K, val: ThemeDetail[K]) {
     setForm((f) => ({ ...f, [key]: val }));
@@ -332,9 +363,14 @@ function ThemeDetailModal({
                 <F label="Company Name *">
                   <input required value={form.companyName} onChange={(e) => set("companyName", e.target.value)} className={inp} placeholder="e.g. ADND Studio" />
                 </F>
-                <F label="Logo URL">
-                  <input value={form.logo} onChange={(e) => set("logo", e.target.value)} className={inp} placeholder="/temp/edition/core-logo/... or https://..." />
-                  {form.logo && <img src={form.logo} alt="logo" className="mt-2 h-10 object-contain border border-black/10 p-1" />}
+                <F label="Logo">
+                  <ImageUploadField
+                    value={form.logo}
+                    onChange={(url) => set("logo", url)}
+                    folder={uploadFolder}
+                    className={inp}
+                    previewClassName="mt-2 h-16 object-contain border border-black/10 p-1"
+                  />
                 </F>
               </>
             )}
@@ -342,9 +378,9 @@ function ThemeDetailModal({
             {/* Images */}
             {activeTab === "images" && (
               <>
-                <ImageList label="Theme Images" images={form.themeImages} onUpdate={(i, v) => updateImg("themeImages", i, v)} onAdd={() => addImg("themeImages")} onRemove={(i) => removeImg("themeImages", i)} />
+                <ImageList label="Theme Images" images={form.themeImages} folder={uploadFolder} onUpdate={(i, v) => updateImg("themeImages", i, v)} onAdd={() => addImg("themeImages")} onRemove={(i) => removeImg("themeImages", i)} />
                 <div className="border-t border-black/10 pt-4">
-                  <ImageList label="Core Images" images={form.coreImages} onUpdate={(i, v) => updateImg("coreImages", i, v)} onAdd={() => addImg("coreImages")} onRemove={(i) => removeImg("coreImages", i)} />
+                  <ImageList label="Core Images" images={form.coreImages} folder={uploadFolder} onUpdate={(i, v) => updateImg("coreImages", i, v)} onAdd={() => addImg("coreImages")} onRemove={(i) => removeImg("coreImages", i)} />
                 </div>
               </>
             )}
@@ -403,9 +439,10 @@ function ThemeDetailModal({
 }
 
 // ── Shared sub-components ────────────────────────────────────────────────────
-function ImageList({ label, images, onUpdate, onAdd, onRemove }: {
+function ImageList({ label, images, folder, onUpdate, onAdd, onRemove }: {
   label: string;
   images: string[];
+  folder: string;
   onUpdate: (i: number, v: string) => void;
   onAdd: () => void;
   onRemove: (i: number) => void;
@@ -415,10 +452,17 @@ function ImageList({ label, images, onUpdate, onAdd, onRemove }: {
       <p className="text-[10px] uppercase tracking-widest text-gray-400 mb-2">{label}</p>
       <div className="space-y-2">
         {images.map((url, i) => (
-          <div key={i} className="flex gap-2 items-center">
-            <input value={url} onChange={(e) => onUpdate(i, e.target.value)} className={`${inp} flex-1`} placeholder={`Image ${i + 1} URL`} />
-            {url && <img src={url} alt="" className="h-8 w-12 object-cover border border-black/10 shrink-0" />}
-            <button type="button" onClick={() => onRemove(i)} className="shrink-0 text-red-400 hover:text-red-600 border border-red-200 hover:bg-red-50 px-2 py-2 text-xs transition-colors">✕</button>
+          <div key={i} className="flex gap-2 items-start">
+            <div className="flex-1">
+              <ImageUploadField
+                value={url}
+                onChange={(v) => onUpdate(i, v)}
+                folder={folder}
+                className={inp}
+                previewClassName="mt-1 h-16 w-24 object-cover border border-black/10"
+              />
+            </div>
+            <button type="button" onClick={() => onRemove(i)} className="mt-0.5 shrink-0 text-red-400 hover:text-red-600 border border-red-200 hover:bg-red-50 px-2 py-2 text-xs transition-colors">✕</button>
           </div>
         ))}
       </div>
