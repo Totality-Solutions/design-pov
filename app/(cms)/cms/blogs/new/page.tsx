@@ -1,7 +1,18 @@
 import CmsSidebar from "@/components/cms/CmsSidebar";
 import BlogForm from "@/components/cms/BlogForm";
+import { createServerClient } from "@/lib/supabase/server";
+import { getNextMagazineFolderNumber } from "@/lib/blog";
 
-export default function NewBlogPage() {
+export const dynamic = "force-dynamic";
+
+export default async function NewBlogPage() {
+  const { data } = await createServerClient()
+    .from("blogs")
+    .select("image, thumbnail, detailed_content");
+
+  const nextFolder = getNextMagazineFolderNumber(data ?? []);
+  const defaultImageFolder = `/temp/magazine/${nextFolder}/`;
+
   return (
     <div className="min-h-screen bg-[#f7f7f7]">
       <CmsSidebar />
@@ -13,7 +24,7 @@ export default function NewBlogPage() {
         </div>
 
         <div className="bg-white border border-black/10 p-8">
-          <BlogForm />
+          <BlogForm defaultImageFolder={defaultImageFolder} />
         </div>
       </main>
     </div>

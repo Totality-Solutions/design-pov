@@ -49,12 +49,25 @@ const emptyForm: BlogFormData = {
   detailed_content: [{ type: "text", title: "", value: "" }],
 };
 
-export default function BlogForm({ initialData, blogId }: { initialData?: Partial<BlogFormData>; blogId?: string }) {
+export default function BlogForm({
+  initialData,
+  blogId,
+  defaultImageFolder,
+}: {
+  initialData?: Partial<BlogFormData>;
+  blogId?: string;
+  /** e.g. "/temp/magazine/43/" — pre-fills new image fields so only the filename needs typing */
+  defaultImageFolder?: string;
+}) {
   const router = useRouter();
   const isEdit = !!blogId;
   const viewUrl = isEdit && initialData?.slug ? `/magazine/${initialData.slug}` : null;
 
-  const [form, setForm] = useState<BlogFormData>({ ...emptyForm, ...initialData });
+  const [form, setForm] = useState<BlogFormData>({
+    ...emptyForm,
+    ...(defaultImageFolder && !isEdit ? { image: defaultImageFolder, thumbnail: defaultImageFolder } : {}),
+    ...initialData,
+  });
   const [slugEdited, setSlugEdited] = useState(isEdit);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
@@ -90,7 +103,7 @@ export default function BlogForm({ initialData, blogId }: { initialData?: Partia
   function addBlock(type: ContentBlock["type"]) {
     const block: ContentBlock =
       type === "text" ? { type: "text", title: "", value: "" } :
-      type === "image" ? { type: "image", value: "", caption: "" } :
+      type === "image" ? { type: "image", value: defaultImageFolder && !isEdit ? defaultImageFolder : "", caption: "" } :
       { type: "quote", value: "" };
     setForm((f) => ({ ...f, detailed_content: [...f.detailed_content, block] }));
   }

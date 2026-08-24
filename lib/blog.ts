@@ -20,6 +20,36 @@ export interface NormalizedBlog {
   detailedContent: ContentBlock[];
 }
 
+// Extracts the numeric folder from a legacy "/temp/magazine/{n}/..." path, e.g. 42.
+function extractMagazineFolderNumber(path?: string | null): number | null {
+  const match = path?.match(/\/temp\/magazine\/(\d+)\//);
+  return match ? parseInt(match[1], 10) : null;
+}
+
+/**
+ * Scans every blog's image/thumbnail/content-block paths for the highest
+ * "/temp/magazine/{n}/" folder number in use, and returns the next one.
+ * Used to pre-fill the image path fields on the "New Blog Post" form.
+ */
+export function getNextMagazineFolderNumber(rows: Array<Record<string, any>>): number {
+  let max = 0;
+
+  const scan = (path?: string | null) => {
+    const n = extractMagazineFolderNumber(path);
+    if (n !== null) max = Math.max(max, n);
+  };
+
+  rows.forEach((row) => {
+    scan(row.image);
+    scan(row.thumbnail);
+    (row.detailed_content ?? []).forEach((block: any) => {
+      if (block?.type === "image") scan(block.value);
+    });
+  });
+
+  return max + 1;
+}
+
 export function normalizeStaticBlog(blog: Blog): NormalizedBlog {
   return {
     type:               blog.type,
