@@ -8,7 +8,7 @@ import {
   useSpring,
   useTransform,
 } from "framer-motion";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, MapPin } from "lucide-react";
 
 import { Container } from "../common/Container";
 import Link from "next/link";
@@ -36,6 +36,7 @@ const navLinks = {
       { title: "Brands", href: "/edition/brands" },
       { title: "Core", href: "/edition/core" },
       { title: "Schedule", href: "/edition/schedule" },
+      { title: "2027", href: "/collaborate", type: "button" },
     ],
   },
 
@@ -184,6 +185,9 @@ const Footer = () => {
               <div className="text-white text-[12px] opacity-80">
                 <div className="leading-relaxed mb-4">
                   <p>A design-led platform where lived spaces, ideas, and perspectives come together.</p>
+                </div>
+                <div className="leading-relaxed mb-4">
+                  <Link href="https://maps.app.goo.gl/rKrz4VCGXkXpnBjt7" target="_blank" className="flex items-center gap-2 hover:underline"> <MapPin/> Jio World Convention Centre</Link>
                 </div>
                 <div className="flex gap-4 pointer-events-auto">
                   {[
@@ -386,12 +390,21 @@ const FooterTextColumn = ({ title, href, items }: any) => (
       <ul className="flex flex-col gap-1 lg:gap-3">
         {items.map((item: any) => (
           <li key={item.title}>
-            <Link
-              href={item.href}
-              className="text-white text-[15px] font-normal tracking-[0.05em] opacity-90 hover:opacity-70 transition-opacity cursor-pointer"
-            >
-              {item.title}
-            </Link>
+            {item.type === "button" ? (
+              <Link
+                href={item.href}
+                className="inline-block border border-white/40 text-white px-4 py-1.5  text-[13px] font-semibold hover:bg-white hover:text-black transition-colors"
+              >
+                {item.title}
+              </Link>
+            ) : (
+              <Link
+                href={item.href}
+                className="text-white text-[15px] font-normal tracking-[0.05em] opacity-90 hover:opacity-70 transition-opacity cursor-pointer"
+              >
+                {item.title}
+              </Link>
+            )}
           </li>
         ))}
       </ul>

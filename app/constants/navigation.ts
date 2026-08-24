@@ -4,6 +4,7 @@ import { cdn } from "@/lib/cdn";
 export type SubLink = {
   label: string;
   href: string;
+  type?: "button";
 };
 
 export type SubmenuContent = {
@@ -49,6 +50,7 @@ export const NAV_DATA: Record<string, SubmenuContent> = {
       { label: "Core",     href: "/edition/core" },
       { label: "Schedule", href: "/edition/schedule" },
       { label: "Contact",  href: "/contact" },
+      { label: "2027",     href: "/collaborate", type: "button" },
     ],
   },
   Collaborate: {

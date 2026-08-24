@@ -133,12 +133,21 @@ const FooterTablet = ({ navLinks }: Props) => {
                 <ul className="flex flex-col gap-3">
                   {(value.items ?? []).map((item: any) => (
                     <li key={item.title}>
-                      <Link
-                        href={item.href}
-                        className="text-[14px] font-regular hover:opacity-100 transition-opacity"
-                      >
-                        {item.title}
-                      </Link>
+                      {item.type === "button" ? (
+                        <Link
+                          href={item.href}
+                          className="inline-block border border-white/40 px-3 py-1 rounded-full text-[13px] font-semibold hover:bg-white hover:text-black transition-colors"
+                        >
+                          {item.title}
+                        </Link>
+                      ) : (
+                        <Link
+                          href={item.href}
+                          className="text-[14px] font-regular hover:opacity-100 transition-opacity"
+                        >
+                          {item.title}
+                        </Link>
+                      )}
                     </li>
                   ))}
                 </ul>

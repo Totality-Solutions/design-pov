@@ -283,6 +283,18 @@ export default function Navbar() {
                       )}
                       <div className="flex flex-col gap-4">
                         {item.col1Links.map((link) => {
+                          if (link.type === "button") {
+                            return (
+                              <Link
+                                key={link.label}
+                                href={link.href}
+                                onClick={closeMenu}
+                                className="w-fit border border-primary-blue text-primary-blue px-4 py-1.5  text-sm font-semibold hover:bg-primary-blue hover:text-white transition-colors"
+                              >
+                                {link.label}
+                              </Link>
+                            );
+                          }
                           // Active = current pathname matches this link's href
                           const isLinkActive = pathname === link.href;
                           return (
@@ -377,6 +389,19 @@ export default function Navbar() {
                       activeMenu === label ? "max-h-96" : "max-h-0"
                     }`}>
                       {NAV_DATA[label].col1Links?.map((link) => {
+                        if (link.type === "button") {
+                          return (
+                            <div key={link.label} className="px-12 py-4 border-b border-gray-100">
+                              <Link
+                                href={link.href}
+                                onClick={() => setMobileOpen(false)}
+                                className="inline-block border border-primary-blue text-primary-blue px-4 py-1.5 text-sm font-semibold hover:bg-primary-blue hover:text-white transition-colors"
+                              >
+                                {link.label}
+                              </Link>
+                            </div>
+                          );
+                        }
                         const isLinkActive = pathname === link.href;
                         return (
                           <Link
