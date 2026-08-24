@@ -1,5 +1,13 @@
 import { NextResponse } from 'next/server';
-import { SESClient, SendEmailCommand } from '@aws-sdk/client-ses';
+import { SESClient, SendRawEmailCommand } from '@aws-sdk/client-ses';
+
+const MAX_CV_SIZE_BYTES = 10 * 1024 * 1024; // SES raw message limit is 40MB; base64 inflates ~33%, well within range
+const ALLOWED_CV_EXTENSIONS = ['.pdf', '.doc', '.docx'];
+const EXTENSION_CONTENT_TYPES: Record<string, string> = {
+  '.pdf': 'application/pdf',
+  '.doc': 'application/msword',
+  '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+};
 
 let _ses: SESClient | null = null;
 function getSesClient() {
@@ -48,6 +56,68 @@ function buildCareerEmailHtml(fields: Record<string, string | null>) {
     </div>`;
 }
 
+function encodeMimeWord(str: string) {
+  return /[^\x00-\x7F]/.test(str)
+    ? `=?UTF-8?B?${Buffer.from(str, 'utf-8').toString('base64')}?=`
+    : str;
+}
+
+function buildRawMimeEmail(opts: {
+  from: string;
+  to: string;
+  subject: string;
+  text: string;
+  html: string;
+  attachment: { filename: string; contentType: string; content: Buffer } | null;
+}) {
+  const boundaryMixed = `mixed_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+  const boundaryAlt = `alt_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+
+  const headers = [
+    `From: ${opts.from}`,
+    `To: ${opts.to}`,
+    `Subject: ${encodeMimeWord(opts.subject)}`,
+    'MIME-Version: 1.0',
+    `Content-Type: multipart/mixed; boundary="${boundaryMixed}"`,
+  ].join('\r\n');
+
+  const alternativePart = [
+    `--${boundaryMixed}`,
+    `Content-Type: multipart/alternative; boundary="${boundaryAlt}"`,
+    '',
+    `--${boundaryAlt}`,
+    'Content-Type: text/plain; charset="UTF-8"',
+    'Content-Transfer-Encoding: base64',
+    '',
+    Buffer.from(opts.text, 'utf-8').toString('base64'),
+    '',
+    `--${boundaryAlt}`,
+    'Content-Type: text/html; charset="UTF-8"',
+    'Content-Transfer-Encoding: base64',
+    '',
+    Buffer.from(opts.html, 'utf-8').toString('base64'),
+    '',
+    `--${boundaryAlt}--`,
+  ].join('\r\n');
+
+  let attachmentPart = '';
+  if (opts.attachment) {
+    const filename = encodeMimeWord(opts.attachment.filename);
+    const base64Content = opts.attachment.content.toString('base64').replace(/(.{76})/g, '$1\r\n');
+    attachmentPart = [
+      '',
+      `--${boundaryMixed}`,
+      `Content-Type: ${opts.attachment.contentType}; name="${filename}"`,
+      'Content-Transfer-Encoding: base64',
+      `Content-Disposition: attachment; filename="${filename}"`,
+      '',
+      base64Content,
+    ].join('\r\n');
+  }
+
+  return [headers, '', alternativePart, attachmentPart, `--${boundaryMixed}--`, ''].join('\r\n');
+}
+
 export async function POST(req: Request) {
   try {
     // 1. Parse FormData payload securely
@@ -67,15 +137,33 @@ export async function POST(req: Request) {
     const portfolio = (formData.get("portfolio") as string) || "";
     const reason = (formData.get("reason") as string) || "";
     
-    // Process the file name string cleanly
-    const cvFile = formData.get("cv");
-    let cvFileName: string | null = null;
-    if (cvFile && typeof cvFile !== 'string') {
-      cvFileName = (cvFile as File).name;
-    }
-
     if (!name || !email || !phone) {
       return NextResponse.json({ error: "Missing required basic fields." }, { status: 400 });
+    }
+
+    // Read the uploaded CV in-memory so it can be attached directly to the email
+    const cvFile = formData.get("cv");
+    let cvFileName: string | null = null;
+    let cvAttachment: { filename: string; contentType: string; content: Buffer } | null = null;
+
+    if (cvFile && typeof cvFile !== 'string') {
+      const file = cvFile as File;
+      cvFileName = file.name;
+
+      const extension = file.name.slice(file.name.lastIndexOf('.')).toLowerCase();
+      if (!ALLOWED_CV_EXTENSIONS.includes(extension)) {
+        return NextResponse.json({ error: "CV must be a PDF, DOC, or DOCX file." }, { status: 400 });
+      }
+      if (file.size > MAX_CV_SIZE_BYTES) {
+        return NextResponse.json({ error: "CV file is too large (max 10MB)." }, { status: 400 });
+      }
+
+      const arrayBuffer = await file.arrayBuffer();
+      cvAttachment = {
+        filename: file.name,
+        contentType: file.type || EXTENSION_CONTENT_TYPES[extension],
+        content: Buffer.from(arrayBuffer),
+      };
     }
 
     // 2. Build template email structures
@@ -100,16 +188,19 @@ export async function POST(req: Request) {
     // Making this await blocking guarantees that if AWS SES fails, it falls straight to the catch block
     console.log(`[careers] Attempting to route application alert email to: ${HR_EMAIL}`);
     
-    await getSesClient().send(new SendEmailCommand({
-      Source: `Design POV Careers <${FROM_EMAIL}>`,
-      Destination: { ToAddresses: [HR_EMAIL] },
-      Message: {
-        Subject: { Data: subject, Charset: 'UTF-8' },
-        Body: {
-          Html: { Data: buildCareerEmailHtml(emailFields), Charset: 'UTF-8' },
-          Text: { Data: plainText, Charset: 'UTF-8' },
-        },
-      },
+    const rawMessage = buildRawMimeEmail({
+      from: `Design POV Careers <${FROM_EMAIL}>`,
+      to: HR_EMAIL,
+      subject,
+      text: plainText,
+      html: buildCareerEmailHtml(emailFields),
+      attachment: cvAttachment,
+    });
+
+    await getSesClient().send(new SendRawEmailCommand({
+      Source: FROM_EMAIL,
+      Destinations: [HR_EMAIL],
+      RawMessage: { Data: Buffer.from(rawMessage, 'utf-8') },
     }));
 
     console.log('[careers] SES email successfully dispatched!');
