@@ -1,8 +1,10 @@
 import { NextResponse } from "next/server";
 import { createServerClient } from "@/lib/supabase/server";
 
-// Helper utility to safely ensure the settings table exists with both config columns
-async function ensureSettingsTableExists(supabase: any) {
+// Helper utility to safely ensure the settings table exists with both config columns.
+// Returns "migrated" if a schema change (CREATE/ALTER) just ran — callers should give
+// PostgREST's schema cache a moment to pick up the new columns before querying them.
+async function ensureSettingsTableExists(supabase: any): Promise<"migrated" | "ok" | "failed"> {
   try {
     const { error: tableCheckError } = await supabase
       .from("settings")
@@ -27,9 +29,10 @@ async function ensureSettingsTableExists(supabase: any) {
           INSERT INTO settings (id, is_hiring, hide_tickets, nav_button_label, nav_button_href)
           VALUES ('global', false, false, '2027', '/collaborate')
           ON CONFLICT (id) DO NOTHING;
+          NOTIFY pgrst, 'reload schema';
         `
       });
-      return true;
+      return "migrated";
     }
 
     // Ensure our global fallback config row exists
@@ -44,11 +47,17 @@ async function ensureSettingsTableExists(supabase: any) {
       }]);
     }
 
-    return true;
+    return "ok";
   } catch (err) {
     console.warn("[Settings Init Warning] Automated schema validation skipped.", err);
-    return false;
+    return "failed";
   }
+}
+
+// PostgREST reloads its schema cache asynchronously after NOTIFY — give it a beat
+// before issuing a query that depends on columns created moments ago.
+function delay(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 // ─── GET QUERY ──────────────────────────────────────────────────────────────
@@ -56,11 +65,22 @@ export async function GET() {
   try {
     const supabase = createServerClient();
 
-    const { data, error } = await supabase
+    let { data, error } = await supabase
       .from("settings")
       .select("is_hiring, hide_tickets, nav_button_label, nav_button_href")
       .eq("id", "global")
       .maybeSingle();
+
+    // Columns missing (older deploy, first run after adding nav_button_* fields) — migrate and retry once.
+    if (error?.code === "42703") {
+      const status = await ensureSettingsTableExists(supabase);
+      if (status === "migrated") await delay(500);
+      ({ data, error } = await supabase
+        .from("settings")
+        .select("is_hiring, hide_tickets, nav_button_label, nav_button_href")
+        .eq("id", "global")
+        .maybeSingle());
+    }
 
     if (error) throw error;
 
@@ -89,7 +109,8 @@ export async function PUT(req: Request) {
     const { isHiring, hideTickets, navButtonLabel, navButtonHref } = body;
 
     const supabase = createServerClient();
-    await ensureSettingsTableExists(supabase);
+    const status = await ensureSettingsTableExists(supabase);
+    if (status === "migrated") await delay(500);
 
     // Build payload dynamically so individual toggle components don't overwrite each other's parameters
     const updateFields: Record<string, any> = {
@@ -101,11 +122,21 @@ export async function PUT(req: Request) {
     if (navButtonLabel !== undefined) updateFields.nav_button_label = navButtonLabel;
     if (navButtonHref !== undefined) updateFields.nav_button_href = navButtonHref;
 
-    const { data, error } = await supabase
+    let { data, error } = await supabase
       .from("settings")
       .update(updateFields)
       .eq("id", "global")
       .select();
+
+    // Schema cache was still stale despite the NOTIFY — retry once after a longer wait.
+    if (error?.code === "PGRST204") {
+      await delay(1000);
+      ({ data, error } = await supabase
+        .from("settings")
+        .update(updateFields)
+        .eq("id", "global")
+        .select());
+    }
 
     if (error) {
       console.error("[Settings PUT API Error]:", error);

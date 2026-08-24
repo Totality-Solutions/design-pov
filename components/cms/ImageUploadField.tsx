@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { cdn } from "@/lib/cdn";
 
 interface ImageUploadFieldProps {
   value: string;
@@ -75,7 +76,7 @@ export default function ImageUploadField({
       {error && <p className="text-xs text-red-500 mt-1">{error}</p>}
       {value && (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={value} alt="preview" className={previewClassName || "mt-2 h-32 w-full object-cover border border-black/10"} />
+        <img src={cdn(value)} alt="preview" className={previewClassName || "mt-2 h-32 w-full object-cover border border-black/10"} />
       )}
     </div>
   );

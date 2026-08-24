@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { cdn } from "@/lib/cdn";
 
 type ObjectFormData = {
   label: string;
@@ -174,7 +175,7 @@ export default function ObjectForm({
           />
           {form.src && (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={form.src} alt="preview" className="mt-2 h-32 w-full object-cover border border-black/10" />
+            <img src={cdn(form.src)} alt="preview" className="mt-2 h-32 w-full object-cover border border-black/10" />
           )}
         </Field>
 
@@ -192,7 +193,7 @@ export default function ObjectForm({
                   />
                   {img && (
                     // eslint-disable-next-line @next/next/no-img-element
-                    <img src={img} alt={`additional ${i}`} className="h-20 w-full object-cover border border-black/10" />
+                    <img src={cdn(img)} alt={`additional ${i}`} className="h-20 w-full object-cover border border-black/10" />
                   )}
                 </div>
                 <button
