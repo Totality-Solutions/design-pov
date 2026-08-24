@@ -136,7 +136,8 @@ const FooterTablet = ({ navLinks }: Props) => {
                       {item.type === "button" ? (
                         <Link
                           href={item.href}
-                          className="inline-block border border-white/40 px-3 py-1 rounded-full text-[13px] font-semibold hover:bg-white hover:text-black transition-colors"
+                          // style={{ borderRadius: 9999 }}
+                          className="inline-block border border-white/40 px-3 py-1 text-[13px] font-semibold hover:bg-white hover:text-black transition-colors"
                         >
                           {item.title}
                         </Link>

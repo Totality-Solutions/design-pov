@@ -393,7 +393,8 @@ const FooterTextColumn = ({ title, href, items }: any) => (
             {item.type === "button" ? (
               <Link
                 href={item.href}
-                className="inline-block border border-white/40 text-white px-4 py-1.5  text-[13px] font-semibold hover:bg-white hover:text-black transition-colors"
+                // style={{ borderRadius: 9999 }}
+                className="inline-block border border-white/40 text-white px-4 py-1.5 text-[13px] font-semibold hover:bg-white hover:text-black transition-colors"
               >
                 {item.title}
               </Link>

@@ -289,7 +289,8 @@ export default function Navbar() {
                                 key={link.label}
                                 href={link.href}
                                 onClick={closeMenu}
-                                className="w-fit border border-primary-blue text-primary-blue px-4 py-1.5  text-sm font-semibold hover:bg-primary-blue hover:text-white transition-colors"
+                                // style={{ borderRadius: 9999 }}
+                                className="w-fit border border-primary-blue text-primary-blue px-4 py-1.5 text-sm font-semibold hover:bg-primary-blue hover:text-white transition-colors"
                               >
                                 {link.label}
                               </Link>
@@ -395,6 +396,7 @@ export default function Navbar() {
                               <Link
                                 href={link.href}
                                 onClick={() => setMobileOpen(false)}
+                                // style={{ borderRadius: 9999 }}
                                 className="inline-block border border-primary-blue text-primary-blue px-4 py-1.5 text-sm font-semibold hover:bg-primary-blue hover:text-white transition-colors"
                               >
                                 {link.label}
