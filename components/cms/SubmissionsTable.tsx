@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useToast } from "./ToastProvider";
 
 const MAILBOX_OPTIONS = [
   { value: "all", label: "All Mailboxes" },
@@ -76,6 +77,7 @@ function getDateRangeBounds(range: string, customStart: string, customEnd: strin
 }
 
 export default function SubmissionsTable({ initialData }: { initialData: Submission[] }) {
+  const { showSuccess, showError } = useToast();
   const [rows, setRows] = useState(initialData);
   const [filter, setFilter] = useState("all");
   const [mailFilter, setMailFilter] = useState("all");
@@ -124,12 +126,17 @@ export default function SubmissionsTable({ initialData }: { initialData: Submiss
     });
 
     setDeleting(null);
-    if (res.ok) setRows((prev) => prev.filter((r) => r.id !== id));
+    if (res.ok) {
+      setRows((prev) => prev.filter((r) => r.id !== id));
+      showSuccess("Submission deleted.");
+    } else {
+      showError("Couldn't delete this submission. Please try again.");
+    }
   }
 
   function exportCsv() {
     if (dateRange === "custom" && (!customStart || !customEnd)) {
-      alert("Please pick both a start and end date for a custom export.");
+      showError("Please pick both a start and end date for a custom export.");
       return;
     }
 
@@ -168,6 +175,7 @@ export default function SubmissionsTable({ initialData }: { initialData: Submiss
     a.download = `submissions-${suffix}-${Date.now()}.csv`;
     a.click();
     URL.revokeObjectURL(url);
+    showSuccess("CSV downloaded.");
   }
 
   return (

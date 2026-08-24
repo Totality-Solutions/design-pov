@@ -2,9 +2,11 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useToast } from "./ToastProvider";
 
 export default function SeedObjectsButton() {
   const router = useRouter();
+  const { showSuccess, showError } = useToast();
   const [loading, setLoading] = useState(false);
 
   async function handleSeed() {
@@ -14,10 +16,10 @@ export default function SeedObjectsButton() {
     const json = await res.json();
     setLoading(false);
     if (res.ok) {
-      alert(`Inserted ${json.inserted} objects.`);
+      showSuccess(`Added ${json.inserted} objects.`);
       router.refresh();
     } else {
-      alert("Error: " + json.error);
+      showError("Couldn't import the default objects. Please try again.");
     }
   }
 

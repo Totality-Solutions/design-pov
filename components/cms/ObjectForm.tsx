@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { cdn } from "@/lib/cdn";
+import { useToast } from "./ToastProvider";
 
 type ObjectFormData = {
   label: string;
@@ -38,6 +39,7 @@ export default function ObjectForm({
   objectId?: string;
 }) {
   const router = useRouter();
+  const { showSuccess, showError } = useToast();
   const isEdit = !!objectId;
 
   const [form, setForm] = useState<ObjectFormData>({ ...emptyForm, ...initialData });
@@ -86,11 +88,13 @@ export default function ObjectForm({
     setSaving(false);
 
     if (res.ok) {
+      showSuccess(isEdit ? "Object updated." : "Object created.");
       router.push("/cms/objects");
       router.refresh();
     } else {
       const json = await res.json();
       setError(json.error || "Something went wrong.");
+      showError("Couldn't save this object. Please try again.");
     }
   }
 

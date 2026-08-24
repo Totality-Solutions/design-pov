@@ -1,8 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import { useToast } from "./ToastProvider";
 
 export default function SeedBrandPartnersButton() {
+  const { showSuccess, showError } = useToast();
   const [loading, setLoading] = useState(false);
   const [msg, setMsg]         = useState("");
 
@@ -13,6 +15,11 @@ export default function SeedBrandPartnersButton() {
     const json = await res.json().catch(() => ({}));
     setLoading(false);
     setMsg(json.message ?? json.error ?? "Done");
+    if (res.ok) {
+      showSuccess("Brand partner data imported.");
+    } else {
+      showError("Couldn't import the brand partner data. Please try again.");
+    }
   }
 
   return (

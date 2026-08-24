@@ -1,9 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { useToast } from "./ToastProvider";
 
 export default function IsHiringToggle() {
-  // We initialize it directly as a simple local UI state toggle first 
+  const { showSuccess, showError } = useToast();
+  // We initialize it directly as a simple local UI state toggle first
   // to ensure it never gets permanently stuck on "Loading..."
   const [isHiring, setIsHiring] = useState<boolean>(true);
   const [isSaving, setIsSaving] = useState<boolean>(false);
@@ -11,15 +13,19 @@ export default function IsHiringToggle() {
   async function handleToggle(checked: boolean) {
     setIsHiring(checked);
     setIsSaving(true);
-    
+
     try {
-      await fetch("/api/cms/global-settings", {
+      const res = await fetch("/api/cms/global-settings", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ isHiring: checked }),
       });
+      if (!res.ok) throw new Error("Update failed");
+      showSuccess(checked ? "Careers module turned on." : "Careers module turned off.");
     } catch (err) {
       console.error("Failed to sync state:", err);
+      setIsHiring(!checked);
+      showError("Couldn't save this change. Please try again.");
     } finally {
       setIsSaving(false);
     }

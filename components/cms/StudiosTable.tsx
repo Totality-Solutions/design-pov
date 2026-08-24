@@ -5,8 +5,10 @@ import Link from "next/link";
 import Image from "next/image";
 import { cdn } from "@/lib/cdn";
 import type { StudioRow } from "@/types";
+import { useToast } from "./ToastProvider";
 
 export default function StudiosTable({ initialData }: { initialData: StudioRow[] }) {
+  const { showSuccess, showError } = useToast();
   const [rows, setRows]         = useState<StudioRow[]>(initialData);
   const [search, setSearch]     = useState("");
   const [deleting, setDeleting] = useState<string | null>(null);
@@ -24,7 +26,12 @@ export default function StudiosTable({ initialData }: { initialData: StudioRow[]
     setDeleting(id);
     const res = await fetch(`/api/cms/studios/${id}`, { method: "DELETE" });
     setDeleting(null);
-    if (res.ok) setRows((prev) => prev.filter((r) => r.id !== id));
+    if (res.ok) {
+      setRows((prev) => prev.filter((r) => r.id !== id));
+      showSuccess("Studio deleted.");
+    } else {
+      showError("Couldn't delete this studio. Please try again.");
+    }
   }
 
   async function toggleActive(row: StudioRow) {
@@ -35,7 +42,12 @@ export default function StudiosTable({ initialData }: { initialData: StudioRow[]
       body: JSON.stringify({ active: !row.active }),
     });
     setToggling(null);
-    if (res.ok) setRows((prev) => prev.map((r) => r.id === row.id ? { ...r, active: !r.active } : r));
+    if (res.ok) {
+      setRows((prev) => prev.map((r) => r.id === row.id ? { ...r, active: !r.active } : r));
+      showSuccess(!row.active ? "Studio shown on site." : "Studio hidden from site.");
+    } else {
+      showError("Couldn't update this studio. Please try again.");
+    }
   }
 
   const active = rows.filter((r) => r.active).length;

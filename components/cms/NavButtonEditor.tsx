@@ -1,8 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useToast } from "./ToastProvider";
 
 export default function NavButtonEditor() {
+  const { showSuccess, showError } = useToast();
   const [label, setLabel] = useState("2027");
   const [href, setHref] = useState("/collaborate");
   const [isLoading, setIsLoading] = useState(true);
@@ -38,10 +40,11 @@ export default function NavButtonEditor() {
       });
       if (!res.ok) throw new Error("Update failed");
       setSaved(true);
+      showSuccess("Nav button updated.");
       setTimeout(() => setSaved(false), 2000);
     } catch (err) {
       console.error("Failed to save nav button:", err);
-      alert("Failed to save nav button changes. Please try again.");
+      showError("Couldn't save this change. Please try again.");
     } finally {
       setIsSaving(false);
     }

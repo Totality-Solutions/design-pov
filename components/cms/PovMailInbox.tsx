@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useToast } from "./ToastProvider";
 
 type Department = "all" | "marketing" | "sales" | "core" | "rsvp";
 
@@ -29,6 +30,7 @@ const DEPT_COLORS: Record<string, string> = {
 };
 
 export default function PovMailInbox({ initialMails }: { initialMails: Mail[] }) {
+  const { showSuccess, showError } = useToast();
   const [mails, setMails]             = useState<Mail[]>(initialMails);
   useEffect(() => { setMails(initialMails); }, [initialMails]);
   const [activeTab, setActiveTab]     = useState<Department>("all");
@@ -76,6 +78,9 @@ export default function PovMailInbox({ initialMails }: { initialMails: Mail[] })
     if (res.ok) {
       setMails((prev) => prev.filter((m) => m.id !== id));
       if (activeId === id) setActiveId(null);
+      showSuccess("Mail deleted.");
+    } else {
+      showError("Couldn't delete this mail. Please try again.");
     }
   }
 
@@ -96,6 +101,7 @@ export default function PovMailInbox({ initialMails }: { initialMails: Mail[] })
       ...Object.entries(mail.extra_data || {}).map(([k, v]) => `${k}: ${v}`),
     ].filter(Boolean).join("\n");
     navigator.clipboard.writeText(lines);
+    showSuccess("Copied to clipboard.");
   }
 
   const TABS: { key: Department; label: string }[] = [
@@ -279,6 +285,7 @@ export default function PovMailInbox({ initialMails }: { initialMails: Mail[] })
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function ForwardModal({ mail, onClose }: { mail: Mail; onClose: () => void }) {
+  const { showSuccess, showError } = useToast();
   const [to, setTo]         = useState("");
   const [sending, setSending] = useState(false);
   const [sent, setSent]      = useState(false);
@@ -299,8 +306,15 @@ function ForwardModal({ mail, onClose }: { mail: Mail; onClose: () => void }) {
       body: JSON.stringify({ to: trimmed, mail }),
     });
     setSending(false);
-    if (res.ok) { setSent(true); setTimeout(onClose, 1500); }
-    else { const j = await res.json(); setError(j.error || "Failed to send"); }
+    if (res.ok) {
+      setSent(true);
+      showSuccess("Mail forwarded.");
+      setTimeout(onClose, 1500);
+    } else {
+      const j = await res.json();
+      setError(j.error || "Failed to send");
+      showError("Couldn't forward this mail. Please try again.");
+    }
   }
 
   return (
@@ -338,6 +352,7 @@ function ForwardModal({ mail, onClose }: { mail: Mail; onClose: () => void }) {
 }
 
 function CreateMailModal({ onClose, onCreate }: { onClose: () => void; onCreate: (m: Mail) => void }) {
+  const { showSuccess, showError } = useToast();
   const [form, setForm] = useState({ department: "marketing", category: "", subject: "", from_name: "", from_email: "", from_phone: "", message: "" });
   const [saving, setSaving] = useState(false);
   const [error, setError]   = useState("");
@@ -349,8 +364,15 @@ function CreateMailModal({ onClose, onCreate }: { onClose: () => void; onCreate:
     setSaving(true);
     const res = await fetch("/api/cms/pov-mail", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(form) });
     setSaving(false);
-    if (res.ok) { const { data } = await res.json(); onCreate(data); }
-    else { const j = await res.json(); setError(j.error || "Failed"); }
+    if (res.ok) {
+      const { data } = await res.json();
+      onCreate(data);
+      showSuccess("Mail entry created.");
+    } else {
+      const j = await res.json();
+      setError(j.error || "Failed");
+      showError("Couldn't create this entry. Please try again.");
+    }
   }
 
   const inp = "border border-black/20 px-3 py-2 text-sm outline-none focus:border-black w-full bg-white";

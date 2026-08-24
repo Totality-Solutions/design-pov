@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { cdn } from "@/lib/cdn";
+import { useToast } from "./ToastProvider";
 
 type FormData = {
   label: string;
@@ -54,6 +55,7 @@ export default function StudioForm({
   studioId?: string;
 }) {
   const router = useRouter();
+  const { showSuccess, showError } = useToast();
   const isEdit = !!studioId;
 
   const [form, setForm]     = useState<FormData>({ ...emptyForm, ...initialData });
@@ -100,8 +102,10 @@ export default function StudioForm({
     if (!res.ok) {
       const json = await res.json().catch(() => ({}));
       setError(json.error ?? "Save failed. Try again.");
+      showError("Couldn't save this studio. Please try again.");
       return;
     }
+    showSuccess(isEdit ? "Studio updated." : "Studio created.");
     router.push("/cms/studios");
     router.refresh();
   }

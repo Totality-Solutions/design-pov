@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useToast } from "./ToastProvider";
 
 type Speaker = { name: string; role: "speaker" | "moderator" };
 
@@ -24,6 +25,7 @@ type InitialData = {
 
 export default function ScheduleForm({ initialData }: { initialData?: InitialData }) {
   const router = useRouter();
+  const { showSuccess, showError } = useToast();
   const isEdit = !!initialData?.id;
 
   const [title, setTitle]             = useState(initialData?.title ?? "");
@@ -82,11 +84,18 @@ export default function ScheduleForm({ initialData }: { initialData?: InitialDat
         body: JSON.stringify(payload),
       });
       const json = await res.json();
-      if (!res.ok) { setError(json.error || "Save failed"); setSaving(false); return; }
+      if (!res.ok) {
+        setError(json.error || "Save failed");
+        showError("Couldn't save this schedule item. Please try again.");
+        setSaving(false);
+        return;
+      }
+      showSuccess(isEdit ? "Schedule item updated." : "Schedule item created.");
       router.push("/cms/schedule");
       router.refresh();
     } catch (e: any) {
       setError(e.message || "Network error");
+      showError("Couldn't save this schedule item. Please try again.");
       setSaving(false);
     }
   }

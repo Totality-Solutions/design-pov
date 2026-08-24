@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useToast } from "./ToastProvider";
 
 type ObjectRow = {
   id: string;
@@ -15,6 +16,7 @@ type ObjectRow = {
 };
 
 export default function ObjectsTable({ initialData }: { initialData: ObjectRow[] }) {
+  const { showSuccess, showError } = useToast();
   const [rows, setRows]       = useState<ObjectRow[]>(initialData);
   const [search, setSearch]   = useState("");
   const [deleting, setDeleting] = useState<string | null>(null);
@@ -32,7 +34,12 @@ export default function ObjectsTable({ initialData }: { initialData: ObjectRow[]
     setDeleting(id);
     const res = await fetch(`/api/cms/objects/${id}`, { method: "DELETE" });
     setDeleting(null);
-    if (res.ok) setRows((prev) => prev.filter((r) => r.id !== id));
+    if (res.ok) {
+      setRows((prev) => prev.filter((r) => r.id !== id));
+      showSuccess("Object deleted.");
+    } else {
+      showError("Couldn't delete this object. Please try again.");
+    }
   }
 
   async function toggleActive(row: ObjectRow) {
@@ -43,7 +50,12 @@ export default function ObjectsTable({ initialData }: { initialData: ObjectRow[]
       body: JSON.stringify({ active: !row.active }),
     });
     setToggling(null);
-    if (res.ok) setRows((prev) => prev.map((r) => r.id === row.id ? { ...r, active: !r.active } : r));
+    if (res.ok) {
+      setRows((prev) => prev.map((r) => r.id === row.id ? { ...r, active: !r.active } : r));
+      showSuccess(!row.active ? "Object shown on site." : "Object hidden from site.");
+    } else {
+      showError("Couldn't update this object. Please try again.");
+    }
   }
 
   const active  = rows.filter((r) => r.active).length;

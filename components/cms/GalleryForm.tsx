@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import ImageUploadField from "./ImageUploadField";
+import { useToast } from "./ToastProvider";
 
 type GalleryFormData = {
   title: string;
@@ -30,6 +31,7 @@ export default function GalleryForm({
   itemId?: string;
 }) {
   const router = useRouter();
+  const { showSuccess, showError } = useToast();
   const isEdit = !!itemId;
 
   const [form, setForm] = useState<GalleryFormData>({ ...emptyForm, ...initialData });
@@ -70,11 +72,13 @@ export default function GalleryForm({
     setSaving(false);
 
     if (res.ok) {
+      showSuccess(isEdit ? "Gallery item updated." : "Gallery item created.");
       router.push("/cms/gallery");
       router.refresh();
     } else {
       const json = await res.json();
       setError(json.error || "Something went wrong.");
+      showError("Couldn't save this gallery item. Please try again.");
     }
   }
 

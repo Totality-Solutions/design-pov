@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useToast } from "./ToastProvider";
 
 type Blog = {
   id: string;
@@ -15,6 +16,7 @@ type Blog = {
 };
 
 export default function BlogsTable({ initialData }: { initialData: Blog[] }) {
+  const { showSuccess, showError } = useToast();
   const [rows, setRows]       = useState<Blog[]>(initialData);
   const [statusFilter, setStatusFilter] = useState("all");
   const [categoryFilter, setCategoryFilter] = useState("all");
@@ -39,7 +41,12 @@ export default function BlogsTable({ initialData }: { initialData: Blog[] }) {
     setDeleting(id);
     const res = await fetch(`/api/cms/blogs/${id}`, { method: "DELETE" });
     setDeleting(null);
-    if (res.ok) setRows((prev) => prev.filter((r) => r.id !== id));
+    if (res.ok) {
+      setRows((prev) => prev.filter((r) => r.id !== id));
+      showSuccess("Blog post deleted.");
+    } else {
+      showError("Couldn't delete this post. Please try again.");
+    }
   }
 
   async function toggleStatus(row: Blog) {
@@ -51,7 +58,12 @@ export default function BlogsTable({ initialData }: { initialData: Blog[] }) {
       body: JSON.stringify({ status: next }),
     });
     setToggling(null);
-    if (res.ok) setRows((prev) => prev.map((r) => r.id === row.id ? { ...r, status: next } : r));
+    if (res.ok) {
+      setRows((prev) => prev.map((r) => r.id === row.id ? { ...r, status: next } : r));
+      showSuccess(next === "published" ? "Post published." : "Post moved to draft.");
+    } else {
+      showError("Couldn't update this post. Please try again.");
+    }
   }
 
   const published = rows.filter((r) => r.status === "published").length;

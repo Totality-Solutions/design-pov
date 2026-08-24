@@ -2,10 +2,12 @@
 
 import { useState } from "react";
 import type { BrandPartnerTypeRow } from "@/types";
+import { useToast } from "./ToastProvider";
 
 const inputCls = "border border-black/20 px-3 py-2 text-sm outline-none focus:border-black bg-white transition-colors";
 
 export default function BrandPartnerTypesTable({ initialData }: { initialData: BrandPartnerTypeRow[] }) {
+  const { showSuccess, showError } = useToast();
   const [rows, setRows]       = useState<BrandPartnerTypeRow[]>(initialData);
   const [editing, setEditing] = useState<Record<string, { title: string; sort_order: number }>>({});
   const [saving, setSaving]   = useState<string | null>(null);
@@ -37,6 +39,9 @@ export default function BrandPartnerTypesTable({ initialData }: { initialData: B
       const { data } = await res.json();
       setRows((r) => r.map((row) => row.id === id ? { ...row, ...data } : row));
       cancelEdit(id);
+      showSuccess("Type updated.");
+    } else {
+      showError("Couldn't save changes. Please try again.");
     }
   }
 
@@ -48,7 +53,12 @@ export default function BrandPartnerTypesTable({ initialData }: { initialData: B
       body: JSON.stringify({ active: !row.active }),
     });
     setSaving(null);
-    if (res.ok) setRows((r) => r.map((r2) => r2.id === row.id ? { ...r2, active: !r2.active } : r2));
+    if (res.ok) {
+      setRows((r) => r.map((r2) => r2.id === row.id ? { ...r2, active: !r2.active } : r2));
+      showSuccess(!row.active ? "Type shown on site." : "Type hidden from site.");
+    } else {
+      showError("Couldn't update this type. Please try again.");
+    }
   }
 
   async function handleDelete(id: string) {
@@ -56,7 +66,12 @@ export default function BrandPartnerTypesTable({ initialData }: { initialData: B
     setDeleting(id);
     const res = await fetch(`/api/cms/brand-partner-types/${id}`, { method: "DELETE" });
     setDeleting(null);
-    if (res.ok) setRows((r) => r.filter((row) => row.id !== id));
+    if (res.ok) {
+      setRows((r) => r.filter((row) => row.id !== id));
+      showSuccess("Type deleted.");
+    } else {
+      showError("Couldn't delete this type. Please try again.");
+    }
   }
 
   async function handleCreate() {
@@ -78,9 +93,11 @@ export default function BrandPartnerTypesTable({ initialData }: { initialData: B
       setRows((r) => [...r, data]);
       setNewRow({ type: "", title: "", sort_order: rows.length + 2 });
       setShowNew(false);
+      showSuccess("Type created.");
     } else {
       const json = await res.json().catch(() => ({}));
       setError(json.error ?? "Failed to create. Try again.");
+      showError("Couldn't create this type. Please try again.");
     }
   }
 

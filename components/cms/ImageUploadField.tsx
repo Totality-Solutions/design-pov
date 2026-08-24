@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { cdn } from "@/lib/cdn";
+import { useToast } from "./ToastProvider";
 
 interface ImageUploadFieldProps {
   value: string;
@@ -20,6 +21,7 @@ export default function ImageUploadField({
   className,
   previewClassName,
 }: ImageUploadFieldProps) {
+  const { showSuccess, showError } = useToast();
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
@@ -37,8 +39,10 @@ export default function ImageUploadField({
 
       if (!res.ok) throw new Error(json.error || "Upload failed.");
       onChange(json.data.url);
+      showSuccess("Image uploaded.");
     } catch (err: any) {
       setError(err.message || "Upload failed.");
+      showError("Couldn't upload this image. Please try again.");
     } finally {
       setUploading(false);
     }

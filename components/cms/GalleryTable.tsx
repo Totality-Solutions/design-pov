@@ -3,6 +3,7 @@
 import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useToast } from "./ToastProvider";
 
 type GalleryRow = {
   id: string;
@@ -16,6 +17,7 @@ type GalleryRow = {
 };
 
 export default function GalleryTable({ initialData }: { initialData: GalleryRow[] }) {
+  const { showSuccess, showError } = useToast();
   const [rows, setRows] = useState<GalleryRow[]>(initialData);
   const [search, setSearch] = useState("");
   const [yearFilter, setYearFilter] = useState("all");
@@ -47,7 +49,12 @@ export default function GalleryTable({ initialData }: { initialData: GalleryRow[
     setDeleting(id);
     const res = await fetch(`/api/cms/gallery/${id}`, { method: "DELETE" });
     setDeleting(null);
-    if (res.ok) setRows((prev) => prev.filter((r) => r.id !== id));
+    if (res.ok) {
+      setRows((prev) => prev.filter((r) => r.id !== id));
+      showSuccess("Image deleted.");
+    } else {
+      showError("Couldn't delete this image. Please try again.");
+    }
   }
 
   async function toggleActive(row: GalleryRow) {
@@ -58,7 +65,12 @@ export default function GalleryTable({ initialData }: { initialData: GalleryRow[
       body: JSON.stringify({ active: !row.active }),
     });
     setToggling(null);
-    if (res.ok) setRows((prev) => prev.map((r) => (r.id === row.id ? { ...r, active: !r.active } : r)));
+    if (res.ok) {
+      setRows((prev) => prev.map((r) => (r.id === row.id ? { ...r, active: !r.active } : r)));
+      showSuccess(!row.active ? "Image shown on site." : "Image hidden from site.");
+    } else {
+      showError("Couldn't update this image. Please try again.");
+    }
   }
 
   const active = rows.filter((r) => r.active).length;

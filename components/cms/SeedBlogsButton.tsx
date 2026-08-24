@@ -2,9 +2,11 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useToast } from "./ToastProvider";
 
 export default function SeedBlogsButton() {
   const router = useRouter();
+  const { showSuccess, showError } = useToast();
   const [status, setStatus] = useState<"idle" | "loading" | "done" | "error">("idle");
   const [msg, setMsg] = useState("");
 
@@ -18,15 +20,18 @@ export default function SeedBlogsButton() {
       if (!res.ok) {
         setStatus("error");
         setMsg(json.error || "Seed failed");
+        showError("Couldn't import the magazine data. Please try again.");
         return;
       }
       const { upserted, errors } = json;
       setStatus("done");
       setMsg(`✓ Synced ${upserted} blogs${errors?.length ? `, ${errors.length} error(s)` : ""}`);
+      showSuccess(`Synced ${upserted} blog posts.`);
       router.refresh();
     } catch (e: any) {
       setStatus("error");
       setMsg(e.message || "Network error");
+      showError("Couldn't import the magazine data. Please try again.");
     }
   }
 

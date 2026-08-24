@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useToast } from "./ToastProvider";
 
 type ScheduleEvent = {
   id: string;
@@ -21,6 +22,7 @@ const DAY_LABELS: Record<number, string> = { 1: "Day 01 — May 15", 2: "Day 02 
 const VENUES = ["Circle", "Show floor", "Workshop Zone"];
 
 export default function ScheduleTable({ initialData }: { initialData: ScheduleEvent[] }) {
+  const { showSuccess, showError } = useToast();
   const [rows, setRows] = useState<ScheduleEvent[]>(initialData);
   const [dayFilter, setDayFilter] = useState("all");
   const [venueFilter, setVenueFilter] = useState("all");
@@ -42,7 +44,12 @@ export default function ScheduleTable({ initialData }: { initialData: ScheduleEv
     setDeleting(id);
     const res = await fetch(`/api/cms/schedule/${id}`, { method: "DELETE" });
     setDeleting(null);
-    if (res.ok) setRows((prev) => prev.filter((r) => r.id !== id));
+    if (res.ok) {
+      setRows((prev) => prev.filter((r) => r.id !== id));
+      showSuccess("Schedule event deleted.");
+    } else {
+      showError("Couldn't delete this event. Please try again.");
+    }
   }
 
   return (

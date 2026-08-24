@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { cdn } from "@/lib/cdn";
+import { useToast } from "./ToastProvider";
 
 const SPECIAL_TYPES = [
   { value: "sponsor", label: "Sponsor (Partners)" },
@@ -73,6 +74,7 @@ export default function BrandPartnerForm({
   partnerId?: string;
 }) {
   const router  = useRouter();
+  const { showSuccess, showError } = useToast();
   const isEdit  = !!partnerId;
 
   const [form, setForm]           = useState<FormData>({ ...emptyForm, ...initialData });
@@ -129,8 +131,10 @@ export default function BrandPartnerForm({
     if (!res.ok) {
       const json = await res.json().catch(() => ({}));
       setError(json.error ?? "Save failed. Try again.");
+      showError("Couldn't save this brand partner. Please try again.");
       return;
     }
+    showSuccess(isEdit ? "Brand partner updated." : "Brand partner created.");
     router.push("/cms/brand-partners");
     router.refresh();
   }

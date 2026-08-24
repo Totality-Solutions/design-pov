@@ -2,9 +2,11 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useToast } from "./ToastProvider";
 
 export default function SeedGalleryButton() {
   const router = useRouter();
+  const { showSuccess, showError } = useToast();
   const [loading, setLoading] = useState(false);
 
   async function handleSeed() {
@@ -14,10 +16,10 @@ export default function SeedGalleryButton() {
     const json = await res.json();
     setLoading(false);
     if (res.ok) {
-      alert(`Inserted ${json.inserted} gallery items.`);
+      showSuccess(`Added ${json.inserted} gallery items.`);
       router.refresh();
     } else {
-      alert("Error: " + json.error);
+      showError("Couldn't import the gallery data. Please try again.");
     }
   }
 

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import ImageUploadField from "./ImageUploadField";
+import { useToast } from "./ToastProvider";
 
 type TextBlock = { type: "text"; title?: string; value: string };
 type ImageBlock = { type: "image"; value: string; caption?: string };
@@ -67,6 +68,7 @@ export default function BlogForm({
   defaultImageFolder?: string;
 }) {
   const router = useRouter();
+  const { showSuccess, showError } = useToast();
   const isEdit = !!blogId;
   const viewUrl = isEdit && initialData?.slug ? `/magazine/${initialData.slug}` : null;
 
@@ -168,11 +170,13 @@ export default function BlogForm({
     setSaving(false);
 
     if (res.ok) {
+      showSuccess(isEdit ? "Blog post updated." : "Blog post created.");
       router.push("/cms/blogs");
       router.refresh();
     } else {
       const json = await res.json();
       setError(json.error || "Something went wrong.");
+      showError("Couldn't save this post. Please try again.");
     }
   }
 

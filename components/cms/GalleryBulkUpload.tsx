@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { Upload } from "lucide-react";
+import { useToast } from "./ToastProvider";
 
 type FileStatus = "pending" | "uploading" | "done" | "error";
 
@@ -17,6 +18,7 @@ const CONCURRENCY = 4;
 
 export default function GalleryBulkUpload() {
   const router = useRouter();
+  const { showSuccess, showError } = useToast();
   const [category, setCategory] = useState("");
   const [year, setYear] = useState(new Date().getFullYear());
   const [files, setFiles] = useState<QueuedFile[]>([]);
@@ -104,6 +106,7 @@ export default function GalleryBulkUpload() {
     if (results.length === 0) {
       setUploading(false);
       setError("All uploads failed — nothing was saved.");
+      showError("None of the images could be uploaded. Please try again.");
       return;
     }
 
@@ -116,11 +119,13 @@ export default function GalleryBulkUpload() {
     setUploading(false);
 
     if (res.ok) {
+      showSuccess(`${results.length} image${results.length === 1 ? "" : "s"} added to the gallery.`);
       router.push("/cms/gallery");
       router.refresh();
     } else {
       const json = await res.json();
       setError(`Uploaded ${results.length} images, but saving to the database failed: ${json.error}`);
+      showError("Images uploaded, but couldn't be saved to the gallery. Please try again.");
     }
   }
 

@@ -2,9 +2,11 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useToast } from "./ToastProvider";
 
 export default function SeedScheduleButton() {
   const router = useRouter();
+  const { showSuccess, showError } = useToast();
   const [status, setStatus] = useState<"idle" | "loading" | "done" | "error">("idle");
   const [msg, setMsg] = useState("");
 
@@ -18,15 +20,18 @@ export default function SeedScheduleButton() {
       if (!res.ok) {
         setStatus("error");
         setMsg(json.error || "Seed failed");
+        showError("Couldn't import the schedule data. Please try again.");
         return;
       }
       const { inserted, skipped, errors } = json;
       setStatus("done");
       setMsg(`✓ Inserted ${inserted}, skipped ${skipped}${errors?.length ? `, ${errors.length} error(s)` : ""}`);
+      showSuccess(`Added ${inserted} schedule events.`);
       router.refresh();
     } catch (e: any) {
       setStatus("error");
       setMsg(e.message || "Network error");
+      showError("Couldn't import the schedule data. Please try again.");
     }
   }
 

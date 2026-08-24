@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { normalizeBrandPartner } from "@/lib/brandPartners";
 import type { BrandPartnerRow, BrandPartnerTypeRow } from "@/types";
+import { useToast } from "./ToastProvider";
 
 export default function BrandPartnersTable({
   initialData,
@@ -13,6 +14,7 @@ export default function BrandPartnersTable({
   initialData: BrandPartnerRow[];
   types: BrandPartnerTypeRow[];
 }) {
+  const { showSuccess, showError } = useToast();
   const [rows, setRows]         = useState<BrandPartnerRow[]>(initialData);
   const [search, setSearch]     = useState("");
   const [typeFilter, setType]   = useState("all");
@@ -52,7 +54,12 @@ export default function BrandPartnersTable({
     setDeleting(id);
     const res = await fetch(`/api/cms/brand-partners/${id}`, { method: "DELETE" });
     setDeleting(null);
-    if (res.ok) setRows((prev) => prev.filter((r) => r.id !== id));
+    if (res.ok) {
+      setRows((prev) => prev.filter((r) => r.id !== id));
+      showSuccess("Partner deleted.");
+    } else {
+      showError("Couldn't delete this partner. Please try again.");
+    }
   }
 
   async function toggleActive(row: BrandPartnerRow) {
@@ -63,7 +70,12 @@ export default function BrandPartnersTable({
       body: JSON.stringify({ active: !row.active }),
     });
     setToggling(null);
-    if (res.ok) setRows((prev) => prev.map((r) => r.id === row.id ? { ...r, active: !r.active } : r));
+    if (res.ok) {
+      setRows((prev) => prev.map((r) => r.id === row.id ? { ...r, active: !r.active } : r));
+      showSuccess(!row.active ? "Partner shown on site." : "Partner hidden from site.");
+    } else {
+      showError("Couldn't update this partner. Please try again.");
+    }
   }
 
   const active = rows.filter((r) => r.active).length;

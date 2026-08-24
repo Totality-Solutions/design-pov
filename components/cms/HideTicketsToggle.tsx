@@ -1,8 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useToast } from "./ToastProvider";
 
 export default function HideTicketsToggle() {
+  const { showSuccess, showError } = useToast();
   const [hideTickets, setHideTickets] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isSaving, setIsSaving] = useState<boolean>(false);
@@ -36,10 +38,11 @@ export default function HideTicketsToggle() {
         body: JSON.stringify({ hideTickets: checked }), // Sends only this column field
       });
       if (!res.ok) throw new Error("Update failed");
+      showSuccess(checked ? "Ticket buttons hidden." : "Ticket buttons are now visible.");
     } catch (err) {
       console.error("Failed to update ticketing status:", err);
       setHideTickets(!checked); // Revert UI state on network failure
-      alert("Failed to save ticketing changes. Please try again.");
+      showError("Couldn't save this change. Please try again.");
     } finally {
       setIsSaving(false);
     }
