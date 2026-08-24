@@ -6,11 +6,11 @@ async function ensureSettingsTableExists(supabase: any) {
   try {
     const { error: tableCheckError } = await supabase
       .from("settings")
-      .select("is_hiring, hide_tickets")
+      .select("is_hiring, hide_tickets, nav_button_label, nav_button_href")
       .limit(1);
 
-    if (tableCheckError && (tableCheckError.code === "P0001" || tableCheckError?.message?.includes("does not exist"))) {
-      console.log("[Settings Init] Table missing. Executing structural schema setup...");
+    if (tableCheckError && (tableCheckError.code === "P0001" || tableCheckError?.message?.includes("does not exist") || tableCheckError?.message?.includes("column"))) {
+      console.log("[Settings Init] Table missing or outdated. Executing structural schema setup...");
 
       await supabase.rpc("execute_sql", {
         sql_query: `
@@ -18,10 +18,14 @@ async function ensureSettingsTableExists(supabase: any) {
             id TEXT PRIMARY KEY DEFAULT 'global',
             is_hiring BOOLEAN DEFAULT false,
             hide_tickets BOOLEAN DEFAULT false,
+            nav_button_label TEXT DEFAULT '2027',
+            nav_button_href TEXT DEFAULT '/collaborate',
             updated_at TIMESTAMPTZ DEFAULT NOW()
           );
-          INSERT INTO settings (id, is_hiring, hide_tickets) 
-          VALUES ('global', false, false) 
+          ALTER TABLE settings ADD COLUMN IF NOT EXISTS nav_button_label TEXT DEFAULT '2027';
+          ALTER TABLE settings ADD COLUMN IF NOT EXISTS nav_button_href TEXT DEFAULT '/collaborate';
+          INSERT INTO settings (id, is_hiring, hide_tickets, nav_button_label, nav_button_href)
+          VALUES ('global', false, false, '2027', '/collaborate')
           ON CONFLICT (id) DO NOTHING;
         `
       });
@@ -31,7 +35,13 @@ async function ensureSettingsTableExists(supabase: any) {
     // Ensure our global fallback config row exists
     const { data: rowCheck } = await supabase.from("settings").select("id").eq("id", "global");
     if (!rowCheck || rowCheck.length === 0) {
-      await supabase.from("settings").insert([{ id: "global", is_hiring: false, hide_tickets: false }]);
+      await supabase.from("settings").insert([{
+        id: "global",
+        is_hiring: false,
+        hide_tickets: false,
+        nav_button_label: "2027",
+        nav_button_href: "/collaborate",
+      }]);
     }
 
     return true;
@@ -48,19 +58,27 @@ export async function GET() {
 
     const { data, error } = await supabase
       .from("settings")
-      .select("is_hiring, hide_tickets")
+      .select("is_hiring, hide_tickets, nav_button_label, nav_button_href")
       .eq("id", "global")
       .maybeSingle();
 
     if (error) throw error;
 
-    return NextResponse.json({ 
-      isHiring: data?.is_hiring ?? false, 
-      hideTickets: data?.hide_tickets ?? false 
+    return NextResponse.json({
+      isHiring: data?.is_hiring ?? false,
+      hideTickets: data?.hide_tickets ?? false,
+      navButtonLabel: data?.nav_button_label ?? "2027",
+      navButtonHref: data?.nav_button_href ?? "/collaborate",
     }, { status: 200 });
   } catch (error: any) {
     console.error("[Settings GET API Error]:", error);
-    return NextResponse.json({ isHiring: false, hideTickets: false, error: error.message }, { status: 200 });
+    return NextResponse.json({
+      isHiring: false,
+      hideTickets: false,
+      navButtonLabel: "2027",
+      navButtonHref: "/collaborate",
+      error: error.message,
+    }, { status: 200 });
   }
 }
 
@@ -68,8 +86,8 @@ export async function GET() {
 export async function PUT(req: Request) {
   try {
     const body = await req.json();
-    const { isHiring, hideTickets } = body;
-    
+    const { isHiring, hideTickets, navButtonLabel, navButtonHref } = body;
+
     const supabase = createServerClient();
     await ensureSettingsTableExists(supabase);
 
@@ -80,6 +98,8 @@ export async function PUT(req: Request) {
 
     if (isHiring !== undefined) updateFields.is_hiring = isHiring;
     if (hideTickets !== undefined) updateFields.hide_tickets = hideTickets;
+    if (navButtonLabel !== undefined) updateFields.nav_button_label = navButtonLabel;
+    if (navButtonHref !== undefined) updateFields.nav_button_href = navButtonHref;
 
     const { data, error } = await supabase
       .from("settings")
@@ -95,7 +115,7 @@ export async function PUT(req: Request) {
     return NextResponse.json({ success: true, ...body }, { status: 200 });
   } catch (error: any) {
     return NextResponse.json(
-      { error: error.message || "Failed to update configuration parameter." }, 
+      { error: error.message || "Failed to update configuration parameter." },
       { status: 500 }
     );
   }

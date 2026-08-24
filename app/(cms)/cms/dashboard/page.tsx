@@ -1,7 +1,8 @@
 import Link from "next/link";
 import CmsSidebar from "@/components/cms/CmsSidebar";
-import IsHiringToggle from "@/components/cms/IsHiringToggle"; 
+import IsHiringToggle from "@/components/cms/IsHiringToggle";
 import HideTicketsToggle from "@/components/cms/HideTicketsToggle"; // 👈 Imported the new separate toggle
+import NavButtonEditor from "@/components/cms/NavButtonEditor";
 import { createServerClient } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
@@ -49,6 +50,7 @@ export default async function Dashboard() {
           <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto shrink-0">
             <IsHiringToggle />
             <HideTicketsToggle />
+            <NavButtonEditor />
           </div>
         </div>
 

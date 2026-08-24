@@ -25,10 +25,12 @@ function useDesktopImagePreload() {
 export default function Navbar() {
   const pathname = usePathname();
 
-  const [activeMenu,  setActiveMenu]  = useState<string | null>(null);
-  const [mobileOpen,  setMobileOpen]  = useState(false);
-  const [isSticky,    setIsSticky]    = useState(false);
-  const [hideTickets, setHideTickets] = useState(false);
+  const [activeMenu,     setActiveMenu]     = useState<string | null>(null);
+  const [mobileOpen,     setMobileOpen]     = useState(false);
+  const [isSticky,       setIsSticky]       = useState(false);
+  const [hideTickets,    setHideTickets]    = useState(false);
+  const [navButtonLabel, setNavButtonLabel] = useState("2027");
+  const [navButtonHref,  setNavButtonHref]  = useState("/collaborate");
 
   const leaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const scrollY    = useRef(0);
@@ -42,6 +44,8 @@ export default function Navbar() {
         if (res.ok) {
           const data = await res.json();
           setHideTickets(!!data.hideTickets);
+          if (data.navButtonLabel) setNavButtonLabel(data.navButtonLabel);
+          if (data.navButtonHref) setNavButtonHref(data.navButtonHref);
         }
       } catch (err) {
         console.error("[Navbar] Failed to fetch layout control flags:", err);
@@ -287,12 +291,11 @@ export default function Navbar() {
                             return (
                               <Link
                                 key={link.label}
-                                href={link.href}
+                                href={navButtonHref}
                                 onClick={closeMenu}
-                                // style={{ borderRadius: 9999 }}
                                 className="w-fit border border-primary-blue text-primary-blue px-4 py-1.5 text-sm font-semibold hover:bg-primary-blue hover:text-white transition-colors"
                               >
-                                {link.label}
+                                {navButtonLabel}
                               </Link>
                             );
                           }
@@ -394,12 +397,11 @@ export default function Navbar() {
                           return (
                             <div key={link.label} className="px-12 py-4 border-b border-gray-100">
                               <Link
-                                href={link.href}
+                                href={navButtonHref}
                                 onClick={() => setMobileOpen(false)}
-                                // style={{ borderRadius: 9999 }}
                                 className="inline-block border border-primary-blue text-primary-blue px-4 py-1.5 text-sm font-semibold hover:bg-primary-blue hover:text-white transition-colors"
                               >
-                                {link.label}
+                                {navButtonLabel}
                               </Link>
                             </div>
                           );

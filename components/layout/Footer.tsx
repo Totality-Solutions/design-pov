@@ -72,6 +72,8 @@ const Footer = () => {
 
   // 1. Turned isHiring into component state driven by your global configuration API
   const [isHiring, setIsHiring] = useState(false);
+  const [navButtonLabel, setNavButtonLabel] = useState("2027");
+  const [navButtonHref, setNavButtonHref] = useState("/collaborate");
 
   useEffect(() => {
     // 2. Fetch the module visibility flag state on mount
@@ -81,12 +83,14 @@ const Footer = () => {
         if (res.ok) {
           const data = await res.json();
           setIsHiring(!!data.isHiring);
+          if (data.navButtonLabel) setNavButtonLabel(data.navButtonLabel);
+          if (data.navButtonHref) setNavButtonHref(data.navButtonHref);
         }
       } catch (err) {
         console.error("Could not sync footer hiring modules status:", err);
       }
     }
-    
+
     checkHiringStatus();
 
     const handleResize = () => {
@@ -213,14 +217,14 @@ const Footer = () => {
             {/* RIGHT: Main Navigation Columns */}
             <div className="hidden lg:flex pointer-events-auto" style={{ gap: "var(--footer-gap-links)"}}>
               <FooterTextColumn {...navLinks.Partners} />
-              <FooterTextColumn {...navLinks.AboutUs} />
+              <FooterTextColumn {...navLinks.AboutUs} navButtonOverride={{ label: navButtonLabel, href: navButtonHref }} />
               <FooterTextColumn {...navLinks.Originals} />
             </div>
           </div>          
           
           <div className="grid grid-cols-2 md:grid-cols-3 lg:hidden pointer-events-auto my-12 gap-8" >
             <FooterTextColumn {...navLinks.Partners} />
-            <FooterTextColumn {...navLinks.AboutUs} />
+            <FooterTextColumn {...navLinks.AboutUs} navButtonOverride={{ label: navButtonLabel, href: navButtonHref }} />
             <FooterTextColumn {...navLinks.Originals} />
           </div>
 
@@ -375,7 +379,7 @@ const MagneticFollowFlare = ({ index, mouseX, imageSrc, colWidth, baseFlareWidth
   );
 };
 
-const FooterTextColumn = ({ title, href, items }: any) => (
+const FooterTextColumn = ({ title, href, items, navButtonOverride }: any) => (
   <div
     className="flex flex-col lg:pl-4"
     style={{ width: "var(--footer-col-width)" }}
@@ -392,11 +396,10 @@ const FooterTextColumn = ({ title, href, items }: any) => (
           <li key={item.title}>
             {item.type === "button" ? (
               <Link
-                href={item.href}
-                // style={{ borderRadius: 9999 }}
+                href={navButtonOverride?.href ?? item.href}
                 className="inline-block border border-white/40 text-white px-4 py-1.5 text-[13px] font-semibold hover:bg-white hover:text-black transition-colors"
               >
-                {item.title}
+                {navButtonOverride?.label ?? item.title}
               </Link>
             ) : (
               <Link
