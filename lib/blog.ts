@@ -50,6 +50,17 @@ export function getNextMagazineFolderNumber(rows: Array<Record<string, any>>): n
   return max + 1;
 }
 
+/** Collects every image path/URL referenced by a blog row (cover, thumbnail, content blocks). */
+export function collectBlogImageValues(row: Record<string, any>): string[] {
+  const values: string[] = [];
+  if (row.image) values.push(row.image);
+  if (row.thumbnail) values.push(row.thumbnail);
+  (row.detailed_content ?? []).forEach((block: any) => {
+    if (block?.type === "image" && block.value) values.push(block.value);
+  });
+  return values;
+}
+
 export function normalizeStaticBlog(blog: Blog): NormalizedBlog {
   return {
     type:               blog.type,

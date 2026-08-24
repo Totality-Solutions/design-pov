@@ -32,6 +32,13 @@ function toSlug(title: string) {
   return title.toLowerCase().replace(/[^a-z0-9\s-]/g, "").trim().replace(/\s+/g, "-");
 }
 
+// Pulls "temp/magazine/43" out of a path/URL like "/temp/magazine/43/1" so
+// image uploads land in the same folder as the pre-filled path convention.
+function extractMagazineFolder(path?: string): string | null {
+  const match = path?.match(/\/temp\/magazine\/(\d+)\//);
+  return match ? `temp/magazine/${match[1]}` : null;
+}
+
 const emptyForm: BlogFormData = {
   title: "",
   slug: "",
@@ -71,6 +78,13 @@ export default function BlogForm({
   const [slugEdited, setSlugEdited] = useState(isEdit);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+
+  // Keep uploaded files in the same "/temp/magazine/{n}/" folder as the pre-filled
+  // path fields, falling back to blog/{slug} only when that convention isn't in use.
+  const uploadFolder =
+    extractMagazineFolder(form.image) ||
+    extractMagazineFolder(form.thumbnail) ||
+    (defaultImageFolder ? defaultImageFolder.replace(/^\/+|\/+$/g, "") : `blog/${form.slug || "misc"}`);
 
   useEffect(() => {
     if (!slugEdited && form.title) {
@@ -232,7 +246,7 @@ export default function BlogForm({
             <ImageUploadField
               value={form.image}
               onChange={(url) => setField("image", url)}
-              folder={`blog/${form.slug || "misc"}`}
+              folder={uploadFolder}
               className={input}
               previewClassName="mt-2 h-28 w-full object-cover border border-black/10"
             />
@@ -241,7 +255,7 @@ export default function BlogForm({
             <ImageUploadField
               value={form.thumbnail}
               onChange={(url) => setField("thumbnail", url)}
-              folder={`blog/${form.slug || "misc"}`}
+              folder={uploadFolder}
               className={input}
               previewClassName="mt-2 h-28 w-full object-cover border border-black/10"
             />
@@ -319,7 +333,7 @@ export default function BlogForm({
                   <ImageUploadField
                     value={block.value}
                     onChange={(url) => updateBlock(i, { value: url })}
-                    folder={`blog/${form.slug || "misc"}`}
+                    folder={uploadFolder}
                     className={input}
                     previewClassName="mt-1 h-40 w-full object-cover border border-black/10"
                   />
