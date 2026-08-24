@@ -6,10 +6,12 @@ import { cdn } from "@/lib/cdn";
 import SectionHeading from "../common/SectionHeading";
 import CTABtn from "../common/CTABtn";
 import { useHubspotForm } from "@/hooks/useHubspotForm";
+import { MAX_ATTACHMENT_SIZE_BYTES } from "@/lib/attachments";
 
 export default function ParticipationForm() {
   let [selectedOption, setSelectedOption] = useState("");
-  let [fileName, setFileName] = useState("");
+  const [file, setFile] = useState<File | null>(null);
+  const [fileError, setFileError] = useState("");
   const [isHovered, setIsHovered] = useState(false);
 
   const formRef = useRef<HTMLFormElement>(null);
@@ -19,7 +21,8 @@ export default function ParticipationForm() {
     type: "ecosystem",
     onSuccess: () => {
       setSelectedOption("");
-      setFileName("");
+      setFile(null);
+      setFileError("");
 
       if (formRef.current) {
         formRef.current.reset();
@@ -46,11 +49,18 @@ export default function ParticipationForm() {
   ];
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
-    let file = e.target.files?.[0];
+    const selected = e.target.files?.[0];
+    if (!selected) return;
 
-    if (file) {
-      setFileName(file.name);
+    if (selected.size > MAX_ATTACHMENT_SIZE_BYTES) {
+      setFile(null);
+      setFileError("File size must be under 10 MB");
+      e.target.value = "";
+      return;
     }
+
+    setFile(selected);
+    setFileError("");
   }
 
   async function handleSubmit(e?: React.MouseEvent) {
@@ -65,10 +75,9 @@ export default function ParticipationForm() {
       email: formData.get("email") as string,
       contact: formData.get("contact") as string,
       category: selectedOption,
-      fileName: fileName,
     };
 
-    await submit(data);
+    await submit(data, { file });
   }
 
   return (
@@ -191,7 +200,7 @@ export default function ParticipationForm() {
 
             <div className="flex flex-col gap-4">
 
-              {!fileName ? (
+              {!file ? (
 
                 <label className="cursor-pointer border border-black/20 px-8 py-2 my-2 flex items-center gap-3 hover:bg-gray-50 transition-colors w-fit">
 
@@ -216,12 +225,12 @@ export default function ParticipationForm() {
                   </div>
 
                   <span className="text-[15px] text-black break-all">
-                    {fileName}
+                    {file.name}
                   </span>
 
                   <button
                     type="button"
-                    onClick={() => setFileName("")}
+                    onClick={() => setFile(null)}
                     className="text-primary-red text-[12px] hover:underline"
                   >
                     Remove
@@ -229,6 +238,10 @@ export default function ParticipationForm() {
 
                 </div>
 
+              )}
+
+              {fileError && (
+                <p className="text-[12px] text-red-600">{fileError}</p>
               )}
 
               <p className="text-[11px] text-black/30">

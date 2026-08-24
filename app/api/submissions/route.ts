@@ -1,26 +1,10 @@
 import { NextResponse, after } from 'next/server';
-import { SESClient, SendEmailCommand } from '@aws-sdk/client-ses';
 import { createServerClient } from '@/lib/supabase/server';
 import { getDepartment, DEPARTMENT_EMAILS } from '@/lib/mailDepartment';
+import { sendRawEmail, readEmailAttachment, type EmailAttachment } from '@/lib/sesMail';
 
-let _ses: SESClient | null = null;
-function getSesClient() {
-  if (!_ses) {
-    const region = process.env.AWS_REGION;
-    const accessKeyId = process.env.AWS_ACCESS_KEY_ID;
-    const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
-    if (!region || !accessKeyId || !secretAccessKey) {
-      throw new Error("Missing AWS SES environment variables");
-    }
-    _ses = new SESClient({
-      region,
-      credentials: { accessKeyId: accessKeyId.trim(), secretAccessKey: secretAccessKey.trim() },
-    });
-  }
-  return _ses;
-}
-
-const FROM_EMAIL = process.env.SES_FROM_EMAIL || 'noreply@designpovindia.com';
+// Form components attach files under one (or more) of these field names
+const ATTACHMENT_FIELDS = ['file', 'doc', 'image'];
 
 function buildEmailHtml(fields: Record<string, string | null>) {
   const rows = Object.entries(fields)
@@ -48,29 +32,62 @@ function buildEmailHtml(fields: Record<string, string | null>) {
     </div>`;
 }
 
-async function sendEmail(to: string, subject: string, fields: Record<string, string | null>) {
+async function sendSubmissionEmail(
+  to: string,
+  subject: string,
+  fields: Record<string, string | null>,
+  attachments: EmailAttachment[]
+) {
   const plainText = Object.entries(fields)
     .filter(([, v]) => v != null)
     .map(([k, v]) => `${k}: ${v}`)
     .join('\n');
 
-  await getSesClient().send(new SendEmailCommand({
-    Source: `Design POV <${FROM_EMAIL}>`,
-    Destination: { ToAddresses: [to] },
-    Message: {
-      Subject: { Data: subject, Charset: 'UTF-8' },
-      Body: {
-        Html: { Data: buildEmailHtml(fields), Charset: 'UTF-8' },
-        Text: { Data: plainText, Charset: 'UTF-8' },
-      },
-    },
-  }));
+  await sendRawEmail({
+    from: `Design POV <${process.env.SES_FROM_EMAIL || 'noreply@designpovindia.com'}>`,
+    to,
+    subject,
+    text: plainText,
+    html: buildEmailHtml(fields),
+    attachments,
+  });
 }
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
-    const { type, category, name, email, contact, message, fileName } = body;
+    let formData: FormData;
+    try {
+      formData = await req.formData();
+    } catch (parseError) {
+      console.error('[submissions] Failed to parse form data:', parseError);
+      return NextResponse.json({ error: "Invalid form payload format." }, { status: 400 });
+    }
+
+    const type = (formData.get("type") as string) || null;
+    const category = (formData.get("category") as string) || null;
+    const name = (formData.get("name") as string) || null;
+    const email = (formData.get("email") as string) || null;
+    const contact = (formData.get("contact") as string) || null;
+    const message = (formData.get("message") as string) || null;
+
+    // Read any attached files in-memory so they can go straight into the email.
+    // Only the count is tracked downstream — actual filenames aren't stored or emailed.
+    const attachments: EmailAttachment[] = [];
+
+    for (const field of ATTACHMENT_FIELDS) {
+      const value = formData.get(field);
+      if (value && typeof value !== 'string') {
+        const file = value as File;
+        const result = await readEmailAttachment(file);
+        if (!result.ok) {
+          return NextResponse.json({ error: result.error }, { status: 400 });
+        }
+        attachments.push(result.attachment);
+      }
+    }
+
+    const attachedFileCount = attachments.length;
+    const attachedFileSummary = attachedFileCount > 0 ? `attached_file: ${attachedFileCount}` : null;
 
     const supabase = createServerClient();
 
@@ -86,7 +103,7 @@ export async function POST(req: Request) {
         name,
         email,
         contact,
-        file_name: fileName,
+        file_name: attachedFileSummary,
         created_at: new Date().toISOString(),
       }])
       .select()
@@ -114,7 +131,7 @@ export async function POST(req: Request) {
         message: message || null,
         to_email: toEmail,
         mail_sent: false,
-        extra_data: fileName ? { file_name: fileName } : {},
+        extra_data: attachedFileCount > 0 ? { attached_file: attachedFileCount } : {},
       }]).select().single();
       if (mailErr) {
         console.error('[submissions] pov_mails write error:', mailErr);
@@ -123,14 +140,14 @@ export async function POST(req: Request) {
       }
 
       try {
-        await sendEmail(toEmail, `New Submission: ${category || type || 'Form'}`, {
+        await sendSubmissionEmail(toEmail, `New Submission: ${category || type || 'Form'}`, {
           Category: category || type || null,
           Name: name || null,
           Email: email || null,
           Phone: contact || null,
           Message: message || null,
-          'File Name': fileName || null,
-        });
+          'File Name': attachedFileSummary || 'No file attached',
+        }, attachments);
         if (mailData) {
           await supabase.from('pov_mails').update({ mail_sent: true }).eq('id', mailData.id);
         }

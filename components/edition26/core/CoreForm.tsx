@@ -3,9 +3,11 @@ import React, { useRef, useState } from 'react'
 import { useHubspotForm } from '@/hooks/useHubspotForm'
 import CTABtn from '../../common/CTABtn'
 import SectionHeading from '../../common/SectionHeading';
+import { MAX_ATTACHMENT_SIZE_BYTES } from '@/lib/attachments';
 
 const CoreForm = () => {
-  const [fileName, setFileName] = useState("");
+  const [file, setFile] = useState<File | null>(null);
+  const [fileError, setFileError] = useState("");
   const [isHovered, setIsHovered] = useState(false);
 
   const formRef = useRef<HTMLFormElement>(null);
@@ -13,14 +15,25 @@ const CoreForm = () => {
   const { submit, loading, success, error } = useHubspotForm({
     type: "core",
     onSuccess: () => {
-      setFileName("");
+      setFile(null);
+      setFileError("");
       if (formRef.current) formRef.current.reset();
     }
   });
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    if (file) setFileName(file.name);
+    const selected = e.target.files?.[0];
+    if (!selected) return;
+
+    if (selected.size > MAX_ATTACHMENT_SIZE_BYTES) {
+      setFile(null);
+      setFileError("File size must be under 10 MB");
+      e.target.value = "";
+      return;
+    }
+
+    setFile(selected);
+    setFileError("");
   }
 
   async function handleSubmit(e?: React.MouseEvent) {
@@ -34,10 +47,9 @@ const CoreForm = () => {
       name: formData.get("fullname") as string,
       email: formData.get("email") as string,
       contact: formData.get("contact") as string,
-      fileName: fileName
     };
 
-    await submit(data);
+    await submit(data, { file });
   }
 
   return (
@@ -80,7 +92,7 @@ const CoreForm = () => {
           <div className="space-y-4">
             <label className="text-[15px] text-black/50 font-medium block">Upload your file :</label>
             <div className="flex flex-col md:flex-row md:items-center gap-6">
-              {!fileName ? (
+              {!file ? (
                 <label className="cursor-pointer border border-black/20 px-8 py-2 my-2 rounded-sm flex items-center gap-3 hover:bg-gray-50 transition-colors w-fit">
                   <span className="text-[15px] text-black/60">Upload file</span>
                   <input type="file" className="hidden" onChange={handleFileChange} />
@@ -88,9 +100,12 @@ const CoreForm = () => {
               ) : (
                 <div className="flex items-center gap-4 border border-black/10 p-2 pr-4 my-2 bg-gray-50 w-fit">
                   <div className="bg-blue-800 text-white px-2 py-1 rounded-sm text-[10px] font-bold">DOC</div>
-                  <span className="text-[15px] text-black">{fileName}</span>
-                  <button type="button" onClick={() => setFileName("")} className="text-red-500 text-[12px] ml-4 hover:underline">Remove</button>
+                  <span className="text-[15px] text-black">{file.name}</span>
+                  <button type="button" onClick={() => setFile(null)} className="text-red-500 text-[12px] ml-4 hover:underline">Remove</button>
                 </div>
+              )}
+              {fileError && (
+                <p className="text-[12px] text-red-600">{fileError}</p>
               )}
               <p className="text-[11px] text-black/30">Documents: Max 10 MB each | Images: Max 5 MB each</p>
             </div>

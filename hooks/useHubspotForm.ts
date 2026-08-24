@@ -51,24 +51,37 @@ export function useHubspotForm({ type, onSuccess }: UseHubspotFormOptions) {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const submit = async (data: Record<string, string>) => {
+  const submit = async (data: Record<string, string>, files?: Record<string, File | null | undefined>) => {
     setLoading(true);
     setError(null);
 
     try {
-      // We changed /api/hubspot to /api/submissions to match your new folder
+      // FormData (not JSON) so any attached file travels with the request and can be emailed directly
+      const formData = new FormData();
+      formData.append("type", type);
+      Object.entries(data).forEach(([key, value]) => {
+        if (value != null) formData.append(key, value);
+      });
+      if (files) {
+        Object.entries(files).forEach(([key, file]) => {
+          if (file) formData.append(key, file);
+        });
+      }
+
       const res = await fetch("/api/submissions", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ type, ...data }),
+        body: formData,
       });
 
-      if (!res.ok) throw new Error("Submission failed");
+      if (!res.ok) {
+        const errBody = await res.json().catch(() => null);
+        throw new Error(errBody?.error || "Submission failed");
+      }
 
       setSuccess(true);
       onSuccess?.();
-    } catch (err) {
-      setError("Something went wrong. Please try again.");
+    } catch (err: any) {
+      setError(err.message || "Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }

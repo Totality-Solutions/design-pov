@@ -489,7 +489,7 @@
                           htmlFor="gallery-website"
                           className="block text-sm text-gray-800 mb-2"
                         >
-                          Website
+                          Social Link
                         </label>
 
                         <input

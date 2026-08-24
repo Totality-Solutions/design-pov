@@ -2,13 +2,14 @@
 import { useState, useRef } from 'react';
 import CTABtn from './CTABtn';
 import { isValidEmail, isValidPhone, isValidName } from '@/lib/validation';
+import { MAX_ATTACHMENT_SIZE_BYTES } from '@/lib/attachments';
 
 export default function FormInner({ category }: { category?: string }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [message, setMessage] = useState("");
-  const [imgName, setImgName] = useState("");
+  const [imgFile, setImgFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
@@ -18,7 +19,16 @@ export default function FormInner({ category }: { category?: string }) {
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
-    if (file) setImgName(file.name);
+    if (!file) return;
+
+    if (file.size > MAX_ATTACHMENT_SIZE_BYTES) {
+      setErrorMsg("File size must be under 10 MB");
+      e.target.value = "";
+      return;
+    }
+
+    setErrorMsg("");
+    setImgFile(file);
   }
 
   async function handleSubmit() {
@@ -41,18 +51,18 @@ export default function FormInner({ category }: { category?: string }) {
     setIsLoading(true);
 
     try {
+      const formData = new FormData();
+      formData.append("type", "participation");
+      formData.append("category", category || "General Enquiry");
+      formData.append("name", name);
+      formData.append("email", email);
+      formData.append("contact", phone);
+      if (message) formData.append("message", message);
+      if (imgFile) formData.append("image", imgFile);
+
       const res = await fetch("/api/submissions", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          type: "participation",
-          category: category || "General Enquiry",
-          name,
-          email,
-          contact: phone,
-          message: message || null,
-          fileName: imgName || null,
-        }),
+        body: formData,
       });
 
       if (!res.ok) {
@@ -61,7 +71,7 @@ export default function FormInner({ category }: { category?: string }) {
       }
 
       setIsSubmitted(true);
-      setName(""); setEmail(""); setPhone(""); setMessage(""); setImgName("");
+      setName(""); setEmail(""); setPhone(""); setMessage(""); setImgFile(null);
       setTimeout(() => setIsSubmitted(false), 5000);
     } catch (err: any) {
       setErrorMsg(err.message || "Something went wrong. Please try again.");
@@ -131,7 +141,7 @@ export default function FormInner({ category }: { category?: string }) {
           {!isElevate ? (
             <div className="space-y-4">
               <label className="text-[15px] text-black/50 font-medium block">Upload Image :</label>
-              {!imgName ? (
+              {!imgFile ? (
                 <label className="cursor-pointer border border-black/20 px-8 py-2 mt-2 rounded-sm flex items-center gap-3 hover:bg-gray-50 transition-colors w-fit">
                   <span className="text-[15px] text-black/60">Upload image</span>
                   <input type="file" accept="image/*" className="hidden" onChange={handleFileChange} />
@@ -139,8 +149,8 @@ export default function FormInner({ category }: { category?: string }) {
               ) : (
                 <div className="flex items-center gap-4 border border-black/10 p-2 pr-4 bg-gray-50 w-fit">
                   <div className="bg-green-700 text-white px-2 py-1 rounded-sm text-[10px] font-bold uppercase">Img</div>
-                  <span className="text-[15px] text-black max-w-[200px] truncate">{imgName}</span>
-                  <button type="button" onClick={() => setImgName("")} className="text-red-500 text-[12px] ml-4 hover:underline">Remove</button>
+                  <span className="text-[15px] text-black max-w-[200px] truncate">{imgFile.name}</span>
+                  <button type="button" onClick={() => setImgFile(null)} className="text-red-500 text-[12px] ml-4 hover:underline">Remove</button>
                 </div>
               )}
             </div>

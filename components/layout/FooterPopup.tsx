@@ -11,6 +11,8 @@ interface FooterPopupProps {
     onClose: () => void;
 }
 
+const MAX_CV_SIZE_BYTES = 10 * 1024 * 1024;
+
 export default function FooterPopup({
     isOpen,
     onClose,
@@ -47,6 +49,7 @@ export default function FooterPopup({
         if (!experience.trim())
             next.experience = "Years of Experience is required";
         if (!cv) next.cv = "CV Upload is required";
+        else if (cv.size > MAX_CV_SIZE_BYTES) next.cv = "File size must be under 10 MB";
         if (!reason.trim())
             next.reason = "This field is required";
 
@@ -280,7 +283,17 @@ export default function FooterPopup({
                                     accept=".pdf,.doc,.docx"
                                     onChange={(e) => {
                                         const file = e.target.files?.[0];
-                                        if (file) setCv(file);
+                                        if (!file) return;
+
+                                        if (file.size > MAX_CV_SIZE_BYTES) {
+                                            setCv(null);
+                                            setErrors((prev) => ({ ...prev, cv: "File size must be under 10 MB" }));
+                                            e.target.value = "";
+                                            return;
+                                        }
+
+                                        setCv(file);
+                                        setErrors((prev) => ({ ...prev, cv: undefined }));
                                     }}
                                     className="w-full border bg-white p-3"
                                 />

@@ -4,13 +4,14 @@ import React, { useState, useRef } from 'react';
 import SectionHeading from '../common/SectionHeading';
 import CTABtn from '../common/CTABtn';
 import { isValidEmail, isValidPhone, isValidName } from '@/lib/validation';
+import { MAX_ATTACHMENT_SIZE_BYTES } from '@/lib/attachments';
 
 export default function MagazineSubmissionForm() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [docName, setDocName] = useState("");
-  const [imgName, setImgName] = useState("");
+  const [docFile, setDocFile] = useState<File | null>(null);
+  const [imgFile, setImgFile] = useState<File | null>(null);
   const [isHovered, setIsHovered] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -21,10 +22,17 @@ export default function MagazineSubmissionForm() {
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>, type: 'doc' | 'img') {
     const file = e.target.files?.[0];
-    if (file) {
-      if (type === 'doc') setDocName(file.name);
-      else setImgName(file.name);
+    if (!file) return;
+
+    if (file.size > MAX_ATTACHMENT_SIZE_BYTES) {
+      setErrorMsg("File size must be under 10 MB");
+      e.target.value = "";
+      return;
     }
+
+    setErrorMsg("");
+    if (type === 'doc') setDocFile(file);
+    else setImgFile(file);
   }
 
   async function handleSubmit(e?: React.MouseEvent) {
@@ -43,7 +51,7 @@ export default function MagazineSubmissionForm() {
       setErrorMsg("Please enter a valid phone number.");
       return;
     }
-    if (!docName?.trim()) {
+    if (!docFile) {
       setErrorMsg("Please upload the required document.");
       return;
     }
@@ -52,17 +60,18 @@ export default function MagazineSubmissionForm() {
     setIsLoading(true);
 
     try {
+      const formData = new FormData();
+      formData.append("type", "magazine");
+      formData.append("category", "Magazine Submission");
+      formData.append("name", name);
+      formData.append("email", email);
+      formData.append("contact", phone);
+      formData.append("doc", docFile);
+      if (imgFile) formData.append("image", imgFile);
+
       const res = await fetch("/api/submissions", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          type: "magazine",
-          category: "Magazine Submission",
-          name,
-          email,
-          contact: phone,
-          fileName: docName || imgName || null,
-        }),
+        body: formData,
       });
 
       if (!res.ok) {
@@ -71,7 +80,7 @@ export default function MagazineSubmissionForm() {
       }
 
       setIsSubmitted(true);
-      setName(""); setEmail(""); setPhone(""); setDocName(""); setImgName("");
+      setName(""); setEmail(""); setPhone(""); setDocFile(null); setImgFile(null);
       if (formRef.current) formRef.current.reset();
       setTimeout(() => setIsSubmitted(false), 5000);
     } catch (err: any) {
@@ -121,7 +130,7 @@ export default function MagazineSubmissionForm() {
             <div className="space-y-4">
               <label className="text-[15px] text-black/50 font-medium block">Doc Upload <span className="text-red-600">*</span></label>
               <div className="flex flex-col gap-4">
-                {!docName ? (
+                {!docFile ? (
                   <label className="cursor-pointer border border-black/20 px-8 py-2 my-4 r flex items-center gap-3 hover:bg-gray-50 transition-colors w-fit">
                     <span className="text-[15px] text-black/60">Upload file</span>
                     <input type="file" accept=".pdf,.doc,.docx" className="hidden" onChange={(e) => handleFileChange(e, 'doc')} />
@@ -129,8 +138,8 @@ export default function MagazineSubmissionForm() {
                 ) : (
                   <div className="flex items-center gap-4 border border-black/10 p-2 pr-4 my-4 bg-gray-50 w-fit">
                     {/* <div className="bg-blue-800 text-white px-2 py-1 rounded-sm text-[10px] font-bold uppercase">Doc</div> */}
-                    <span className="text-[15px] text-black max-w-[200px] truncate">{docName}</span>
-                    <button type="button" onClick={() => setDocName("")} className="text-red-500 text-[12px] ml-4 hover:underline">Remove</button>
+                    <span className="text-[15px] text-black max-w-[200px] truncate">{docFile.name}</span>
+                    <button type="button" onClick={() => setDocFile(null)} className="text-red-500 text-[12px] ml-4 hover:underline">Remove</button>
                   </div>
                 )}
               </div>
@@ -140,7 +149,7 @@ export default function MagazineSubmissionForm() {
             <div className="space-y-4">
               <label className="text-[15px] text-black/50 font-medium block">Image Upload </label>
               <div className="flex flex-col gap-4">
-                {!imgName ? (
+                {!imgFile ? (
                   <label className="cursor-pointer border border-black/20 px-8 py-2 my-4 flex items-center gap-3 hover:bg-gray-50 transition-colors w-fit">
                     <span className="text-[15px] text-black/60">Upload image</span>
                     <input type="file" accept="image/*" className="hidden" onChange={(e) => handleFileChange(e, 'img')} />
@@ -148,8 +157,8 @@ export default function MagazineSubmissionForm() {
                 ) : (
                   <div className="flex items-center gap-4 border border-black/10 p-2 pr-4 my-4 bg-gray-50 w-fit">
                     {/* <div className="bg-green-700 text-white px-2 py-1 rounded-sm text-[10px] font-bold uppercase">Img</div> */}
-                    <span className="text-[15px] text-black max-w-[200px] truncate">{imgName}</span>
-                    <button type="button" onClick={() => setImgName("")} className="text-red-500 text-[12px] ml-4 hover:underline">Remove</button>
+                    <span className="text-[15px] text-black max-w-[200px] truncate">{imgFile.name}</span>
+                    <button type="button" onClick={() => setImgFile(null)} className="text-red-500 text-[12px] ml-4 hover:underline">Remove</button>
                   </div>
                 )}
               </div>

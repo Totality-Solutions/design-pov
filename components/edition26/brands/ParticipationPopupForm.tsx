@@ -6,6 +6,7 @@ import { X } from "lucide-react";
 import CTABtn from "@/components/common/CTABtn";
 import { useHubspotForm } from "@/hooks/useHubspotForm";
 import { cdn } from "@/lib/cdn";
+import { MAX_ATTACHMENT_SIZE_BYTES } from "@/lib/attachments";
 
 interface ParticipationPopupFormProps {
   onClose: () => void;
@@ -13,22 +14,34 @@ interface ParticipationPopupFormProps {
 
 export default function ParticipationPopupForm({ onClose }: ParticipationPopupFormProps) {
   const [selectedOption, setSelectedOption] = useState("");
-  const [fileName, setFileName] = useState("");
-  
+  const [file, setFile] = useState<File | null>(null);
+  const [fileError, setFileError] = useState("");
+
   const formRef = useRef<HTMLFormElement>(null);
 
   const { submit, loading, success, error } = useHubspotForm({
     type: "brands",
     onSuccess: () => {
       setSelectedOption("");
-      setFileName("");
+      setFile(null);
+      setFileError("");
       if (formRef.current) formRef.current.reset();
     },
   });
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) setFileName(file.name);
+    const selected = e.target.files?.[0];
+    if (!selected) return;
+
+    if (selected.size > MAX_ATTACHMENT_SIZE_BYTES) {
+      setFile(null);
+      setFileError("File size must be under 10 MB");
+      e.target.value = "";
+      return;
+    }
+
+    setFile(selected);
+    setFileError("");
   };
 
   async function handleSubmit(e?: React.MouseEvent) {
@@ -42,8 +55,7 @@ export default function ParticipationPopupForm({ onClose }: ParticipationPopupFo
       email:    formData.get("email") as string,
       contact:  formData.get("contact") as string,
       category: selectedOption,
-      fileName,
-    });
+    }, { file });
   }
 
   const options = ["Core", "Circle", "Objects", "Elevate", "Brands", "Partnership"];
@@ -131,7 +143,7 @@ export default function ParticipationPopupForm({ onClose }: ParticipationPopupFo
               </label>
 
               <div className="flex flex-col gap-2">
-                {!fileName ? (
+                {!file ? (
                   <label className="cursor-pointer border border-black/20 px-8 py-2 flex items-center gap-3 hover:bg-gray-50 transition-colors w-fit">
                     <span className="text-[14px] text-black/60">Upload file</span>
                     <input
@@ -144,16 +156,19 @@ export default function ParticipationPopupForm({ onClose }: ParticipationPopupFo
                   <div className="flex flex-wrap items-center gap-4 border border-black/10 p-2 pr-4 bg-gray-50 w-fit max-w-full">
                     <div className="bg-red-600 text-white px-2 py-1 text-[10px] font-bold">DOC</div>
                     <span className="text-[13px] text-black truncate max-w-[150px]">
-                      {fileName}
+                      {file.name}
                     </span>
                     <button
                       type="button"
-                      onClick={() => setFileName("")}
+                      onClick={() => setFile(null)}
                       className="text-red-600 text-[12px] hover:underline"
                     >
                       Remove
                     </button>
                   </div>
+                )}
+                {fileError && (
+                  <p className="text-[12px] text-red-600">{fileError}</p>
                 )}
                 <p className="text-[11px] text-black/30">
                   Documents: Max 10 MB each | Images: Max 5 MB each
