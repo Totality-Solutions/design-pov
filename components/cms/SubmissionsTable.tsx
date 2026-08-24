@@ -11,6 +11,24 @@ const MAILBOX_OPTIONS = [
   { value: "hr@totality.solutions", label: "HR" },
 ];
 
+const DATE_RANGE_OPTIONS = [
+  { value: "all", label: "All Time" },
+  { value: "week", label: "This Week" },
+  { value: "month", label: "This Month" },
+  { value: "custom", label: "Custom Range" },
+];
+
+const ATTACHMENT_OPTIONS = [
+  { value: "all", label: "All Submissions" },
+  { value: "with", label: "With Attachment" },
+  { value: "without", label: "Without Attachment" },
+];
+
+const SORT_OPTIONS = [
+  { value: "newest", label: "Newest First" },
+  { value: "oldest", label: "Oldest First" },
+];
+
 type Submission = {
   id: string;
   type: string;
@@ -23,25 +41,77 @@ type Submission = {
   created_at: string;
 };
 
+// Returns the [start, end] bounds (inclusive) for a given date range, or null for "all"
+function getDateRangeBounds(range: string, customStart: string, customEnd: string): { start: Date; end: Date } | null {
+  const now = new Date();
+
+  if (range === "week") {
+    const day = now.getDay();
+    const diffToMonday = day === 0 ? 6 : day - 1;
+    const start = new Date(now);
+    start.setDate(now.getDate() - diffToMonday);
+    start.setHours(0, 0, 0, 0);
+    const end = new Date(now);
+    end.setHours(23, 59, 59, 999);
+    return { start, end };
+  }
+
+  if (range === "month") {
+    const start = new Date(now.getFullYear(), now.getMonth(), 1, 0, 0, 0, 0);
+    const end = new Date(now);
+    end.setHours(23, 59, 59, 999);
+    return { start, end };
+  }
+
+  if (range === "custom") {
+    if (!customStart || !customEnd) return null;
+    const start = new Date(customStart);
+    start.setHours(0, 0, 0, 0);
+    const end = new Date(customEnd);
+    end.setHours(23, 59, 59, 999);
+    return { start, end };
+  }
+
+  return null;
+}
+
 export default function SubmissionsTable({ initialData }: { initialData: Submission[] }) {
   const [rows, setRows] = useState(initialData);
   const [filter, setFilter] = useState("all");
   const [mailFilter, setMailFilter] = useState("all");
   const [search, setSearch] = useState("");
   const [deleting, setDeleting] = useState<string | null>(null);
+  const [dateRange, setDateRange] = useState("all");
+  const [customStart, setCustomStart] = useState("");
+  const [customEnd, setCustomEnd] = useState("");
+  const [attachmentFilter, setAttachmentFilter] = useState("all");
+  const [sortOrder, setSortOrder] = useState("newest");
 
   const types = ["all", ...Array.from(new Set(initialData.map((r) => r.category || r.type).filter(Boolean)))];
 
-  const filtered = rows.filter((r) => {
-    // console.log("rowsss",rows);
-    const matchType = filter === "all" || (r.category || r.type) === filter;
-    const matchMail = mailFilter === "all" || r.to_email === mailFilter;
-    const matchSearch =
-      !search ||
-      r.name?.toLowerCase().includes(search.toLowerCase()) ||
-      r.email?.toLowerCase().includes(search.toLowerCase());
-    return matchType && matchMail && matchSearch;
-  });
+  const dateBounds = getDateRangeBounds(dateRange, customStart, customEnd);
+
+  const filtered = rows
+    .filter((r) => {
+      const matchType = filter === "all" || (r.category || r.type) === filter;
+      const matchMail = mailFilter === "all" || r.to_email === mailFilter;
+      const matchSearch =
+        !search ||
+        r.name?.toLowerCase().includes(search.toLowerCase()) ||
+        r.email?.toLowerCase().includes(search.toLowerCase());
+      const matchAttachment =
+        attachmentFilter === "all" ||
+        (attachmentFilter === "with" ? !!r.file_name : !r.file_name);
+      const matchDate = !dateBounds || (() => {
+        const created = new Date(r.created_at);
+        return created >= dateBounds.start && created <= dateBounds.end;
+      })();
+      return matchType && matchMail && matchSearch && matchAttachment && matchDate;
+    })
+    .sort((a, b) => {
+      const diff = new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+      return sortOrder === "newest" ? -diff : diff;
+    });
 
   async function handleDelete(id: string) {
     if (!confirm("Delete this submission?")) return;
@@ -58,6 +128,11 @@ export default function SubmissionsTable({ initialData }: { initialData: Submiss
   }
 
   function exportCsv() {
+    if (dateRange === "custom" && (!customStart || !customEnd)) {
+      alert("Please pick both a start and end date for a custom export.");
+      return;
+    }
+
     const seen = new Set<string>();
     const deduped = filtered.filter((r) => {
       const key = `${r.email?.toLowerCase().trim()}|${r.contact?.trim()}|${r.category || r.type}`;
@@ -89,7 +164,8 @@ export default function SubmissionsTable({ initialData }: { initialData: Submiss
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `submissions-${Date.now()}.csv`;
+    const suffix = dateRange === "custom" ? `${customStart}_to_${customEnd}` : dateRange;
+    a.download = `submissions-${suffix}-${Date.now()}.csv`;
     a.click();
     URL.revokeObjectURL(url);
   }
@@ -129,6 +205,59 @@ export default function SubmissionsTable({ initialData }: { initialData: Submiss
             </option>
           ))}
         </select>
+
+        <select
+          value={attachmentFilter}
+          onChange={(e) => setAttachmentFilter(e.target.value)}
+          className="border border-black/20 px-4 py-2 text-sm outline-none focus:border-black bg-white"
+        >
+          {ATTACHMENT_OPTIONS.map((a) => (
+            <option key={a.value} value={a.value}>
+              {a.label}
+            </option>
+          ))}
+        </select>
+
+        <select
+          value={sortOrder}
+          onChange={(e) => setSortOrder(e.target.value)}
+          className="border border-black/20 px-4 py-2 text-sm outline-none focus:border-black bg-white"
+        >
+          {SORT_OPTIONS.map((s) => (
+            <option key={s.value} value={s.value}>
+              {s.label}
+            </option>
+          ))}
+        </select>
+
+        <select
+          value={dateRange}
+          onChange={(e) => setDateRange(e.target.value)}
+          className="border border-black/20 px-4 py-2 text-sm outline-none focus:border-black bg-white"
+        >
+          {DATE_RANGE_OPTIONS.map((r) => (
+            <option key={r.value} value={r.value}>
+              {r.label}
+            </option>
+          ))}
+        </select>
+
+        {dateRange === "custom" && (
+          <>
+            <input
+              type="date"
+              value={customStart}
+              onChange={(e) => setCustomStart(e.target.value)}
+              className="border border-black/20 px-4 py-2 text-sm outline-none focus:border-black bg-white"
+            />
+            <input
+              type="date"
+              value={customEnd}
+              onChange={(e) => setCustomEnd(e.target.value)}
+              className="border border-black/20 px-4 py-2 text-sm outline-none focus:border-black bg-white"
+            />
+          </>
+        )}
 
         <button
           onClick={exportCsv}
