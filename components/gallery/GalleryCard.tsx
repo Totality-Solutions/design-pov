@@ -252,7 +252,7 @@ function GalleryCard({ item, index, isExpanded, onExpand, onCollapse, onView }: 
               {item.title}
             </span>
           </div>
-          <div className="absolute bg-black/90 bottom-0 left-0 right-0 flex items-center justify-center gap-7 sm:gap-6 py-5 sm:py-3.5">
+          <div className="absolute bg-black/90 bottom-0 left-0 right-0 flex items-center justify-evenly gap-7 sm:gap-6 py-5 sm:py-5">
               <button
                 type="button"
                 onClick={handleRotate}
