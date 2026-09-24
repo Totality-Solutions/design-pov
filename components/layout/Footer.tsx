@@ -199,6 +199,7 @@ const Footer = () => {
                     { id: "FB", href: "https://www.facebook.com/share/1GiQ7sWhVw/?mibextid=wwXIfr" },
                     { id: "IN", href: "https://www.linkedin.com/company/design-pov/" },
                     { id: "YT", href: "https://youtube.com/@designpov?si=x8inJDuQDclsMQ9y" },
+                    { id: "PT", href: "https://in.pinterest.com/DesignPOVIndia/" },
                   ].map((item) => (
                     <a
                       key={item.id}
@@ -232,9 +233,9 @@ const Footer = () => {
           <div className="flex flex-col gap-10" style={{
             paddingRight: "var(--footer-px)",
           }}>
-            <div className="flex justify-between items-end lg:h-[180px]">
+            <div className="flex justify-between items-end lg:h-fit">
               {/* Dynamic Hiring Card Block */}
-              <div className="w-[180px] pointer-events-auto relative">
+              <div className="w-auto pointer-events-auto relative">
                 <motion.div
                   initial={false}
                   animate={{
@@ -277,7 +278,7 @@ const Footer = () => {
                     rel="noopener noreferrer"
                     className="relative z-20 bg-white text-black px-5 py-3 text-[14px] font-medium flex items-center justify-between w-full hover:bg-neutral-200 transition-all"
                   >
-                    Plan Your Visit
+                    Explore The Show
                     <ArrowUpRight size={14} strokeWidth={1.8} />
                   </a>
                 )}

@@ -39,7 +39,7 @@ export const faqData: FAQCategory[] = [
       {
         question: "How can I purchase tickets?",
         answer: "Tickets can be purchased directly through the website. Multiple pass categories and pricing tiers are available.",
-        triggers: [{ phrase: "website", type: "redirect", url: "https://tktplz.events/gjdlb5-design-pov" }]
+        // triggers: [{ phrase: "website", type: "redirect", url: "https://tktplz.events/gjdlb5-design-pov" }]
       },
       {
         question: "What can I expect at the show?",
