@@ -8,6 +8,7 @@ export interface GalleryItem {
   gradientTo?: string;
   category: string;
   year?: number;
+  pinnedAt?: string;
 }
 
 export interface GalleryCategory {

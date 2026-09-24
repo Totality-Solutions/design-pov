@@ -14,7 +14,8 @@ const INITIAL_BATCH = 12;
 const LOAD_BATCH = 12;
 
 export default function GalleryGrid() {
-  const [activeCategory, setActiveCategory] = useState("all");
+  // Empty array means "All" — no category filter applied.
+  const [activeCategories, setActiveCategories] = useState<string[]>([]);
   const [activeYear, setActiveYear] = useState("all");
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [expandedId, setExpandedId] = useState<string | null>(null);
@@ -64,25 +65,38 @@ export default function GalleryGrid() {
     const source = shuffledGallery.length > 0 ? shuffledGallery : galleryItems;
     return source.filter(
       (item) =>
-        (activeCategory === "all" || item.category === activeCategory) &&
+        (activeCategories.length === 0 || activeCategories.includes(item.category)) &&
         (activeYear === "all" || item.year?.toString() === activeYear)
     );
-  }, [activeCategory, activeYear, shuffledGallery]);
+  }, [activeCategories, activeYear, shuffledGallery]);
+
+  // Pinned items lead the "All" year tab (in the order they were pinned);
+  // individual year tabs ignore pinning and keep the shuffled order.
+  const pinnedItems = useMemo(() => {
+    if (activeYear !== "all") return [];
+    return baseItems
+      .filter((item) => item.pinnedAt)
+      .sort((a, b) => a.pinnedAt!.localeCompare(b.pinnedAt!));
+  }, [baseItems, activeYear]);
 
   // Reveals items in small batches as the user scrolls (see the
   // IntersectionObserver above) instead of rendering the whole gallery at
-  // once. Cycles back through baseItems to keep the scroll feeling infinite.
+  // once. Pinned items appear once at the top; the rest cycle to keep the
+  // scroll feeling infinite.
   const displayItems = useMemo(() => {
     if (baseItems.length === 0) return [];
-    const count = visibleCount;
-    const items: GalleryItem[] = [];
-    for (let i = 0; i < count; i++) {
-      const base = baseItems[i % baseItems.length];
-      const cycle = Math.floor(i / baseItems.length);
+    const rest = pinnedItems.length > 0 ? baseItems.filter((item) => !item.pinnedAt) : baseItems;
+    const items: GalleryItem[] = pinnedItems
+      .slice(0, visibleCount)
+      .map((item) => ({ ...item, id: `${item.id}-0` }));
+    if (rest.length === 0) return items;
+    for (let i = 0; items.length < visibleCount; i++) {
+      const base = rest[i % rest.length];
+      const cycle = Math.floor(i / rest.length);
       items.push({ ...base, id: `${base.id}-${cycle}` });
     }
     return items;
-  }, [baseItems, visibleCount]);
+  }, [baseItems, pinnedItems, visibleCount]);
 
   const selectedItem = useMemo(
     () =>
@@ -108,12 +122,28 @@ export default function GalleryGrid() {
     setExpandedId(null);
   }, []);
 
-  const handleCategoryChange = useCallback((cat: string) => {
-    setActiveCategory(cat);
+  const applyCategories = useCallback((update: (prev: string[]) => string[]) => {
+    setActiveCategories(update);
     setSelectedId(null);
     setExpandedId(null);
     setVisibleCount(INITIAL_BATCH);
   }, []);
+
+  const handleCategoryToggle = useCallback(
+    (cat: string) =>
+      applyCategories((prev) =>
+        prev.includes(cat) ? prev.filter((c) => c !== cat) : [...prev, cat]
+      ),
+    [applyCategories]
+  );
+
+  const handleCategoryClear = useCallback(() => applyCategories(() => []), [applyCategories]);
+
+  // A card's title pill adds its category to the filter (never removes it).
+  const handleCategoryAdd = useCallback(
+    (cat: string) => applyCategories((prev) => (prev.includes(cat) ? prev : [...prev, cat])),
+    [applyCategories]
+  );
 
   const handleYearChange = useCallback((year: string) => {
     setActiveYear(year);
@@ -163,8 +193,9 @@ export default function GalleryGrid() {
         <GalleryHero
           categories={categories}
           years={years}
-          activeCategory={activeCategory}
-          onCategoryChange={handleCategoryChange}
+          activeCategories={activeCategories}
+          onCategoryToggle={handleCategoryToggle}
+          onCategoryClear={handleCategoryClear}
           activeYear={activeYear}
           onYearChange={handleYearChange}
           selectedItem={selectedItem}
@@ -193,9 +224,11 @@ export default function GalleryGrid() {
                   item={item}
                   index={index}
                   isExpanded={expandedId === item.id}
+                  isPinned={index < pinnedItems.length}
                   onExpand={handleExpand}
                   onCollapse={handleCollapse}
                   onView={handleView}
+                  onCategoryClick={handleCategoryAdd}
                 />
               ))}
             </AnimatePresence>

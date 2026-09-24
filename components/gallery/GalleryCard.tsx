@@ -3,7 +3,7 @@
 import { memo, useCallback, useMemo, useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Download, Eye, RotateCw, Share2, X } from "lucide-react";
+import { Download, Eye, Pin, RotateCw, Share2, X } from "lucide-react";
 import { Component as LumaSpin } from "@/components/ui/luma-spin";
 import type { GalleryItem } from "./types";
 
@@ -11,9 +11,11 @@ interface GalleryCardProps {
   item: GalleryItem;
   index: number;
   isExpanded: boolean;
+  isPinned?: boolean;
   onExpand: (item: GalleryItem) => void;
   onCollapse: () => void;
   onView: (item: GalleryItem) => void;
+  onCategoryClick: (category: string) => void;
 }
 
 // Curated display ratios cycled by position so the masonry always shows real
@@ -21,7 +23,7 @@ interface GalleryCardProps {
 // (most of this gallery's photos share the same 3:2 ratio).
 const DISPLAY_RATIOS = [4 / 5, 1, 3 / 4, 4 / 3, 3 / 5, 1, 4 / 5, 5 / 4, 3 / 4];
 
-function GalleryCard({ item, index, isExpanded, onExpand, onCollapse, onView }: GalleryCardProps) {
+function GalleryCard({ item, index, isExpanded, isPinned = false, onExpand, onCollapse, onView, onCategoryClick }: GalleryCardProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [expandedImageLoaded, setExpandedImageLoaded] = useState(false);
@@ -118,6 +120,14 @@ function GalleryCard({ item, index, isExpanded, onExpand, onCollapse, onView }: 
       onCollapse();
     },
     [onCollapse]
+  );
+
+  const handleTitleClick = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+      onCategoryClick(item.category);
+    },
+    [item.category, onCategoryClick]
   );
 
   const handleRotate = useCallback((e: React.MouseEvent) => {
@@ -247,11 +257,16 @@ function GalleryCard({ item, index, isExpanded, onExpand, onCollapse, onView }: 
               </div>
             </div>
           )}
-          <div className="absolute top-[14px] left-[14px] max-w-[calc(100%-70px)] w-fit bg-black/50 rounded-full px-4 py-1.5">
+          <button
+            type="button"
+            onClick={handleTitleClick}
+            aria-label={`Show all ${item.title}`}
+            className="absolute top-[14px] left-[14px] max-w-[calc(100%-70px)] w-fit bg-black/50 hover:bg-black/70 transition-colors rounded-full px-4 py-1.5 cursor-pointer z-10"
+          >
             <span className="text-white text-[14px] font-(family-name:--font-family) font-medium leading-5 truncate block drop-shadow-md">
               {item.title}
             </span>
-          </div>
+          </button>
           <div className="absolute bg-black/90 bottom-0 left-0 right-0 flex items-center justify-evenly gap-7 sm:gap-6 py-5 sm:py-5">
               <button
                 type="button"
@@ -306,6 +321,23 @@ function GalleryCard({ item, index, isExpanded, onExpand, onCollapse, onView }: 
             }`}
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, 20vw"
           />
+
+          {isPinned && (
+            <div className="absolute top-2 left-2 z-10 group/pin">
+              <span
+                aria-label="Pinned image"
+                className="w-7 h-7 flex items-center justify-center rounded-full bg-black/70 text-white shadow-sm"
+              >
+                <Pin className="w-3.5 h-3.5 fill-current" strokeWidth={2} />
+              </span>
+              <span
+                role="tooltip"
+                className="pointer-events-none absolute top-full left-0 mt-1.5 w-max max-w-[200px] bg-black text-white text-[11px] leading-4 px-2.5 py-1.5 opacity-0 -translate-y-1 group-hover/pin:opacity-100 group-hover/pin:translate-y-0 transition-all duration-150"
+              >
+                Featured pick — pinned to the top by our team
+              </span>
+            </div>
+          )}
 
           <div className="absolute top-2 right-2 z-10">
             <button

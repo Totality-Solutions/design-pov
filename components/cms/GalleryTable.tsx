@@ -3,6 +3,7 @@
 import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { Pin } from "lucide-react";
 import { useToast } from "./ToastProvider";
 
 type GalleryRow = {
@@ -13,6 +14,7 @@ type GalleryRow = {
   year: number;
   sort_order: number;
   active: boolean;
+  pinned_at: string | null;
   created_at: string;
 };
 
@@ -24,6 +26,7 @@ export default function GalleryTable({ initialData }: { initialData: GalleryRow[
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [deleting, setDeleting] = useState<string | null>(null);
   const [toggling, setToggling] = useState<string | null>(null);
+  const [pinning, setPinning] = useState<string | null>(null);
 
   useEffect(() => setRows(initialData), [initialData]);
 
@@ -73,7 +76,25 @@ export default function GalleryTable({ initialData }: { initialData: GalleryRow[
     }
   }
 
+  async function togglePinned(row: GalleryRow) {
+    const pinned_at = row.pinned_at ? null : new Date().toISOString();
+    setPinning(row.id);
+    const res = await fetch(`/api/cms/gallery/${row.id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ pinned_at }),
+    });
+    setPinning(null);
+    if (res.ok) {
+      setRows((prev) => prev.map((r) => (r.id === row.id ? { ...r, pinned_at } : r)));
+      showSuccess(pinned_at ? "Image pinned to top of gallery." : "Image unpinned.");
+    } else {
+      showError("Couldn't update this image. Please try again.");
+    }
+  }
+
   const active = rows.filter((r) => r.active).length;
+  const pinned = rows.filter((r) => r.pinned_at).length;
 
   return (
     <div>
@@ -82,6 +103,7 @@ export default function GalleryTable({ initialData }: { initialData: GalleryRow[
         {[
           { label: "Total", value: rows.length },
           { label: "Active", value: active },
+          { label: "Pinned", value: pinned },
           { label: "Years", value: years.length },
           { label: "Categories", value: categories.length },
         ].map((s) => (
@@ -127,7 +149,7 @@ export default function GalleryTable({ initialData }: { initialData: GalleryRow[
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-black/10 bg-[#fafafa]">
-              <th className="text-left px-5 py-3 text-[10px] uppercase tracking-widest text-gray-400 font-normal w-16">Image</th>
+              <th className="text-left px-5 py-3 text-[10px] uppercase tracking-widest text-gray-400 font-normal w-28">Image</th>
               <th className="text-left px-5 py-3 text-[10px] uppercase tracking-widest text-gray-400 font-normal">Title</th>
               <th className="text-left px-5 py-3 text-[10px] uppercase tracking-widest text-gray-400 font-normal">Category</th>
               <th className="text-left px-5 py-3 text-[10px] uppercase tracking-widest text-gray-400 font-normal w-20">Year</th>
@@ -148,12 +170,36 @@ export default function GalleryTable({ initialData }: { initialData: GalleryRow[
             {filtered.map((row) => (
               <tr key={row.id} className="border-b border-black/5 hover:bg-gray-50/60 transition-colors">
                 <td className="px-5 py-3">
-                  <div className="relative w-12 h-10 bg-gray-100 overflow-hidden">
-                    {row.image_src ? (
-                      <Image src={row.image_src} alt={row.title} fill className="object-cover" sizes="48px" />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-gray-300 text-xs">—</div>
-                    )}
+                  <div className="flex items-center gap-3">
+                    <div className="relative group">
+                      <button
+                        onClick={() => togglePinned(row)}
+                        disabled={pinning === row.id}
+                        aria-label={row.pinned_at ? "Unpin image" : "Pin image"}
+                        className={`w-7 h-7 flex items-center justify-center border transition-colors cursor-pointer disabled:opacity-40 ${
+                          row.pinned_at
+                            ? "bg-black text-white border-black"
+                            : "border-black/15 text-gray-300 hover:border-black hover:text-black"
+                        }`}
+                      >
+                        <Pin className={`w-3.5 h-3.5 ${row.pinned_at ? "fill-current" : ""}`} strokeWidth={2} />
+                      </button>
+                      <span
+                        role="tooltip"
+                        className="pointer-events-none absolute bottom-full left-0 mb-2 z-20 whitespace-nowrap bg-black text-white text-[11px] px-2.5 py-1.5 opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-150"
+                      >
+                        {row.pinned_at
+                          ? "Pinned to top of gallery (All tab) — click to unpin"
+                          : "Pin to top of gallery (All tab)"}
+                      </span>
+                    </div>
+                    <div className="relative w-12 h-10 bg-gray-100 overflow-hidden">
+                      {row.image_src ? (
+                        <Image src={row.image_src} alt={row.title} fill className="object-cover" sizes="48px" />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-gray-300 text-xs">—</div>
+                      )}
+                    </div>
                   </div>
                 </td>
                 <td className="px-5 py-3">

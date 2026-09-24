@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic";
 async function getGalleryItems() {
   const { data, error } = await createServerClient()
     .from("gallery_items")
-    .select("id, title, image_src, category, year, sort_order, active, created_at")
+    .select("id, title, image_src, category, year, sort_order, active, pinned_at, created_at")
     .order("year", { ascending: false })
     .order("sort_order", { ascending: true });
 

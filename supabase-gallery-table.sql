@@ -26,3 +26,7 @@ CREATE POLICY "Service role has full access"
   ON gallery_items FOR ALL
   USING (true)
   WITH CHECK (true);
+
+-- Pinning: non-null = pinned to the top of the gallery's "All" year tab,
+-- ordered by when it was pinned (earliest first). Safe to re-run.
+ALTER TABLE gallery_items ADD COLUMN IF NOT EXISTS pinned_at timestamp with time zone;

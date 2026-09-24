@@ -10,6 +10,7 @@ export interface GalleryItemRow {
   year: number;
   sort_order: number;
   active: boolean;
+  pinned_at: string | null;
 }
 
 // image_src is already a ready-to-use value (a full CDN URL for new uploads,
@@ -24,6 +25,7 @@ export function normalizeGalleryItem(row: GalleryItemRow): GalleryItem {
     imageHeight: row.image_height ?? undefined,
     category: row.category,
     year: row.year,
+    pinnedAt: row.pinned_at ?? undefined,
   };
 }
 

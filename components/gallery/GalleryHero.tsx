@@ -9,8 +9,9 @@ import GallerySubmissionForm from "./GallerySubmissionForm";
 interface GalleryHeroProps {
   categories: GalleryCategory[];
   years: GalleryYear[];
-  activeCategory: string;
-  onCategoryChange: (category: string) => void;
+  activeCategories: string[];
+  onCategoryToggle: (category: string) => void;
+  onCategoryClear: () => void;
   activeYear: string;
   onYearChange: (year: string) => void;
   selectedItem?: GalleryItem | null;
@@ -24,8 +25,9 @@ interface GalleryHeroProps {
 export default function GalleryHero({
   categories,
   years,
-  activeCategory,
-  onCategoryChange,
+  activeCategories,
+  onCategoryToggle,
+  onCategoryClear,
   activeYear,
   onYearChange,
   isFormOpen,
@@ -81,7 +83,7 @@ export default function GalleryHero({
               ref={filterButtonRef}
               onClick={() => setFilterOpen((prev) => !prev)}
               className={`w-8 h-8 flex items-center justify-center border transition-colors cursor-pointer ${
-                activeCategory !== "all" || filterOpen
+                activeCategories.length > 0 || filterOpen
                   ? "bg-white text-black border-white"
                   : "border-white/20 text-white/60 hover:border-white hover:text-white"
               }`}
@@ -93,24 +95,49 @@ export default function GalleryHero({
             {filterOpen && (
               <div
                 ref={filterRef}
-                className="absolute bottom-full right-0 mb-2 sm:bottom-auto sm:top-full sm:mb-0 sm:mt-2 z-20 bg-white border border-gray-200 shadow-lg min-w-[160px] py-1"
+                className="absolute bottom-full right-0 mb-2 sm:bottom-auto sm:top-full sm:mb-0 sm:mt-2 z-20 bg-white border border-gray-200 shadow-lg min-w-[200px] py-1"
               >
-                {categories.map((cat) => (
+                <div className="flex items-stretch border-b border-gray-200">
                   <button
-                    key={cat.id}
-                    onClick={() => {
-                      onCategoryChange(cat.id);
-                      setFilterOpen(false);
-                    }}
-                    className={`w-full text-left px-4 py-2.5 text-sm font-(family-name:--font-family) transition-colors cursor-pointer ${
-                      activeCategory === cat.id
+                    onClick={onCategoryClear}
+                    className={`flex-1 text-left px-4 py-2.5 text-sm font-(family-name:--font-family) transition-colors cursor-pointer ${
+                      activeCategories.length === 0
                         ? "bg-black text-white"
                         : "text-black hover:bg-gray-100"
                     }`}
                   >
-                    {cat.label}
+                    All
                   </button>
-                ))}
+                  <button
+                    onClick={onCategoryClear}
+                    disabled={activeCategories.length === 0}
+                    className="px-4 py-2.5 text-sm font-(family-name:--font-family) text-black underline underline-offset-2 hover:bg-gray-100 transition-colors cursor-pointer disabled:text-gray-300 disabled:no-underline disabled:cursor-default disabled:hover:bg-transparent"
+                  >
+                    Clear
+                  </button>
+                </div>
+                {categories
+                  .filter((cat) => cat.id !== "all")
+                  .map((cat) => {
+                    const isActive = activeCategories.includes(cat.id);
+                    return (
+                      <button
+                        key={cat.id}
+                        onClick={() => onCategoryToggle(cat.id)}
+                        aria-pressed={isActive}
+                        className={`w-full flex items-center justify-between gap-3 text-left px-4 py-2.5 text-sm font-(family-name:--font-family) transition-colors cursor-pointer ${
+                          isActive
+                            ? "bg-black text-white"
+                            : "text-black hover:bg-gray-100"
+                        }`}
+                      >
+                        {cat.label}
+                        {isActive && (
+                          <X className="w-3.5 h-3.5 shrink-0" strokeWidth={2} aria-label={`Remove ${cat.label}`} />
+                        )}
+                      </button>
+                    );
+                  })}
               </div>
             )}
           </div>
