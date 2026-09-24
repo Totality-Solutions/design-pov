@@ -9,6 +9,7 @@ export interface GalleryItem {
   category: string;
   year?: number;
   pinnedAt?: string;
+  likeCount?: number;
 }
 
 export interface GalleryCategory {

@@ -11,6 +11,7 @@ export interface GalleryItemRow {
   sort_order: number;
   active: boolean;
   pinned_at: string | null;
+  like_count: number | null;
 }
 
 // image_src is already a ready-to-use value (a full CDN URL for new uploads,
@@ -26,7 +27,24 @@ export function normalizeGalleryItem(row: GalleryItemRow): GalleryItem {
     category: row.category,
     year: row.year,
     pinnedAt: row.pinned_at ?? undefined,
+    likeCount: row.like_count ?? 0,
   };
+}
+
+export async function getLikedGalleryIds(): Promise<string[]> {
+  const res = await fetch("/api/gallery/likes", { cache: "no-store" });
+  if (!res.ok) return [];
+  const { likedIds } = await res.json();
+  return likedIds as string[];
+}
+
+export async function setGalleryLike(
+  id: string,
+  liked: boolean
+): Promise<{ liked: boolean; likeCount: number } | null> {
+  const res = await fetch(`/api/gallery/${id}/like`, { method: liked ? "POST" : "DELETE" });
+  if (!res.ok) return null;
+  return res.json();
 }
 
 export async function getGalleryItems(): Promise<GalleryItem[]> {

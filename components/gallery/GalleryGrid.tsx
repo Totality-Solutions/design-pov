@@ -2,7 +2,13 @@
 
 import { useState, useMemo, useCallback, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { getGalleryItems, deriveCategories, deriveYears } from "@/lib/gallery";
+import {
+  getGalleryItems,
+  getLikedGalleryIds,
+  setGalleryLike,
+  deriveCategories,
+  deriveYears,
+} from "@/lib/gallery";
 import GalleryCard from "./GalleryCard";
 import GalleryHero from "./GalleryHero";
 import Lightbox from "./Lightbox";
@@ -12,6 +18,12 @@ import type { GalleryItem } from "./types";
 
 const INITIAL_BATCH = 12;
 const LOAD_BATCH = 12;
+
+// displayItems suffix ids with "-<cycle>" for the infinite scroll; strip it
+// to get the database id back.
+function sourceId(displayId: string) {
+  return displayId.slice(0, displayId.lastIndexOf("-"));
+}
 
 export default function GalleryGrid() {
   // Empty array means "All" — no category filter applied.
@@ -24,12 +36,25 @@ export default function GalleryGrid() {
   const [shuffledGallery, setShuffledGallery] = useState<GalleryItem[]>([]);
   const [visibleCount, setVisibleCount] = useState(INITIAL_BATCH);
   const [toast, setToast] = useState<ToastData | null>(null);
+  const [likedIds, setLikedIds] = useState<Set<string>>(() => new Set());
+  const [showLiked, setShowLiked] = useState(false);
+  // Counts updated in this session, keyed by source id; falls back to the
+  // count loaded with the gallery. Kept separate from galleryItems so a like
+  // doesn't trigger a reshuffle.
+  const [likeCounts, setLikeCounts] = useState<Record<string, number>>({});
+  const likedIdsRef = useRef(likedIds);
+  const pendingLikesRef = useRef(new Set<string>());
   const sentinelRef = useRef<HTMLDivElement>(null);
   const toastIdRef = useRef(0);
 
   useEffect(() => {
     getGalleryItems().then(setGalleryItems);
+    getLikedGalleryIds().then((ids) => setLikedIds(new Set(ids)));
   }, []);
+
+  useEffect(() => {
+    likedIdsRef.current = likedIds;
+  }, [likedIds]);
 
   useEffect(() => {
     if (galleryItems.length === 0) return;
@@ -63,21 +88,23 @@ export default function GalleryGrid() {
 
   const baseItems = useMemo(() => {
     const source = shuffledGallery.length > 0 ? shuffledGallery : galleryItems;
+    // The Liked view shows every liked image, ignoring year/category filters.
+    if (showLiked) return source.filter((item) => likedIds.has(item.id));
     return source.filter(
       (item) =>
         (activeCategories.length === 0 || activeCategories.includes(item.category)) &&
         (activeYear === "all" || item.year?.toString() === activeYear)
     );
-  }, [activeCategories, activeYear, shuffledGallery]);
+  }, [activeCategories, activeYear, shuffledGallery, showLiked, likedIds]);
 
   // Pinned items lead the "All" year tab (in the order they were pinned);
-  // individual year tabs ignore pinning and keep the shuffled order.
+  // individual year tabs and the Liked view ignore pinning.
   const pinnedItems = useMemo(() => {
-    if (activeYear !== "all") return [];
+    if (activeYear !== "all" || showLiked) return [];
     return baseItems
       .filter((item) => item.pinnedAt)
       .sort((a, b) => a.pinnedAt!.localeCompare(b.pinnedAt!));
-  }, [baseItems, activeYear]);
+  }, [baseItems, activeYear, showLiked]);
 
   // Reveals items in small batches as the user scrolls (see the
   // IntersectionObserver above) instead of rendering the whole gallery at
@@ -85,6 +112,10 @@ export default function GalleryGrid() {
   // scroll feeling infinite.
   const displayItems = useMemo(() => {
     if (baseItems.length === 0) return [];
+    // A personal list shouldn't loop — show each liked image once.
+    if (showLiked) {
+      return baseItems.slice(0, visibleCount).map((item) => ({ ...item, id: `${item.id}-0` }));
+    }
     const rest = pinnedItems.length > 0 ? baseItems.filter((item) => !item.pinnedAt) : baseItems;
     const items: GalleryItem[] = pinnedItems
       .slice(0, visibleCount)
@@ -96,7 +127,7 @@ export default function GalleryGrid() {
       items.push({ ...base, id: `${base.id}-${cycle}` });
     }
     return items;
-  }, [baseItems, pinnedItems, visibleCount]);
+  }, [baseItems, pinnedItems, visibleCount, showLiked]);
 
   const selectedItem = useMemo(
     () =>
@@ -122,8 +153,16 @@ export default function GalleryGrid() {
     setExpandedId(null);
   }, []);
 
+  const handleToggleLikedView = useCallback(() => {
+    setShowLiked((prev) => !prev);
+    setSelectedId(null);
+    setExpandedId(null);
+    setVisibleCount(INITIAL_BATCH);
+  }, []);
+
   const applyCategories = useCallback((update: (prev: string[]) => string[]) => {
     setActiveCategories(update);
+    setShowLiked(false);
     setSelectedId(null);
     setExpandedId(null);
     setVisibleCount(INITIAL_BATCH);
@@ -147,6 +186,7 @@ export default function GalleryGrid() {
 
   const handleYearChange = useCallback((year: string) => {
     setActiveYear(year);
+    setShowLiked(false);
     setSelectedId(null);
     setExpandedId(null);
     setVisibleCount(INITIAL_BATCH);
@@ -183,6 +223,47 @@ export default function GalleryGrid() {
     setToast((prev) => (prev?.id === id ? null : prev));
   }, []);
 
+  // Optimistic: flip the heart and count immediately, then reconcile with
+  // the server's count, or roll back if the request fails.
+  const handleToggleLike = useCallback(
+    async (item: GalleryItem) => {
+      const id = sourceId(item.id);
+      if (pendingLikesRef.current.has(id)) return;
+      pendingLikesRef.current.add(id);
+
+      const wasLiked = likedIdsRef.current.has(id);
+      const setLiked = (liked: boolean) =>
+        setLikedIds((prev) => {
+          const next = new Set(prev);
+          if (liked) next.add(id);
+          else next.delete(id);
+          return next;
+        });
+
+      const delta = wasLiked ? -1 : 1;
+      const applyDelta = (d: number) =>
+        setLikeCounts((prev) => ({
+          ...prev,
+          [id]: Math.max((prev[id] ?? item.likeCount ?? 0) + d, 0),
+        }));
+
+      setLiked(!wasLiked);
+      applyDelta(delta);
+
+      const result = await setGalleryLike(id, !wasLiked);
+      pendingLikesRef.current.delete(id);
+
+      if (result) {
+        setLikeCounts((prev) => ({ ...prev, [id]: result.likeCount }));
+      } else {
+        setLiked(wasLiked);
+        applyDelta(-delta);
+        handleFormError("Couldn't save your like. Please try again.");
+      }
+    },
+    [handleFormError]
+  );
+
   return (
     <>
       <motion.div
@@ -196,6 +277,9 @@ export default function GalleryGrid() {
           activeCategories={activeCategories}
           onCategoryToggle={handleCategoryToggle}
           onCategoryClear={handleCategoryClear}
+          showLiked={showLiked}
+          likedCount={likedIds.size}
+          onToggleLiked={handleToggleLikedView}
           activeYear={activeYear}
           onYearChange={handleYearChange}
           selectedItem={selectedItem}
@@ -225,6 +309,9 @@ export default function GalleryGrid() {
                   index={index}
                   isExpanded={expandedId === item.id}
                   isPinned={index < pinnedItems.length}
+                  isLiked={likedIds.has(sourceId(item.id))}
+                  likeCount={likeCounts[sourceId(item.id)] ?? item.likeCount ?? 0}
+                  onToggleLike={handleToggleLike}
                   onExpand={handleExpand}
                   onCollapse={handleCollapse}
                   onView={handleView}
@@ -233,6 +320,23 @@ export default function GalleryGrid() {
               ))}
             </AnimatePresence>
           </motion.div>
+          {showLiked && baseItems.length === 0 && (
+            <div className="py-24 flex flex-col items-center text-center gap-3">
+              <p className="text-[15px] font-(family-name:--font-family) font-medium text-black">
+                No liked images yet
+              </p>
+              <p className="text-[13px] font-(family-name:--font-family) text-black/50 max-w-[280px]">
+                Tap the heart on any image to save it here.
+              </p>
+              <button
+                type="button"
+                onClick={handleToggleLikedView}
+                className="mt-2 px-4 py-2 text-[13px] font-(family-name:--font-family) bg-black text-white hover:bg-black/80 transition-colors cursor-pointer"
+              >
+                Browse gallery
+              </button>
+            </div>
+          )}
           <div ref={sentinelRef} className="h-px w-full" />
         </div>
       </motion.div>

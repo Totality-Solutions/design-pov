@@ -15,6 +15,7 @@ type GalleryRow = {
   sort_order: number;
   active: boolean;
   pinned_at: string | null;
+  like_count: number | null;
   created_at: string;
 };
 
@@ -104,6 +105,7 @@ export default function GalleryTable({ initialData }: { initialData: GalleryRow[
           { label: "Total", value: rows.length },
           { label: "Active", value: active },
           { label: "Pinned", value: pinned },
+          { label: "Likes", value: rows.reduce((sum, r) => sum + (r.like_count ?? 0), 0) },
           { label: "Years", value: years.length },
           { label: "Categories", value: categories.length },
         ].map((s) => (
@@ -153,6 +155,7 @@ export default function GalleryTable({ initialData }: { initialData: GalleryRow[
               <th className="text-left px-5 py-3 text-[10px] uppercase tracking-widest text-gray-400 font-normal">Title</th>
               <th className="text-left px-5 py-3 text-[10px] uppercase tracking-widest text-gray-400 font-normal">Category</th>
               <th className="text-left px-5 py-3 text-[10px] uppercase tracking-widest text-gray-400 font-normal w-20">Year</th>
+              <th className="text-left px-5 py-3 text-[10px] uppercase tracking-widest text-gray-400 font-normal w-20">Likes</th>
               <th className="text-left px-5 py-3 text-[10px] uppercase tracking-widest text-gray-400 font-normal w-20">Status</th>
               <th className="px-5 py-3 w-28" />
             </tr>
@@ -160,7 +163,7 @@ export default function GalleryTable({ initialData }: { initialData: GalleryRow[
           <tbody>
             {filtered.length === 0 && (
               <tr>
-                <td colSpan={6} className="px-5 py-10 text-center text-sm text-gray-400">
+                <td colSpan={7} className="px-5 py-10 text-center text-sm text-gray-400">
                   {search || yearFilter !== "all" || categoryFilter !== "all"
                     ? "No images match your filters."
                     : "No images yet."}
@@ -207,6 +210,7 @@ export default function GalleryTable({ initialData }: { initialData: GalleryRow[
                 </td>
                 <td className="px-5 py-3 text-gray-500">{row.category}</td>
                 <td className="px-5 py-3 text-gray-500 tabular-nums">{row.year}</td>
+                <td className="px-5 py-3 text-gray-500 tabular-nums">{row.like_count ?? 0}</td>
                 <td className="px-5 py-3">
                   <button
                     onClick={() => toggleActive(row)}

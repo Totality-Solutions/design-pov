@@ -3,7 +3,7 @@
 import { memo, useCallback, useMemo, useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Download, Eye, Pin, RotateCw, Share2, X } from "lucide-react";
+import { Download, Eye, Heart, Pin, RotateCw, Share2, X } from "lucide-react";
 import { Component as LumaSpin } from "@/components/ui/luma-spin";
 import type { GalleryItem } from "./types";
 
@@ -12,10 +12,13 @@ interface GalleryCardProps {
   index: number;
   isExpanded: boolean;
   isPinned?: boolean;
+  isLiked: boolean;
+  likeCount: number;
   onExpand: (item: GalleryItem) => void;
   onCollapse: () => void;
   onView: (item: GalleryItem) => void;
   onCategoryClick: (category: string) => void;
+  onToggleLike: (item: GalleryItem) => void;
 }
 
 // Curated display ratios cycled by position so the masonry always shows real
@@ -23,7 +26,19 @@ interface GalleryCardProps {
 // (most of this gallery's photos share the same 3:2 ratio).
 const DISPLAY_RATIOS = [4 / 5, 1, 3 / 4, 4 / 3, 3 / 5, 1, 4 / 5, 5 / 4, 3 / 4];
 
-function GalleryCard({ item, index, isExpanded, isPinned = false, onExpand, onCollapse, onView, onCategoryClick }: GalleryCardProps) {
+function GalleryCard({
+  item,
+  index,
+  isExpanded,
+  isPinned = false,
+  isLiked,
+  likeCount,
+  onExpand,
+  onCollapse,
+  onView,
+  onCategoryClick,
+  onToggleLike,
+}: GalleryCardProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [expandedImageLoaded, setExpandedImageLoaded] = useState(false);
@@ -128,6 +143,14 @@ function GalleryCard({ item, index, isExpanded, isPinned = false, onExpand, onCo
       onCategoryClick(item.category);
     },
     [item.category, onCategoryClick]
+  );
+
+  const handleLike = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+      onToggleLike(item);
+    },
+    [item, onToggleLike]
   );
 
   const handleRotate = useCallback((e: React.MouseEvent) => {
@@ -270,6 +293,19 @@ function GalleryCard({ item, index, isExpanded, isPinned = false, onExpand, onCo
           <div className="absolute bg-black/90 bottom-0 left-0 right-0 flex items-center justify-evenly gap-7 sm:gap-6 py-5 sm:py-5">
               <button
                 type="button"
+                onClick={handleLike}
+                aria-pressed={isLiked}
+                aria-label={isLiked ? "Unlike image" : "Like image"}
+                className="flex items-center gap-1.5 text-white hover:opacity-80 transition cursor-pointer"
+              >
+                <Heart
+                  className={`w-5 h-5 transition-colors ${isLiked ? "fill-red-500 text-red-500" : ""}`}
+                  strokeWidth={2}
+                />
+                {likeCount > 0 && <span className="text-[13px] tabular-nums">{likeCount}</span>}
+              </button>
+              <button
+                type="button"
                 onClick={handleRotate}
                 className="text-white hover:opacity-80 transition cursor-pointer"
                 aria-label="Rotate image"
@@ -321,6 +357,22 @@ function GalleryCard({ item, index, isExpanded, isPinned = false, onExpand, onCo
             }`}
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, 20vw"
           />
+
+          <button
+            type="button"
+            onClick={handleLike}
+            aria-pressed={isLiked}
+            aria-label={isLiked ? "Unlike image" : "Like image"}
+            className="absolute bottom-2 right-2 z-10 h-7 min-w-7 px-2 flex items-center justify-center gap-1 rounded-full bg-white/90 hover:bg-white shadow-sm cursor-pointer transition-colors"
+          >
+            <Heart
+              className={`w-3.5 h-3.5 transition-colors ${isLiked ? "fill-red-500 text-red-500" : "text-black"}`}
+              strokeWidth={2}
+            />
+            {likeCount > 0 && (
+              <span className="text-[12px] leading-none font-medium text-black tabular-nums">{likeCount}</span>
+            )}
+          </button>
 
           {isPinned && (
             <div className="absolute top-2 left-2 z-10 group/pin">
