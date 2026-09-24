@@ -321,7 +321,7 @@ const Footer = () => {
                     rel="noopener noreferrer"
                     className="hover:text-neutral-400 transition"
                   >
-                    Developed by Totality Solutions
+                    Built by Totality Solutions
                   </a>
                 </div>
               </div>
