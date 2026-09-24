@@ -85,6 +85,10 @@ export const NAV_DATA: Record<string, SubmenuContent> = {
       { label: "Work With Us", href: "/magazine/jobs" },
     ],
   },
+  Gallery: {
+    mainHref: "/gallery",
+    filetype: "none",
+  },
 };
 
 // Derived list of labels in insertion order
