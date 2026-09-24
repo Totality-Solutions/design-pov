@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { Filter, Plus, X } from "lucide-react";
+import { Filter, Heart, Plus, X } from "lucide-react";
 import type { GalleryItem, GalleryCategory, GalleryYear } from "./types";
 import GallerySubmissionForm from "./GallerySubmissionForm";
 
@@ -12,6 +12,9 @@ interface GalleryHeroProps {
   activeCategories: string[];
   onCategoryToggle: (category: string) => void;
   onCategoryClear: () => void;
+  showLiked: boolean;
+  likedCount: number;
+  onToggleLiked: () => void;
   activeYear: string;
   onYearChange: (year: string) => void;
   selectedItem?: GalleryItem | null;
@@ -28,6 +31,9 @@ export default function GalleryHero({
   activeCategories,
   onCategoryToggle,
   onCategoryClear,
+  showLiked,
+  likedCount,
+  onToggleLiked,
   activeYear,
   onYearChange,
   isFormOpen,
@@ -68,7 +74,7 @@ export default function GalleryHero({
             key={year.id}
             onClick={() => onYearChange(year.id)}
             className={`pb-1 text-[14px] font-(family-name:--font-family) leading-5 whitespace-nowrap cursor-pointer transition-all duration-200 border-b-2 ${
-              activeYear === year.id
+              activeYear === year.id && !showLiked
                 ? "text-white border-white font-medium"
                 : "text-white/50 border-transparent"
             }`}
@@ -77,13 +83,13 @@ export default function GalleryHero({
           </button>
         ))}
 
-        <div className="ml-auto flex items-center gap-2 shrink-0 pl-4">
+        <div className="ml-auto flex items-center gap-6 shrink-0 pl-4">
           <div className="relative">
             <button
               ref={filterButtonRef}
               onClick={() => setFilterOpen((prev) => !prev)}
               className={`w-8 h-8 flex items-center justify-center border transition-colors cursor-pointer ${
-                activeCategories.length > 0 || filterOpen
+                (activeCategories.length > 0 && !showLiked) || filterOpen
                   ? "bg-white text-black border-white"
                   : "border-white/20 text-white/60 hover:border-white hover:text-white"
               }`}
@@ -141,6 +147,36 @@ export default function GalleryHero({
               </div>
             )}
           </div>
+
+          <button
+            onClick={onToggleLiked}
+            aria-pressed={showLiked}
+            aria-label={showLiked ? "Show all images" : "Show liked images"}
+            title={showLiked ? "Show all images" : "Your liked images"}
+            className={`relative w-8 h-8 flex items-center justify-center border transition-colors cursor-pointer ${
+              showLiked
+                ? "bg-white text-black border-white"
+                : "border-white/20 text-white/60 hover:border-white hover:text-white"
+            }`}
+          >
+            {
+              showLiked?
+              <h1 className="w-4 h-4 text-black bg-white">
+                <X className="w-4.5 h-4.5" strokeWidth={2} />
+              </h1>
+              :
+              <Heart
+                className={`w-4 h-4 ${showLiked ? "fill-red-500 text-red-500" : ""}`}
+                strokeWidth={2}
+              />
+
+            }
+            {likedCount > 0 && (
+              <span className="absolute -top-1.5 -right-1.5 min-w-4 h-4 px-1 rounded-full bg-red-500 text-white text-[10px] leading-4 font-medium text-center tabular-nums">
+                {likedCount > 99 ? "99+" : likedCount}
+              </span>
+            )}
+          </button>
 
           <button
             onClick={onToggleForm}

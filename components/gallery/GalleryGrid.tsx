@@ -97,6 +97,13 @@ export default function GalleryGrid() {
     );
   }, [activeCategories, activeYear, shuffledGallery, showLiked, likedIds]);
 
+  // likedIds can include images since hidden/deleted in the CMS; only count
+  // the ones actually shown.
+  const likedVisibleCount = useMemo(
+    () => galleryItems.filter((item) => likedIds.has(item.id)).length,
+    [galleryItems, likedIds]
+  );
+
   // Pinned items lead the "All" year tab (in the order they were pinned);
   // individual year tabs and the Liked view ignore pinning.
   const pinnedItems = useMemo(() => {
@@ -278,7 +285,7 @@ export default function GalleryGrid() {
           onCategoryToggle={handleCategoryToggle}
           onCategoryClear={handleCategoryClear}
           showLiked={showLiked}
-          likedCount={likedIds.size}
+          likedCount={likedVisibleCount}
           onToggleLiked={handleToggleLikedView}
           activeYear={activeYear}
           onYearChange={handleYearChange}

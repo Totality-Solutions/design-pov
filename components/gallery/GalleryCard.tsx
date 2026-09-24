@@ -369,9 +369,9 @@ function GalleryCard({
               className={`w-3.5 h-3.5 transition-colors ${isLiked ? "fill-red-500 text-red-500" : "text-black"}`}
               strokeWidth={2}
             />
-            {likeCount > 0 && (
+            {/* {likeCount > 0 && (
               <span className="text-[12px] leading-none font-medium text-black tabular-nums">{likeCount}</span>
-            )}
+            )} */}
           </button>
 
           {isPinned && (
