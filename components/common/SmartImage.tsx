@@ -31,6 +31,19 @@ function networkQuality(): number | undefined {
   return undefined;
 }
 
+// URL of the tiny low-quality version of an image. Exported so other
+// components can show the exact file SmartImage has already put in the
+// browser cache.
+export function placeholderSrc(src: ImageProps["src"]): string {
+  return getImageProps({
+    src,
+    alt: "",
+    width: PLACEHOLDER_WIDTH,
+    height: PLACEHOLDER_WIDTH,
+    quality: PLACEHOLDER_QUALITY,
+  }).props.src;
+}
+
 // Vector, animated and inline sources gain nothing from a raster placeholder.
 function canUsePlaceholder({ src, unoptimized, placeholder, loader }: ImageProps): boolean {
   if (unoptimized || loader || (placeholder && placeholder !== "empty")) return false;
@@ -86,14 +99,6 @@ const SmartImage = forwardRef<HTMLImageElement, ImageProps>(function SmartImage(
     return <NextImage ref={forwardedRef} {...props} />;
   }
 
-  const placeholderSrc = getImageProps({
-    src: props.src,
-    alt: "",
-    width: PLACEHOLDER_WIDTH,
-    height: PLACEHOLDER_WIDTH,
-    quality: PLACEHOLDER_QUALITY,
-  }).props.src;
-
   return (
     <NextImage
       {...rest}
@@ -103,7 +108,7 @@ const SmartImage = forwardRef<HTMLImageElement, ImageProps>(function SmartImage(
       style={
         loaded
           ? style
-          : { ...backgroundFit(className), backgroundImage: `url("${placeholderSrc}")`, ...style }
+          : { ...backgroundFit(className), backgroundImage: `url("${placeholderSrc(props.src)}")`, ...style }
       }
       onLoad={(e) => {
         setLoaded(true);

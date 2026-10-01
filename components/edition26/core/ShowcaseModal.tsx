@@ -1,15 +1,67 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import Image from "@/components/common/SmartImage";
+import Image, { placeholderSrc } from "@/components/common/SmartImage";
+import NextImage from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Component as LumaSpin } from "@/components/ui/luma-spin";
 import type { ModalData } from "@/types";
 
 interface ShowcaseModalProps {
   isOpen: boolean;
   onClose: () => void;
   data: ModalData | null;
+}
+
+// Same loading treatment as the gallery's expanded card: a tiny low-quality
+// version shows straight away with a spinner over it, then the full image
+// fades in once it has finished downloading.
+function ModalSlide({ src, alt, eager }: { src: string; alt: string; eager: boolean }) {
+  const [loaded, setLoaded] = useState(false);
+  const imgRef = useRef<HTMLImageElement>(null);
+
+  // Cached images can finish before React attaches onLoad.
+  useEffect(() => {
+    const img = imgRef.current;
+    setLoaded(!!img?.complete && img.naturalWidth > 0);
+  }, [src]);
+
+  return (
+    <>
+      {/* Plain <img> on purpose: it must request the exact URL the page's
+          cards already cached, which next/image's srcset wouldn't guarantee. */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={placeholderSrc(src)}
+        alt=""
+        aria-hidden
+        className={`absolute inset-0 w-full h-full object-contain lg:object-cover transition-opacity duration-500 ${
+          loaded ? "opacity-0" : "opacity-100"
+        }`}
+      />
+      <NextImage
+        ref={imgRef}
+        src={src}
+        alt={alt}
+        fill
+        sizes="(max-width: 1024px) 100vw, 520px"
+        loading={eager ? "eager" : "lazy"}
+        onLoad={() => setLoaded(true)}
+        onError={() => setLoaded(true)}
+        className={`object-contain lg:object-cover transition-opacity duration-500 ${
+          loaded ? "opacity-100" : "opacity-0"
+        }`}
+      />
+      {!loaded && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          <div className="scale-50 sm:scale-75">
+            <LumaSpin />
+          </div>
+        </div>
+      )}
+    </>
+  );
 }
 
 export const ShowcaseModal = ({
@@ -122,13 +174,10 @@ export const ShowcaseModal = ({
                     key={i}
                     className="relative w-full h-full flex-shrink-0"
                   >
-                    <Image
+                    <ModalSlide
                       src={img}
                       alt={`${data.label} slide ${i}`}
-                      fill
-                      sizes="(max-width: 1024px) 100vw, 520px"
-                      loading={i === 0 ? "eager" : "lazy"}
-                      className="object-contain lg:object-cover"
+                      eager={i === 0}
                     />
                   </div>
                 ))}
