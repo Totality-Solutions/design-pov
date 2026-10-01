@@ -12,7 +12,7 @@ import {
   AnimatePresence,
 } from 'framer-motion';
 
-import Image from 'next/image';
+import Image from "@/components/common/SmartImage";
 import SectionHeading from '../common/SectionHeading';
 import Link from 'next/link';
 

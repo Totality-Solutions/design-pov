@@ -1,6 +1,6 @@
 import React from 'react';
 import { cdn } from "@/lib/cdn";
-import Image from 'next/image';
+import Image from "@/components/common/SmartImage";
 import { UnderlineText } from '../../common/Underlinetext';
 
 const BrandsHero = () => {

@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import Image from "@/components/common/SmartImage";
 import { motion } from "framer-motion";
 import { Heart, Share2 } from "lucide-react";
 import type { GalleryItem } from "./types";

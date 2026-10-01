@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef, useMemo, useState, useEffect } from "react";
-import Image from "next/image";
+import Image from "@/components/common/SmartImage";
 import { useRouter } from "next/navigation";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { blogs as staticBlogs } from "@/data/magazineData";

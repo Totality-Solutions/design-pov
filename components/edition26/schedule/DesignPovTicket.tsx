@@ -1,5 +1,5 @@
 import React from 'react';
-import Image from 'next/image';
+import Image from "@/components/common/SmartImage";
 import { ExternalLink } from 'lucide-react';
 import Link from 'next/link';
 import { cdn } from '@/lib/cdn';

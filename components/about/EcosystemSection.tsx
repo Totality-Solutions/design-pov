@@ -3,7 +3,7 @@ import { cdn } from "@/lib/cdn";
 
 import React, { useState } from "react";
 import MarqueeFlow from "../common/MarqueeFlow";
-import Image from "next/image";
+import Image from "@/components/common/SmartImage";
 import Link from "next/link";
 import SectionHeading from "../common/SectionHeading";
 import CTABtn from "../common/CTABtn";

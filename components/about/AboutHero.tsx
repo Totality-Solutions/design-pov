@@ -1,6 +1,6 @@
 "use client";
 import { cdn } from "@/lib/cdn";
-import Image from "next/image";
+import Image from "@/components/common/SmartImage";
 import React, { useState, useEffect } from "react";
 
 type Slide = {

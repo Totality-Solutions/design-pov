@@ -2,7 +2,7 @@
 import { cdn } from "@/lib/cdn";
 
 import React from "react";
-import Image from "next/image";
+import Image from "@/components/common/SmartImage";
 import { MediaRenderer } from "../common/MediaRenderer";
 import CTABtn from "../common/CTABtn";
 import { UnderlineText } from "../common/Underlinetext";

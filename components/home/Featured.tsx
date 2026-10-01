@@ -2,7 +2,8 @@
 import { cdn } from "@/lib/cdn";
 
 import React, { useState, useEffect } from "react";
-import Image, { StaticImageData } from "next/image";
+import Image from "@/components/common/SmartImage";
+import type { StaticImageData } from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 
 const video1 = cdn("/temp/home/core-collective/4.mp4");

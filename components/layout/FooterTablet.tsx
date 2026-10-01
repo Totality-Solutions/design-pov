@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState, useRef } from "react";
-import Image from "next/image";
+import Image from "@/components/common/SmartImage";
 import { cdn } from "@/lib/cdn";
 import Link from "next/link";
 import {

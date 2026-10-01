@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef } from "react";
-import Image from "next/image";
+import Image from "@/components/common/SmartImage";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { cdn } from "@/lib/cdn";

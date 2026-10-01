@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import Image from "next/image";
+import Image from "@/components/common/SmartImage";
 import Link from "next/link";
 import SectionHeading from "./SectionHeading";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";

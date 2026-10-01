@@ -3,7 +3,7 @@ import { cdn } from "@/lib/cdn";
 
 import { forwardRef, useRef, useEffect } from "react";
 import { motion, MotionValue } from "framer-motion";
-import Image from "next/image";
+import Image from "@/components/common/SmartImage";
 
 
 import Link  from "next/link";

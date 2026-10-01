@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import Image from 'next/image';
+import Image from "@/components/common/SmartImage";
 import CTAStrip from '@/components/common/CTAStrip';
 import CTABtn from '../common/CTABtn';
 import SectionHeading from '../common/SectionHeading';

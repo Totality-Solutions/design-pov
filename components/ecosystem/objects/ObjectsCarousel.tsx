@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef, useState, useEffect } from "react";
-import Image from "next/image";
+import Image from "@/components/common/SmartImage";
 import dynamic from "next/dynamic";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { DesignObjectItem } from "@/types";

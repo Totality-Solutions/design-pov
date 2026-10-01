@@ -7,7 +7,7 @@ import InterviewsSection from "@/components/magazine/InterviewSection";
 import FeaturedBlogSection from "@/components/magazine/FeaturedBlogSection";
 import MagazineMediaForm from "@/components/magazine/MagazineMediaForm";
 import HomeSponsors from "@/components/home/HomeSponsors";
-import Image from "next/image";
+import Image from "@/components/common/SmartImage";
 import Link from "next/link";
 import { createServerClient } from "@/lib/supabase/server";
 import { NormalizedBlog, normalizeDbBlog } from "@/lib/blog";

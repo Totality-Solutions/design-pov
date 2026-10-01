@@ -12,7 +12,7 @@ import { ArrowUpRight, MapPin } from "lucide-react";
 
 import { Container } from "../common/Container";
 import Link from "next/link";
-import Image from "next/image";
+import Image from "@/components/common/SmartImage";
 import FooterPopup from "./FooterPopup";
 
 const navLinks = {

@@ -2,7 +2,7 @@
 import { cdn } from "@/lib/cdn";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import Image from "next/image";
+import Image from "@/components/common/SmartImage";
 
 import { Container } from "@/components/common/Container";
 import Section from "@/components/common/Section";

@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import Image from "next/image";
+import Image from "@/components/common/SmartImage";
 import { Download, Eye, RotateCw, Share2, X } from "lucide-react";
 import { Component as LumaSpin } from "@/components/ui/luma-spin";
 import type { GalleryItem } from "./types";

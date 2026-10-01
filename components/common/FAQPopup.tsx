@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect } from "react";
-import Image from "next/image";
+import Image from "@/components/common/SmartImage";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 

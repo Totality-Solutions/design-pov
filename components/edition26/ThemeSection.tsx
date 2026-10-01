@@ -3,7 +3,7 @@ import { cdn } from "@/lib/cdn";
 
 import React, { useState, useEffect } from 'react';
 import type { NextPage } from 'next';
-import Image from "next/image";
+import Image from "@/components/common/SmartImage";
 import { motion, useSpring, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 

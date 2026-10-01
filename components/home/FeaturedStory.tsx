@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import Image from "next/image";
+import Image from "@/components/common/SmartImage";
 
 // Common UI Components
 import Section from "../common/Section";

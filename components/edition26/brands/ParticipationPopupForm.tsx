@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef } from "react";
-import Image from "next/image";
+import Image from "@/components/common/SmartImage";
 import { X } from "lucide-react";
 import CTABtn from "@/components/common/CTABtn";
 import { useHubspotForm } from "@/hooks/useHubspotForm";

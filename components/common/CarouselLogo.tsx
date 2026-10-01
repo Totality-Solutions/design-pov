@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import Image from "@/components/common/SmartImage";
 import { useEffect, useRef } from "react";
 import type { StaticImageData } from "next/image";
 

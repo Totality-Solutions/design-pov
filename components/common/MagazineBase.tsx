@@ -1,7 +1,8 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import { cdn } from "@/lib/cdn";
-import Image, { StaticImageData } from "next/image";
+import Image from "@/components/common/SmartImage";
+import type { StaticImageData } from "next/image";
 import { FiChevronLeft, FiX } from "react-icons/fi";
 import CTABtn from "../common/CTABtn";
 import { advertisements } from "@/data/magazineData";

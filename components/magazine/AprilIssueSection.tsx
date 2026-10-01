@@ -2,7 +2,7 @@
 import { cdn } from "@/lib/cdn";
 
 import React, { useState } from "react";
-import Image from "next/image";
+import Image from "@/components/common/SmartImage";
 import SectionHeading from "../common/SectionHeading";
 import CTABtn from "../common/CTABtn";
 import Link from "next/link";

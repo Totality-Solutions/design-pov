@@ -2,7 +2,7 @@
 
 import { cdn } from "@/lib/cdn";
 import { useCallback, useEffect, useRef, useState } from "react";
-import Image from "next/image";
+import Image from "@/components/common/SmartImage";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Container } from "../common/Container";
 

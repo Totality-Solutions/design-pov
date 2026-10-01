@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import Image from "next/image";
+import Image from "@/components/common/SmartImage";
 import { motion } from "framer-motion";
 import CTABtn from "@/components/common/CTABtn";
 

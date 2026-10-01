@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
-import Image from "next/image";
+import Image from "@/components/common/SmartImage";
 import { FiX } from "react-icons/fi";
 import CTABtn from "./CTABtn";
 import { cdn } from "@/lib/cdn";

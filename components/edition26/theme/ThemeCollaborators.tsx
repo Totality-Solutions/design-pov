@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
+import Image from "@/components/common/SmartImage";
 import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import type { StudioItem, ModalData } from "@/types";

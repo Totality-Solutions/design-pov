@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from "react"
 import { motion, useScroll, useSpring, useTransform } from "framer-motion"
 import { Container } from "../common/Container"
 import MarqueeFlow from "../common/MarqueeFlow"
-import Image from "next/image"
+import Image from "@/components/common/SmartImage";
 import Link from "next/link"
 import { cdn } from "@/lib/cdn"
 

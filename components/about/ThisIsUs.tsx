@@ -3,7 +3,7 @@ import { cdn } from "@/lib/cdn";
 import React, { useState, useRef, useEffect } from 'react';
 import { Maximize2, Volume2, VolumeX, Play, Pause } from 'lucide-react';
 import SectionHeading from '../common/SectionHeading';
-import Image from 'next/image';
+import Image from "@/components/common/SmartImage";
 
 const ThisIsUs: React.FC = () => {
   const [isMuted, setIsMuted] = useState(true);
