@@ -63,16 +63,14 @@ export const ShowcaseModal = ({
     ...(data.additionalImages || []),
   ];
 
+  const hasPrevSlide = currentSlide > 0;
+  const hasNextSlide = currentSlide < images.length - 1;
+
   const nextSlide = () =>
-    setCurrentSlide(
-      (prev) => (prev + 1) % images.length
-    );
+    setCurrentSlide((prev) => Math.min(prev + 1, images.length - 1));
 
   const prevSlide = () =>
-    setCurrentSlide(
-      (prev) =>
-        (prev - 1 + images.length) % images.length
-    );
+    setCurrentSlide((prev) => Math.max(prev - 1, 0));
 
   return (
     <AnimatePresence mode="wait">
@@ -137,29 +135,35 @@ export const ShowcaseModal = ({
               </motion.div>
 
               <div className="absolute inset-0 flex items-center justify-between px-4 pointer-events-none">
-                <button
-                  onClick={prevSlide}
-                  className="pointer-events-auto p-2 text-white/70 hover:text-white transition-opacity"
-                >
-                  <ChevronLeft
-                    size={36}
-                    strokeWidth={1.5}
-                  />
-                </button>
+                {hasPrevSlide && (
+                  <button
+                    onClick={prevSlide}
+                    aria-label="Previous image"
+                    className="pointer-events-auto p-2 text-white/70 hover:text-white transition-opacity"
+                  >
+                    <ChevronLeft
+                      size={36}
+                      strokeWidth={1.5}
+                    />
+                  </button>
+                )}
 
-                <button
-                  onClick={nextSlide}
-                  className="pointer-events-auto p-2 text-white/70 hover:text-white transition-opacity"
-                >
-                  <ChevronRight
-                    size={36}
-                    strokeWidth={1.5}
-                  />
-                </button>
+                {hasNextSlide && (
+                  <button
+                    onClick={nextSlide}
+                    aria-label="Next image"
+                    className="pointer-events-auto p-2 text-white/70 hover:text-white transition-opacity ml-auto"
+                  >
+                    <ChevronRight
+                      size={36}
+                      strokeWidth={1.5}
+                    />
+                  </button>
+                )}
               </div>
 
               <div className="absolute bottom-6 left-0 w-full flex justify-center gap-2">
-                {images.map((_, i) => (
+                {images.length > 1 && images.map((_, i) => (
                   <button
                     key={i}
                     onClick={() =>

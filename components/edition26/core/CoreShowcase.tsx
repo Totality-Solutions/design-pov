@@ -18,13 +18,24 @@ const StatusDot = ({ isActive }: { isActive: boolean }) => (
 );
 
 function toModalData(studio: StudioItem): ModalData {
+  // Booth images come right after core_image, then the remaining core
+  // images. Booth images can repeat a core image (booth_image falls back to
+  // core_image when seeded), so drop empties and duplicates.
+  const additionalImages = [
+    studio.booth_image,
+    ...(studio.booth_additional_images ?? []),
+    ...(studio.core_additional_images ?? []),
+  ].filter(
+    (img, i, all) => !!img && img !== studio.core_image && all.indexOf(img) === i
+  );
+
   return {
     id: studio.id,
     label: studio.label,
     architects: studio.architects,
     src: studio.core_image,
     description: studio.bio,
-    additionalImages: studio.core_additional_images,
+    additionalImages,
     logo: studio.logo,
     website: studio.website,
     instagram: studio.instagram,
@@ -44,6 +55,7 @@ export const CoreShowcase = ({ studios }: { studios: StudioItem[] }) => {
       const item = studios.find(d => d.id === designerId);
       if (item) setSelectedDesigner(toModalData(item));
     }
+    console.log("Found designer:", studios);
   }, [searchParams, studios]);
 
   useEffect(() => {
