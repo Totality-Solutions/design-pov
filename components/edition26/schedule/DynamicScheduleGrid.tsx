@@ -303,7 +303,8 @@ const DynamicScheduleGrid = ({ serverEvents }: { serverEvents?: ScheduleEventRow
                         bottomKey2Width="12px"
                         bottomKey1Right="50px"
                         bottomKey2Right="15px"
-                        href={event.inviteOnlyLink}
+                        href="https://povindex.designpovindia.com/schedule"
+                        target="_blank"
                       />
                   </div>
                     )}

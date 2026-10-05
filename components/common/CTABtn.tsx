@@ -7,6 +7,7 @@ import { FiMinus, FiPlus, FiRefreshCcw, FiX } from "react-icons/fi";
 interface CTABtnProps {
   label?: string;
   href?: string;
+  target?: "_blank" | "_self";
   onClick?: () => void;
   size?: "sm" | "md" | "lg";
   width?: "fit" | "full";
@@ -37,6 +38,7 @@ interface CTABtnProps {
 export default function CTABtn({
   label,
   href,
+  target,
   onClick,
   size = "md",
   width = "fit",
@@ -190,7 +192,11 @@ export default function CTABtn({
   return (
     <Component
       {...(href
-        ? { ...commonProps, href }
+        ? {
+            ...commonProps,
+            href,
+            ...(target === "_blank" ? { target, rel: "noopener noreferrer" } : target ? { target } : {}),
+          }
         : commonProps)}
     >
       {/* TOP KEY */}
