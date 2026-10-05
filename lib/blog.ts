@@ -102,6 +102,7 @@ export function normalizeDbBlog(row: Record<string, any>): NormalizedBlog {
       value: block.type === "image" ? cdn(block.value ?? "") : (block.value ?? ""),
       ...(block.title   ? { title:   block.title   } : {}),
       ...(block.caption ? { caption: block.caption } : {}),
+      ...(block.size    ? { size:    block.size    } : {}),
     })),
   };
 }

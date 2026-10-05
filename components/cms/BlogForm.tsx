@@ -8,7 +8,15 @@ import { useToast } from "./ToastProvider";
 type TextBlock = { type: "text"; title?: string; value: string };
 type ImageBlock = { type: "image"; value: string; caption?: string };
 type QuoteBlock = { type: "quote"; value: string };
-type ContentBlock = TextBlock | ImageBlock | QuoteBlock;
+type LinkBlock = { type: "link"; title?: string; value: string };
+type HeadingBlock = { type: "heading"; value: string; size?: "lg" | "md" | "sm" };
+type ContentBlock = TextBlock | ImageBlock | QuoteBlock | LinkBlock | HeadingBlock;
+
+const HEADING_SIZES = [
+  { id: "lg", label: "Large" },
+  { id: "md", label: "Medium" },
+  { id: "sm", label: "Small" },
+] as const;
 
 type BlogFormData = {
   title: string;
@@ -120,6 +128,8 @@ export default function BlogForm({
     const block: ContentBlock =
       type === "text" ? { type: "text", title: "", value: "" } :
       type === "image" ? { type: "image", value: defaultImageFolder && !isEdit ? defaultImageFolder : "", caption: "" } :
+      type === "link" ? { type: "link", title: "", value: "" } :
+      type === "heading" ? { type: "heading", value: "", size: "md" } :
       { type: "quote", value: "" };
     setForm((f) => ({ ...f, detailed_content: [...f.detailed_content, block] }));
   }
@@ -301,6 +311,8 @@ export default function BlogForm({
                 <span className={`text-[9px] uppercase tracking-widest px-2 py-0.5 font-semibold ${
                   block.type === "text" ? "bg-blue-50 text-blue-600" :
                   block.type === "image" ? "bg-green-50 text-green-600" :
+                  block.type === "link" ? "bg-purple-50 text-purple-600" :
+                  block.type === "heading" ? "bg-gray-200 text-gray-700" :
                   "bg-orange-50 text-orange-600"
                 }`}>
                   {block.type}
@@ -350,6 +362,55 @@ export default function BlogForm({
                 </div>
               )}
 
+              {/* Heading block */}
+              {block.type === "heading" && (
+                <div className="space-y-2">
+                  <div className="flex gap-2">
+                    {HEADING_SIZES.map((s) => (
+                      <button
+                        key={s.id}
+                        type="button"
+                        onClick={() => updateBlock(i, { size: s.id })}
+                        className={`px-3 py-1 text-[10px] uppercase tracking-widest border transition-colors ${
+                          ((block as HeadingBlock).size ?? "md") === s.id
+                            ? "bg-black text-white border-black"
+                            : "border-black/20 text-gray-500 hover:border-black"
+                        }`}
+                      >
+                        {s.label}
+                      </button>
+                    ))}
+                  </div>
+                  <input
+                    value={block.value}
+                    onChange={(e) => updateBlock(i, { value: e.target.value })}
+                    className={`${input} font-semibold ${
+                      (block as HeadingBlock).size === "lg" ? "text-xl" : (block as HeadingBlock).size === "sm" ? "text-sm" : "text-base"
+                    }`}
+                    placeholder="Heading text *"
+                  />
+                </div>
+              )}
+
+              {/* Link block (reference) */}
+              {block.type === "link" && (
+                <div className="space-y-2">
+                  <input
+                    value={(block as LinkBlock).title ?? ""}
+                    onChange={(e) => updateBlock(i, { title: e.target.value })}
+                    className={input}
+                    placeholder="Link title (optional — the URL is shown if empty)"
+                  />
+                  <input
+                    inputMode="url"
+                    value={block.value}
+                    onChange={(e) => updateBlock(i, { value: e.target.value })}
+                    className={input}
+                    placeholder="https://..."
+                  />
+                </div>
+              )}
+
               {/* Quote block */}
               {block.type === "quote" && (
                 <textarea
@@ -366,9 +427,11 @@ export default function BlogForm({
 
         {/* Add block buttons */}
         <div className="flex gap-2 mt-4 flex-wrap">
+          <button type="button" onClick={() => addBlock("heading")} className={`${addBtn} bg-gray-100 border-gray-300 text-gray-700 hover:bg-gray-200`}>+ Heading Block</button>
           <button type="button" onClick={() => addBlock("text")} className={`${addBtn} bg-blue-50 border-blue-200 text-blue-600 hover:bg-blue-100`}>+ Text Block</button>
           <button type="button" onClick={() => addBlock("image")} className={`${addBtn} bg-green-50 border-green-200 text-green-600 hover:bg-green-100`}>+ Image Block</button>
           <button type="button" onClick={() => addBlock("quote")} className={`${addBtn} bg-orange-50 border-orange-200 text-orange-600 hover:bg-orange-100`}>+ Quote Block</button>
+          <button type="button" onClick={() => addBlock("link")} className={`${addBtn} bg-purple-50 border-purple-200 text-purple-600 hover:bg-purple-100`}>+ Link Block</button>
         </div>
       </Section>
 

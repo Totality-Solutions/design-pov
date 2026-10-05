@@ -13,6 +13,27 @@ import Link from "next/link";
 type Ad = { type: "ad"; id: string; image: string; link: string; aspect: string };
 type SidebarItem = NormalizedBlog | Ad;
 
+// "md" matches the existing text-block section heading so the two look alike.
+const HEADING_CLASS = {
+  lg: "text-3xl md:text-4xl mt-8",
+  md: "text-2xl mt-6",
+  sm: "text-xl mt-4",
+} as const;
+
+// Reference links come from the CMS as free text: add https:// when the
+// protocol is missing, and reject anything that isn't http(s) (e.g.
+// javascript: URLs).
+function safeHref(raw: string): string | null {
+  const value = raw.trim();
+  if (!value) return null;
+  try {
+    const url = new URL(/^[a-z][a-z0-9+.-]*:/i.test(value) ? value : `https://${value}`);
+    return url.protocol === "http:" || url.protocol === "https:" ? url.href : null;
+  } catch {
+    return null;
+  }
+}
+
 export default function MagazineBase({
   activeBlog: initialBlog,
   isInnerPage = false,
@@ -149,6 +170,36 @@ export default function MagazineBase({
                     <blockquote className="border-y border-black/10 py-8 italic text-2xl font-medium">
                       "{block.value}"
                     </blockquote>
+                  )}
+
+                  {block.type === "heading" && (() => {
+                    const size = block.size ?? "md";
+                    const Tag = size === "lg" ? "h3" : size === "sm" ? "h5" : "h4";
+                    return (
+                      <Tag className={`${HEADING_CLASS[size]} font-medium text-black tracking-tight`}>
+                        {block.value}
+                      </Tag>
+                    );
+                  })()}
+
+                  {block.type === "link" && safeHref(block.value) && (
+                    <div className="flex flex-col gap-3 -mt-4 first:mt-0">
+                      {/* Heading only above the first link in a consecutive run */}
+                      {activeBlog.detailedContent[i - 1]?.type !== "link" && (
+                        <h3 className="text-2xl md:text-2xl font-medium text-black mt-10 tracking-tight">References</h3>
+                      )}
+                      <a
+                        href={safeHref(block.value)!}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group inline-flex items-start gap-2 text-black/80 text-lg leading-relaxed hover:text-primary-blue transition-colors break-words"
+                      >
+                        <span className="underline underline-offset-4 decoration-black/20 group-hover:decoration-current">
+                          {block.title || block.value}
+                        </span>
+                        <span aria-hidden className="shrink-0">↗</span>
+                      </a>
+                    </div>
                   )}
                 </React.Fragment>
               ))

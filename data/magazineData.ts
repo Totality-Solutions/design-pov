@@ -8,7 +8,11 @@ export type ContentBlock =
     value: string;
   }
   | { type: "image"; value: string; caption?: string }
-  | { type: "quote"; value: string };
+  | { type: "quote"; value: string }
+  | { type: "link"; value: string; title?: string } // reference: value = URL, title = link text
+  | { type: "heading"; value: string; size?: HeadingSize };
+
+export type HeadingSize = "lg" | "md" | "sm";
 
 export interface Blog {
   type: "blog";
