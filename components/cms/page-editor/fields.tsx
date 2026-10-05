@@ -8,7 +8,14 @@ import { DIRECT_UPLOAD_ACCEPT, uploadFileDirect, type UploadedFile } from "@/lib
 import { SingleUploadStatus, UploadProgressPanel, toEntries, type UploadEntry } from "../UploadProgress";
 import type { MediaType } from "@/lib/homeContent";
 
-// Small form building blocks shared by the CMS → Home section editors.
+// Small form building blocks shared by the CMS page editors (Home, Ecosystem, ...).
+
+/** "my-photo_01.jpg" → "my photo 01" — a starting description for uploads. */
+export const nameToText = (fileName: string) => fileName.replace(/\.[^.]+$/, "").replace(/[-_]+/g, " ").trim();
+
+export function Note({ children }: { children: React.ReactNode }) {
+  return <p className="text-[12px] text-gray-500 bg-[#fafafa] border border-black/10 px-4 py-3">{children}</p>;
+}
 
 export const inputCls = "border border-black/20 px-4 py-2.5 text-sm outline-none focus:border-black transition-colors bg-white w-full";
 const labelCls = "text-[11px] uppercase tracking-widest text-gray-500";

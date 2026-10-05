@@ -2,13 +2,23 @@
 
 import React, { useState, useRef } from "react";
 import Image from "@/components/common/SmartImage";
-import { cdn } from "@/lib/cdn";
 import SectionHeading from "../common/SectionHeading";
 import CTABtn from "../common/CTABtn";
 import { useHubspotForm } from "@/hooks/useHubspotForm";
 import { MAX_ATTACHMENT_SIZE_BYTES } from "@/lib/attachments";
+import { DEFAULT_ECOSYSTEM, type ParticipationOption } from "@/lib/ecosystemContent";
 
-export default function ParticipationForm() {
+// Also used inside popups (Collaborate, FAQ) without props — those get the
+// default heading/options; the Ecosystem page passes the CMS values.
+export default function ParticipationForm({
+  headingMain = DEFAULT_ECOSYSTEM.participation.headingMain,
+  headingBold = DEFAULT_ECOSYSTEM.participation.headingBold,
+  options: optionItems = DEFAULT_ECOSYSTEM.participation.options,
+}: {
+  headingMain?: string;
+  headingBold?: string;
+  options?: ParticipationOption[];
+}) {
   let [selectedOption, setSelectedOption] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [fileError, setFileError] = useState("");
@@ -30,23 +40,9 @@ export default function ParticipationForm() {
     },
   });
 
-  let imageMap: Record<string, any> = {
-    Core: cdn("/temp/home/ecosystem/N1.jpg"),
-    Circle: cdn("/temp/home/ecosystem/N-3.jpg"),
-    Objects: cdn("/temp/home/ecosystem/OBJECT.jpeg"),
-    Elevate: cdn("/temp/home/ecosystem/N-2.jpg"),
-    Brands: cdn("/temp/ecosystem/brand-hero.png"),
-    Partnership: cdn("/temp/about/3.png"),
-  };
-
-  let options = [
-    "Core",
-    "Circle",
-    "Objects",
-    "Elevate",
-    "Brands",
-    "Partnership",
-  ];
+  // The selected label is sent to HubSpot as the submission's category.
+  const imageMap: Record<string, string> = Object.fromEntries(optionItems.map((o) => [o.label, o.image]));
+  const options = optionItems.map((o) => o.label);
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const selected = e.target.files?.[0];
@@ -88,8 +84,8 @@ export default function ParticipationForm() {
       onMouseLeave={() => setIsHovered(false)}
     >
       <SectionHeading
-        titleMain="Participation "
-        titleBold="Form"
+        titleMain={headingMain}
+        titleBold={headingBold}
         sticky={false}
         isSectionHovered={isHovered}
       />

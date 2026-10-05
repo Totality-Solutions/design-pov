@@ -1,4 +1,5 @@
 import { cdn } from "@/lib/cdn";
+import type { SectionMeta } from "@/lib/pageContent";
 
 // Content model for the home page sections, edited in CMS → Home.
 // The defaults below are the content that used to be hardcoded in the
@@ -6,7 +7,8 @@ import { cdn } from "@/lib/cdn";
 // unsaved section (or a missing table) renders exactly as before.
 //
 // Shared by the CMS editor (client) and the home page (server) — keep it free
-// of server-only imports. The database read lives in lib/homeContentServer.ts.
+// of server-only imports. Storage/merging is generic: see lib/pageContent.ts
+// and lib/pageContentServer.ts.
 
 export type MediaType = "image" | "video";
 
@@ -40,7 +42,7 @@ export type HomeContent = {
 export type HomeSectionKey = keyof HomeContent;
 
 /** CMS accordion order and labels — matches the order on the home page. */
-export const HOME_SECTIONS: { key: HomeSectionKey; label: string; hint: string }[] = [
+export const HOME_SECTIONS: SectionMeta<HomeSectionKey>[] = [
   { key: "hero",           label: "Hero Banner",          hint: "Full-width slider at the top" },
   { key: "intro",          label: "Intro Strip",          hint: "Black strip with the \"Explore the Show\" button" },
   { key: "whatPov",        label: "What is POV",          hint: "Scroll-reveal text and media marquee" },
@@ -186,14 +188,3 @@ export const DEFAULT_HOME: HomeContent = {
   brands:   { enabled: true, headingMain: "Brands", headingBold: "2026" },
 };
 
-/** Saved data overrides the default field by field; unknown sections are ignored. */
-export function mergeHomeContent(saved: Partial<Record<string, unknown>>): HomeContent {
-  const merged = { ...DEFAULT_HOME };
-  for (const { key } of HOME_SECTIONS) {
-    const value = saved[key];
-    if (value && typeof value === "object") {
-      merged[key] = { ...DEFAULT_HOME[key], ...(value as object) } as never;
-    }
-  }
-  return merged;
-}

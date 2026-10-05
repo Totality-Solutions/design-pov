@@ -10,14 +10,14 @@ import ScrollMaskText from "@/components/home/ScrollRevealText";
 import HomeSponsors from "@/components/home/HomeSponsors";
 import ShowDeckCTA from "@/components/common/ShowDeckCTA";
 import DeferredRender from "@/components/common/DeferredRender";
-import { getHomeContent } from "@/lib/homeContentServer";
+import { getPageContent } from "@/lib/pageContentServer";
 
 // Saving a section in CMS → Home revalidates "/" immediately; this is only
 // the fallback refresh interval.
 export const revalidate = 3600;
 
 export default async function HomePage() {
-  const home = await getHomeContent();
+  const home = await getPageContent("home");
 
   return (
     <>

@@ -1,11 +1,11 @@
 import CmsSidebar from "@/components/cms/CmsSidebar";
-import HomeEditor from "@/components/cms/home/HomeEditor";
+import EcosystemEditor from "@/components/cms/ecosystem/EcosystemEditor";
 import { getPageContent, getSavedSections } from "@/lib/pageContentServer";
 
 export const dynamic = "force-dynamic";
 
-export default async function HomeCmsPage() {
-  const [content, { saved, error }] = await Promise.all([getPageContent("home"), getSavedSections("home")]);
+export default async function EcosystemCmsPage() {
+  const [content, { saved, error }] = await Promise.all([getPageContent("ecosystem"), getSavedSections("ecosystem")]);
 
   return (
     <div className="min-h-screen bg-[#f7f7f7]">
@@ -15,15 +15,15 @@ export default async function HomeCmsPage() {
         <div className="mb-8 flex items-end justify-between">
           <div>
             <p className="text-[10px] uppercase tracking-[0.3em] text-gray-400 mb-1">CMS</p>
-            <h1 className="text-2xl font-semibold text-black">Home</h1>
+            <h1 className="text-2xl font-semibold text-black">Ecosystem</h1>
           </div>
           <a
-            href="/"
+            href="/ecosystem"
             target="_blank"
             rel="noopener noreferrer"
             className="text-[11px] uppercase tracking-widest text-gray-400 hover:text-black transition-colors border-b border-dashed border-gray-300"
           >
-            View home page ↗
+            View ecosystem page ↗
           </a>
         </div>
 
@@ -38,7 +38,7 @@ export default async function HomeCmsPage() {
           </div>
         )}
 
-        <HomeEditor initial={content} saved={saved} />
+        <EcosystemEditor initial={content} saved={saved} />
       </main>
     </div>
   );

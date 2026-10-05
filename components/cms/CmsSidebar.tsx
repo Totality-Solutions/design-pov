@@ -10,6 +10,7 @@ const links = [
   { href: "/cms/dashboard",   label: "Dashboard" },
   { href: "/cms/pov-mail",    label: "POV Mail" },
   { href: "/cms/home",        label: "Home" },
+  { href: "/cms/ecosystem",   label: "Ecosystem" },
   { href: "/cms/submissions", label: "Submissions" },
   { href: "/cms/blogs",       label: "Blogs" },
   { href: "/cms/gallery",         label: "Gallery" },

@@ -6,11 +6,13 @@ interface MediaRendererProps {
   src: string;
   alt?: string;
   className?: string;
+  /** Set when known (e.g. from the CMS); otherwise guessed from the file extension. */
+  type?: "image" | "video";
 }
 
-export const MediaRenderer = ({ src, alt = "", className = "" }: MediaRendererProps) => {
+export const MediaRenderer = ({ src, alt = "", className = "", type }: MediaRendererProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const isVideo = /\.(mp4|webm|ogg)$/i.test(src);
+  const isVideo = type ? type === "video" : /\.(mp4|webm|ogg|mov)$/i.test(src);
   const [shouldLoadVideo, setShouldLoadVideo] = useState(false);
 
   useEffect(() => {

@@ -4,57 +4,9 @@ import React, { useRef } from "react";
 import Image from "@/components/common/SmartImage";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
-import { cdn } from "@/lib/cdn";
+import type { EcosystemPillar } from "@/lib/ecosystemContent";
 
-const ecosystemPillars = [
-  {
-    id: 1,
-    title: "The Core",
-    description:
-      "Sixteen design studios create immersive environments where ideas take spatial form.",
-    imageSrc: cdn("/temp/home/ecosystem/N1.jpg"),
-    logoSrc: cdn("/temp/ecosystem/icons/core.png"),
-    href: "/edition/core",
-  },
-  {
-    id: 2,
-    title: "Circle",
-    description:
-      "A live forum for dialogue—bringing together voices shaping how we think, build, and live.",
-    imageSrc: cdn("/temp/home/ecosystem/N-3.jpg"),
-    logoSrc: cdn("/temp/ecosystem/icons/circle.png"),
-    href: "/edition/schedule",
-  },
-  {
-    id: 3,
-    title: "Objects",
-    description:
-      "A collection of original, one-of-one pieces—each a distilled expression of perspective.",
-    imageSrc: cdn("/temp/home/ecosystem/OBJECT.jpeg"),
-    logoSrc: cdn("/temp/ecosystem/icons/objects.png"),
-    href: "/ecosystem/objects",
-  },
-  {
-    id: 4,
-    title: "Elevate",
-    description:
-      "Curated extensions that create meaningful brand moments beyond the show floor.",
-    imageSrc: cdn("/temp/home/ecosystem/N-2.jpg"),
-    logoSrc: cdn("/temp/ecosystem/icons/elevate.png"),
-    href: "/ecosystem/elevate",
-  },
-  {
-    id: 5,
-    title: "Afterhours",
-    description:
-      "Where the industry unwinds—a late-night program of music, culture, and networking.",
-    imageSrc: cdn("/temp/home/ecosystem/N-4.png"),
-    logoSrc: cdn("/temp/ecosystem/icons/afterhours.png"),
-    href: "/ecosystem",
-  },
-];
-
-export default function EcosystemCarousel() {
+export default function EcosystemCarousel({ pillars: ecosystemPillars }: { pillars: EcosystemPillar[] }) {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const scroll = (direction: "left" | "right") => {
@@ -123,9 +75,9 @@ export default function EcosystemCarousel() {
           msOverflowStyle: "none",
         }}
       >
-        {ecosystemPillars.map((pillar) => (
+        {ecosystemPillars.map((pillar, i) => (
           <div
-            key={pillar.id}
+            key={i}
             className="
               group
               flex-shrink-0
@@ -151,18 +103,19 @@ export default function EcosystemCarousel() {
 function PillarCard({
   pillar,
 }: {
-  pillar: (typeof ecosystemPillars)[0];
+  pillar: EcosystemPillar;
 }) {
   return (
     <Link
-      href={pillar.href}
+      href={pillar.href || "#"}
       className="flex h-full flex-col"
     >
       {/* IMAGE */}
-      <div className="relative w-full aspect-[8/4] overflow-hidden">
-        
+      <div className="relative w-full aspect-[8/4] overflow-hidden bg-black/5">
+
+        {pillar.image && (
         <Image
-          src={pillar.imageSrc}
+          src={pillar.image}
           alt={pillar.title}
           fill
           className="
@@ -172,6 +125,7 @@ function PillarCard({
             group-hover:scale-105
           "
         />
+        )}
 
         {/* OVERLAY */}
         <div
@@ -183,14 +137,16 @@ function PillarCard({
             group-hover:opacity-0
           "
         >
+          {pillar.logo && (
           <div className="relative h-14 w-28">
             <Image
-              src={pillar.logoSrc}
+              src={pillar.logo}
               alt={`${pillar.title} logo`}
               fill
               className="object-contain"
             />
           </div>
+          )}
         </div>
       </div>
 

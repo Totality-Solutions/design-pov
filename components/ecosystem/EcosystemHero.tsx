@@ -1,34 +1,36 @@
 'use client'
-import { cdn } from "@/lib/cdn";
 import React from 'react'
 import { MediaRenderer } from '@/components/common/MediaRenderer'
 import { UnderlineText } from '../common/Underlinetext'
+import type { EcosystemPageContent } from '@/lib/ecosystemContent'
 
-export default function EcosystemHero() {
+type HeroProps = Omit<EcosystemPageContent["hero"], "enabled">
+
+export default function EcosystemHero({ headline, media, alt }: HeroProps) {
   return (
     <section className="w-full h-fit bg-pov-white border-b border-pov-black/40 pt-28 lg:pt-12">
       {/* TEXT SECTION: Clean horizontal layout with border */}
 
       <UnderlineText lineHeight={72} className="text-h2-mobile md:text-h2-tab lg:text-h2 tracking-tight font-semibold">
-          Design POV extends beyond a singular format.
+          {headline}
       </UnderlineText>
-      {/* <UnderlineText lineHeight={72} className="text-h2-mobile md:text-h2-tab lg:text-h2 tracking-tight font-semibold">
-          singular format.
-      </UnderlineText> */}
 
       {/* MEDIA SECTION: Responsive container for Image or Video */}
+      {media.src && (
       <div className="relative w-full h-[50vh] lg:h-[70vh] overflow-hidden flex items-center justify-center py-4">
-        
+
         {/* Main Video/Image Asset (No background visuals) */}
         <div className="relative z-10 w-full h-full bg-black overflow-hidden">
-          <MediaRenderer 
-            src={cdn("/temp/ecosystem/POV.mp4")} 
-            alt="Ecosystem Highlight"
+          <MediaRenderer
+            src={media.src}
+            type={media.type}
+            alt={alt}
             className="w-full h-full object-cover"
           />
         </div>
 
       </div>
+      )}
     </section>
   )
 }

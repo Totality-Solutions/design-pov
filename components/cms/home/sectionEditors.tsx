@@ -10,28 +10,17 @@ import {
   type HomeSectionKey,
   type MarqueeItem,
 } from "@/lib/homeContent";
-import { BulkUploadButton, ImageField, ListEditor, MediaField, ParagraphsField, TextArea, TextField } from "./fields";
+import {
+  BulkUploadButton, ImageField, ListEditor, MediaField, Note, ParagraphsField, TextArea, TextField, nameToText,
+} from "../page-editor/fields";
+import type { SectionEditorProps, SectionEditors } from "../page-editor/PageEditor";
 
 // One editor per home section. Each receives the section's draft and an
 // `update` that merges a partial patch into it.
 
-export type SectionPatch<K extends HomeSectionKey> =
-  | Partial<HomeContent[K]>
-  | ((latest: HomeContent[K]) => Partial<HomeContent[K]>);
-
-type EditorProps<K extends HomeSectionKey> = {
-  value: HomeContent[K];
-  update: (patch: SectionPatch<K>) => void;
-};
+type EditorProps<K extends HomeSectionKey> = SectionEditorProps<HomeContent[K]>;
 
 const folder = (section: string) => `temp/home/cms/${section}`;
-
-/** "my-photo_01.jpg" → "my photo 01" — a starting description for uploads. */
-const nameToText = (fileName: string) => fileName.replace(/\.[^.]+$/, "").replace(/[-_]+/g, " ").trim();
-
-function Note({ children }: { children: React.ReactNode }) {
-  return <p className="text-[12px] text-gray-500 bg-[#fafafa] border border-black/10 px-4 py-3">{children}</p>;
-}
 
 function HeroEditor({ value, update }: EditorProps<"hero">) {
   return (
@@ -306,7 +295,7 @@ function BrandsEditor({ value, update }: EditorProps<"brands">) {
   );
 }
 
-export const SECTION_EDITORS: { [K in HomeSectionKey]: (props: EditorProps<K>) => React.ReactNode } = {
+export const SECTION_EDITORS: SectionEditors<HomeContent> = {
   hero: HeroEditor,
   intro: IntroEditor,
   whatPov: WhatPovEditor,
@@ -320,7 +309,7 @@ export const SECTION_EDITORS: { [K in HomeSectionKey]: (props: EditorProps<K>) =
 };
 
 /** Returns a message for the first problem that would break the page, or null. */
-export function validateSection(key: HomeSectionKey, value: HomeContent[HomeSectionKey]): string | null {
+export function validateSection(key: string, value: unknown): string | null {
   const v = value as any;
   switch (key) {
     case "hero": {
@@ -342,17 +331,4 @@ export function validateSection(key: HomeSectionKey, value: HomeContent[HomeSect
     default:
       return null;
   }
-}
-
-/** Trims text and drops empty paragraphs before saving. */
-export function cleanSection<T>(value: T): T {
-  if (typeof value === "string") return value.trim() as T;
-  if (Array.isArray(value)) {
-    const cleaned = value.map(cleanSection);
-    return (cleaned.every((x) => typeof x === "string") ? cleaned.filter(Boolean) : cleaned) as T;
-  }
-  if (value && typeof value === "object") {
-    return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, cleanSection(v)])) as T;
-  }
-  return value;
 }
