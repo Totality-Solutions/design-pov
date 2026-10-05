@@ -1,4 +1,5 @@
 import { S3Client, PutObjectCommand, DeleteObjectsCommand } from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 // designpovindia.com/* is the S3 prefix CloudFront (NEXT_PUBLIC_CDN_URL) serves from.
 const S3_PREFIX = "designpovindia.com";
@@ -19,6 +20,29 @@ function getS3Client(): S3Client {
     });
   }
   return _client;
+}
+
+let _presignClient: S3Client | null = null;
+
+// Separate client for presigned uploads. Recent AWS SDK versions add a
+// default CRC32 checksum to every PutObject; in a presigned URL that's the
+// checksum of an *empty* body (x-amz-checksum-crc32=AAAAAA==), so S3 rejects
+// the real file. "WHEN_REQUIRED" leaves the checksum out.
+function getPresignClient(): S3Client {
+  if (!_presignClient) {
+    const region = process.env.AWS_REGION;
+    const accessKeyId = process.env.AWS_ACCESS_KEY_ID;
+    const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
+    if (!region || !accessKeyId || !secretAccessKey) {
+      throw new Error("Missing AWS S3 environment variables (AWS_REGION / AWS_ACCESS_KEY_ID / AWS_SECRET_ACCESS_KEY).");
+    }
+    _presignClient = new S3Client({
+      region,
+      credentials: { accessKeyId: accessKeyId.trim(), secretAccessKey: secretAccessKey.trim() },
+      requestChecksumCalculation: "WHEN_REQUIRED",
+    });
+  }
+  return _presignClient;
 }
 
 export interface S3UploadResult {
@@ -56,6 +80,40 @@ export async function uploadBufferToS3(
   const path = `/${normalizedKey}`;
 
   return { path, url: `${cdnBase}${path}` };
+}
+
+/**
+ * Creates a short-lived URL the browser can PUT a file to directly, so large
+ * files (videos) skip the 4.5 MB request-body limit of our own API routes.
+ * ContentType and ContentLength are part of the signature: S3 rejects the
+ * upload if the browser sends a different type or size, which is what
+ * enforces the size limit checked by the caller.
+ *
+ * Requires a CORS rule on the bucket allowing PUT from the site's origins.
+ */
+export async function createPresignedUpload(
+  key: string,
+  contentType: string,
+  contentLength: number
+): Promise<S3UploadResult & { uploadUrl: string }> {
+  const bucket = process.env.AWS_BUCKET_NAME?.trim();
+  if (!bucket) throw new Error("Missing AWS_BUCKET_NAME environment variable.");
+
+  const normalizedKey = key.startsWith("/") ? key.slice(1) : key;
+  const uploadUrl = await getSignedUrl(
+    getPresignClient(),
+    new PutObjectCommand({
+      Bucket: bucket,
+      Key: `${S3_PREFIX}/${normalizedKey}`,
+      ContentType: contentType,
+      ContentLength: contentLength,
+    }),
+    { expiresIn: 60 * 10 }
+  );
+
+  const cdnBase = process.env.NEXT_PUBLIC_CDN_URL || `https://d1qlyda1dsr5ui.cloudfront.net/${S3_PREFIX}`;
+  const path = `/${normalizedKey}`;
+  return { uploadUrl, path, url: `${cdnBase}${path}` };
 }
 
 /**

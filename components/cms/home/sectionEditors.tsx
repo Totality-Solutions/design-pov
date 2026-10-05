@@ -10,17 +10,24 @@ import {
   type HomeSectionKey,
   type MarqueeItem,
 } from "@/lib/homeContent";
-import { ImageField, ListEditor, MediaField, ParagraphsField, TextArea, TextField } from "./fields";
+import { BulkUploadButton, ImageField, ListEditor, MediaField, ParagraphsField, TextArea, TextField } from "./fields";
 
 // One editor per home section. Each receives the section's draft and an
 // `update` that merges a partial patch into it.
 
+export type SectionPatch<K extends HomeSectionKey> =
+  | Partial<HomeContent[K]>
+  | ((latest: HomeContent[K]) => Partial<HomeContent[K]>);
+
 type EditorProps<K extends HomeSectionKey> = {
   value: HomeContent[K];
-  update: (patch: Partial<HomeContent[K]>) => void;
+  update: (patch: SectionPatch<K>) => void;
 };
 
 const folder = (section: string) => `temp/home/cms/${section}`;
+
+/** "my-photo_01.jpg" → "my photo 01" — a starting description for uploads. */
+const nameToText = (fileName: string) => fileName.replace(/\.[^.]+$/, "").replace(/[-_]+/g, " ").trim();
 
 function Note({ children }: { children: React.ReactNode }) {
   return <p className="text-[12px] text-gray-500 bg-[#fafafa] border border-black/10 px-4 py-3">{children}</p>;
@@ -35,6 +42,17 @@ function HeroEditor({ value, update }: EditorProps<"hero">) {
       newItem={() => ({ src: "", type: "image", alt: "" })}
       addLabel="+ Add Slide"
       minItems={1}
+      extraActions={
+        <BulkUploadButton
+          folder={folder("hero")}
+          label="Bulk Upload Slides"
+          onUploaded={(files) =>
+            update((latest) => ({
+              slides: [...latest.slides, ...files.map((f) => ({ src: f.url, type: f.type, alt: nameToText(f.name) }))],
+            }))
+          }
+        />
+      }
       renderItem={(slide, set) => (
         <>
           <MediaField
@@ -94,6 +112,16 @@ function WhatPovEditor({ value, update }: EditorProps<"whatPov">) {
         newItem={() => ({ src: "", type: "image", title: "" })}
         addLabel="+ Add Media"
         minItems={1}
+        extraActions={
+          <BulkUploadButton
+            folder={folder("what-pov")}
+            onUploaded={(files) =>
+              update((latest) => ({
+                items: [...latest.items, ...files.map((f) => ({ src: f.url, type: f.type, title: nameToText(f.name) }))],
+              }))
+            }
+          />
+        }
         renderItem={(item, set) => (
           <>
             <MediaField label="Image / Video *" src={item.src} type={item.type} onChange={set} folder={folder("what-pov")} allowVideo />
@@ -200,13 +228,35 @@ function CoreCollectiveEditor({ value, update }: EditorProps<"coreCollective">) 
         onChange={(next) => update({ tiles: next })}
         itemLabel={(tile, i) => `Tile ${i + 1}${i === 2 ? " (centre)" : ""} — ${tile.media.map((m) => m.name).filter(Boolean).join(" / ") || "empty"}`}
         fixed
-        renderItem={(tile, setTile) => (
+        renderItem={(tile, setTile, tileIndex) => (
           <ListEditor<CoreMedia>
             items={tile.media}
             onChange={(media) => setTile({ media })}
             itemLabel={(m, i) => `Item ${i + 1}${m.name ? ` — ${m.name}` : ""}`}
             newItem={() => ({ src: "", type: "image", name: "", link: "/edition/core" })}
             addLabel="+ Add Item"
+            extraActions={
+              <BulkUploadButton
+                folder={folder("core-collective")}
+                onUploaded={(files) =>
+                  update((latest) => {
+                    const padded = Array.from({ length: CORE_TILE_COUNT }, (_, i) => latest.tiles[i] ?? { media: [] });
+                    return {
+                      tiles: padded.map((t, i) =>
+                        i === tileIndex
+                          ? {
+                              media: [
+                                ...t.media,
+                                ...files.map((f) => ({ src: f.url, type: f.type, name: nameToText(f.name), link: "/edition/core" })),
+                              ],
+                            }
+                          : t
+                      ),
+                    };
+                  })
+                }
+              />
+            }
             renderItem={(m, set) => (
               <>
                 <MediaField label="Image / Video *" src={m.src} type={m.type} onChange={set} folder={folder("core-collective")} allowVideo />

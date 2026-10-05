@@ -1,7 +1,11 @@
 "use client";
 
+import { useRef, useState } from "react";
 import ImageUploadField from "../ImageUploadField";
+import { useToast } from "../ToastProvider";
 import { cdn } from "@/lib/cdn";
+import { DIRECT_UPLOAD_ACCEPT, uploadFileDirect, type UploadedFile } from "@/lib/cmsUpload";
+import { SingleUploadStatus, UploadProgressPanel, toEntries, type UploadEntry } from "../UploadProgress";
 import type { MediaType } from "@/lib/homeContent";
 
 // Small form building blocks shared by the CMS → Home section editors.
@@ -47,9 +51,133 @@ export function TextArea({
 }
 
 /**
- * Image or video picker. Images upload through the CMS uploader; videos are
- * pasted as a CDN URL because video files exceed the 4.5 MB request limit
- * of the upload route on Vercel.
+ * Picks several images/videos at once and uploads them one after another
+ * straight to S3 (50 MB max each). Calls `onUploaded` with every file that
+ * succeeded; a per-file progress panel shows what's uploading, done or failed.
+ */
+export function BulkUploadButton({
+  folder, onUploaded, label = "Bulk Upload", accept = DIRECT_UPLOAD_ACCEPT,
+}: {
+  folder: string;
+  onUploaded: (files: UploadedFile[]) => void;
+  label?: string;
+  accept?: string;
+}) {
+  const { showSuccess, showError } = useToast();
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [entries, setEntries] = useState<UploadEntry[]>([]);
+  const busy = entries.some((e) => e.status === "waiting" || e.status === "uploading");
+
+  const patchEntry = (i: number, patch: Partial<UploadEntry>) =>
+    setEntries((prev) => prev.map((e, idx) => (idx === i ? { ...e, ...patch } : e)));
+
+  async function handleFiles(files: File[]) {
+    if (files.length === 0) return;
+    setEntries(toEntries(files));
+    const done: UploadedFile[] = [];
+
+    for (let i = 0; i < files.length; i++) {
+      patchEntry(i, { status: "uploading" });
+      try {
+        done.push(await uploadFileDirect(files[i], folder, (progress) => patchEntry(i, { progress })));
+        patchEntry(i, { status: "done", progress: 1 });
+      } catch (err: any) {
+        patchEntry(i, { status: "error", error: err.message });
+      }
+    }
+
+    const failed = files.length - done.length;
+    if (done.length) {
+      onUploaded(done);
+      showSuccess(`${done.length} file${done.length === 1 ? "" : "s"} uploaded — click Save Section to publish.`);
+    }
+    if (failed) showError(`${failed} file${failed === 1 ? "" : "s"} failed to upload. See the list for details.`);
+  }
+
+  return (
+    <div className="w-full">
+      <div className="flex items-center gap-3">
+        <button
+          type="button"
+          onClick={() => inputRef.current?.click()}
+          disabled={busy}
+          className={`${smallBtn} bg-white`}
+        >
+          {busy ? "Uploading..." : label}
+        </button>
+        <span className="text-[11px] text-gray-400">Images or videos · 50 MB max each</span>
+      <input
+        ref={inputRef}
+        type="file"
+        accept={accept}
+        multiple
+        className="hidden"
+        onChange={(e) => {
+          const files = Array.from(e.target.files ?? []);
+          e.target.value = "";
+          handleFiles(files);
+        }}
+      />
+      </div>
+      <UploadProgressPanel entries={entries} onDismiss={() => setEntries([])} />
+    </div>
+  );
+}
+
+/** Single video upload (direct to S3, 50 MB max). Status is shown by the caller. */
+function VideoUploadButton({
+  folder, onUploaded, upload, setUpload,
+}: {
+  folder: string;
+  onUploaded: (url: string) => void;
+  upload: UploadEntry | null;
+  setUpload: React.Dispatch<React.SetStateAction<UploadEntry | null>>;
+}) {
+  const { showSuccess, showError } = useToast();
+  const inputRef = useRef<HTMLInputElement>(null);
+  const uploading = upload?.status === "uploading";
+
+  async function handleFile(file: File) {
+    setUpload({ name: file.name, size: file.size, status: "uploading", progress: 0 });
+    try {
+      const { url } = await uploadFileDirect(file, folder, (progress) => setUpload((u) => u && { ...u, progress }));
+      onUploaded(url);
+      setUpload((u) => u && { ...u, status: "done", progress: 1 });
+      showSuccess("Video uploaded.");
+    } catch (err: any) {
+      setUpload((u) => u && { ...u, status: "error", error: err.message });
+      showError("Couldn't upload this video. See the message under the field.");
+    }
+  }
+
+  return (
+    <>
+      <button
+        type="button"
+        onClick={() => inputRef.current?.click()}
+        disabled={uploading}
+        className="shrink-0 border border-black/20 px-4 py-2.5 text-[11px] uppercase tracking-widest text-gray-600 hover:border-black hover:text-black transition-colors disabled:opacity-50"
+      >
+        {uploading ? `Uploading ${Math.round((upload?.progress ?? 0) * 100)}%` : "Upload"}
+      </button>
+      <input
+        ref={inputRef}
+        type="file"
+        accept="video/mp4,video/webm,video/quicktime"
+        className="hidden"
+        onChange={(e) => {
+          const file = e.target.files?.[0];
+          e.target.value = "";
+          if (file) handleFile(file);
+        }}
+      />
+    </>
+  );
+}
+
+/**
+ * Image or video picker. Images use the regular CMS uploader; videos upload
+ * straight to S3 (50 MB max) or can be pasted as a CDN URL.
  */
 export function MediaField({
   label, src, type, onChange, folder, allowVideo = false, hint,
@@ -62,6 +190,7 @@ export function MediaField({
   allowVideo?: boolean;
   hint?: string;
 }) {
+  const [videoUpload, setVideoUpload] = useState<UploadEntry | null>(null);
   return (
     <Field label={label} hint={hint}>
       {allowVideo && (
@@ -82,15 +211,22 @@ export function MediaField({
       )}
       {type === "video" ? (
         <>
-          <input
-            value={src}
-            onChange={(e) => onChange({ src: e.target.value })}
-            className={inputCls}
-            placeholder="https://d1qlyda1dsr5ui.cloudfront.net/.../video.mp4"
-          />
-          <p className="text-[11px] text-gray-400">
-            Paste the video&apos;s CDN URL (.mp4). Upload large videos to S3 first — the CMS uploader only takes images.
-          </p>
+          <div className="flex gap-2">
+            <input
+              value={src}
+              onChange={(e) => onChange({ src: e.target.value })}
+              className={inputCls}
+              placeholder="https://... .mp4 or upload a file"
+            />
+            <VideoUploadButton
+              folder={folder}
+              onUploaded={(url) => onChange({ src: url })}
+              upload={videoUpload}
+              setUpload={setVideoUpload}
+            />
+          </div>
+          <SingleUploadStatus entry={videoUpload} onDismiss={() => setVideoUpload(null)} />
+          <p className="text-[11px] text-gray-400">MP4, WEBM or MOV · 50 MB max. MP4 plays in every browser.</p>
           {src && (
             <video src={cdn(src)} muted loop playsInline controls className="mt-1 h-40 w-full object-cover bg-black border border-black/10" />
           )}
@@ -130,8 +266,10 @@ export function ImageField({
  * length is set by the page layout (e.g. the 9 Core Collective tiles).
  */
 export function ListEditor<T>({
-  items, onChange, renderItem, newItem, itemLabel, addLabel = "+ Add", fixed = false, minItems = 0,
+  items, onChange, renderItem, newItem, itemLabel, addLabel = "+ Add", fixed = false, minItems = 0, extraActions,
 }: {
+  /** Rendered next to the Add button, e.g. a BulkUploadButton. */
+  extraActions?: React.ReactNode;
   items: T[];
   onChange: (items: T[]) => void;
   renderItem: (item: T, update: (patch: Partial<T>) => void, index: number) => React.ReactNode;
@@ -178,10 +316,15 @@ export function ListEditor<T>({
           <div className="space-y-3">{renderItem(item, (patch) => update(i, patch), i)}</div>
         </div>
       ))}
-      {!fixed && newItem && (
-        <button type="button" onClick={() => onChange([...items, newItem()])} className={smallBtn}>
-          {addLabel}
-        </button>
+      {!fixed && (newItem || extraActions) && (
+        <div className="flex flex-wrap items-center gap-4">
+          {newItem && (
+            <button type="button" onClick={() => onChange([...items, newItem()])} className={smallBtn}>
+              {addLabel}
+            </button>
+          )}
+          {extraActions}
+        </div>
       )}
     </div>
   );

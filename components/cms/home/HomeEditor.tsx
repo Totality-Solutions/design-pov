@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { useToast } from "../ToastProvider";
 import { DEFAULT_HOME, HOME_SECTIONS, type HomeContent, type HomeSectionKey } from "@/lib/homeContent";
-import { SECTION_EDITORS, cleanSection, validateSection } from "./sectionEditors";
+import { SECTION_EDITORS, cleanSection, validateSection, type SectionPatch } from "./sectionEditors";
 
 type SavedMap = Record<string, string>; // section → updated_at
 
@@ -114,7 +114,10 @@ function SectionPanel<K extends HomeSectionKey>({
   const isDirty = JSON.stringify(draft) !== JSON.stringify(committed);
   useEffect(() => onDirtyChange(isDirty), [isDirty]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const update = (patch: Partial<HomeContent[K]>) => setDraft((d) => ({ ...d, ...patch }));
+  // Accepts a patch, or a function of the latest draft (used by uploads that
+  // finish after the user has kept editing).
+  const update = (patch: SectionPatch<K>) =>
+    setDraft((d) => ({ ...d, ...(typeof patch === "function" ? patch(d) : patch) }));
 
   async function save() {
     const data = cleanSection(draft);
@@ -161,7 +164,7 @@ function SectionPanel<K extends HomeSectionKey>({
 
   const Editor = SECTION_EDITORS[sectionKey] as (props: {
     value: HomeContent[K];
-    update: (patch: Partial<HomeContent[K]>) => void;
+    update: (patch: SectionPatch<K>) => void;
   }) => React.ReactNode;
 
   return (

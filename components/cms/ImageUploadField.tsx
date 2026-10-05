@@ -2,7 +2,9 @@
 
 import { useRef, useState } from "react";
 import { cdn } from "@/lib/cdn";
+import { uploadViaApi } from "@/lib/cmsUpload";
 import { useToast } from "./ToastProvider";
+import { SingleUploadStatus, type UploadEntry } from "./UploadProgress";
 
 interface ImageUploadFieldProps {
   value: string;
@@ -25,30 +27,23 @@ export default function ImageUploadField({
   allowSvg = false,
 }: ImageUploadFieldProps) {
   const { showSuccess, showError } = useToast();
-  const [uploading, setUploading] = useState(false);
-  const [error, setError] = useState("");
+  const [upload, setUpload] = useState<UploadEntry | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const uploading = upload?.status === "uploading";
 
   async function handleFile(file: File) {
-    setError("");
-    setUploading(true);
+    setUpload({ name: file.name, size: file.size, status: "uploading", progress: 0 });
     try {
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("folder", folder);
-      if (allowSvg) formData.append("allowSvg", "true");
-
-      const res = await fetch("/api/cms/upload", { method: "POST", body: formData });
-      const json = await res.json();
-
-      if (!res.ok) throw new Error(json.error || "Upload failed.");
-      onChange(json.data.url);
+      const url = await uploadViaApi(file, folder, {
+        allowSvg,
+        onProgress: (progress) => setUpload((u) => u && { ...u, progress }),
+      });
+      onChange(url);
+      setUpload((u) => u && { ...u, status: "done", progress: 1 });
       showSuccess("Image uploaded.");
     } catch (err: any) {
-      setError(err.message || "Upload failed.");
-      showError("Couldn't upload this image. Please try again.");
-    } finally {
-      setUploading(false);
+      setUpload((u) => u && { ...u, status: "error", error: err.message || "Upload failed." });
+      showError("Couldn't upload this image. See the message under the field.");
     }
   }
 
@@ -67,7 +62,7 @@ export default function ImageUploadField({
           disabled={uploading}
           className="shrink-0 border border-black/20 px-4 py-2.5 text-[11px] uppercase tracking-widest text-gray-600 hover:border-black hover:text-black transition-colors disabled:opacity-50"
         >
-          {uploading ? "Uploading..." : "Upload"}
+          {uploading ? `Uploading ${Math.round((upload?.progress ?? 0) * 100)}%` : "Upload"}
         </button>
         <input
           ref={inputRef}
@@ -81,7 +76,7 @@ export default function ImageUploadField({
           }}
         />
       </div>
-      {error && <p className="text-xs text-red-500 mt-1">{error}</p>}
+      <SingleUploadStatus entry={upload} onDismiss={() => setUpload(null)} />
       {value && (
         // eslint-disable-next-line @next/next/no-img-element
         <img src={cdn(value)} alt="preview" className={previewClassName || "mt-2 h-32 w-full object-cover border border-black/10"} />

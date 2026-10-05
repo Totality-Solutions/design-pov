@@ -5,6 +5,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { cdn } from "@/lib/cdn";
 import { useToast } from "./ToastProvider";
+import { uploadViaApi } from "@/lib/cmsUpload";
+import { UploadProgressPanel, toEntries, type UploadEntry } from "./UploadProgress";
 
 type CollaborateImageRow = {
   id: string;
@@ -22,33 +24,33 @@ export default function CollaborateImagesTable({ initialData }: { initialData: C
   const [rows, setRows]         = useState<CollaborateImageRow[]>(initialData);
   const [deleting, setDeleting] = useState<string | null>(null);
   const [toggling, setToggling] = useState<string | null>(null);
-  const [progress, setProgress] = useState<{ done: number; total: number } | null>(null);
+  const [entries, setEntries] = useState<UploadEntry[]>([]);
+  const uploading = entries.some((e) => e.status === "waiting" || e.status === "uploading");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => { setRows(initialData); }, [initialData]);
 
   // Uploads each file to S3, then creates all rows in one request, appended
   // after the current last image. Files that fail to upload are skipped.
+  const patchEntry = (i: number, patch: Partial<UploadEntry>) =>
+    setEntries((prev) => prev.map((e, idx) => (idx === i ? { ...e, ...patch } : e)));
+
   async function handleBulkUpload(files: File[]) {
     if (files.length === 0) return;
     const folder = `temp/collaborate/${new Date().getFullYear()}`;
-    const uploaded: string[] = [];
-    let failed = 0;
+    const uploaded: { index: number; url: string }[] = [];
 
-    setProgress({ done: 0, total: files.length });
-    for (const file of files) {
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("folder", folder);
+    setEntries(toEntries(files));
+    for (let i = 0; i < files.length; i++) {
+      patchEntry(i, { status: "uploading" });
       try {
-        const res = await fetch("/api/cms/upload", { method: "POST", body: formData });
-        const json = await res.json();
-        if (!res.ok) throw new Error(json.error);
-        uploaded.push(json.data.url);
-      } catch {
-        failed += 1;
+        const url = await uploadViaApi(files[i], folder, { onProgress: (progress) => patchEntry(i, { progress }) });
+        uploaded.push({ index: i, url });
+        // Not "done" until the row is saved below.
+        patchEntry(i, { progress: 1 });
+      } catch (err: any) {
+        patchEntry(i, { status: "error", error: err.message });
       }
-      setProgress((p) => p && { ...p, done: p.done + 1 });
     }
 
     if (uploaded.length > 0) {
@@ -56,20 +58,23 @@ export default function CollaborateImagesTable({ initialData }: { initialData: C
       const res = await fetch("/api/cms/collaborate-images", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(uploaded.map((image, i) => ({ image, alt: "", sort_order: startOrder + i }))),
+        body: JSON.stringify(uploaded.map(({ url }, i) => ({ image: url, alt: "", sort_order: startOrder + i }))),
       });
       if (res.ok) {
         const { data } = await res.json();
         setRows((prev) => [...prev, ...data]);
+        uploaded.forEach(({ index }) => patchEntry(index, { status: "done" }));
+        showSuccess(`${uploaded.length} image${uploaded.length === 1 ? "" : "s"} added to the Collaborate page.`);
       } else {
-        failed = files.length;
+        const json = await res.json().catch(() => ({}));
+        uploaded.forEach(({ index }) =>
+          patchEntry(index, { status: "error", error: `Uploaded, but couldn't be added to the list: ${json.error || res.status}` })
+        );
       }
     }
 
-    setProgress(null);
-    const added = files.length - failed;
-    if (added > 0) showSuccess(`${added} image${added === 1 ? "" : "s"} added.`);
-    if (failed > 0) showError(`${failed} image${failed === 1 ? "" : "s"} couldn't be uploaded. Please try again.`);
+    const failed = files.length - uploaded.length;
+    if (failed > 0) showError(`${failed} image${failed === 1 ? "" : "s"} failed to upload. See the list for details.`);
   }
 
   async function handleDelete(id: string) {
@@ -125,10 +130,10 @@ export default function CollaborateImagesTable({ initialData }: { initialData: C
           <button
             type="button"
             onClick={() => fileInputRef.current?.click()}
-            disabled={!!progress}
+            disabled={uploading}
             className="border border-black/20 bg-white px-5 py-2.5 text-[11px] uppercase tracking-widest text-gray-600 hover:border-black hover:text-black transition-colors disabled:opacity-50"
           >
-            {progress ? `Uploading ${progress.done}/${progress.total}...` : "Upload Multiple"}
+            {uploading ? "Uploading..." : "Upload Multiple"}
           </button>
           <p className="text-[11px] text-gray-400">JPG, PNG or WEBP · added to the end of the list</p>
           <input
@@ -144,6 +149,10 @@ export default function CollaborateImagesTable({ initialData }: { initialData: C
             }}
           />
         </div>
+      </div>
+
+      <div className="mb-6 -mt-3">
+        <UploadProgressPanel entries={entries} onDismiss={() => setEntries([])} nextStep={null} />
       </div>
 
       {/* Table */}
