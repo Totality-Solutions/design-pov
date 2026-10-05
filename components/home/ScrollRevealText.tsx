@@ -1,10 +1,12 @@
 "use client";
 
 import React from "react";
-import { Container } from "../common/Container";
 import CTABtn from "../common/CTABtn";
+import type { HomeContent } from "@/lib/homeContent";
 
-export default function ScrollMaskText() {
+type IntroProps = Omit<HomeContent["intro"], "enabled">;
+
+export default function ScrollMaskText({ text, highlight, ctaLabel, ctaHref }: IntroProps) {
   return (
     <section className="w-full lg:pt-20">
       <div className=" w-full bg-black py-6 md:py-12 px-6 md:px-10">
@@ -13,16 +15,21 @@ export default function ScrollMaskText() {
         <div className="max-w-4xl">
           <h2 className="text-body-mobile md:text-2xl font-medium text-white duration-300"
             style={{ fontFamily: 'Montserrat' }}>
-            A platform where architects, brands, artists, and thinkers come
-            together to shape environments that go beyond the{" "}
-            <span className="text-primary-red font-semibold">visual.</span>
+            {text}
+            {highlight && (
+              <>
+                {" "}
+                <span className="text-primary-red font-semibold">{highlight}</span>
+              </>
+            )}
           </h2>
         </div>
 
         {/* Right CTA */}
+        {ctaLabel && ctaHref && (
         <div className="flex-shrink-0">
           <CTABtn
-            label="Explore the Show"
+            label={ctaLabel}
             btnBg="var(--primary-blue)"
             btnHoverBg="var(--primary-blue)"
             textColor="var(--color-white)"
@@ -34,11 +41,12 @@ export default function ScrollMaskText() {
             bottomKey2Width="12px"
             bottomKey1Right="50px"
             bottomKey2Right="15px"
-            href="/edition"
+            href={ctaHref}
           />
         </div>
+        )}
         </div>
-        
+
       </div>
     </section>
   );

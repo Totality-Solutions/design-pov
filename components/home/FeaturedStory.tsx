@@ -12,7 +12,7 @@ import Link from "next/link";
 // import { Blog, blogs } from "@/data/magazineData";
 import { NormalizedBlog, normalizeDbBlog } from "@/lib/blog";
 
-export default function MarqueeCarousel() {
+export default function MarqueeCarousel({ heading }: { heading: string }) {
   const [blogs, setBlogs] = useState<NormalizedBlog[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [prevIndex, setPrevIndex] = useState<number | null>(null);
@@ -142,7 +142,7 @@ export default function MarqueeCarousel() {
     >
     <Container className="">
       <SectionHeading
-        titleMain="Magazine"
+        titleMain={heading}
         sticky={false}
         isSectionHovered={isHovered}
       />

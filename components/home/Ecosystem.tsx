@@ -9,99 +9,11 @@ import { FiMinus } from 'react-icons/fi'
 import SectionHeading from '../common/SectionHeading'
 import CTAStrip from '../common/CTAStrip'
 
-import { cdn } from '@/lib/cdn'
+import type { EcosystemItem } from '@/lib/homeContent'
 
-interface EcosystemItem {
-  id: string
-  label: string
-  tag?: string
-  title: string
-  description?: string[]
-  stats: { value: string; unit: string }[]
-  cta: string
-  bgImage?: string
-  href?: string
-}
-
-const ECOSYSTEM: EcosystemItem[] = [
-  {
-    id: 'core',
-    label: 'THE CORE',
-    tag: 'THE FOUNDATION TRACK',
-    bgImage: cdn('/temp/home/ecosystem/N1.jpg'),
-    title: 'THE CORE',
-    description: [
-      "At the heart of Design POV are 16 design studios—each invited to interpret the theme through a fully realised spatial narrative.",
-      "These are not booths, they are environments.",
-      "Each space is built in collaboration with leading brands and fabricators, resulting in distinct, immersive experiences that challenge how design is typically presented.",
-    ],
-    stats: [
-      { value: '40', unit: 'MEMBERS' },
-      { value: '12', unit: 'MONTHS' },
-    ],
-    cta: 'Explore',
-    href: '/edition/core',
-  },
-  {
-    id: 'circle',
-    label: 'CIRCLE',
-    tag: 'THE COMMUNITY TRACK',
-    bgImage: cdn('/temp/home/ecosystem/N-3.jpg'),
-    title: 'CIRCLE',
-    description: ["A live space for open dialogue and powerful discourse. Curated with the same intent as the show: to question, reflect, and reconsider, these discussions brought together the voices shaping India’s cultural landscape. Unfiltered and unscripted, the platform dove deep into the ideas shaping how we live, build, and collaborate."],
-    stats: [
-      { value: '200', unit: 'MEMBERS' },
-      { value: '12', unit: 'EVENTS/YR' },
-    ],
-    cta: 'Explore',
-    href: '/edition/schedule',
-  },
-  {
-    id: 'objects',
-    label: 'OBJECTS',
-    tag: 'THE PUBLICATION TRACK',
-    bgImage: cdn('/temp/home/ecosystem/OBJECT.jpeg'),
-    title: 'OBJECTS',
-    description: ["A curated initiative where select architects, designers, product designers, and artists are invited to conceive and fabricate one original object in response to the edition's theme. Stripping away the noise to create something pure - a perspective in the form of a physical object."],
-    stats: [
-      { value: '2', unit: 'ISSUES/YR' },
-      { value: '500', unit: 'COPIES' },
-    ],
-    cta: 'Explore',
-    href: '/ecosystem/objects',
-  },
-  {
-    id: 'elevate',
-    label: 'ELEVATE',
-    tag: 'THE MENTORSHIP TRACK',
-    bgImage: cdn('/temp/home/ecosystem/N-2.jpg'),
-    title: 'ELEVATE',
-    description: ["An initiative for brand moments worth remembering. Exclusively available for the POV ecosystem, it's designed to help you create strategic visibility that goes beyond the show floor."],
-    stats: [
-      { value: '12', unit: 'PAIRS' },
-      { value: '3', unit: 'MONTHS' },
-    ],
-    cta: 'Explore',
-    href: '/ecosystem/elevate',
-  },
-  {
-    id: 'magazine',
-    label: 'MAGAZINE',
-    tag: 'THE ARCHIVE TRACK',
-    bgImage: cdn('/temp/home/blogs/blog-2.jpg'),
-    title: 'MAGAZINE',
-    description: ["A curation of stories from those who consume and create design - from the Indian sub-continent and beyond."],
-    stats: [
-      { value: '100+', unit: 'ESSAYS' },
-      { value: 'OPEN', unit: 'ACCESS' },
-    ],
-    cta: 'Explore',
-    href: '/magazine',
-  },
-]
-
-const EcosystemSection = () => {
-  const [activeId, setActiveId] = useState<string>('core')
+const EcosystemSection = ({ heading, items: ECOSYSTEM }: { heading: string; items: EcosystemItem[] }) => {
+  // Panels are identified by position; the first one starts open.
+  const [activeId, setActiveId] = useState(0)
   const [isHovered, setIsHovered] = useState(false)
   const [isMobileViewport, setIsMobileViewport] = useState(true)
 
@@ -119,7 +31,7 @@ const EcosystemSection = () => {
       className='pt-6 lg:pt-0'
     >
       <SectionHeading
-        titleBold="POV ECOSYSTEM"
+        titleBold={heading}
         sticky={false}
         isSectionHovered={isHovered}
       />
@@ -137,16 +49,16 @@ const EcosystemSection = () => {
             }}
           >
             {ECOSYSTEM.map((item, index) => {
-              const isActive = activeId === item.id
-              // We hide the right border if THIS item is active 
+              const isActive = activeId === index
+              // We hide the right border if THIS item is active
               // OR if the NEXT item is active (to avoid double lines with the blue accent)
-              const nextIsActive = ECOSYSTEM[index + 1]?.id === activeId;
+              const nextIsActive = index + 1 === activeId;
               const isLast = index === ECOSYSTEM.length - 1;
 
               return (
                 <motion.div
-                  key={item.id}
-                  onMouseEnter={() => setActiveId(item.id)}
+                  key={index}
+                  onMouseEnter={() => setActiveId(index)}
                   animate={{
                     flex: isActive ? 5 : 0.6,
                   }}
@@ -164,7 +76,7 @@ const EcosystemSection = () => {
                 >
                   {/* Background Image */}
                   <motion.img
-                    src={item.bgImage}
+                    src={item.image}
                     alt={item.title}
                     loading="lazy"
                     decoding="async"
@@ -318,7 +230,7 @@ const EcosystemSection = () => {
                             ))}
                           </div> */}
                           <CTABtn
-                            label={item.cta}
+                            label={item.ctaLabel}
                             className="text-tab-body"
                             iconType="arrow"
                             btnBg="var(--primary-blue)"
@@ -339,13 +251,13 @@ const EcosystemSection = () => {
           {/* ───────── MOBILE (Stacked) ───────── */}
           {isMobileViewport && (
           <div className="md:hidden ">
-  {ECOSYSTEM.map((item) => {
-    const isActive = activeId === item.id
+  {ECOSYSTEM.map((item, index) => {
+    const isActive = activeId === index
 
     return (
       <div
-        key={item.id}
-        onClick={() => setActiveId(item.id)}
+        key={index}
+        onClick={() => setActiveId(index)}
         style={{
           position: 'relative',
           borderTop: '1px solid #222',
@@ -356,7 +268,7 @@ const EcosystemSection = () => {
         {/* Background Image */}
         {isActive && (
           <motion.img
-            src={item.bgImage}
+            src={item.image}
             alt={item.title}
             loading="lazy"
             decoding="async"
@@ -425,7 +337,7 @@ const EcosystemSection = () => {
             </div>
 
             <CTABtn
-              label={item.cta}
+              label={item.ctaLabel}
               className="text-mob-body"
               iconType="arrow"
               btnBg="var(--color-black)"

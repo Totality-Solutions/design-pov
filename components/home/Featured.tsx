@@ -1,30 +1,14 @@
 "use client";
-import { cdn } from "@/lib/cdn";
 
 import React, { useState, useEffect } from "react";
 import Image from "@/components/common/SmartImage";
-import type { StaticImageData } from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-
-const video1 = cdn("/temp/home/core-collective/4.mp4");
+import type { CoreTile } from "@/lib/homeContent";
 
 // Components
 import { Container } from "../common/Container";
 import Section from "../common/Section";
 import SectionHeading from "../common/SectionHeading";
-
-type DesignerMedia = {
-  src: StaticImageData | string;
-  type?: "image" | "video";
-  poster?: StaticImageData | string;
-  name: string;
-  link: string;
-};
-
-type Designer = {
-  id: number;
-  media: DesignerMedia[];
-};
 
 const GRID_POSITIONS = [
   { col: "1 / 2", row: "1 / 2" },
@@ -193,27 +177,15 @@ function DesignerTile({
   );
 }
 
-// ─── Data ─────────────────────────
-const designers: Designer[] = [
-  { id: 1, media: [{ src: cdn("/temp/home/core/ADND.jpg"), name: "ADND", link: "/edition/core?designer=01" }, { src: cdn("/temp/home/core/ALARA STUDIO.jpg"), name: "Alara Studio", link: "/edition/core?designer=02" }] },
-  { id: 2, media: [{ src: cdn("/temp/home/core/Abin.jpg"), name: "Abin Design Studio", link: "/edition/core?designer=03" }, { src: cdn("/temp/home/core/BALDIWALA EDGE.jpg"), name: "Baldiwala Edge", link: "/edition/core?designer=04" }] },
-  { id: 3, media: [{ src: video1, type: "video", poster: cdn("/temp/home/core/ADND.jpg"), name: "Arjun Sharma", link: "/edition/core" }] },
-  { id: 4, media: [{ src: cdn("/temp/home/core/CITYSPACE.png"), name: "Cityspace’82 Architects", link: "/edition/core?designer=05" }, { src: cdn("/temp/home/core/DESIGN HEX.jpg"), name: "Design Hex", link: "/edition/core?designer=06" }] },
-  { id: 5, media: [{ src: cdn("/temp/home/core/DSP DESIGN.jpg"), name: "DSP Design", link: "/edition/core?designer=07" }, { src: cdn("/temp/home/core/JANNAT VASI.jpg"), name: "Jannat Vasi Design", link: "/edition/core?designer=08" }] },
-  { id: 6, media: [{ src: cdn("/temp/home/core/NA ARCHITECT.jpg"), name: "NA Architects", link: "/edition/core?designer=09" }, { src: cdn("/temp/home/core/POONAM AKASH.jpg"), name: "Poonam Akash", link: "/edition/core?designer=10" }] },
-  { id: 7, media: [{ src: cdn("/temp/home/core/SANJAY PURI.jpg"), name: "Sanjay Puri Architects", link: "/edition/core?designer=11" }, { src: cdn("/temp/home/core/SAV.jpg"), name: "SAV", link: "/edition/core?designer=12" }] },
-  { id: 8, media: [{ src: cdn("/temp/home/core/SHROFFLEON.jpg"), name: "Shroffleón", link: "/edition/core?designer=13" }, { src: cdn("/temp/home/core/SPARC DESIGN.jpg"), name: "Sparc Design", link: "/edition/core?designer=14" }] },
-  { id: 9, media: [{ src: cdn("/temp/home/core/STUDIO ARCHOHM.jpg"), name: "Studio Archohm", link: "/edition/core?designer=15" }, { src: cdn("/temp/home/core/TALATI & PARTNER.jpg"), name: "Talati & Partners", link: "/edition/core?designer=16" }] },
-];
-
 // ─── Main Component ─────────────────────────
-export default function FeaturedDesigners() {
+export default function FeaturedDesigners({ heading, tiles }: { heading: string; tiles: CoreTile[] }) {
   const sectionRef = React.useRef<HTMLDivElement>(null);
   const [isMobile, setIsMobile] = useState(true);
   const [isHovered, setIsHovered] = useState(false);
   const [isInView, setIsInView] = useState(true);
 
-  const baseSlots = designers;
+  // A tile with no media would crash DesignerTile — skip empty ones.
+  const baseSlots = tiles.filter((t) => t.media.length > 0);
   const loopedSlots = [...baseSlots, ...baseSlots, ...baseSlots];
   const [activeIndex, setActiveIndex] = useState(baseSlots.length);
   const shouldMountMobileSlide = (index: number) => {
@@ -272,7 +244,7 @@ export default function FeaturedDesigners() {
       className="pt-6 lg:pt-0"
     >
       <SectionHeading
-        titleMain="Core Collective" 
+        titleMain={heading}
         sticky={false}
         isSectionHovered={isHovered} 
         className=' !border-0'

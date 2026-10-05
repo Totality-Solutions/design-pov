@@ -5,8 +5,14 @@ import { Container } from "../common/Container";
 import SectionHeading from "../common/SectionHeading";
 import { normalizeBrandPartner } from "@/lib/brandPartners";
 import type { BrandPartnerRow } from "@/types";
+import { DEFAULT_HOME } from "@/lib/homeContent";
 
-const ClientLogo = () => {
+// Also used outside the home page (e.g. Edition → Brands), where the
+// defaults apply; the home page passes the CMS headings.
+const ClientLogo = ({
+  headingMain = DEFAULT_HOME.brands.headingMain,
+  headingBold = DEFAULT_HOME.brands.headingBold,
+}: { headingMain?: string; headingBold?: string }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [Client, setClient]       = useState<{ src: string; alt: string }[]>([]);
   const trackRef      = useRef<HTMLDivElement>(null);
@@ -75,8 +81,8 @@ const ClientLogo = () => {
       <div className="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-4">
         <div className="shrink-0 whitespace-nowrap">
           <SectionHeading
-            titleMain="Brands"
-            titleBold="2026"
+            titleMain={headingMain}
+            titleBold={headingBold}
             sticky={false}
             isSectionHovered={isHovered}
           />

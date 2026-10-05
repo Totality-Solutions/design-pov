@@ -6,33 +6,11 @@ import { Container } from "../common/Container"
 import MarqueeFlow from "../common/MarqueeFlow"
 import Image from "@/components/common/SmartImage";
 import Link from "next/link"
-import { cdn } from "@/lib/cdn"
+import type { MarqueeItem } from "@/lib/homeContent"
 
-interface ArrivalItem {
-  id: number;
-  img: string;
-  title: string;
-  href: string;
-}
-
-const NEW_ARRIVALS: ArrivalItem[] = [
-  { id: 1,  img: cdn('/temp/home/section2/1.jpg'),   title: 'Simply Dummy', href: '#' },
-  { id: 10, img: cdn('/temp/home/section2/1.mp4'),   title: 'Simply Dummy', href: '#' },
-  { id: 2,  img: cdn('/temp/home/section2/2.jpg'),   title: 'Dynamic Video', href: '#' },
-  { id: 11, img: cdn('/temp/home/section2/2.mp4'),   title: 'Simply Dummy', href: '#' },
-  { id: 3,  img: cdn('/temp/home/section2/3.jpg'),   title: 'Simply Dummy', href: '#' },
-  { id: 12, img: cdn('/temp/home/section2/3.mp4'),   title: 'Simply Dummy', href: '#' },
-  { id: 4,  img: cdn('/temp/home/section2/4.jpg'),   title: 'Simply Dummy', href: '#' },
-  { id: 13, img: cdn('/temp/home/section2/4.mp4'),   title: 'Simply Dummy', href: '#' },
-  { id: 5,  img: cdn('/temp/home/section2/5.jpg'),   title: 'Simply Dummy', href: '#' },
-  { id: 6,  img: cdn('/temp/home/section2/6.jpg'),   title: 'Simply Dummy', href: '#' },
-  { id: 7,  img: cdn('/temp/home/section2/7.jpg'),   title: 'Simply Dummy', href: '#' },
-  { id: 8,  img: cdn('/temp/home/section2/8.jpg'),   title: 'Simply Dummy', href: '#' },
-  { id: 9,  img: cdn('/temp/home/section2/9.jpg'),   title: 'Simply Dummy', href: '#' },
-];
-
-const text1 = `Design POV is a curated platform that brings together multiple disciplines to explore how design is lived, not just displayed.`
-const text2 = `Across immersive installations, collaborative spaces, and evolving narratives, it creates a setting where design moves beyond product and into experience.`
+// Scroll progress (0 → 1) the text reveal is spread across; the rest of the
+// scroll is spent with all paragraphs fully revealed.
+const REVEAL_END = 0.8
 
 function Word({ word, progress, range, isStatic }: any) {
   // If isStatic is true, we ignore the scroll progress and show the word fully
@@ -109,7 +87,7 @@ function LazyMarqueeVideo({ src }: { src: string }) {
     />
   );
 }
-const WhatPOV = () => {
+const WhatPOV = ({ paragraphs, items }: { paragraphs: string[]; items: MarqueeItem[] }) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const [isMobileOrTab, setIsMobileOrTab] = useState(true)
   const [expandedIndex, setExpandedIndex] = useState(0)
@@ -143,18 +121,18 @@ const WhatPOV = () => {
           {/* 🔹 TEXT SECTION */}
           <div className="flex items-justify justify-center px-6 md:px-10">
             <div className="space-y-6 md:space-y-8 w-full text-center">
-              <WordReveal 
-                text={text1} 
-                progress={smooth} 
-                range={[0, 0.4]} 
-                isStatic={isMobileOrTab}
-              />
-              <WordReveal 
-                text={text2} 
-                progress={smooth} 
-                range={[0.4, 0.8]} 
-                isStatic={isMobileOrTab}
-              />
+              {paragraphs.map((text, i) => {
+                const step = REVEAL_END / paragraphs.length
+                return (
+                  <WordReveal
+                    key={i}
+                    text={text}
+                    progress={smooth}
+                    range={[i * step, (i + 1) * step]}
+                    isStatic={isMobileOrTab}
+                  />
+                )
+              })}
             </div>
           </div>
 
@@ -163,14 +141,17 @@ const WhatPOV = () => {
             {/* Added explicit height classes for mobile to ensure visibility */}
             <div className="w-full overflow-hidden h-[280px] sm:h-[320px] md:h-[300px] lg:h-[340px] flex items-end">
               <MarqueeFlow
-                items={NEW_ARRIVALS}
+                items={items}
                 gap={5}
                 speed={200}
                 desktopCount={4}
                 onExpandChange={setExpandedIndex}
                 renderItem={(item, index) => {
                   const isExpanded = index === expandedIndex;
-                  const isVideo = typeof item.img === 'string' && item.img.match(/\.(mp4|webm|ogg)$/i);
+                  const isVideo = item.type === 'video';
+                  // Mobile shows a still for videos: the poster, or the
+                  // legacy same-name .jpg convention.
+                  const still = item.poster || item.src.replace(/\.(mp4|webm|ogg)$/i, ".jpg");
                   return (
                     <Link
                       href={item.href || '#'}
@@ -185,7 +166,7 @@ const WhatPOV = () => {
                         {isVideo ? (
                           isMobileOrTab ? (
                             <Image
-                              src={(item.img as string).replace(/\.(mp4|webm|ogg)$/i, ".jpg")}
+                              src={still}
                               alt={item.title}
                               fill
                               className="object-cover"
@@ -193,11 +174,11 @@ const WhatPOV = () => {
                               loading="lazy"
                             />
                           ) : (
-                            <LazyMarqueeVideo src={item.img as string} />
+                            <LazyMarqueeVideo src={item.src} />
                           )
                         ) : (
                           <Image
-                            src={item.img}
+                            src={item.src}
                             alt={item.title}
                             fill
                             className="object-cover"

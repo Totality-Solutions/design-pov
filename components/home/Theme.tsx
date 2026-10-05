@@ -3,8 +3,11 @@ import React, { useRef, useEffect, useState } from 'react'
 import { useScroll, useTransform, useSpring } from "framer-motion"
 import MasonryGrid from './Mansonrygrid'
 import CTABtn from '../common/CTABtn'
+import type { HomeContent } from '@/lib/homeContent'
 
-const Theme = () => {
+type ThemeProps = Omit<HomeContent["theme"], "enabled">
+
+const Theme = ({ heading, description, ctaLabel, ctaHref, media }: ThemeProps) => {
   const containerRef = useRef<HTMLDivElement>(null)
   const gridRef = useRef<HTMLDivElement>(null)
   const [scrollRange, setScrollRange] = useState(1200)
@@ -55,12 +58,13 @@ const Theme = () => {
         <div className="grid grid-cols-1 lg:grid-cols-[3fr_7fr] w-full h-full pt-6 md:pt-12 py-0 gap-10 md:gap-4">
           
           <div className="w-full flex flex-col justify-end gap-4 lg:pb-12 px-6 lg:px-10">
-            <h1 className="text-h2-mobile md:text-h2-tab lg:text-h2 font-semibold uppercase">2026 THEME</h1>
+            <h1 className="text-h2-mobile md:text-h2-tab lg:text-h2 font-semibold uppercase">{heading}</h1>
             <p className="text-body-tab">
-              A sharper focus on how spaces are experienced - through texture, sound, atmosphere, and memory.
+              {description}
             </p>
+            {ctaLabel && ctaHref && (
             <CTABtn
-              label="2026 THEME"
+              label={ctaLabel}
               btnBg="transparent"
               btnHoverBg="var(--primary-blue)"
               textColor="black"
@@ -72,15 +76,18 @@ const Theme = () => {
               bottomKey2Width="12px"
               bottomKey1Right="50px"
               bottomKey2Right="15px"
-              href="/edition/theme"
+              href={ctaHref}
               size='md'
               />
+            )}
           </div>
 
           <div className="w-full h-full lg:overflow-hidden">
             <MasonryGrid
               ref={gridRef}
               y={y}
+              media={media}
+              href={ctaHref || "/edition/theme"}
             />
           </div>
 

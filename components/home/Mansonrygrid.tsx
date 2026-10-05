@@ -1,12 +1,10 @@
 "use client";
-import { cdn } from "@/lib/cdn";
 
 import { forwardRef, useRef, useEffect } from "react";
 import { motion, MotionValue } from "framer-motion";
 import Image from "@/components/common/SmartImage";
-
-
 import Link  from "next/link";
+import type { ThemeMedia } from "@/lib/homeContent";
 
 // ✅ Flexible Cell (image | video | empty for color)
 function Cell({
@@ -60,21 +58,29 @@ function Cell({
   return null;
 }
 
+// One of the five fixed layout slots (see THEME_SLOTS in lib/homeContent).
+function MediaCell({ media }: { media?: ThemeMedia }) {
+  if (!media?.src) return <Cell type="empty" />;
+  return <Cell type={media.type} src={media.src} alt={media.alt} />;
+}
+
 interface MasonryGridProps {
   y: MotionValue<number>;
+  media: ThemeMedia[];
+  href: string;
 }
 
 const MasonryGrid = forwardRef<HTMLDivElement, MasonryGridProps>(
-  ({ y }, ref) => {
+  ({ y, media, href }, ref) => {
     return (
       <div ref={ref} className="w-full overflow-hidden h-fit md:h-full">
-        <Link href="/edition/theme" className="cursor-pointer">
+        <Link href={href} className="cursor-pointer">
         <motion.div style={{ y }}>
           <div className="h-full grid grid-cols-2 auto-rows-[100px] md:auto-rows-[300px] w-full">
 
             {/* 01 IMAGE */}
             <div className="row-span-2">
-              <Cell type="image" src={cdn("/temp/home/theme/WEBSITE_THEME BANNER_4.jpg.jpeg")} alt="Theme 1" />
+              <MediaCell media={media[0]} />
             </div>
 
             {/* 02 BRAND COLOR (KEEP) */}
@@ -84,7 +90,7 @@ const MasonryGrid = forwardRef<HTMLDivElement, MasonryGridProps>(
 
             {/* 03 IMAGE */}
             <div className="hidden md:block row-span-2">
-              <Cell type="image" src={cdn("/temp/home/theme/WEBSITE_THEME BANNER_2.jpg.jpeg")} alt="Theme 2" />
+              <MediaCell media={media[1]} />
             </div>
 
             {/* 04 BRAND COLOR (KEEP) */}
@@ -94,23 +100,13 @@ const MasonryGrid = forwardRef<HTMLDivElement, MasonryGridProps>(
 
             {/* 05 IMAGE */}
             <div className="hidden md:block row-span-3">
-              <Cell type="image" src={cdn("/temp/home/theme/WEBSITE_THEME BANNER_3.jpg.jpeg")} alt="Theme 3" />
+              <MediaCell media={media[2]} />
             </div>
 
-            {/* 06 VIDEO EXAMPLE */}
+            {/* 06 VIDEO */}
             <div className="row-span-2">
-              <Cell type="video" src={cdn("/temp/home/theme/WEBSITE1.mp4")} />
+              <MediaCell media={media[3]} />
             </div>
-
-            {/* 07 IMAGE */}
-            {/* <div className="row-span-2">
-              <Cell type="image" src={img4} alt="Theme 4" />
-            </div> */}
-
-            {/* 08 IMAGE */}
-            {/* <div>
-              <Cell type="image" src={img8} alt="Theme 5" />
-            </div> */}
 
             {/* 09 BRAND BLACK (KEEP) */}
             <div className="hidden md:block bg-[var(--color-black)]">
@@ -119,7 +115,7 @@ const MasonryGrid = forwardRef<HTMLDivElement, MasonryGridProps>(
 
             {/* 10 FULL WIDTH IMAGE */}
             <div className="col-span-2">
-              <Cell type="image" src={cdn("/temp/home/theme/sens-sensibility.jpg")} alt="Theme 6" />
+              <MediaCell media={media[4]} />
             </div>
 
           </div>

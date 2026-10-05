@@ -1,30 +1,10 @@
 "use client";
 
-import { cdn } from "@/lib/cdn";
 import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "@/components/common/SmartImage";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Container } from "../common/Container";
-
-type Slide = {
-  src: string;
-  type?: "image" | "video";
-  poster?: string;
-  alt?: string;
-  href?: string;
-};
-
-const POV_INDEX_URL = "http://povindex.designpovindia.com/";
-
-const SLIDES: Slide[] = [
-  { src: "/temp/home-hero-banner.jpeg", alt: "Design POV showcase", href: POV_INDEX_URL },
-  {
-    src: cdn("/video/POV ad 1.mp4"),
-    type: "video",
-    poster: cdn("/temp/home/section2/1.jpg"),
-    alt: "Design POV film",
-  },
-];
+import type { HeroSlide } from "@/lib/homeContent";
 
 const AUTOPLAY_MS = 5000;
 
@@ -63,20 +43,24 @@ function HeroVideo({
   );
 }
 
-export default function Hero() {
+export default function Hero({ slides: SLIDES }: { slides: HeroSlide[] }) {
   const [index, setIndex] = useState(0);
+  const hasMultiple = SLIDES.length > 1;
 
   const goTo = useCallback((next: number) => {
     setIndex(((next % SLIDES.length) + SLIDES.length) % SLIDES.length);
-  }, []);
+  }, [SLIDES.length]);
 
   const handlePrev = useCallback(() => goTo(index - 1), [goTo, index]);
   const handleNext = useCallback(() => goTo(index + 1), [goTo, index]);
 
   useEffect(() => {
+    if (!hasMultiple) return;
     const timer = setInterval(() => goTo(index + 1), AUTOPLAY_MS);
     return () => clearInterval(timer);
-  }, [index, goTo]);
+  }, [index, goTo, hasMultiple]);
+
+  if (SLIDES.length === 0) return null;
 
   return (
     <Container className="w-full overflow-hidden lg:max-w-none px-0 pt-20">
@@ -116,6 +100,7 @@ export default function Hero() {
         })}
 
         {/* Manual nav arrows — always visible on touch, hidden until hover on desktop */}
+        {hasMultiple && (<>
         <button
           onClick={handlePrev}
           aria-label="Previous hero slide"
@@ -144,6 +129,7 @@ export default function Hero() {
             />
           ))}
         </div>
+        </>)}
       </div>
     </Container>
   );

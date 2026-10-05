@@ -5,6 +5,7 @@ import SectionHeading from "../common/SectionHeading";
 import Link from "next/link";
 import { normalizeBrandPartner } from "@/lib/brandPartners";
 import type { BrandPartnerRow } from "@/types";
+import { DEFAULT_HOME } from "@/lib/homeContent";
 
 
 type SponsorItem = { id: string; name: string; logo: string; href: string };
@@ -17,7 +18,8 @@ type SponsorItem = { id: string; name: string; logo: string; href: string };
   { id: "5", name: "COLOUR PARTNER",     logo: "https://d1qlyda1dsr5ui.cloudfront.net/designpovindia.com/temp/edition/sponsors/5.png", href: "https://www.pantone.com/hk/en/" },
 ]; */
 
-const HomeSponsors: React.FC = () => {
+// Also used on the Magazine page, where the default heading applies.
+const HomeSponsors = ({ heading = DEFAULT_HOME.partners.heading }: { heading?: string }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [partners, setPartners]   = useState<SponsorItem[]>([]);
 
@@ -50,7 +52,7 @@ const HomeSponsors: React.FC = () => {
     >
       {/* HEADING */}
       <SectionHeading
-        titleMain="POV PARTNERS"
+        titleMain={heading}
         sticky={false}
         bgColor="black"
         isSectionHovered={isHovered}
