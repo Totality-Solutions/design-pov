@@ -10,6 +10,8 @@ const PUBLIC_API_ROUTES = new Set([
   "/api/cms/gallery",
   "/api/cms/studios",
   "/api/cms/global-settings",
+  "/api/cms/press-mentions",
+  "/api/cms/collaborate-images",
 ]);
 
 export function proxy(request: NextRequest) {

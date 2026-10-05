@@ -18,6 +18,8 @@ const links = [
   { href: "/cms/schedule",        label: "Schedule" },
   { href: "/cms/theme",           label: "Theme" },
   { href: "/cms/studios",         label: "Studios" },
+  { href: "/cms/about",           label: "About" },
+  { href: "/cms/collaborate",     label: "Collaborate" },
 ];
 
 export default function CmsSidebar() {

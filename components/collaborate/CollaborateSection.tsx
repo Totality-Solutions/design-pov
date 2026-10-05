@@ -1,27 +1,12 @@
 "use client";
-import { cdn } from "@/lib/cdn";
 
 import React, { useEffect, useRef, useState } from "react";
 import { ArrowUpRight, ArrowLeft, ArrowRight, X } from "lucide-react";
 import CTABtn from "../common/CTABtn";
 import CollaborateGallary from "./CollaborateGallary";
 
-const images = [
-  cdn('/temp/collaborate/brand1.jpeg'),
-  cdn('/temp/collaborate/brand2.jpg'),
-  cdn('/temp/collaborate/circle1.jpeg'),
-  cdn('/temp/collaborate/circle2.jpg'),
-  cdn('/temp/collaborate/core1.jpg'),
-  cdn('/temp/collaborate/core2.jpg'),
-  cdn('/temp/collaborate/elevate1.jpeg'),
-  cdn('/temp/collaborate/object1.jpeg'),
-  cdn('/temp/collaborate/partner1.jpeg'),
-  cdn('/temp/collaborate/partner2.jpeg'),
-  cdn('/temp/collaborate/partner3.jpeg'),
-  cdn('/temp/collaborate/partner4.jpg'),
-];
-
-const CollaborateSection = () => {
+// Images come from the CMS (Collaborate) via the Collaborate page.
+const CollaborateSection = ({ images }: { images: string[] }) => {
   const trackRef = useRef<HTMLDivElement | null>(null);
   const rafRef = useRef<number>(0);
   const offsetRef = useRef(0);

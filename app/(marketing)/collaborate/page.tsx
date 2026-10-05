@@ -3,12 +3,17 @@ import CollaborateSection from "@/components/collaborate/CollaborateSection";
 import ParticipationSection from "@/components/collaborate/ParticipationSection";
 import CTAStrip from "@/components/common/CTAStrip";
 import ShowDeckCTA from "@/components/common/ShowDeckCTA";
+import { getCollaborateImages } from "@/lib/collaborateImages";
 
+// Images are edited in the CMS — re-fetch at most once a minute.
+export const revalidate = 60;
 
-const Collaborate = () => {
+const Collaborate = async () => {
+  const images = await getCollaborateImages();
+
   return (
       <main>
-        <CollaborateSection />
+        <CollaborateSection images={images} />
         <ParticipationSection />
         <ShowDeckCTA />
       </main>

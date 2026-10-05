@@ -1,23 +1,14 @@
 "use client";
-import { cdn } from "@/lib/cdn";
 
 import React, { useState } from "react";
 import MarqueeFlow from "../common/MarqueeFlow";
 import Image from "@/components/common/SmartImage";
 import Link from "next/link";
 import SectionHeading from "../common/SectionHeading";
-import CTABtn from "../common/CTABtn";
+import type { PressMention } from "@/lib/pressMentions";
 
-const ITEMS = [
-  { id: 1, img: cdn("/temp/about/architecture-design.png"), title: "Architects", href: "https://www.architectureplusdesign.in/business-centre/asif-sataar-gagan-bhatia-perspective-risks-rewards-reinventing-design-pov/" },
-  { id: 2, img: cdn("/temp/about/the-hindu.png"), title: "Designers", href: "https://www.thehindu.com/society/mumbais-design-pov-from-bachelor-pad-to-disco-bar/article69767762.ece" },
-  { id: 3, img: cdn("/temp/about/design-pataki.png"), title: "Builders", href: "https://www.designpataki.com/dp-cult/how-design-pov-is-reimagining-indias-creative-landscape/#:~:text=The%20execution%20of%20the%20inaugural,studio's%20narrative%20vividly%20to%20life.&text=%E2%80%9CWhen%20we%20were%20organising%20Design,visitors%20in%20just%20three%20days.%E2%80%9D" },
-  { id: 4, img: cdn("/temp/about/india-today-home.png"), title: "Brands", href: "https://www.indiatoday.in/magazine/supplements/home/story/20250728-news-events-inside-access-2757644-2025-07-18" },
-  { id: 5, img: cdn("/temp/about/the-ideal-home.png"), title: "Creative", href: "https://theidealhomeandgarden.com/interior-design-exhibition-india-design-pov-2025/" },
-  { id: 6, img: cdn("/temp/about/svasa.png"), title: "Creative", href: "https://svasalife.com/designpov/?fbclid=PAZXh0bgNhZW0CMTEAAadcYvYRMj3T9_rqVZnFQk7ihe8c_gAlpfQQqJaue2l-n9xWZFxKhdwWDBMIKA_aem_nnZVMvsCr74BaBir8c-TrA" },
-];
-
-const EcosystemSection = () => {
+// Items come from the CMS (About → Press Mentions) via the About page.
+const EcosystemSection = ({ items }: { items: PressMention[] }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [expandedIndex, setExpandedIndex] = useState(0);
   return (
@@ -37,7 +28,7 @@ const EcosystemSection = () => {
       </SectionHeading>
       <div className="w-full bg-white overflow-hidden h-[160px] md:h-[140px] 2xl:h-[200px] py-4 flex items-end">
         <MarqueeFlow
-          items={ITEMS}
+          items={items}
           gap={0}
           speed={200}
           desktopCount={4}
@@ -48,6 +39,7 @@ const EcosystemSection = () => {
             return (
               <Link
                 href={item.href || '#'}
+                {...(item.href ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                 className="relative block w-full overflow-hidden border-r  border-gray-200 hover:bg-black/10"
                 style={{
                   aspectRatio:'14/4',

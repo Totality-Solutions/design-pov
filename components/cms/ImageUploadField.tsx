@@ -11,6 +11,8 @@ interface ImageUploadFieldProps {
   placeholder?: string;
   className?: string;
   previewClassName?: string;
+  /** Also accept SVG files — meant for logos. */
+  allowSvg?: boolean;
 }
 
 export default function ImageUploadField({
@@ -20,6 +22,7 @@ export default function ImageUploadField({
   placeholder,
   className,
   previewClassName,
+  allowSvg = false,
 }: ImageUploadFieldProps) {
   const { showSuccess, showError } = useToast();
   const [uploading, setUploading] = useState(false);
@@ -33,6 +36,7 @@ export default function ImageUploadField({
       const formData = new FormData();
       formData.append("file", file);
       formData.append("folder", folder);
+      if (allowSvg) formData.append("allowSvg", "true");
 
       const res = await fetch("/api/cms/upload", { method: "POST", body: formData });
       const json = await res.json();
@@ -68,7 +72,7 @@ export default function ImageUploadField({
         <input
           ref={inputRef}
           type="file"
-          accept="image/jpeg,image/jpg,image/png,image/webp"
+          accept={`image/jpeg,image/jpg,image/png,image/webp${allowSvg ? ",image/svg+xml,.svg" : ""}`}
           className="hidden"
           onChange={(e) => {
             const file = e.target.files?.[0];

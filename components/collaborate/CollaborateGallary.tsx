@@ -1,39 +1,10 @@
 "use client";
-import { cdn } from "@/lib/cdn";
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import Image from "@/components/common/SmartImage";
 
 import { Container } from "@/components/common/Container";
 import Section from "@/components/common/Section";
-
-const img1 = cdn("/temp/edition/elevate/1.JPG");
-const img2 = cdn("/temp/edition/elevate/2.JPG");
-const img3 = cdn("/temp/edition/elevate/3.JPG");
-const img4 = cdn("/temp/edition/elevate/4.JPG");
-const img5 = cdn("/temp/edition/elevate/5.JPG");
-const img6 = cdn("/temp/edition/elevate/6.JPG");
-const img7 = cdn("/temp/edition/elevate/7.JPG");
-const img8 = cdn("/temp/edition/elevate/8.JPG");
-const img9 = cdn("/temp/edition/elevate/9.JPG");
-const img10 = cdn("/temp/edition/elevate/10.JPG");
-const img11 = cdn("/temp/edition/elevate/11.JPG");
-const img12 = cdn("/temp/edition/elevate/12.JPG");
-
-const gallery = [
-  { id: 1, image: img1, thumbnail: img1 },
-  { id: 2, image: img2, thumbnail: img2 },
-  { id: 3, image: img3, thumbnail: img3 },
-  { id: 4, image: img4, thumbnail: img4 },
-  { id: 5, image: img5, thumbnail: img5 },
-  { id: 6, image: img6, thumbnail: img6 },
-  { id: 7, image: img7, thumbnail: img7 },
-  { id: 8, image: img8, thumbnail: img8 },
-  { id: 9, image: img9, thumbnail: img9 },
-  { id: 10, image: img10, thumbnail: img10 },
-  { id: 11, image: img11, thumbnail: img11 },
-  { id: 12, image: img12, thumbnail: img12 },
-];
 
 export default function CollaborateGallary({ Images }: { Images: string[] }) {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -67,9 +38,10 @@ export default function CollaborateGallary({ Images }: { Images: string[] }) {
   );
 
   const next = useCallback(() => {
-    const nextIdx = (activeIndex + 1) % gallery.length;
+    if (Images.length < 2) return;
+    const nextIdx = (activeIndex + 1) % Images.length;
     goTo(nextIdx, "down");
-  }, [activeIndex, goTo]);
+  }, [activeIndex, goTo, Images.length]);
 
   useEffect(() => {
     autoRef.current = setTimeout(next, 4000);
@@ -122,8 +94,6 @@ export default function CollaborateGallary({ Images }: { Images: string[] }) {
       });
     }
   }, [activeIndex]);
-
-  const current = gallery[activeIndex];
 
   return (
     <Container className="pb-0">
