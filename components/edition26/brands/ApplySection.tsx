@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import CTABtn from "../../common/CTABtn";
 import ParticipationPopup from "@/components/collaborate/ParticipationPopup";
 import ParticipationPopupForm from "./ParticipationPopupForm";
+import type { ApplyCardContent } from "@/lib/brandsContent";
 
 type ApplyCardProps = {
   title: string;
@@ -89,7 +90,7 @@ const ApplyCard = ({
   );
 };
 
-const ApplySection = () => {
+const ApplySection = ({ partner, participant }: { partner: ApplyCardContent; participant: ApplyCardContent }) => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [popupCategory, setPopupCategory] = useState("");
 
@@ -109,18 +110,18 @@ const ApplySection = () => {
           {/* PARTNER */}
           <ApplyCard
             isInitiallyDark={true}
-            title="Become a Partner"
-            description="Align with a platform shaping design culture and create meaningful visibility through considered partnerships."
-            buttonText="Apply as a Partner"
+            title={partner.title}
+            description={partner.description}
+            buttonText={partner.buttonLabel}
             onClick={() => openPopup("Partner")}
           />
 
           {/* PARTICIPANT */}
           <ApplyCard
             isInitiallyDark={false}
-            title="Join as a Participant"
-            description="Collaborate within the ecosystem to present your work in context - where it’s experienced, not just seen."
-            buttonText="Apply as a Participant"
+            title={participant.title}
+            description={participant.description}
+            buttonText={participant.buttonLabel}
             onClick={() => setIsParticipationPopupOpen(true)}
           />
 

@@ -1,5 +1,6 @@
 import { DEFAULT_HOME, HOME_SECTIONS, type HomeContent } from "@/lib/homeContent";
 import { DEFAULT_ECOSYSTEM, ECOSYSTEM_SECTIONS, type EcosystemPageContent } from "@/lib/ecosystemContent";
+import { DEFAULT_BRANDS, BRANDS_SECTIONS, type BrandsPageContent } from "@/lib/brandsContent";
 import type { SectionMeta } from "@/lib/pageContent";
 
 // Every CMS-editable fixed-layout page. Adding a page = a content file with
@@ -9,6 +10,7 @@ import type { SectionMeta } from "@/lib/pageContent";
 export type PageContentMap = {
   home: HomeContent;
   ecosystem: EcosystemPageContent;
+  brands: BrandsPageContent;
 };
 
 export type PageKey = keyof PageContentMap;
@@ -24,6 +26,7 @@ export type PageConfig<P extends PageKey> = {
 export const PAGES: { [P in PageKey]: PageConfig<P> } = {
   home:      { label: "Home",      path: "/",          sections: HOME_SECTIONS,      defaults: DEFAULT_HOME },
   ecosystem: { label: "Ecosystem", path: "/ecosystem", sections: ECOSYSTEM_SECTIONS, defaults: DEFAULT_ECOSYSTEM },
+  brands:    { label: "Brands",    path: "/edition/brands", sections: BRANDS_SECTIONS, defaults: DEFAULT_BRANDS },
 };
 
 export function isPageKey(value: string): value is PageKey {
