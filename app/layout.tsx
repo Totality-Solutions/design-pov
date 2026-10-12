@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Analytics } from "@vercel/analytics/react";
+import { Analytics } from "@vercel/analytics/next";
 import { Montserrat } from 'next/font/google';
 import PageLoader from "@/components/common/PageLoader";
 import ErrorBoundary from "@/components/common/ErrorBoundary";
@@ -72,8 +72,8 @@ export default function RootLayout({
           <PageLoader>
             {children}
           </PageLoader>
-          <Analytics/>
         </ErrorBoundary>
+        <Analytics />
       </body>
     </html>
   );
