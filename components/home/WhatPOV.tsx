@@ -83,7 +83,7 @@ function LazyMarqueeVideo({ src }: { src: string }) {
       muted
       playsInline
       preload="metadata" // ✅ IMPORTANT
-      className="absolute inset-0 w-full h-full object-cover"
+      className="absolute inset-0 w-full h-full object-cover object-top"
     />
   );
 }
@@ -169,7 +169,7 @@ const WhatPOV = ({ paragraphs, items }: { paragraphs: string[]; items: MarqueeIt
                               src={still}
                               alt={item.title}
                               fill
-                              className="object-cover"
+                              className="object-cover object-top"
                               sizes="50vw"
                               loading="lazy"
                             />
@@ -181,7 +181,7 @@ const WhatPOV = ({ paragraphs, items }: { paragraphs: string[]; items: MarqueeIt
                             src={item.src}
                             alt={item.title}
                             fill
-                            className="object-cover"
+                            className="object-cover object-top"
                             sizes="(max-width: 768px) 50vw, 25vw"
                             loading="lazy"
                           />
