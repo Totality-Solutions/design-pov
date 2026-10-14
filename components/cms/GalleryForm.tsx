@@ -35,6 +35,7 @@ export default function GalleryForm({
   const isEdit = !!itemId;
 
   const [form, setForm] = useState<GalleryFormData>({ ...emptyForm, ...initialData });
+  const [rotation, setRotation] = useState(0);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [existingCategories, setExistingCategories] = useState<string[]>([]);
@@ -66,7 +67,7 @@ export default function GalleryForm({
     const res = await fetch(url, {
       method,
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
+      body: JSON.stringify({ ...form, rotation }),
     });
 
     setSaving(false);
@@ -76,7 +77,8 @@ export default function GalleryForm({
       router.push("/cms/gallery");
       router.refresh();
     } else {
-      const json = await res.json();
+      // A crashed route can return an empty/HTML body, not JSON.
+      const json = await res.json().catch(() => ({}));
       setError(json.error || "Something went wrong.");
       showError("Couldn't save this gallery item. Please try again.");
     }
@@ -134,11 +136,37 @@ export default function GalleryForm({
       <Field label="Image *">
         <ImageUploadField
           value={form.image_src}
-          onChange={(url) => setField("image_src", url)}
+          onChange={(url) => {
+            setField("image_src", url);
+            setRotation(0);
+          }}
           folder={`gallery/${form.year}/${form.category || "misc"}`}
           className={input}
-          previewClassName="mt-2 h-40 w-full object-cover border border-black/10"
+          // Square + object-contain so the preview still fits after a 90° turn.
+          previewClassName="mt-2 h-64 w-64 object-contain bg-gray-50 border border-black/10 transition-transform duration-200"
+          previewStyle={{ transform: `rotate(${rotation}deg)` }}
+          cdnPreview={false}
         />
+        {form.image_src && (
+          <div className="flex items-center gap-2 mt-2">
+            <button type="button" onClick={() => setRotation((r) => (r + 270) % 360)} className={rotateBtn}>
+              ⟲ Rotate left
+            </button>
+            <button type="button" onClick={() => setRotation((r) => (r + 90) % 360)} className={rotateBtn}>
+              ⟳ Rotate right
+            </button>
+            {rotation !== 0 && (
+              <>
+                <button type="button" onClick={() => setRotation(0)} className={rotateBtn}>
+                  Reset
+                </button>
+                <span className="text-[11px] text-gray-400">
+                  Rotated {rotation}° — the image file is fixed when you save.
+                </span>
+              </>
+            )}
+          </div>
+        )}
       </Field>
 
       <div className="grid grid-cols-2 gap-4">
@@ -199,5 +227,8 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
     </div>
   );
 }
+
+const rotateBtn =
+  "border border-black/20 px-3 py-1.5 text-[10px] uppercase tracking-widest text-gray-600 hover:border-black hover:text-black transition-colors";
 
 const input = "border border-black/20 px-4 py-2.5 text-sm outline-none focus:border-black transition-colors bg-white w-full";

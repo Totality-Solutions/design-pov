@@ -13,6 +13,9 @@ interface ImageUploadFieldProps {
   placeholder?: string;
   className?: string;
   previewClassName?: string;
+  previewStyle?: React.CSSProperties;
+  /** Prefix bare paths with the CDN for the preview. Off for values that are already render-ready (e.g. gallery's local /gallery/... paths). */
+  cdnPreview?: boolean;
   /** Also accept SVG files — meant for logos. */
   allowSvg?: boolean;
 }
@@ -24,6 +27,8 @@ export default function ImageUploadField({
   placeholder,
   className,
   previewClassName,
+  previewStyle,
+  cdnPreview = true,
   allowSvg = false,
 }: ImageUploadFieldProps) {
   const { showSuccess, showError } = useToast();
@@ -79,7 +84,12 @@ export default function ImageUploadField({
       <SingleUploadStatus entry={upload} onDismiss={() => setUpload(null)} />
       {value && (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={cdn(value)} alt="preview" className={previewClassName || "mt-2 h-32 w-full object-cover border border-black/10"} />
+        <img
+          src={cdnPreview ? cdn(value) : value}
+          alt="preview"
+          style={previewStyle}
+          className={previewClassName || "mt-2 h-32 w-full object-cover border border-black/10"}
+        />
       )}
     </div>
   );

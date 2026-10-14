@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createServerClient } from "@/lib/supabase/server";
 import { resolveS3KeyFromCdnValue, deleteObjectsFromS3 } from "@/lib/s3";
+import { parseRotation, rotateGalleryImage, deleteReplacedGalleryImage } from "@/lib/galleryRotate";
 
 export async function GET(
   _req: Request,
@@ -22,7 +23,21 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  const body = await req.json();
+  const { rotation, ...body } = await req.json();
+  const degrees = parseRotation(rotation);
+  const originalSrc: string = body.image_src;
+
+  if (degrees && originalSrc) {
+    try {
+      Object.assign(
+        body,
+        await rotateGalleryImage(originalSrc, degrees, `gallery/${body.year}/${body.category || "misc"}`, req.url)
+      );
+    } catch (err: any) {
+      console.error("[gallery] Rotate failed for item", id, err);
+      return NextResponse.json({ error: err.message || "Failed to rotate image." }, { status: 500 });
+    }
+  }
 
   const { data, error } = await createServerClient()
     .from("gallery_items")
@@ -32,6 +47,7 @@ export async function PUT(
     .single();
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (degrees && originalSrc) await deleteReplacedGalleryImage(originalSrc);
   return NextResponse.json({ data });
 }
 
