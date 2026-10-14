@@ -1,45 +1,24 @@
 "use client";
-import { cdn } from "@/lib/cdn";
 import Image from "@/components/common/SmartImage";
 import React, { useState, useEffect } from "react";
+import { DEFAULT_ABOUT, type AboutSlide } from "@/lib/aboutContent";
 
-type Slide = {
-  bgText: string;
-  label: string;
-  statement: string;
-};
-
-const SLIDES: Slide[] = [
-  { 
-    bgText: "THE PHILOSOPHY", 
-    label: "The Philosophy", 
-    statement: "Design POV is built on a simple belief: design is not neutral."
-  },
-  { 
-    bgText: "WHY WE EXIST", 
-    label: "Why We Exist", 
-    statement: "To move beyond transactional formats that prioritise display over dialogue."
-  },
-  { 
-    bgText: "WHAT MAKES US DIFFERENT", 
-    label: "What Makes Us Different", 
-    statement: "We don't exist in isolation. We’re built through collaboration and experienced in context."
-  },
-];
-
-const DesignHero: React.FC<{}> = () => {
+const DesignHero = ({
+  slides: SLIDES = DEFAULT_ABOUT.hero.slides,
+  image = DEFAULT_ABOUT.hero.image,
+}: { slides?: AboutSlide[]; image?: string }) => {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [isPaused, setIsPaused] = useState<boolean>(false);
 
   useEffect(() => {
-    if (isPaused) return;
+    if (isPaused || SLIDES.length < 2) return;
 
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % SLIDES.length);
     }, 4000);
 
     return () => clearInterval(interval);
-  }, [isPaused]);
+  }, [isPaused, SLIDES.length]);
 
   return (
     <section className="relative w-full h-full bg-white px-6 md:px-10  md:pt-24 pt-12 pb-10 flex flex-col font-display overflow-hidden">
@@ -72,7 +51,7 @@ const DesignHero: React.FC<{}> = () => {
 
             return (
               <div
-                key={item.label}
+                key={index}
                 onClick={() => setCurrentIndex(index)}
                 onMouseEnter={() => {
                   if (window.innerWidth >= 1024) setCurrentIndex(index);
@@ -108,9 +87,10 @@ const DesignHero: React.FC<{}> = () => {
       </div>
 
       {/* 3. HERO IMAGE */}
+      {image && (
       <div className="group w-full aspect-[16/6] overflow-hidden bg-gray-100 mt-12 md:mt-0 relative">
         <Image
-          src={cdn("/temp/about/about-hero.jpeg")}
+          src={image}
           alt="Design POV"
           fill
           loading="lazy"
@@ -118,6 +98,7 @@ const DesignHero: React.FC<{}> = () => {
           className="object-cover transition-transform duration-2000 group-hover:scale-105"
         />
       </div>
+      )}
       
     </section>
   );

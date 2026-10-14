@@ -8,12 +8,7 @@ import {
   useTransform,
 } from "framer-motion";
 import { Container } from "@/components/common/Container";
-
-const text1 =
-  `Design POV has always believed that meaningful visibility comes from intent, context, and reaching the right audience. POV Elevate extends this philosophy beyond the show floor as an exclusive initiative for home and lifestyle brands, helping create lasting impressions and meaningful relationships.`;
-
-const text2 =
-  `Through curated offline events, tailored programming, access to discerning audiences, media and F&B partnerships, and strategic online amplification, brands are positioned in front of the people who matter. POV Elevate enables collaboration with Design POV beyond the traditional playbook.`;
+import { DEFAULT_ELEVATE } from "@/lib/elevateContent";
 
 function Word({ word, progress, range }: any) {
   const opacity = useTransform(progress, range, [0.2, 1]);
@@ -44,8 +39,10 @@ function WordReveal({ text, progress, range }: any) {
   );
 }
 
-const ElevateHero = () => {
+const ElevateHero = ({ paragraphs = DEFAULT_ELEVATE.intro.paragraphs }: { paragraphs?: string[] }) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  // Desktop: the paragraphs share the first 90% of the scroll, one after another.
+  const span = 0.9 / Math.max(paragraphs.length, 1);
   const [isMobile, setIsMobile] = useState(false);
 
   // Detect screen size to toggle between Plain Text and Sticky Reveal
@@ -73,28 +70,22 @@ const ElevateHero = () => {
         {isMobile ? (
           <div className="pt-15  px-6 text-center">
             <div className="max-w-5xl space-y-10">
-              <p className="text-h3-mobile font-medium leading-[1.3] text-justify text-neutral-900 pb-4">
-                {text1}
-              </p>
-              <p className="text-h3-mobile font-medium leading-[1.3] text-justify text-neutral-900">
-                {text2}
-              </p>
+              {paragraphs.map((text, i) => (
+                <p key={i} className="text-h3-mobile font-medium leading-[1.3] text-justify text-neutral-900 pb-4 last:pb-0">
+                  {text}
+                </p>
+              ))}
             </div>
           </div>
         ) : (
           <div className="sticky top-0 h-screen flex flex-col items-center justify-center overflow-hidden">
             <div className="px-10 text-center ">
-              <WordReveal
-                text={text1}
-                progress={smoothProgress}
-                range={[0, 0.45]}
-              />
-              <div className="h-4" aria-hidden="true" />
-              <WordReveal
-                text={text2}
-                progress={smoothProgress}
-                range={[0.45, 0.9]}
-              />
+              {paragraphs.map((text, i) => (
+                <React.Fragment key={i}>
+                  {i > 0 && <div className="h-4" aria-hidden="true" />}
+                  <WordReveal text={text} progress={smoothProgress} range={[i * span, (i + 1) * span]} />
+                </React.Fragment>
+              ))}
             </div>
           </div>
         )}

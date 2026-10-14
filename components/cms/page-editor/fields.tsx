@@ -337,6 +337,41 @@ export function ListEditor<T>({
   );
 }
 
+/** Short-text list edited as one textarea, one item per line. */
+export function LinesField({
+  label, value, onChange, hint, rows = 5,
+}: { label: string; value: string[]; onChange: (v: string[]) => void; hint?: string; rows?: number }) {
+  return (
+    <TextArea
+      label={label}
+      value={value.join("\n")}
+      onChange={(text) => onChange(text.split("\n"))}
+      rows={rows}
+      hint={hint ?? "One item per line."}
+    />
+  );
+}
+
+export function SelectField<T extends string>({
+  label, value, onChange, options, hint,
+}: {
+  label: string;
+  value: T;
+  onChange: (v: T) => void;
+  options: { value: T; label: string }[];
+  hint?: string;
+}) {
+  return (
+    <Field label={label} hint={hint}>
+      <select value={value} onChange={(e) => onChange(e.target.value as T)} className={inputCls}>
+        {options.map((o) => (
+          <option key={o.value} value={o.value}>{o.label}</option>
+        ))}
+      </select>
+    </Field>
+  );
+}
+
 /** Paragraph list edited as one textarea; a blank line starts a new paragraph. */
 export function ParagraphsField({
   label, value, onChange, hint,

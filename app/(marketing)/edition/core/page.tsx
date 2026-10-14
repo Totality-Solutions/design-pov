@@ -6,6 +6,7 @@ import { CoreShowcase } from "@/components/edition26/core/CoreShowcase";
 import CoreForm from "@/components/edition26/core/CoreForm";
 import { createServerClient } from "@/lib/supabase/server";
 import { normalizeStudio } from "@/lib/studios";
+import { getPageContent } from "@/lib/pageContentServer";
 
 async function getStudios() {
   try {
@@ -22,7 +23,7 @@ async function getStudios() {
 }
 
 export default async function CorePage() {
-  const studios = await getStudios();
+  const [studios, { coreCta }] = await Promise.all([getStudios(), getPageContent("edition")]);
 
   return (
     <main>
@@ -30,16 +31,18 @@ export default async function CorePage() {
         <CoreShowcase studios={studios} />
       </Suspense>
       <CoreForm/>
-      <div className="w-full z-10 bg-white">
-        <CTAStrip
-          title="Become a part of The Core Collective 2027"
-          ctaLabel="Apply Now"
-          ctaHref="#"
-          hoverBgColor="#000000"
-          textColor='var(--primary-red)'
-          hoverTextColor='var(--color-white)'
-        />
-      </div>
+      {coreCta.enabled && (
+        <div className="w-full z-10 bg-white">
+          <CTAStrip
+            title={coreCta.title}
+            ctaLabel={coreCta.ctaLabel}
+            ctaHref={coreCta.ctaHref}
+            hoverBgColor="#000000"
+            textColor='var(--primary-red)'
+            hoverTextColor='var(--color-white)'
+          />
+        </div>
+      )}
     </main>
   );
 }

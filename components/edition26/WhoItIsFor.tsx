@@ -5,16 +5,16 @@ import { motion, useAnimation } from "framer-motion";
 
 import CTABtn from "@/components/common/CTABtn";
 import SectionHeading from "@/components/common/SectionHeading";
+import { DEFAULT_EDITION, type EditionPageContent } from "@/lib/editionContent";
 
-const lines = [
-  "Architects & Interior Designers",
-  "Homeowners & Collectors",
-  "Developers & Decision-Makers",
-  "Artists & Cultural Thinkers",
-  "Dreamers & Design Aspirants",
-];
+const DEFAULTS = DEFAULT_EDITION.whoItIsFor;
 
-export default function WhoItIsFor() {
+export default function WhoItIsFor({
+  heading = DEFAULTS.heading,
+  lines = DEFAULTS.lines,
+  ctaLabel = DEFAULTS.ctaLabel,
+  ctaHref = DEFAULTS.ctaHref,
+}: Partial<Omit<EditionPageContent["whoItIsFor"], "enabled">>) {
   const controls = useAnimation();
 
   const [activeIndex, setActiveIndex] = useState(0);
@@ -95,12 +95,13 @@ export default function WhoItIsFor() {
       }
     };
 
-    runAnimation();
+    // A single line has nowhere to scroll to.
+    if (originalLength > 1) runAnimation();
 
     return () => {
       cancelled = true;
     };
-  }, [controls, lineHeight]);
+  }, [controls, lineHeight, originalLength]);
 
   return (
     <section
@@ -109,7 +110,7 @@ export default function WhoItIsFor() {
       onMouseLeave={() => setIsHovered(false)}
     >
       <SectionHeading
-        titleMain="For those who consume & create design:"
+        titleMain={heading}
         sticky={true}
         isSectionHovered={isHovered}
       />
@@ -177,8 +178,8 @@ export default function WhoItIsFor() {
           <div className="absolute inset-0 bg-gradient-to-l from-white/[0.03] to-transparent" />
 
           <CTABtn
-            label="FAQ"
-            href="/faq"
+            label={ctaLabel}
+            href={ctaHref}
             showButtonBg={true}
             btnBg="var(--primary-blue)"
             btnHoverBg="var(--primary-blue)"

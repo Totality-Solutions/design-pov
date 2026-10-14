@@ -1,8 +1,10 @@
 import Link from "next/link";
-import CmsSidebar from "@/components/cms/CmsSidebar";
+import CmsPageShell from "@/components/cms/page-editor/CmsPageShell";
+import PageEditorClient from "@/components/cms/page-editor/PageEditorClient";
 import ObjectsTable from "@/components/cms/ObjectsTable";
 import SeedObjectsButton from "@/components/cms/SeedObjectsButton";
 import { createServerClient } from "@/lib/supabase/server";
+import { getPageContent, getSavedSections } from "@/lib/pageContentServer";
 
 export const dynamic = "force-dynamic";
 
@@ -16,18 +18,24 @@ async function getObjects() {
 }
 
 export default async function ObjectsCmsPage() {
-  const { objects, error } = await getObjects();
+  const [{ objects, error }, content, sections] = await Promise.all([
+    getObjects(),
+    getPageContent("objects"),
+    getSavedSections("objects"),
+  ]);
 
   return (
-    <div className="min-h-screen bg-[#f7f7f7]">
-      <CmsSidebar />
+    <CmsPageShell wide title="Objects" viewLinks={[{ href: "/ecosystem/objects", label: "View objects page" }]} error={sections.error}>
+      {/* ── Page text ── */}
+      <section className="mb-14">
+        <h2 className="text-lg font-semibold text-black mb-4">Page Sections</h2>
+        <PageEditorClient page="objects" initial={content} saved={sections.saved} />
+      </section>
 
-      <main className="ml-56 p-10">
-        <div className="mb-8 flex items-end justify-between">
-          <div>
-            <p className="text-[10px] uppercase tracking-[0.3em] text-gray-400 mb-1">CMS</p>
-            <h1 className="text-2xl font-semibold text-black">Objects</h1>
-          </div>
+      {/* ── Objects list ── */}
+      <section>
+        <div className="mb-5 flex items-end justify-between">
+          <h2 className="text-lg font-semibold text-black">Objects</h2>
           <div className="flex items-center gap-3">
             <SeedObjectsButton />
             <Link
@@ -55,7 +63,7 @@ export default async function ObjectsCmsPage() {
         )}
 
         <ObjectsTable initialData={objects} />
-      </main>
-    </div>
+      </section>
+    </CmsPageShell>
   );
 }

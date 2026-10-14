@@ -2,7 +2,7 @@
 import { cdn } from "@/lib/cdn";
 
 import React, { useState, useEffect } from 'react';
-import type { NextPage } from 'next';
+import { DEFAULT_EDITION, type EditionPageContent } from "@/lib/editionContent";
 import Image from "@/components/common/SmartImage";
 import Link from "next/link";
 import { motion } from 'framer-motion';
@@ -81,7 +81,12 @@ const HoverCard = ({ project, isDesktop }: any) => {
   );
 };
 
-const Core2026: NextPage = () => {
+const Core2026 = ({
+  headingMain = DEFAULT_EDITION.core.headingMain,
+  headingBold = DEFAULT_EDITION.core.headingBold,
+  video = DEFAULT_EDITION.core.video,
+  href = DEFAULT_EDITION.core.href,
+}: Partial<Omit<EditionPageContent["core"], "enabled">>) => {
   const [isDesktop, setIsDesktop] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -99,15 +104,15 @@ const Core2026: NextPage = () => {
       onMouseLeave={() => setIsHovered(false)}
     >
       <SectionHeading
-        titleMain="Core "
-        titleBold="Collective"
+        titleMain={headingMain}
+        titleBold={headingBold}
         sticky={false}
         isSectionHovered={isHovered}
-        
+
       />
-      <Link href="/edition/core">
+      <Link href={href || "/edition/core"}>
         <div className="w-full h-full">
-          <video src={cdn("/video/The Core 26.mp4")} autoPlay loop muted playsInline preload="metadata" className="w-full h-full bg-cover object-contain" />
+          <video src={cdn(video)} autoPlay loop muted playsInline preload="metadata" className="w-full h-full bg-cover object-contain" />
         </div>
       </Link>
       {/* <main className="w-full max-w-[1420px] pt-[20px] px-6 lg:px-[50px] pb-20">

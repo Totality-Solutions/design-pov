@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import SectionHeading from '../../common/SectionHeading';
 import FormInner from '@/components/common/FormInner'; // Importing the shared internal form logic
 
-export default function ElevateForm() {
+export default function ElevateForm({ heading = "Elevate" }: { heading?: string }) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
@@ -14,7 +14,7 @@ export default function ElevateForm() {
       onMouseLeave={() => setIsHovered(false)}
     >
       <SectionHeading
-        titleMain="Elevate"
+        titleMain={heading}
         isSectionHovered={isHovered}
       />
       

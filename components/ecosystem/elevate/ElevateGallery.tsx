@@ -1,41 +1,20 @@
 "use client";
-import { cdn } from "@/lib/cdn";
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import Image from "@/components/common/SmartImage";
 
 import { Container } from "@/components/common/Container";
 import Section from "@/components/common/Section";
+import { DEFAULT_ELEVATE } from "@/lib/elevateContent";
 
-const img1 = cdn("/temp/edition/elevate/1.JPG");
-const img2 = cdn("/temp/edition/elevate/2.JPG");
-const img3 = cdn("/temp/edition/elevate/3.JPG");
-const img4 = cdn("/temp/edition/elevate/4.JPG");
-const img5 = cdn("/temp/edition/elevate/5.JPG");
-const img6 = cdn("/temp/edition/elevate/6.JPG");
-const img7 = cdn("/temp/edition/elevate/7.JPG");
-const img8 = cdn("/temp/edition/elevate/8.JPG");
-const img9 = cdn("/temp/edition/elevate/9.JPG");
-const img10 = cdn("/temp/edition/elevate/10.JPG");
-const img11 = cdn("/temp/edition/elevate/11.JPG");
-const img12 = cdn("/temp/edition/elevate/12.JPG");
+const DEFAULTS = DEFAULT_ELEVATE.gallery;
 
-const gallery = [
-  { id: 1, image: img1, thumbnail: img1 },
-  { id: 2, image: img2, thumbnail: img2 },
-  { id: 3, image: img3, thumbnail: img3 },
-  { id: 4, image: img4, thumbnail: img4 },
-  { id: 5, image: img5, thumbnail: img5 },
-  { id: 6, image: img6, thumbnail: img6 },
-  { id: 7, image: img7, thumbnail: img7 },
-  { id: 8, image: img8, thumbnail: img8 },
-  { id: 9, image: img9, thumbnail: img9 },
-  { id: 10, image: img10, thumbnail: img10 },
-  { id: 11, image: img11, thumbnail: img11 },
-  { id: 12, image: img12, thumbnail: img12 },
-];
-
-export default function ElevateGallery() {
+export default function ElevateGallery({
+  heading = DEFAULTS.heading,
+  body = DEFAULTS.body,
+  images = DEFAULTS.images,
+}: { heading?: string; body?: string; images?: string[] }) {
+  const gallery = images.filter(Boolean).map((src, i) => ({ id: i + 1, image: src, thumbnail: src }));
   const [activeIndex, setActiveIndex] = useState(0);
   const [prevIndex, setPrevIndex] = useState<number | null>(null);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -69,15 +48,16 @@ export default function ElevateGallery() {
   const next = useCallback(() => {
     const nextIdx = (activeIndex + 1) % gallery.length;
     goTo(nextIdx, "down");
-  }, [activeIndex, goTo]);
+  }, [activeIndex, goTo, gallery.length]);
 
   useEffect(() => {
+    if (gallery.length < 2) return;
     autoRef.current = setTimeout(next, 4000);
 
     return () => {
       if (autoRef.current) clearTimeout(autoRef.current);
     };
-  }, [next]);
+  }, [next, gallery.length]);
 
   useEffect(() => {
     const container = carouselRef.current;
@@ -124,6 +104,7 @@ export default function ElevateGallery() {
   }, [activeIndex]);
 
   const current = gallery[activeIndex];
+  if (!current) return null;
 
   return (
     <Container className="pb-10">
@@ -179,14 +160,12 @@ export default function ElevateGallery() {
 
                 <div className="">
                   <h2 className="text-[clamp(24px,1vw,40px)] font-bold leading-none text-black animate-[rtlIn_0.58s_cubic-bezier(0.16,1,0.3,1)_both] [animation-delay:0.12s]">
-                    Light, reimagined
+                    {heading}
                   </h2>
                 </div>
                 <div className="">
-                  <p className="text-[15px] font-light leading-[1.3] text-black max-w-[450px] 2xl:pr-0 lg:pr-8 animate-[rtlIn_0.58s_cubic-bezier(0.16,1,0.3,1)_both]">
-                    In Bengaluru, Sunrooof (@sunrooof_) unveiled their new Experience Centre - a space where natural sunlight meets intelligent technology. Guests experienced guided walkthroughs of their wellness lighting systems, live demonstrations of Al-integrated innovation, and an evening of meaningful conversations with architects, designers, and industry peers.
-                    This evening also marked the beginning of POV Elevate: a new initiative by Design POV that extends our platform beyond the show floor, creating curated, design-led moments for home and lifestyle brands.
-                    Because visibility is strongest when it's intentional, and shared with the right room.<br/>In association with: @theidealhomeandgarden
+                  <p className="text-[15px] font-light leading-[1.3] text-black max-w-[450px] 2xl:pr-0 lg:pr-8 whitespace-pre-line animate-[rtlIn_0.58s_cubic-bezier(0.16,1,0.3,1)_both]">
+                    {body}
                   </p>
                 </div>
 

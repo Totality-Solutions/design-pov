@@ -1,16 +1,19 @@
 import ContactFormSection from "@/components/contact/ContactFormSection";
-// Import other common layout components if needed
-import { Container } from "@/components/common/Container"; 
 import ContactHeader from "@/components/contact/ContactHeader";
-import CTAStrip from "@/components/common/CTAStrip";
 import ShowDeckCTA from "@/components/common/ShowDeckCTA";
+import { getPageContent } from "@/lib/pageContentServer";
 
-export default function ContactPage() {
+// Saving in CMS → Contact revalidates this page immediately; this is only
+// the fallback refresh interval.
+export const revalidate = 3600;
+
+export default async function ContactPage() {
+  const { header, form } = await getPageContent("contact");
+
   return (
     <main className="min-h-screen">
-      {/* You can wrap it in your existing Container or Section components */}
-      <ContactHeader />
-      <ContactFormSection />
+      {header.enabled && <ContactHeader title={header.title} description={header.description} />}
+      {form.enabled && <ContactFormSection />}
       <ShowDeckCTA />
     </main>
   );

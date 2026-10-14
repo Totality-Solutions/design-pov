@@ -1,21 +1,17 @@
 "use client";
-import { cdn } from "@/lib/cdn";
 
 import React from "react";
-import Image from "@/components/common/SmartImage";
-import { MediaRenderer } from "../../common/MediaRenderer";
-import CTABtn from "../../common/CTABtn";
 import { UnderlineText } from "@/components/common/Underlinetext";
+import { DEFAULT_OBJECTS_PAGE } from "@/lib/objectsPageContent";
 
-export default function ObjectsHero() {
+export default function ObjectsHero({ headline = DEFAULT_OBJECTS_PAGE.hero.headline }: { headline?: string }) {
   return (
     <section className="w-full h-full bg-pov-white">
       {/* TEXT SECTION: Clean horizontal layout with border */}
 
     <div className="w-full pt-28 lg:pt-20">
       <UnderlineText lineHeight={72} className="text-h2-mobile md:text-h2-tab lg:text-h2 tracking-tight font-semibold">
-        A collection of original, one-of-one pieces-each a distilled expression of perspective.
-        
+        {headline}
       </UnderlineText>
     </div>
 

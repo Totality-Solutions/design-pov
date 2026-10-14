@@ -8,7 +8,15 @@ import SectionHeading from "../common/SectionHeading";
 import type { PressMention } from "@/lib/pressMentions";
 
 // Items come from the CMS (About → Press Mentions) via the About page.
-const EcosystemSection = ({ items }: { items: PressMention[] }) => {
+const EcosystemSection = ({
+  items,
+  headingMain = "Press",
+  headingBold = "Mentions",
+}: {
+  items: PressMention[];
+  headingMain?: string;
+  headingBold?: string;
+}) => {
   const [isHovered, setIsHovered] = useState(false);
   const [expandedIndex, setExpandedIndex] = useState(0);
   return (
@@ -18,8 +26,8 @@ const EcosystemSection = ({ items }: { items: PressMention[] }) => {
       className="w-full bg-white py-8"
     >
       <SectionHeading 
-        titleMain="Press" 
-        titleBold="Mentions" 
+        titleMain={headingMain}
+        titleBold={headingBold}
         sticky={false}
         isSectionHovered={isHovered} 
       >

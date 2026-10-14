@@ -2,6 +2,7 @@ import ObjectsForm from "@/components/ecosystem/objects/ObjectsForm";
 import ObjectsHero from "@/components/ecosystem/objects/ObjectsHero";
 import ObjectsCarousel from "@/components/ecosystem/objects/ObjectsCarousel";
 import type { Metadata } from "next";
+import { getPageContent } from "@/lib/pageContentServer";
 
 export const metadata: Metadata = {
   title: "Objects | Design POV India",
@@ -33,12 +34,18 @@ export const metadata: Metadata = {
   },
 };
 
-export default function ObjectsPage() {
+// Saving in CMS → Objects revalidates this page immediately; this is only
+// the fallback refresh interval.
+export const revalidate = 3600;
+
+export default async function ObjectsPage() {
+  const { hero, carousel, form } = await getPageContent("objects");
+
   return (
     <main className="w-full min-h-screen bg-white">
-      <ObjectsHero />
-      <ObjectsCarousel />
-      <ObjectsForm />
+      {hero.enabled && <ObjectsHero headline={hero.headline} />}
+      {carousel.enabled && <ObjectsCarousel />}
+      {form.enabled && <ObjectsForm />}
     </main>
   );
 }

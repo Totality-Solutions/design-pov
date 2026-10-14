@@ -7,25 +7,22 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FiPlus, FiMinus } from "react-icons/fi";
 import CTABtn from "../common/CTABtn";
 import ParticipationPopup from "./ParticipationPopup";
+import { DEFAULT_COLLABORATE, type CollaborateMedium } from "@/lib/collaborateContent";
 
-const modules = [
-  { name: "Circle", href: "/edition/schedule", description: "A collaborative space for unfiltered dialogue, bringing together diverse voices to shape the cultural and creative landscape." },
-  { name: "Core", href: "/edition/core", description: "The architectural foundation of our vision, where structural integrity meets the fluid needs of modern society through innovative design." },
-  { name: "Object", href: "/ecosystem/objects", description: "Exploring the boundary between art and utility through a curated collection of physical artifacts that redefine spaces." },
-  { name: "Elevate", href: "/ecosystem/elevate", description: "A dedicated platform designed to amplify emerging talent and high-concept projects within the global design community." },
-  { name: "Brand Participations", href: "/edition/brands", description: "Bridging the gap between corporate identity and immersive physical experience design through spatial storytelling." },
-  { name: "Partnership", href: "/edition/brands", description: "Empowering the creative economy by providing brands with high-impact platforms to integrate with global design movements." },
-  { name: "Media Enquiry", href: "/contact", description: "For press kits, interview requests, and media collaborations, reach out to our communications team for official insights." },
-];
-
-export default function ParticipationSection() {
+export default function ParticipationSection({
+  heading = DEFAULT_COLLABORATE.mediums.heading,
+  items: modules = DEFAULT_COLLABORATE.mediums.items,
+}: {
+  heading?: string;
+  items?: CollaborateMedium[];
+}) {
   const [active, setActive] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [isHovered, setIsHovered] = useState(false);
 
   return (
     <Container className="w-full bg-white" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
-      <SectionHeading titleMain="Collaboration Mediums"  sticky={false} isSectionHovered={isHovered} className=' !border-t-0' />
+      <SectionHeading titleMain={heading}  sticky={false} isSectionHovered={isHovered} className=' !border-t-0' />
 
       {/* MOBILE VIEW */}
       <div className="md:hidden flex flex-col">

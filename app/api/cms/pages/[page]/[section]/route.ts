@@ -13,7 +13,7 @@ async function resolve(params: Params["params"]) {
   const { page, section } = await params;
   if (!isPageKey(page)) return { error: "Unknown page." } as const;
   if (!PAGES[page].sections.some((s) => s.key === section)) return { error: "Unknown section." } as const;
-  return { page, section, path: PAGES[page].path } as const;
+  return { page, section, paths: ([] as string[]).concat(PAGES[page].path) } as const;
 }
 
 // Save a section (create or replace).
@@ -32,7 +32,7 @@ export async function PUT(req: Request, { params }: Params) {
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
   // Pages are statically cached — refresh now rather than waiting.
-  revalidatePath(target.path);
+  target.paths.forEach((p) => revalidatePath(p));
   return NextResponse.json({ success: true });
 }
 
@@ -48,6 +48,6 @@ export async function DELETE(_req: Request, { params }: Params) {
     .eq("section", target.section);
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
-  revalidatePath(target.path);
+  target.paths.forEach((p) => revalidatePath(p));
   return NextResponse.json({ success: true });
 }

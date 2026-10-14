@@ -2,12 +2,13 @@
 import { cdn } from "@/lib/cdn";
 
 import React, { useState, useEffect } from 'react';
-import type { NextPage } from 'next';
 import Image from "@/components/common/SmartImage";
 import { motion, useSpring, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
+import { DEFAULT_EDITION, type EditionPageContent } from "@/lib/editionContent";
 
-// 1. Data Set with Mobile (Fixed), Tablet (New), and Desktop (Fixed)
+// 1. Card layout: Mobile (Fixed), Tablet (New), and Desktop (Fixed).
+// Images come from CMS → Edition Page; `img` is only the fallback.
 const themeData = [
   { 
     id: 1, w: 360, h: 150, img: cdn("/temp/home/theme/sens-sensibility.jpg"),
@@ -42,7 +43,18 @@ const themeData = [
 
 ];
 
-const Theme2026: NextPage = () => {
+type ThemeSectionProps = Omit<EditionPageContent["theme"], "enabled">;
+
+const Theme2026 = ({
+  title = DEFAULT_EDITION.theme.title,
+  subtitle = DEFAULT_EDITION.theme.subtitle,
+  href = DEFAULT_EDITION.theme.href,
+  images = DEFAULT_EDITION.theme.images,
+}: Partial<ThemeSectionProps>) => {
+  // Slots with no image are left out.
+  const cards = themeData
+    .map((item, i) => ({ ...item, img: images[i] ?? item.img }))
+    .filter((item) => item.img);
   const [highlightedIndices, setHighlightedIndices] = useState<number[]>([]);
   const [isIntroActive, setIsIntroActive] = useState(true);
   const [isInsideSection, setIsInsideSection] = useState(false);
@@ -81,7 +93,7 @@ const Theme2026: NextPage = () => {
 
     const interval = setInterval(() => {
       if (!isIntroActive || window.innerWidth < 1024) return;
-      setHighlightedIndices([Math.floor(Math.random() * themeData.length)]);
+      setHighlightedIndices([Math.floor(Math.random() * cards.length)]);
       setTimeout(() => setHighlightedIndices([]), 150);
     }, 450);
 
@@ -91,7 +103,7 @@ const Theme2026: NextPage = () => {
       clearTimeout(introTimer);
       clearInterval(interval);
     };
-  }, [isIntroActive, cursorX, cursorY]);
+  }, [isIntroActive, cursorX, cursorY, cards.length]);
 
   return (
     <section 
@@ -99,16 +111,16 @@ const Theme2026: NextPage = () => {
       onMouseLeave={() => setIsInsideSection(false)}
       className={`relative w-full bg-white h-[180vh] md:h-[200vh] lg:h-[270vh] 2xl:h-[200vh] overflow-visible ${device === 'desktop' ? 'cursor-none' : 'cursor-default'}`}
     >
-      <Link href="/edition/theme" className='cursor-none'>
-      
+      <Link href={href || "/edition/theme"} className='cursor-none'>
+
       {/* 1. STICKY BACKGROUND TEXT LAYER */}
       <div className="sticky top-0 h-screen w-full flex flex-col items-center justify-center pointer-events-none z-0 px-6">
         <div className="text-center">
           <h2 className="font-['Montserrat'] text-[40px] md:text-[56px] lg:text-[72px] font-bold text-black leading-none uppercase select-none">
-            Sense & Sensibility
+            {title}
           </h2>
-          <p className="font-['Montserrat'] text-[16px] md:text-[20px] lg:text-[24px] font-medium text-black/80 mt-2 select-none">
-            Most platforms present design as a product.<br/>We present it as a perspective.
+          <p className="font-['Montserrat'] text-[16px] md:text-[20px] lg:text-[24px] font-medium text-black/80 mt-2 select-none whitespace-pre-line">
+            {subtitle}
           </p>
         </div>
       </div>
@@ -142,7 +154,7 @@ const Theme2026: NextPage = () => {
 
       {/* 3. SCROLLING FOREGROUND CARDS LAYER */}
       <div className="absolute top-0 left-0 w-full h-full z-10 px-4 md:px-10">
-        {themeData.map((item, i) => {
+        {cards.map((item, i) => {
           const isHighlighted = highlightedIndices.includes(i);
           
           // Selection logic for responsive positioning and sizing

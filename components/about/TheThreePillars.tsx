@@ -7,46 +7,20 @@ import CTAStrip from '@/components/common/CTAStrip';
 import CTABtn from '../common/CTABtn';
 import SectionHeading from '../common/SectionHeading';
 
-import { cdn } from '@/lib/cdn'
+import { DEFAULT_ABOUT, type AboutPageContent } from '@/lib/aboutContent';
 
-interface Pillar {
-  id: string;
-  title: string;
-  description: string;
-  image: any;
-  buttonLabel: string;
-  buttonHref?: string;
-}
+const DEFAULTS = DEFAULT_ABOUT.pillars;
 
-const PILLAR_DATA: Pillar[] = [
-  {
-    id: "arch",
-    title: "Architect Firms (The Core):",
-    description: "Shape the vision: translating ideas into immersive, narrative-led environments.",
-    image: cdn('/temp/about/1600-x-1200.png'),
-    buttonLabel: "Explore",
-    buttonHref:"/edition/core"
-  },
-  {
-    id: "brand",
-    title: "Home & Lifestyle Brands:",
-    description: "Enable the narrative: bringing material, product, and innovation into context.",
-    image: cdn('/temp/about/1600-x-1200.-1.png'),
-    buttonLabel: "Explore",
-    buttonHref:"/edition/brands"
-  },
-  {
-    id: "build",
-    title: "Build Partners:",
-    description: "Realise the vision: transforming concepts into precise, tangible spaces.",
-    image: cdn('/temp/about/build-partner.png'),
-    buttonLabel: "Explore",
-    buttonHref:"/edition/theme"
-  }
-];
-
-const TheThreePillars: React.FC = () => {
+const TheThreePillars = ({
+  headingMain = DEFAULTS.headingMain,
+  headingBold = DEFAULTS.headingBold,
+  items: PILLAR_DATA = DEFAULTS.items,
+  ctaTitle = DEFAULTS.ctaTitle,
+  ctaLabel = DEFAULTS.ctaLabel,
+  ctaHref = DEFAULTS.ctaHref,
+}: Partial<Omit<AboutPageContent["pillars"], "enabled">>) => {
   const [activePillar, setActivePillar] = useState<number>(0);
+  const active = PILLAR_DATA[activePillar] ?? PILLAR_DATA[0];
   const [isHovered, setIsHovered] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -87,8 +61,8 @@ const TheThreePillars: React.FC = () => {
     >
       {/* 1. SECTION HEADER */}
       <SectionHeading 
-        titleMain="Our " 
-        titleBold="Pillars" 
+        titleMain={headingMain}
+        titleBold={headingBold}
         sticky={!isMobile} 
         stickyTop="lg:top-20"
         isSectionHovered={isHovered} 
@@ -113,15 +87,15 @@ const TheThreePillars: React.FC = () => {
             >
               <div className="flex flex-col gap-2.5 max-w-[288px] 2xl:max-w-[500px]">
                 <h3 className="text-[22px] 2xl:text-[24px] font-bold text-black tracking-wider uppercase">
-                  {PILLAR_DATA[activePillar].title}
+                  {active?.title}
                 </h3>
                 <p className="text-base 2xl:text-[18px] font-normal text-black opacity-70 leading-[1.3]">
-                  {PILLAR_DATA[activePillar].description}
+                  {active?.description}
                 </p>
               </div>
-              
+
               <CTABtn
-                label={PILLAR_DATA[activePillar].buttonLabel}
+                label={active?.buttonLabel}
                 iconType="arrow"
                 btnBg="var(--color-white)"
                 btnHoverBg="var(--primary-blue)"
@@ -134,7 +108,7 @@ const TheThreePillars: React.FC = () => {
                 bottomKey2Width="12px"
                 bottomKey1Right="50px"
                 bottomKey2Right="15px"
-                href={PILLAR_DATA[activePillar].buttonHref}
+                href={active?.buttonHref}
               />
             </motion.div>
           </AnimatePresence>
@@ -143,8 +117,8 @@ const TheThreePillars: React.FC = () => {
         {/* SCROLLING CONTENT Area with Mobile Stacking */}
         <div className="flex-1 w-full bg-white">
           {PILLAR_DATA.map((pillar, index) => (
-            <div 
-              key={pillar.id}
+            <div
+              key={index}
               data-index={index}
               /* STACKING LOGIC: 
                  - sticky top-0: makes the card stick to top
@@ -167,7 +141,7 @@ const TheThreePillars: React.FC = () => {
                   </p>
                 </div>
                 <div>
-                  <CTABtn label={pillar.buttonLabel} href="#tickets" />
+                  <CTABtn label={pillar.buttonLabel} href={pillar.buttonHref} />
                 </div>
               </div>
 
@@ -191,9 +165,9 @@ const TheThreePillars: React.FC = () => {
       {/* 3. FULL WIDTH CTA STRIP */}
       <div className="w-full z-10 bg-white border-t border-b border-[#DFDFDF]">
         <CTAStrip
-          title="Become a part of a design led platform like no other."
-          ctaLabel="Apply Now"
-          ctaHref="/collaborate"
+          title={ctaTitle}
+          ctaLabel={ctaLabel}
+          ctaHref={ctaHref}
           hoverBgColor="#000000"
           textColor="var(--primary-red)"
           hoverTextColor="var(--color-white)"

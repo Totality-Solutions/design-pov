@@ -3,6 +3,7 @@ import ElevateForm from "@/components/ecosystem/elevate/ElevateForm";
 import ElevateGallery from "@/components/ecosystem/elevate/ElevateGallery";
 import ElevateHero from "@/components/ecosystem/elevate/ElevateHero";
 import type { Metadata } from "next";
+import { getPageContent } from "@/lib/pageContentServer";
 
 export const metadata: Metadata = {
   title: "Elevate | Design POV India",
@@ -34,12 +35,18 @@ export const metadata: Metadata = {
   },
 };
 
-export default function ElevatePage() {
+// Saving in CMS → Elevate revalidates this page immediately; this is only
+// the fallback refresh interval.
+export const revalidate = 3600;
+
+export default async function ElevatePage() {
+  const { intro, gallery, form } = await getPageContent("elevate");
+
   return (
     <main className="w-full min-h-screen bg-white">
-        <ElevateHero />
-        <ElevateGallery />
-        <ElevateForm />
+        {intro.enabled && <ElevateHero paragraphs={intro.paragraphs} />}
+        {gallery.enabled && <ElevateGallery heading={gallery.heading} body={gallery.body} images={gallery.images} />}
+        {form.enabled && <ElevateForm heading={form.heading} />}
     </main>
   );
 }

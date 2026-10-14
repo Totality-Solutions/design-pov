@@ -4,9 +4,18 @@ import React, { useEffect, useRef, useState } from "react";
 import { ArrowUpRight, ArrowLeft, ArrowRight, X } from "lucide-react";
 import CTABtn from "../common/CTABtn";
 import CollaborateGallary from "./CollaborateGallary";
+import { DEFAULT_COLLABORATE } from "@/lib/collaborateContent";
 
-// Images come from the CMS (Collaborate) via the Collaborate page.
-const CollaborateSection = ({ images }: { images: string[] }) => {
+// Images and text come from the CMS (Collaborate) via the Collaborate page.
+const CollaborateSection = ({
+  images,
+  heading = DEFAULT_COLLABORATE.intro.heading,
+  text = DEFAULT_COLLABORATE.intro.text,
+}: {
+  images: string[];
+  heading?: string;
+  text?: string;
+}) => {
   const trackRef = useRef<HTMLDivElement | null>(null);
   const rafRef = useRef<number>(0);
   const offsetRef = useRef(0);
@@ -73,7 +82,7 @@ const CollaborateSection = ({ images }: { images: string[] }) => {
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
             <div className="flex items-center gap-3 text-left ">
               <h2 className="text-3xl md:text-4xl font-bold font-[Montserrat]">
-                Contribute to the Dialogue
+                {heading}
               </h2>
               {/* <ArrowUpRight className="w-5 h-5 mb-4 stroke-[1.5]" /> */}
             </div>
@@ -97,9 +106,8 @@ const CollaborateSection = ({ images }: { images: string[] }) => {
 
           {/* Content */}
           <div className="grid gap-8 text-black text-base md:text-lg leading-relaxed font-[Montserrat]">
-            <p>
-              From immersive spaces to conversations, objects, and extensions beyond the show - Design POV is an ecosystem shaped by many voices.
-              If you’d like to be part of it, we’d like to hear from you.
+            <p className="whitespace-pre-line">
+              {text}
             </p>
             {/* <p>
              If you’d like to be part of it, we’d like to hear from you.

@@ -1,20 +1,20 @@
 "use client";
-import { cdn } from "@/lib/cdn";
 
 import React from "react";
-import Image from "@/components/common/SmartImage";
-import { MediaRenderer } from "../common/MediaRenderer";
-import CTABtn from "../common/CTABtn";
 import { UnderlineText } from "../common/Underlinetext";
+import { DEFAULT_MAGAZINE } from "@/lib/magazineContent";
 
-export default function MagazineHero() {
+export default function MagazineHero({
+  headline = DEFAULT_MAGAZINE.hero.headline,
+  subtext = DEFAULT_MAGAZINE.hero.subtext,
+}: { headline?: string; subtext?: string }) {
   return (
     <section className="w-full h-fit bg-pov-white border-b border-pov-black/40">
       {/* TEXT SECTION: Clean horizontal layout with border */}
 
     <div className="w-full pt-10 lg:pt-20">
       <UnderlineText lineHeight={72} className="text-h2-mobile md:text-h2-tab lg:text-h2 tracking-tight font-semibold">
-        A curation of stories from those who consume and create design - from the Indian sub-continent and beyond.
+        {headline}
       </UnderlineText>
       
 
@@ -23,7 +23,7 @@ export default function MagazineHero() {
         {/* 75% Column */}
         <div className="col-span-3">
           <p className="text-body-mobile md:text-body-tab lg:text-body tracking-tight font-semibold">
-            An editorial platform capturing the voices and narratives shaping design today.
+            {subtext}
           </p>
         </div>
         

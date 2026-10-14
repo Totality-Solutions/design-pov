@@ -1,7 +1,9 @@
 import Link from "next/link";
-import CmsSidebar from "@/components/cms/CmsSidebar";
+import CmsPageShell from "@/components/cms/page-editor/CmsPageShell";
+import PageEditorClient from "@/components/cms/page-editor/PageEditorClient";
 import CollaborateImagesTable from "@/components/cms/CollaborateImagesTable";
 import { createServerClient } from "@/lib/supabase/server";
+import { getPageContent, getSavedSections } from "@/lib/pageContentServer";
 
 export const dynamic = "force-dynamic";
 
@@ -15,17 +17,25 @@ async function getCollaborateImages() {
 }
 
 export default async function CollaborateCmsPage() {
-  const { images, error } = await getCollaborateImages();
+  const [{ images, error }, content, sections] = await Promise.all([
+    getCollaborateImages(),
+    getPageContent("collaborate"),
+    getSavedSections("collaborate"),
+  ]);
 
   return (
-    <div className="min-h-screen bg-[#f7f7f7]">
-      <CmsSidebar />
+    <CmsPageShell wide title="Collaborate" viewLinks={[{ href: "/collaborate", label: "View collaborate page" }]} error={sections.error}>
+      {/* ── Page text ── */}
+      <section className="mb-14">
+        <h2 className="text-lg font-semibold text-black mb-4">Page Sections</h2>
+        <PageEditorClient page="collaborate" initial={content} saved={sections.saved} />
+      </section>
 
-      <main className="ml-56 p-10">
-        <div className="mb-8 flex items-end justify-between">
+      {/* ── Gallery images ── */}
+      <section>
+        <div className="mb-5 flex items-end justify-between">
           <div>
-            <p className="text-[10px] uppercase tracking-[0.3em] text-gray-400 mb-1">CMS</p>
-            <h1 className="text-2xl font-semibold text-black">Collaborate</h1>
+            <h2 className="text-lg font-semibold text-black">Gallery Images</h2>
             <p className="text-sm text-gray-400 mt-0.5">Images in the gallery strip on the Collaborate page.</p>
           </div>
           <Link
@@ -47,7 +57,7 @@ export default async function CollaborateCmsPage() {
         )}
 
         <CollaborateImagesTable initialData={images} />
-      </main>
-    </div>
+      </section>
+    </CmsPageShell>
   );
 }

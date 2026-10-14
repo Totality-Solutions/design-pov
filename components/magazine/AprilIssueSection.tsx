@@ -1,31 +1,27 @@
 "use client";
-import { cdn } from "@/lib/cdn";
 
 import React, { useState } from "react";
 import Image from "@/components/common/SmartImage";
 import SectionHeading from "../common/SectionHeading";
-import CTABtn from "../common/CTABtn";
 import Link from "next/link";
+import { DEFAULT_MAGAZINE, type MagazinePageContent } from "@/lib/magazineContent";
 
-const ISSUE_DATA = [
-  {
-    category: "POV Blogs",
-    title: "Pacific Homes powers Design POV ’26 with engineered stone and surface innovation",
-    author: "Design POV",
-    date: "26 feb, 2026",
-    image: cdn("/temp/ads/april-issue1.png"),
-  },
-  {
-    category: "POV Blogs",
-    title: "Acespace brings a decade of veneer expertise to Design POV ’26",
-    author: "Design POV",
-    date: "26 feb, 2026",
-    image: cdn("/temp/ads/april-issue2.png"),
-  },
-];
+const DEFAULTS = DEFAULT_MAGAZINE.issue;
 
-const AprilIssueSection = () => {
+/** Cards only link somewhere when the CMS gives them a link. */
+function CardLink({ href, children }: { href?: string; children: React.ReactNode }) {
+  const className = "group flex flex-col h-full";
+  return href ? <Link href={href} className={className}>{children}</Link> : <div className={className}>{children}</div>;
+}
+
+const AprilIssueSection = ({
+  headingMain = DEFAULTS.headingMain,
+  headingBold = DEFAULTS.headingBold,
+  cards = DEFAULTS.cards,
+  ad = DEFAULTS.ad,
+}: Partial<Omit<MagazinePageContent["issue"], "enabled">>) => {
   const [isHovered, setIsHovered] = useState(false);
+  const showAd = !!ad.image;
 
   return (
     <section
@@ -35,8 +31,8 @@ const AprilIssueSection = () => {
     >
       {/* 1. HEADER SECTION */}
       <SectionHeading
-        titleMain="The "
-        titleBold="May Issue"
+        titleMain={headingMain}
+        titleBold={headingBold}
         isSectionHovered={isHovered}
       >
       {/* <CTABtn
@@ -57,13 +53,13 @@ const AprilIssueSection = () => {
       </SectionHeading>
 
       <div className="px-6 md:px-[60px] mt-6">
-        <div className="grid grid-cols-1 lg:grid-cols-[80%_1fr] gap-6 items-stretch">
-          
+        <div className={`grid grid-cols-1 gap-6 items-stretch ${showAd ? "lg:grid-cols-[80%_1fr]" : ""}`}>
+
           {/* LEFT 80% SIDE: Main Articles */}
           <div className="h-full">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 h-full">
-              {ISSUE_DATA.map((item, index) => (
-                <div key={index} className="group flex flex-col h-full">
+              {cards.map((item, index) => (
+                <CardLink key={index} href={item.href}>
                   <div className="relative aspect-square w-full overflow-hidden bg-gray-100 flex-grow">
                     <Image
                       src={item.image}
@@ -99,13 +95,14 @@ const AprilIssueSection = () => {
                       </div> */}
                     </div>
                   </div>
-                </div>
+                </CardLink>
               ))}
             </div>
           </div>
 
           {/* RIGHT SIDE: Advertisement column */}
-          <Link href="https://www.pacific-surfaces.com/" target="_blank" className="h-full">
+          {showAd && (
+          <Link href={ad.href || "#"} target="_blank" className="h-full">
           <div className="flex flex-col h-full">
             {/* CLEAN AD LABEL */}
             
@@ -118,7 +115,7 @@ const AprilIssueSection = () => {
             {/* AD IMAGE CONTAINER */}
             <div className="relative group overflow-hidden bg-gray-100 flex-grow flex flex-col justify-end min-h-[400px]">
               <Image
-                src={cdn("/temp/ads/2.png")}
+                src={ad.image}
                 alt="Advertisement"
                 fill
                 className="object-cover transition-transform duration-700 group-hover:scale-105"
@@ -144,6 +141,7 @@ const AprilIssueSection = () => {
             </div>
           </div>
           </Link>
+          )}
 
         </div>
       </div>

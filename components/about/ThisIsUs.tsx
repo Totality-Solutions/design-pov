@@ -1,11 +1,31 @@
 "use client";
-import { cdn } from "@/lib/cdn";
 import React, { useState, useRef, useEffect } from 'react';
-import { Maximize2, Volume2, VolumeX, Play, Pause } from 'lucide-react';
 import SectionHeading from '../common/SectionHeading';
 import Image from "@/components/common/SmartImage";
+import { DEFAULT_ABOUT, type AboutFounder, type AboutPageContent } from "@/lib/aboutContent";
 
-const ThisIsUs: React.FC = () => {
+const DEFAULTS = DEFAULT_ABOUT.thisIsUs;
+
+/** Founder name + quote, with the large quote marks. */
+function FounderQuote({ founder, tracking }: { founder?: AboutFounder; tracking: string }) {
+  if (!founder) return <div />;
+  return (
+    <div className="flex flex-col gap-2 lg:gap-4">
+      <span className="text-primary-red font-semibold text-body tracking-wide">{founder.name}</span>
+      <p className={`text-black text-[18px] md:text-body font-medium text-justify leading-[1.2] ${tracking}`}>
+        <span className='text-h3-mobile md:text-h3-tab text-black font-bold'>“ </span>{founder.quote}<span className='text-h3-mobile md:text-h3-tab text-black font-bold'> ”</span>
+      </p>
+    </div>
+  );
+}
+
+const ThisIsUs = ({
+  heading = DEFAULTS.heading,
+  intro: introParagraphs = DEFAULTS.intro,
+  question = DEFAULTS.question,
+  image = DEFAULTS.image,
+  founders = DEFAULTS.founders,
+}: Partial<Omit<AboutPageContent["thisIsUs"], "enabled">>) => {
   const [isMuted, setIsMuted] = useState(true);
   const [isPlaying, setIsPlaying] = useState(true);
   const [spacerHeight, setSpacerHeight] = useState(0);
@@ -71,20 +91,13 @@ const ThisIsUs: React.FC = () => {
     }
   };
 
-  // 1. TOP END-TO-END PARAGRAPHS
-  const introParagraphs = [
-    "There is a moment at every industry event that no one programmes, yet everyone attends.",
-    "It happens in the margins—between panels, outside exhibition halls, over hurried coffees. Conversations loosen. Opinions sharpen. Real exchanges unfold. Ideas, unfiltered by format, find their voice.",
-    "For Asif Sataar and Gagan Bhatia, that moment wasn’t incidental. It was the point."
-  ];
-
   return (
     <section className="w-full bg-white flex flex-col font-display border-t border-[#DFDFDF] overflow-hidden"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       <SectionHeading 
-        titleMain="This Is Us" 
+        titleMain={heading}
         sticky={false}
         isSectionHovered={isHovered} 
       >
@@ -105,21 +118,18 @@ const ThisIsUs: React.FC = () => {
               </p>
             ))}
           </div>
+          {question && (
           <h2 className="text-[18px] md:text-h2-mobile font-bold text-black tracking-tighter pt-6 lg:pt-16">
-            What was the real trigger behind Design POV?
+            {question}
           </h2>
+          )}
         </div>
 
         {/* BOTTOM SECTION: 3 GRID LAYOUT */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 pt-3 lg:pt-6 items-start">
 
-          {/* LEFT CONTENT: Gagan Bhatia */}
-          <div className="flex flex-col gap-2 lg:gap-4">
-            <span className="text-primary-red font-semibold text-body tracking-wide">Gagan Bhatia</span>
-            <p className="text-black text-[18px] md:text-body font-medium text-justify leading-[1.2] tracking-tightest  ">
-              <span className='text-h3-mobile md:text-h3-tab text-black font-bold'>“ </span>It was actually quite simple. We were listening. Not inside exhibition halls, but outside them. The most meaningful conversations about design, about business, about ideas - were happening on the periphery. That’s where people were most honest, most open.<span className='text-h3-mobile md:text-h3-tab text-black font-bold'> ”</span>
-            </p>
-          </div>
+          {/* LEFT CONTENT */}
+          <FounderQuote founder={founders[0]} tracking="tracking-tightest" />
 
           {/* CENTER VIDEO AREA */}
           <div className="flex flex-col gap-3">
@@ -133,13 +143,13 @@ const ThisIsUs: React.FC = () => {
                 muted={isMuted}
                 playsInline
               /> */}
-              <Image
-              src={cdn("/temp/about/Founder.png")}
+              {image && <Image
+              src={image}
               width={1000}
               style={{ objectFit: "contain", objectPosition: "center" }}
               height={200}
-              alt="Asif Gagan"
-              />
+              alt={founders.map((f) => f.name).join(" & ") || "Founders"}
+              />}
 
               {/* VIDEO CONTROLS */}
               {/* <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-end p-4 gap-4 z-10">
@@ -156,13 +166,8 @@ const ThisIsUs: React.FC = () => {
             </div>
           </div>
 
-          {/* RIGHT CONTENT: Asif Sataar */}
-          <div className="flex flex-col gap-2 lg:gap-4">
-            <span className="text-primary-red font-semibold text-body tracking-wide">Asif Sataar</span>
-            <p className="text-black text-[18px] md:text-body font-medium text-justify leading-[1.2] tracking-tight  ">
-              <span className='text-h3-mobile md:text-h3-tab text-black font-bold'>“ </span>And it made us question the format itself. If the real value is happening outside, then what is the platform doing wrong? We’d been part of this world long enough to see networking become mechanical, almost performative. Commerce was front and centre, and design was getting lost somewhere along the way.<span className='text-h3-mobile md:text-h3-tab text-black font-bold'> ”</span>
-            </p>
-          </div>
+          {/* RIGHT CONTENT */}
+          <FounderQuote founder={founders[1]} tracking="tracking-tight" />
 
         </div>
       </div>
