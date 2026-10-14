@@ -38,7 +38,7 @@ export default function CmsSidebar() {
 
   return (
     <aside className="fixed left-0 top-0 h-full w-56 bg-white border-r border-black/10 flex flex-col z-10">
-      <div className="px-6 py-7 border-b border-black/10 flex items-center justify-between">
+      <div className="shrink-0 px-6 py-7 border-b border-black/10 flex items-center justify-between">
         <div>
           <p className="text-[9px] uppercase tracking-[0.3em] text-gray-400">Design POV</p>
           <p className="text-sm font-semibold mt-0.5">CMS</p>
@@ -52,7 +52,8 @@ export default function CmsSidebar() {
         </button>
       </div>
 
-      <nav className="flex-1 py-4">
+      {/* min-h-0 lets the nav shrink below its content so it scrolls instead of overflowing the fixed panel */}
+      <nav className="flex-1 min-h-0 overflow-y-auto overscroll-contain py-4">
         {links.map((link) => {
           const active = pathname === link.href || (link.href !== "/cms/dashboard" && pathname.startsWith(link.href));
           return (
@@ -69,7 +70,7 @@ export default function CmsSidebar() {
         })}
       </nav>
 
-      <div className="px-6 py-5 border-t border-black/10">
+      <div className="shrink-0 px-6 py-5 border-t border-black/10">
         <CmsLogout />
       </div>
     </aside>
