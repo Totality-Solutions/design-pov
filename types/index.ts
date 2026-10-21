@@ -188,6 +188,7 @@ export interface StudioRow {
   concept: string;
   booth_additional_images: string[];
   sort_order: number;
+  edition: number;
   active: boolean;
   created_at: string;
   updated_at: string;
@@ -208,6 +209,7 @@ export interface StudioItem {
   concept: string;
   booth_additional_images: string[];
   sort_order: number;
+  edition: number;
 }
 
 // Shape passed into ShowcaseModal — context determines which image/text

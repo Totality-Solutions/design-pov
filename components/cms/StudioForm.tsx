@@ -2,11 +2,10 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
-import { cdn } from "@/lib/cdn";
 import { useToast } from "./ToastProvider";
 import ImageUploadField from "./ImageUploadField";
 import { extractFolderNumber } from "@/lib/mediaFolder";
+import { STUDIO_EDITIONS, DEFAULT_STUDIO_EDITION } from "@/lib/studios";
 
 const BASE_PATH = "/temp/studios";
 
@@ -23,6 +22,7 @@ type FormData = {
   concept: string;
   booth_additional_images: string[];
   sort_order: number;
+  edition: number;
   active: boolean;
 };
 
@@ -39,6 +39,7 @@ const emptyForm: FormData = {
   concept: "",
   booth_additional_images: [""],
   sort_order: 0,
+  edition: DEFAULT_STUDIO_EDITION,
   active: true,
 };
 
@@ -118,6 +119,7 @@ export default function StudioForm({
       concept: form.concept.trim(),
       booth_additional_images: form.booth_additional_images.map((s) => s.trim()).filter(Boolean),
       sort_order: form.sort_order,
+      edition: form.edition,
       active: form.active,
     };
 
@@ -139,7 +141,7 @@ export default function StudioForm({
       return;
     }
     showSuccess(isEdit ? "Studio updated." : "Studio created.");
-    router.push("/cms/studios");
+    router.push(`/cms/studios?edition=${form.edition}`);
     router.refresh();
   }
 
@@ -176,13 +178,16 @@ export default function StudioForm({
       </div>
 
       <div>
-        <label className={labelCls}>Logo Path</label>
-        <input value={form.logo} onChange={(e) => set("logo", e.target.value)} placeholder="/temp/edition/core-logo/ads.png" className={inputCls} />
-        {form.logo && (
-          <div className="mt-2 relative w-36 h-16 bg-gray-50 border border-black/10">
-            <Image src={cdn(form.logo)} alt="Logo preview" fill className="object-contain p-2" sizes="144px" unoptimized />
-          </div>
-        )}
+        <label className={labelCls}>Logo</label>
+        <ImageUploadField
+          value={form.logo}
+          onChange={(url) => set("logo", url)}
+          folder={uploadFolder}
+          placeholder="/temp/edition/core-logo/ads.png"
+          allowSvg
+          className={inputCls}
+          previewClassName="mt-2 w-36 h-16 object-contain p-2 bg-gray-50 border border-black/10"
+        />
       </div>
 
       {/* ── CORE SECTION ─────────────────────────────── */}
@@ -312,6 +317,18 @@ export default function StudioForm({
       {/* ── META ─────────────────────────────────────── */}
       <div className={sectionCls}>
         <div className="flex gap-6 items-end">
+          <div>
+            <label className={labelCls}>Edition</label>
+            <select
+              value={form.edition}
+              onChange={(e) => set("edition", Number(e.target.value))}
+              className={`${inputCls} w-28`}
+            >
+              {STUDIO_EDITIONS.map((year) => (
+                <option key={year} value={year}>{year}</option>
+              ))}
+            </select>
+          </div>
           <div>
             <label className={labelCls}>Sort Order</label>
             <input

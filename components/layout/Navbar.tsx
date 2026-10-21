@@ -299,6 +299,13 @@ export default function Navbar() {
                               </Link>
                             );
                           }
+                          if (link.disabled) {
+                            return (
+                              <span key={link.label} className="w-fit font-normal text-black/40 cursor-not-allowed">
+                                {link.label}
+                              </span>
+                            );
+                          }
                           // Active = current pathname matches this link's href
                           const isLinkActive = pathname === link.href;
                           return (
@@ -404,6 +411,13 @@ export default function Navbar() {
                                 {navButtonLabel}
                               </Link>
                             </div>
+                          );
+                        }
+                        if (link.disabled) {
+                          return (
+                            <p key={link.label} className="px-12 py-4 text-sm font-normal border-b border-gray-100 text-black/40 cursor-not-allowed">
+                              {link.label}
+                            </p>
                           );
                         }
                         const isLinkActive = pathname === link.href;

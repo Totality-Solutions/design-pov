@@ -71,8 +71,9 @@ export const CoreShowcase = ({ studios }: { studios: StudioItem[] }) => {
     offset: ["start start", "end end"],
   });
 
-  const scrollPoints = studios.map((_, i) => i / Math.max(studios.length - 1, 1));
-  const transformPoints = studios.map((_, i) => `${25 - (i * 50)}%`);
+  // useTransform needs at least two keyframes — an edition with 0 or 1 studios would crash it
+  const scrollPoints = studios.length > 1 ? studios.map((_, i) => i / (studios.length - 1)) : [0, 1];
+  const transformPoints = studios.length > 1 ? studios.map((_, i) => `${25 - (i * 50)}%`) : ["25%", "25%"];
   const yTranslate = useTransform(scrollYProgress, scrollPoints, transformPoints);
 
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
@@ -85,12 +86,15 @@ export const CoreShowcase = ({ studios }: { studios: StudioItem[] }) => {
     }
   });
 
+  if (studios.length === 0) return null;
+
   return (
     <>
-      <section 
-        ref={containerRef} 
+      <section
+        ref={containerRef}
         className={`relative bg-white ${isMobile ? 'h-auto py-10' : ''}`}
-        style={!isMobile ? { height: `${studios.length * 50}vh` } : undefined}
+        // At least 100vh so the h-screen sticky panel never spills into the next section
+        style={!isMobile ? { height: `${Math.max(studios.length, 2) * 50}vh` } : undefined}
       >
         <div className={`
           w-full flex items-center justify-between px-6 md:px-20

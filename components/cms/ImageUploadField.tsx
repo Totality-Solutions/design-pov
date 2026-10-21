@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import { cdn } from "@/lib/cdn";
-import { uploadViaApi } from "@/lib/cmsUpload";
+import { uploadViaApi, uploadFileDirect } from "@/lib/cmsUpload";
 import { useToast } from "./ToastProvider";
 import { SingleUploadStatus, type UploadEntry } from "./UploadProgress";
 
@@ -38,11 +38,19 @@ export default function ImageUploadField({
 
   async function handleFile(file: File) {
     setUpload({ name: file.name, size: file.size, status: "uploading", progress: 0 });
+    const onProgress = (progress: number) => setUpload((u) => u && { ...u, progress });
     try {
-      const url = await uploadViaApi(file, folder, {
-        allowSvg,
-        onProgress: (progress) => setUpload((u) => u && { ...u, progress }),
-      });
+      // SVGs go through /api/cms/upload, which checks them for scripts. Photos
+      // go straight to S3 so they aren't capped by the API route's body limit
+      // (4.5 MB on Vercel).
+      let url: string;
+      if (file.type === "image/svg+xml") {
+        url = await uploadViaApi(file, folder, { allowSvg, onProgress });
+      } else if (file.type.startsWith("image/")) {
+        url = (await uploadFileDirect(file, folder, onProgress)).url;
+      } else {
+        throw new Error(`${file.name}: unsupported type. Use JPG, PNG or WEBP${allowSvg ? " or SVG" : ""}.`);
+      }
       onChange(url);
       setUpload((u) => u && { ...u, status: "done", progress: 1 });
       showSuccess("Image uploaded.");

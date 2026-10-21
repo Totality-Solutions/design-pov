@@ -14,6 +14,7 @@ async function getStudios() {
       .from("studios")
       .select("*")
       .eq("active", true)
+      .eq("edition", 2026)
       .order("sort_order", { ascending: true });
     return (data ?? []).map(normalizeStudio);
   } catch (err) {

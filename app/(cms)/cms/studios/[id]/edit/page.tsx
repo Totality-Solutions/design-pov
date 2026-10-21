@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import CmsSidebar from "@/components/cms/CmsSidebar";
 import StudioForm from "@/components/cms/StudioForm";
 import { createServerClient } from "@/lib/supabase/server";
+import { DEFAULT_STUDIO_EDITION } from "@/lib/studios";
 
 export const dynamic = "force-dynamic";
 
@@ -33,6 +34,7 @@ export default async function EditStudioPage({
     concept:                  data.concept,
     booth_additional_images:  data.booth_additional_images?.length ? data.booth_additional_images : [""],
     sort_order:               data.sort_order,
+    edition:                  data.edition ?? DEFAULT_STUDIO_EDITION,
     active:                   data.active,
   };
 

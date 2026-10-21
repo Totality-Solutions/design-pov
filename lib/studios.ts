@@ -1,6 +1,9 @@
 import { cdn } from "@/lib/cdn";
 import type { StudioRow, StudioItem } from "@/types";
 
+export const STUDIO_EDITIONS = [2026, 2027] as const;
+export const DEFAULT_STUDIO_EDITION = 2026;
+
 export function normalizeStudio(row: StudioRow): StudioItem {
   return {
     id: row.id,
@@ -16,5 +19,6 @@ export function normalizeStudio(row: StudioRow): StudioItem {
     concept: row.concept,
     booth_additional_images: (row.booth_additional_images ?? []).map(cdn),
     sort_order: row.sort_order,
+    edition: row.edition ?? DEFAULT_STUDIO_EDITION,
   };
 }

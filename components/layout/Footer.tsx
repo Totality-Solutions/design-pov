@@ -40,6 +40,18 @@ const navLinks = {
     ],
   },
 
+  Edition2027: {
+    title: "2027 Edition",
+    href: "/edition-2027/core",
+    img: "/image2.svg",
+    items: [
+      { title: "Theme", href: "/edition-2027/theme", disabled: true },
+      { title: "Brands", href: "/edition-2027/brands", disabled: true },
+      { title: "Core", href: "/edition-2027/core" },
+      { title: "Schedule", href: "/edition-2027/schedule", disabled: true },
+    ],
+  },
+
   Originals: {
     title: "Quick Links",
     href: "",
@@ -219,6 +231,7 @@ const Footer = () => {
             <div className="hidden lg:flex pointer-events-auto" style={{ gap: "var(--footer-gap-links)"}}>
               <FooterTextColumn {...navLinks.Partners} />
               <FooterTextColumn {...navLinks.AboutUs} navButtonOverride={{ label: navButtonLabel, href: navButtonHref }} />
+              <FooterTextColumn {...navLinks.Edition2027} />
               <FooterTextColumn {...navLinks.Originals} />
             </div>
           </div>          
@@ -226,6 +239,7 @@ const Footer = () => {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:hidden pointer-events-auto my-12 gap-8" >
             <FooterTextColumn {...navLinks.Partners} />
             <FooterTextColumn {...navLinks.AboutUs} navButtonOverride={{ label: navButtonLabel, href: navButtonHref }} />
+            <FooterTextColumn {...navLinks.Edition2027} />
             <FooterTextColumn {...navLinks.Originals} />
           </div>
 
@@ -402,6 +416,10 @@ const FooterTextColumn = ({ title, href, items, navButtonOverride }: any) => (
               >
                 {navButtonOverride?.label ?? item.title}
               </Link>
+            ) : item.disabled ? (
+              <span className="text-white text-[15px] font-normal tracking-[0.05em] opacity-40 cursor-not-allowed">
+                {item.title}
+              </span>
             ) : (
               <Link
                 href={item.href}

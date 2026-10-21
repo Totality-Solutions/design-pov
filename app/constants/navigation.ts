@@ -5,6 +5,7 @@ export type SubLink = {
   label: string;
   href: string;
   type?: "button";
+  disabled?: boolean;
 };
 
 export type SubmenuContent = {
@@ -21,7 +22,7 @@ export type SubmenuContent = {
 // --- Navigation Data ---
 // OPTIMISATION: Items with no submenu content (About, Collaborate, Magazine)
 // are marked filetype:"none" so the submenu panel is never triggered for them.
-// Only "2026 Edition" and "Ecosystem" have submenus — matching the component logic.
+// Only "2026 Edition", "2027 Edition" and "Ecosystem" have submenus — matching the component logic.
 export const NAV_DATA: Record<string, SubmenuContent> = {
   About: {
     mainHref: "/about",
@@ -51,6 +52,17 @@ export const NAV_DATA: Record<string, SubmenuContent> = {
       { label: "Schedule", href: "/edition/schedule" },
       { label: "Contact",  href: "/contact" },
       { label: "2027",     href: "/collaborate", type: "button" },
+    ],
+  },
+  "2027 Edition": {
+    mainHref: "/edition-2027/core",
+    image: cdn("/qr/Ticket-2027.png"),
+    filetype: "image",
+    col1Links: [
+      // { label: "Theme",    href: "/edition-2027/theme",    disabled: true },
+      // { label: "Brands",   href: "/edition-2027/brands",   disabled: true },
+      { label: "Core",     href: "/edition-2027/core" },
+      // { label: "Schedule", href: "/edition-2027/schedule", disabled: true },
     ],
   },
   Collaborate: {
