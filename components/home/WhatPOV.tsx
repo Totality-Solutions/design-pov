@@ -52,7 +52,9 @@ function WordReveal({ text, progress, range, isStatic }: any) {
   )
 }
 
-function LazyMarqueeVideo({ src }: { src: string }) {
+// Plays only while on screen (the marquee holds several videos at once), on
+// every screen size — muted + playsInline is what lets mobile autoplay it.
+function LazyMarqueeVideo({ src, poster }: { src: string; poster?: string }) {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -78,6 +80,7 @@ function LazyMarqueeVideo({ src }: { src: string }) {
     <video
       ref={videoRef}
       src={src} // ✅ ALWAYS set src
+      poster={poster}
       autoPlay
       loop
       muted
@@ -149,9 +152,6 @@ const WhatPOV = ({ paragraphs, items }: { paragraphs: string[]; items: MarqueeIt
                 renderItem={(item, index) => {
                   const isExpanded = index === expandedIndex;
                   const isVideo = item.type === 'video';
-                  // Mobile shows a still for videos: the poster, or the
-                  // legacy same-name .jpg convention.
-                  const still = item.poster || item.src.replace(/\.(mp4|webm|ogg)$/i, ".jpg");
                   return (
                     <Link
                       href={item.href || '#'}
@@ -164,18 +164,7 @@ const WhatPOV = ({ paragraphs, items }: { paragraphs: string[]; items: MarqueeIt
                     >
                       <div className="absolute inset-0 w-full h-full">
                         {isVideo ? (
-                          isMobileOrTab ? (
-                            <Image
-                              src={still}
-                              alt={item.title}
-                              fill
-                              className="object-cover object-top"
-                              sizes="50vw"
-                              loading="lazy"
-                            />
-                          ) : (
-                            <LazyMarqueeVideo src={item.src} />
-                          )
+                          <LazyMarqueeVideo src={item.src} poster={item.poster} />
                         ) : (
                           <Image
                             src={item.src}
