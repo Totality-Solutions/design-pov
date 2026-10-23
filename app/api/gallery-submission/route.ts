@@ -3,6 +3,7 @@ import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { createServerClient } from "@/lib/supabase/server";
+import { escapeHtml } from "@/lib/formGuard";
 
 const IMAGE_BUCKET = "gallery-submissions";
 
@@ -194,7 +195,7 @@ export async function POST(req: Request) {
         ([k, v]) =>
           `<tr>
             <td style="padding:8px 16px;font-weight:600;background:#f4f4f4;border:1px solid #ddd;white-space:nowrap">${k}</td>
-            <td style="padding:8px 16px;border:1px solid #ddd">${v}</td>
+            <td style="padding:8px 16px;border:1px solid #ddd;white-space:pre-line">${escapeHtml(v)}</td>
           </tr>`
       )
       .join("");

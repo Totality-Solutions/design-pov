@@ -2,7 +2,8 @@
 
 import React, { useState, useRef } from "react";
 import CTABtn from "../common/CTABtn";
-import { isValidEmail, isValidName } from "@/lib/validation";
+import { isValidEmail, isValidName, isValidPhone } from "@/lib/validation";
+import { HONEYPOT_FIELD, STARTED_AT_FIELD } from "@/lib/formGuard";
 
 type FormData = {
   name: string;
@@ -23,6 +24,10 @@ const ContactFormSection = () => {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
   const submittingRef = useRef(false);
+  // Spam checks (see lib/formGuard.ts): when the form appeared, and a hidden
+  // field only bots fill in.
+  const startedAtRef = useRef(Date.now());
+  const [honeypot, setHoneypot] = useState("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -42,6 +47,11 @@ const ContactFormSection = () => {
       setErrorMsg("Please enter a valid email address.");
       return;
     }
+    if (formData.contact.trim() && !isValidPhone(formData.contact)) {
+      setStatus("error");
+      setErrorMsg("Please enter a valid phone number.");
+      return;
+    }
 
     submittingRef.current = true;
     setStatus("loading");
@@ -51,7 +61,7 @@ const ContactFormSection = () => {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ ...formData, [HONEYPOT_FIELD]: honeypot, [STARTED_AT_FIELD]: startedAtRef.current }),
       });
 
       const data = await res.json();
@@ -60,6 +70,7 @@ const ContactFormSection = () => {
 
       setStatus("success");
       setFormData(EMPTY);
+      startedAtRef.current = Date.now();
     } catch (err: any) {
       setStatus("error");
       setErrorMsg(err.message || "Failed to send. Please try again.");
@@ -90,6 +101,21 @@ const ContactFormSection = () => {
           onSubmit={handleSubmit}
           className="w-full lg:max-w-[584px] bg-white p-4 md:p-10 flex flex-col gap-6"
         >
+          {/* Honeypot: off-screen and skipped by keyboard, screen readers and autofill. */}
+          <div aria-hidden="true" className="absolute -left-[9999px] w-px h-px overflow-hidden">
+            <label>
+              Homepage
+              <input
+                type="text"
+                name={HONEYPOT_FIELD}
+                tabIndex={-1}
+                autoComplete="off"
+                value={honeypot}
+                onChange={(e) => setHoneypot(e.target.value)}
+              />
+            </label>
+          </div>
+
           <Input label="Name" name="name" placeholder="Full Name" value={formData.name} onChange={handleChange} required />
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

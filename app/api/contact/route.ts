@@ -1,6 +1,8 @@
 import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
 import { NextResponse } from "next/server";
 import { createServerClient } from "@/lib/supabase/server";
+import { isValidEmail, isValidName, isValidPhone } from "@/lib/validation";
+import { clientIp, detectBot, escapeHtml, isRateLimited, looksRandom } from "@/lib/formGuard";
 
 let _ses: SESClient | null = null;
 function getSesClient() {
@@ -22,12 +24,43 @@ function getSesClient() {
 const FROM_EMAIL = process.env.SES_FROM_EMAIL || "noreply@designpovindia.com";
 const TO_EMAIL = process.env.MAIL_MARKETING || "marketing@designpovindia.com";
 
+const str = (v: unknown, max: number) => (typeof v === "string" ? v.trim().slice(0, max) : "");
+
 export async function POST(req: Request) {
   try {
-    const { name, email, contact, organization, designation, location, message } = await req.json();
+    const body = await req.json().catch(() => null);
+    if (!body || typeof body !== "object") {
+      return NextResponse.json({ error: "Invalid request." }, { status: 400 });
+    }
 
-    if (!name || !email) {
-      return NextResponse.json({ error: "Name and email are required." }, { status: 400 });
+    // Bots: pretend it worked, but save and send nothing.
+    const bot = detectBot(body);
+    if (bot) {
+      console.warn(`[contact] Dropped bot submission (${bot}) from ${clientIp(req)}`);
+      return NextResponse.json({ success: true });
+    }
+    if (isRateLimited(clientIp(req))) {
+      return NextResponse.json({ error: "Too many messages. Please try again in a few minutes." }, { status: 429 });
+    }
+
+    const name = str(body.name, 120);
+    const email = str(body.email, 200);
+    const contact = str(body.contact, 30);
+    const organization = str(body.organization, 200);
+    const designation = str(body.designation, 200);
+    const location = str(body.location, 200);
+    const message = str(body.message, 5000);
+
+    if (!isValidName(name) || !isValidEmail(email)) {
+      return NextResponse.json({ error: "Please enter your full name and a valid email address." }, { status: 400 });
+    }
+    if (contact && !isValidPhone(contact)) {
+      return NextResponse.json({ error: "Please enter a valid phone number." }, { status: 400 });
+    }
+    // Two or more fields of random-letter filler is a bot, not a person.
+    if ([name, contact, organization, designation, location, message].filter(looksRandom).length >= 2) {
+      console.warn(`[contact] Rejected random-text submission from ${clientIp(req)}`);
+      return NextResponse.json({ error: "Please check the details you entered and try again." }, { status: 400 });
     }
 
     const supabase = createServerClient();
@@ -94,7 +127,7 @@ export async function POST(req: Request) {
         ([k, v]) =>
           `<tr>
             <td style="padding:8px 16px;font-weight:600;background:#f4f4f4;border:1px solid #ddd;white-space:nowrap">${k}</td>
-            <td style="padding:8px 16px;border:1px solid #ddd">${v}</td>
+            <td style="padding:8px 16px;border:1px solid #ddd;white-space:pre-line">${escapeHtml(v)}</td>
           </tr>`
       )
       .join("");
