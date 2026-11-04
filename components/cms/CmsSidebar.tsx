@@ -48,6 +48,7 @@ const groups: NavGroup[] = [
     links: [
       { href: "/cms/magazine", label: "Magazine Page" },
       { href: "/cms/blogs",    label: "Blogs" },
+      { href: "/cms/projects", label: "Projects" },
     ],
   },
   {

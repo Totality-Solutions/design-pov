@@ -30,3 +30,6 @@ yarn-error.log*
 .env*.local
 
 #public
+
+# Local-only project preview (dev): photos + projects.json, never committed or deployed
+/public/_preview/

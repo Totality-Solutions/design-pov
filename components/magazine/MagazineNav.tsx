@@ -13,6 +13,7 @@ const navItems = [
   { label: "Art" },
   { label: "Design" },
   { label: "Spotlight" },
+  { label: "Project" },
   { label: "Submit" },
 ];
 

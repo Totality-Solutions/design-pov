@@ -11,6 +11,7 @@ import Link from "next/link";
 import { createServerClient } from "@/lib/supabase/server";
 import { NormalizedBlog, normalizeDbBlog } from "@/lib/blog";
 import { getPageContent } from "@/lib/pageContentServer";
+import { getPublishedProjectCards } from "@/lib/projectsServer";
 
 export const dynamic = "force-dynamic";
 
@@ -35,14 +36,14 @@ async function getBlogs(): Promise<NormalizedBlog[]> {
 }
 
 export default async function MagazinePage() {
-  const [allBlogs, page] = await Promise.all([getBlogs(), getPageContent("magazine")]);
+  const [allBlogs, page, projects] = await Promise.all([getBlogs(), getPageContent("magazine"), getPublishedProjectCards()]);
   const blogs = allBlogs.length > 0 ? allBlogs : undefined;
   const { hero, issue, interviews, bottomAd } = page;
 
   return (
     <>
       {hero.enabled && <MagazineHero headline={hero.headline} subtext={hero.subtext} />}
-      {page.press.enabled && <PressSection allBlogs={blogs} />}
+      {page.press.enabled && <PressSection allBlogs={blogs} projects={projects} />}
       {issue.enabled && (
         <AprilIssueSection headingMain={issue.headingMain} headingBold={issue.headingBold} cards={issue.cards} ad={issue.ad} />
       )}
