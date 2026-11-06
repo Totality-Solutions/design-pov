@@ -1,7 +1,8 @@
 import { notFound } from "next/navigation";
 import CmsSidebar from "@/components/cms/CmsSidebar";
-import ProjectForm, { EMPTY_PROJECT, type ProjectFormData } from "@/components/cms/ProjectForm";
+import ProjectForm from "@/components/cms/ProjectForm";
 import { createServerClient } from "@/lib/supabase/server";
+import { projectRowToForm } from "@/lib/projectForm";
 
 export const dynamic = "force-dynamic";
 
@@ -10,11 +11,8 @@ export default async function EditProjectPage({ params }: { params: Promise<{ id
   const { data: row } = await createServerClient().from("projects").select("*").eq("id", id).single();
   if (!row) notFound();
 
-  // Nulls from the table → the form's empty values.
-  const initialData = Object.fromEntries(
-    (Object.keys(EMPTY_PROJECT) as (keyof ProjectFormData)[]).map((key) => [key, row[key] ?? EMPTY_PROJECT[key]])
-  ) as ProjectFormData;
-  if (initialData.content.length === 0) initialData.content = EMPTY_PROJECT.content;
+  // Nulls / missing columns from the table → the form's empty values.
+  const initialData = projectRowToForm(row);
 
   return (
     <div className="min-h-screen bg-[#f7f7f7]">

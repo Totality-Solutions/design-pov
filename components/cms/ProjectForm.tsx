@@ -5,60 +5,12 @@ import { useRouter } from "next/navigation";
 import { cdn } from "@/lib/cdn";
 import { useToast } from "./ToastProvider";
 import { BulkUploadButton, Field, ImageField, ListEditor, TextArea, TextField, inputCls } from "./page-editor/fields";
-import { countProjectImages, instagramUrl, MAX_PROJECT_IMAGES, type ProjectBlock, type ProjectGalleryImage, type ProjectSpec } from "@/lib/projects";
+import { countProjectImages, instagramUrl, MAX_PROJECT_IMAGES, type ProjectBlock } from "@/lib/projects";
+import { EMPTY_PROJECT, type ProjectFormData } from "@/lib/projectForm";
 
 // Create / edit a Magazine project (table `projects`). Field names match the
-// table columns so the form posts straight to /api/cms/projects.
-
-export type ProjectFormData = {
-  title: string;
-  slug: string;
-  architects: string;
-  category: string;
-  status: "draft" | "published";
-  published_on: string;
-  area: string;
-  year: string;
-  photographer: string;
-  city: string;
-  country: string;
-  design_team: string;
-  extra_specs: ProjectSpec[];
-  cover_image: string;
-  gallery: ProjectGalleryImage[];
-  text_credit: string;
-  content: ProjectBlock[];
-  office_name: string;
-  office_logo: string;
-  office_url: string;
-  office_instagram: string;
-  tags: string[];
-};
-
-export const EMPTY_PROJECT: ProjectFormData = {
-  title: "",
-  slug: "",
-  architects: "",
-  category: "",
-  status: "draft",
-  published_on: new Date().toISOString().slice(0, 10),
-  area: "",
-  year: String(new Date().getFullYear()),
-  photographer: "",
-  city: "",
-  country: "",
-  design_team: "",
-  extra_specs: [],
-  cover_image: "",
-  gallery: [],
-  text_credit: "Text description provided by the architects.",
-  content: [{ type: "text", value: "" }],
-  office_name: "",
-  office_logo: "",
-  office_url: "",
-  office_instagram: "",
-  tags: [],
-};
+// table columns so the form posts straight to /api/cms/projects. The data
+// shape and defaults live in lib/projectForm.ts (shared with the server edit page).
 
 const CATEGORY_SUGGESTIONS = [
   "Residential Architecture", "Housing", "Houses", "Apartments", "Interior Design", "Hospitality",
