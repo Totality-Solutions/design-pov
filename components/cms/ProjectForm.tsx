@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { cdn } from "@/lib/cdn";
 import { useToast } from "./ToastProvider";
 import { BulkUploadButton, Field, ImageField, ListEditor, TextArea, TextField, inputCls } from "./page-editor/fields";
-import type { ProjectBlock, ProjectGalleryImage, ProjectSpec } from "@/lib/projects";
+import { countProjectImages, instagramUrl, MAX_PROJECT_IMAGES, type ProjectBlock, type ProjectGalleryImage, type ProjectSpec } from "@/lib/projects";
 
 // Create / edit a Magazine project (table `projects`). Field names match the
 // table columns so the form posts straight to /api/cms/projects.
@@ -31,6 +31,7 @@ export type ProjectFormData = {
   office_name: string;
   office_logo: string;
   office_url: string;
+  office_instagram: string;
   tags: string[];
 };
 
@@ -55,6 +56,7 @@ export const EMPTY_PROJECT: ProjectFormData = {
   office_name: "",
   office_logo: "",
   office_url: "",
+  office_instagram: "",
   tags: [],
 };
 
@@ -99,6 +101,8 @@ export default function ProjectForm({ initialData, projectId }: { initialData?: 
   const [error, setError] = useState("");
 
   const folder = `magazine/projects/${form.slug || "misc"}`;
+  const imageCount = countProjectImages(form);
+  const imagesLeft = MAX_PROJECT_IMAGES - imageCount;
   const viewUrl = isEdit && initialData?.slug ? `/magazine/projects/${initialData.slug}` : null;
 
   // New projects: the slug follows "Title Architects" until edited by hand.
@@ -113,6 +117,10 @@ export default function ProjectForm({ initialData, projectId }: { initialData?: 
     setError("");
     if (form.status === "published" && !form.cover_image && form.gallery.length === 0) {
       setError("Add a hero image or at least one photo before publishing.");
+      return;
+    }
+    if (imageCount > MAX_PROJECT_IMAGES) {
+      setError(`This project uses ${imageCount} images — the limit is ${MAX_PROJECT_IMAGES}. Remove ${imageCount - MAX_PROJECT_IMAGES} and save again.`);
       return;
     }
     setSaving(true);
@@ -257,14 +265,26 @@ export default function ProjectForm({ initialData, projectId }: { initialData?: 
         />
       </Section>
 
-      <Section title={`Photos & Drawings (${form.gallery.length})`}>
+      <Section title="Photos & Drawings">
         <p className="text-[11px] text-gray-400 -mt-2">
           The project gallery, in order — photos first, then plans, sections and other drawings.
+        </p>
+        <p
+          className={`text-[12px] px-3 py-2 border ${
+            imagesLeft < 0 ? "bg-red-50 border-red-200 text-red-700" : imagesLeft === 0 ? "bg-amber-50 border-amber-200 text-amber-700" : "bg-[#fafafa] border-black/10 text-gray-600"
+          }`}
+        >
+          <strong className="tabular-nums">{imageCount} / {MAX_PROJECT_IMAGES} images</strong>
+          {" — "}hero, gallery and photos in the text together (each image counted once).
+          {imagesLeft < 0 && ` Remove ${-imagesLeft} to save.`}
+          {imagesLeft === 0 && " Limit reached."}
         </p>
         <BulkUploadButton
           folder={folder}
           accept="image/jpeg,image/png,image/webp"
           label="Upload Photos"
+          maxFiles={Math.max(0, imagesLeft)}
+          note={imagesLeft > 0 ? `${imagesLeft} more allowed · JPG, PNG or WEBP` : "Image limit reached — remove one to add another"}
           onUploaded={(files) => setForm((f) => ({ ...f, gallery: [...f.gallery, ...files.map((file) => ({ src: file.url, caption: "" }))] }))}
         />
         {form.gallery.length > 0 && (
@@ -375,9 +395,26 @@ export default function ProjectForm({ initialData, projectId }: { initialData?: 
 
       {/* ── Office + tags ── */}
       <Section title="About This Office">
+        <TextField label="Office name" value={form.office_name} onChange={(v) => set("office_name", v)} hint="Defaults to the Architects name." />
         <div className="grid grid-cols-2 gap-4">
-          <TextField label="Office name" value={form.office_name} onChange={(v) => set("office_name", v)} hint="Defaults to the Architects name." />
-          <TextField label="Website" value={form.office_url} onChange={(v) => set("office_url", v)} placeholder="https://..." />
+          <TextField
+            label="Instagram (optional)"
+            value={form.office_instagram}
+            onChange={(v) => set("office_instagram", v)}
+            placeholder="@wedesignstudio_mumbai"
+            hint={
+              form.office_instagram.trim() && !instagramUrl(form.office_instagram)
+                ? "⚠ Not a valid handle or instagram.com link — it won’t be shown."
+                : "A @handle or an instagram.com link. Leave empty to hide the icon."
+            }
+          />
+          <TextField
+            label="Website (optional)"
+            value={form.office_url}
+            onChange={(v) => set("office_url", v)}
+            placeholder="https://..."
+            hint="Leave empty to hide the icon."
+          />
         </div>
         <ImageField label="Logo / photo" value={form.office_logo} onChange={(v) => set("office_logo", v)} folder={folder} />
         <TextField

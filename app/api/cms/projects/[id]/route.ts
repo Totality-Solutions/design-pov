@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import { createServerClient } from "@/lib/supabase/server";
 import { resolveS3KeyFromCdnValue, deleteObjectsFromS3 } from "@/lib/s3";
-import { collectProjectImageValues } from "@/lib/projects";
+import { collectProjectImageValues, countProjectImages, MAX_PROJECT_IMAGES, projectSaveError } from "@/lib/projects";
 
 type Params = { params: Promise<{ id: string }> };
 
@@ -22,6 +22,19 @@ export async function PUT(req: Request, { params }: Params) {
   const { id } = await params;
   const body = await req.json();
 
+  // Partial updates (e.g. the status toggle) are counted against the saved row.
+  if ("cover_image" in body || "gallery" in body || "content" in body) {
+    const { data: current } = await createServerClient()
+      .from("projects")
+      .select("cover_image, gallery, content")
+      .eq("id", id)
+      .single();
+    const images = countProjectImages({ ...current, ...body });
+    if (images > MAX_PROJECT_IMAGES) {
+      return NextResponse.json({ error: `A project can have at most ${MAX_PROJECT_IMAGES} images (this one has ${images}).` }, { status: 400 });
+    }
+  }
+
   const { data, error } = await createServerClient()
     .from("projects")
     .update({ ...body, updated_at: new Date().toISOString() })
@@ -29,7 +42,7 @@ export async function PUT(req: Request, { params }: Params) {
     .select()
     .single();
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) return NextResponse.json({ error: projectSaveError(error.message) }, { status: 500 });
   revalidate(data?.slug);
   return NextResponse.json({ data });
 }

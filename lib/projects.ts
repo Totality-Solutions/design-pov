@@ -30,7 +30,10 @@ export interface Project {
   textCredit: string;
   officeName: string;
   officeLogo: string;
+  /** The office's website. */
   officeUrl: string;
+  /** Full Instagram profile URL (from a handle or a link), or "". */
+  officeInstagram: string;
   tags: string[];
   publishedOn: string;
 }
@@ -75,9 +78,48 @@ export function normalizeProject(row: Record<string, any>): Project {
     officeName: row.office_name || row.architects || "",
     officeLogo: row.office_logo ? img(row.office_logo) : "",
     officeUrl: row.office_url ?? "",
+    officeInstagram: instagramUrl(row.office_instagram ?? ""),
     tags: arr<string>(row.tags).filter(Boolean),
     publishedOn: row.published_on ?? "",
   };
+}
+
+/**
+ * "@wedesignstudio_mumbai", "wedesignstudio_mumbai" or an instagram.com link →
+ * "https://www.instagram.com/wedesignstudio_mumbai/". Anything else → "".
+ */
+export function instagramUrl(raw: string): string {
+  const v = raw.trim();
+  if (!v) return "";
+  const fromLink = v.match(/^(?:https?:\/\/)?(?:www\.)?instagram\.com\/([A-Za-z0-9._]{1,30})\/?(?:[?#].*)?$/i);
+  const handle = fromLink ? fromLink[1] : v.replace(/^@/, "");
+  return /^[A-Za-z0-9._]{1,30}$/.test(handle) ? `https://www.instagram.com/${handle}/` : "";
+}
+
+/** "https://www.instagram.com/wedesignstudio_mumbai/" → "@wedesignstudio_mumbai" */
+export function instagramHandle(url: string): string {
+  const m = url.match(/instagram\.com\/([A-Za-z0-9._]+)/i);
+  return m ? `@${m[1]}` : "";
+}
+
+/** A database error from saving a project, explained when it's a column the table doesn't have yet. */
+export function projectSaveError(message: string): string {
+  const column = message.match(/'([a-z_]+)' column/)?.[1];
+  return column
+    ? `The projects table has no “${column}” column yet. Run supabase-projects-table.sql again in the Supabase SQL Editor (it’s safe to re-run), then save.`
+    : message;
+}
+
+/** Most images one project may have — hero, gallery and in-text photos together. */
+export const MAX_PROJECT_IMAGES = 20;
+
+/** Distinct images a project row uses (hero + gallery + in-text); the office logo doesn't count. */
+export function countProjectImages(row: { cover_image?: string | null; gallery?: unknown; content?: unknown }): number {
+  const srcs = new Set<string>();
+  if (row.cover_image) srcs.add(row.cover_image);
+  arr<ProjectGalleryImage>(row.gallery).forEach((g) => g?.src && srcs.add(g.src));
+  arr<ProjectBlock>(row.content).forEach((b) => b?.type === "image" && b.value && srcs.add(b.value));
+  return srcs.size;
 }
 
 /** "Modern Mokotów / BBGK Architekci" */

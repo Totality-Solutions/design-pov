@@ -33,6 +33,10 @@ CREATE TABLE IF NOT EXISTS projects (
 
 CREATE INDEX IF NOT EXISTS projects_status_published_idx ON projects (status, published_on DESC);
 
+-- Office social links (added later): office_url is the website; Instagram is
+-- stored as a handle or a full link. Safe to re-run.
+ALTER TABLE projects ADD COLUMN IF NOT EXISTS office_instagram text;
+
 -- RLS on with no public policies: the site reads through server routes with
 -- the service role, and the CMS API is gated by proxy.ts.
 ALTER TABLE projects ENABLE ROW LEVEL SECURITY;

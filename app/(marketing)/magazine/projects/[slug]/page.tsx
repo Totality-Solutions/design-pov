@@ -37,7 +37,7 @@ export default async function ProjectPage({ params }: Props) {
   const i = all.findIndex((p) => p.slug === slug);
   const previous = i > 0 ? all[i - 1] : null;
   const next = i >= 0 && i < all.length - 1 ? all[i + 1] : null;
-  const more = all.filter((p) => p.slug !== slug && p.slug !== previous?.slug && p.slug !== next?.slug).slice(0, 3);
+  const others = all.filter((p) => p.slug !== slug);
 
-  return <ProjectDetail project={project} previous={previous} next={next} more={more} />;
+  return <ProjectDetail project={project} previous={previous} next={next} others={others} />;
 }

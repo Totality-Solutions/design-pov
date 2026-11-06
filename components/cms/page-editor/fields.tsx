@@ -63,12 +63,16 @@ export function TextArea({
  * succeeded; a per-file progress panel shows what's uploading, done or failed.
  */
 export function BulkUploadButton({
-  folder, onUploaded, label = "Bulk Upload", accept = DIRECT_UPLOAD_ACCEPT,
+  folder, onUploaded, label = "Bulk Upload", accept = DIRECT_UPLOAD_ACCEPT, maxFiles, note,
 }: {
   folder: string;
   onUploaded: (files: UploadedFile[]) => void;
   label?: string;
   accept?: string;
+  /** How many more files may be added; extra picks are skipped before uploading. 0 disables the button. */
+  maxFiles?: number;
+  /** Replaces the default "Images or videos · 50 MB max each" note. */
+  note?: string;
 }) {
   const { showSuccess, showError } = useToast();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -78,7 +82,13 @@ export function BulkUploadButton({
   const patchEntry = (i: number, patch: Partial<UploadEntry>) =>
     setEntries((prev) => prev.map((e, idx) => (idx === i ? { ...e, ...patch } : e)));
 
-  async function handleFiles(files: File[]) {
+  async function handleFiles(picked: File[]) {
+    if (picked.length === 0) return;
+    const files = maxFiles === undefined ? picked : picked.slice(0, Math.max(0, maxFiles));
+    if (files.length < picked.length) {
+      const skipped = picked.length - files.length;
+      showError(`Only ${files.length} more file${files.length === 1 ? "" : "s"} allowed — ${skipped} skipped and not uploaded.`);
+    }
     if (files.length === 0) return;
     setEntries(toEntries(files));
     const done: UploadedFile[] = [];
@@ -107,12 +117,12 @@ export function BulkUploadButton({
         <button
           type="button"
           onClick={() => inputRef.current?.click()}
-          disabled={busy}
+          disabled={busy || maxFiles === 0}
           className={`${smallBtn} bg-white`}
         >
           {busy ? "Uploading..." : label}
         </button>
-        <span className="text-[11px] text-gray-400">Images or videos · 50 MB max each</span>
+        <span className="text-[11px] text-gray-400">{note ?? "Images or videos · 50 MB max each"}</span>
       <input
         ref={inputRef}
         type="file"
