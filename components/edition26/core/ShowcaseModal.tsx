@@ -36,7 +36,7 @@ function ModalSlide({ src, alt, eager }: { src: string; alt: string; eager: bool
         src={placeholderSrc(src)}
         alt=""
         aria-hidden
-        className={`absolute inset-0 w-full h-full object-contain lg:object-cover transition-opacity duration-500 ${
+        className={`absolute inset-0 w-full h-full object-contain transition-opacity duration-500 ${
           loaded ? "opacity-0" : "opacity-100"
         }`}
       />
@@ -49,7 +49,8 @@ function ModalSlide({ src, alt, eager }: { src: string; alt: string; eager: bool
         loading={eager ? "eager" : "lazy"}
         onLoad={() => setLoaded(true)}
         onError={() => setLoaded(true)}
-        className={`object-contain lg:object-cover transition-opacity duration-500 ${
+        // contain, not cover: the whole photo shows (full width for landscape shots) instead of being cropped.
+        className={`object-contain transition-opacity duration-500 ${
           loaded ? "opacity-100" : "opacity-0"
         }`}
       />
@@ -157,7 +158,8 @@ export const ShowcaseModal = ({
             style={{ minHeight: "600px" }}
           >
             {/* LEFT: Carousel */}
-            <div className="relative w-full lg:w-[520px] lg:min-w-[520px] lg:max-w-[520px] h-[300px] lg:h-full bg-zinc-100 overflow-hidden flex-shrink-0">
+            {/* Black behind the photos: letterboxing from object-contain reads as a frame, and the white arrows / dots stay visible. */}
+            <div className="relative w-full lg:w-[520px] lg:min-w-[520px] lg:max-w-[520px] h-[300px] lg:h-full bg-black overflow-hidden flex-shrink-0">
               <motion.div
                 animate={{
                   x: `-${currentSlide * 100}%`,

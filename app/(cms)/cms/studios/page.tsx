@@ -35,6 +35,10 @@ export default async function StudiosCmsPage({
           <div>
             <p className="text-[10px] uppercase tracking-[0.3em] text-gray-400 mb-1">CMS</p>
             <h1 className="text-2xl font-semibold text-black">Studios</h1>
+            <p className="text-sm text-gray-400 mt-0.5">
+              Each studio is a card on <strong className="font-medium text-blue-700">Edition → Core</strong> and on{" "}
+              <strong className="font-medium text-amber-700">Edition → Theme</strong>. Edit a studio to set the images for each.
+            </p>
           </div>
           <div className="flex items-center gap-3">
             <SeedStudiosButton />

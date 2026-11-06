@@ -29,8 +29,8 @@ const groups: NavGroup[] = [
     label: "Edition",
     links: [
       { href: "/cms/edition",     label: "Edition Page" },
-      { href: "/cms/theme",       label: "Theme" },
-      { href: "/cms/studios",     label: "Studios (Core)" },
+      { href: "/cms/studios",     label: "Studios (Core & Theme)" },
+      { href: "/cms/theme",       label: "Theme (not on site)" },
       { href: "/cms/schedule",    label: "Schedule" },
       { href: "/cms/brands-page", label: "Brands Page" },
     ],

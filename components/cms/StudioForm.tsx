@@ -148,6 +148,19 @@ export default function StudioForm({
   return (
     <div className="max-w-2xl space-y-6">
 
+      {/* ── WHERE THIS SHOWS ─────────────────────────── */}
+      <div className="border border-black/10 bg-[#fafafa] p-4 text-[12px] text-gray-600 leading-relaxed">
+        <p className="font-semibold text-black mb-1">One studio = one card on two pages</p>
+        <p>
+          The name, architects, logo and links below are shared. The{" "}
+          <span className="font-semibold text-blue-700">Core section</span> fills the studio’s card and popup on{" "}
+          <a href="/edition/core" target="_blank" rel="noopener noreferrer" className="underline">Edition → Core ↗</a>; the{" "}
+          <span className="font-semibold text-amber-700">Theme section</span> fills its card and popup on{" "}
+          <a href="/edition/theme" target="_blank" rel="noopener noreferrer" className="underline">Edition → Theme ↗</a>.
+          Images uploaded in one section never appear on the other page.
+        </p>
+      </div>
+
       {/* ── IDENTITY ─────────────────────────────────── */}
       <div>
         <label className={labelCls}>Studio Name *</label>
@@ -191,9 +204,14 @@ export default function StudioForm({
       </div>
 
       {/* ── CORE SECTION ─────────────────────────────── */}
-      <div className={sectionCls}>
-        <p className="text-[10px] uppercase tracking-[0.3em] text-gray-400 mb-1">Core Section</p>
-        <p className="text-[11px] text-gray-400 mb-4">Shown on Edition → Core: the card and its popup.</p>
+      <div className="border-l-4 border-blue-600 bg-blue-50/40 pl-5 pr-4 py-5">
+        <div className="flex items-center justify-between gap-3 mb-1">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-blue-700">Core Section</p>
+          <a href="/edition/core" target="_blank" rel="noopener noreferrer" className="text-[10px] uppercase tracking-widest text-blue-700 hover:underline">
+            View Core page ↗
+          </a>
+        </div>
+        <p className="text-[11px] text-gray-500 mb-4">Shown only on Edition → Core: the studio’s card and its popup.</p>
 
         <div className="space-y-4">
           <div>
@@ -254,9 +272,14 @@ export default function StudioForm({
       </div>
 
       {/* ── THEME / BOOTH SECTION ────────────────────── */}
-      <div className={sectionCls}>
-        <p className="text-[10px] uppercase tracking-[0.3em] text-gray-400 mb-1">Theme Section</p>
-        <p className="text-[11px] text-gray-400 mb-4">Shown on Edition → Theme: the card and its popup. These images don’t appear on the Core page.</p>
+      <div className="border-l-4 border-amber-500 bg-amber-50/50 pl-5 pr-4 py-5">
+        <div className="flex items-center justify-between gap-3 mb-1">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-amber-700">Theme Section</p>
+          <a href="/edition/theme" target="_blank" rel="noopener noreferrer" className="text-[10px] uppercase tracking-widest text-amber-700 hover:underline">
+            View Theme page ↗
+          </a>
+        </div>
+        <p className="text-[11px] text-gray-500 mb-4">Shown only on Edition → Theme: the studio’s card and its popup.</p>
 
         <div className="space-y-4">
           <div>

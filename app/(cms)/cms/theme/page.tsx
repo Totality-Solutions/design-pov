@@ -59,6 +59,23 @@ export default async function ThemeCmsPage() {
           <p className="text-sm text-gray-400 mt-1">Manage the Theme page title, content, and collaborators.</p>
         </div>
 
+        {/* This screen's data (pages / blocks tables) isn't read by the public Theme page — it shows the
+            studios from CMS → Studios (Theme Section). Kept for reference until it's removed or wired up. */}
+        <div className="mb-8 border border-amber-300 bg-amber-50 px-5 py-4 text-sm text-amber-900">
+          <p className="font-semibold">Nothing on this screen appears on the website.</p>
+          <p className="mt-1 text-[13px] leading-relaxed">
+            The studio cards and popup images on{" "}
+            <a href="/edition/theme" target="_blank" rel="noopener noreferrer" className="underline">Edition → Theme</a>{" "}
+            come from <strong>Studios → (studio) → Theme Section</strong>. To add or change Theme images, edit the studio there.
+          </p>
+          <a
+            href="/cms/studios"
+            className="inline-block mt-3 bg-black text-white px-4 py-2 text-[11px] uppercase tracking-widest hover:bg-neutral-800 transition-colors"
+          >
+            Go to Studios →
+          </a>
+        </div>
+
         {!page ? (
           <div className="bg-white border border-red-200 p-6 text-sm text-red-600">
             <p className="font-medium mb-1">Could not initialise the Theme page in Supabase.</p>
