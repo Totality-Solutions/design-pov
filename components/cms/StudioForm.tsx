@@ -103,8 +103,8 @@ export default function StudioForm({
   async function handleSave() {
     setError("");
     if (!form.label.trim())      { setError("Studio name is required."); return; }
-    if (!form.core_image.trim()) { setError("Core image path is required."); return; }
-    if (!form.booth_image.trim()) { setError("Booth image path is required."); return; }
+    if (!form.core_image.trim()) { setError("Core image is required."); return; }
+    if (!form.booth_image.trim()) { setError("Theme image is required."); return; }
 
     const payload = {
       label: form.label.trim(),
@@ -192,7 +192,8 @@ export default function StudioForm({
 
       {/* ── CORE SECTION ─────────────────────────────── */}
       <div className={sectionCls}>
-        <p className="text-[10px] uppercase tracking-[0.3em] text-gray-400 mb-4">Core Section</p>
+        <p className="text-[10px] uppercase tracking-[0.3em] text-gray-400 mb-1">Core Section</p>
+        <p className="text-[11px] text-gray-400 mb-4">Shown on Edition → Core: the card and its popup.</p>
 
         <div className="space-y-4">
           <div>
@@ -218,7 +219,7 @@ export default function StudioForm({
           </div>
 
           <div>
-            <label className={labelCls}>Core Additional Images</label>
+            <label className={labelCls}>Core Additional Images <span className="normal-case tracking-normal text-gray-400">— Core popup only</span></label>
             <div className="space-y-2 mt-1.5">
               {form.core_additional_images.map((img, i) => (
                 <div key={i} className="flex gap-2 items-start">
@@ -254,11 +255,12 @@ export default function StudioForm({
 
       {/* ── THEME / BOOTH SECTION ────────────────────── */}
       <div className={sectionCls}>
-        <p className="text-[10px] uppercase tracking-[0.3em] text-gray-400 mb-4">Theme / Booth Section</p>
+        <p className="text-[10px] uppercase tracking-[0.3em] text-gray-400 mb-1">Theme Section</p>
+        <p className="text-[11px] text-gray-400 mb-4">Shown on Edition → Theme: the card and its popup. These images don’t appear on the Core page.</p>
 
         <div className="space-y-4">
           <div>
-            <label className={labelCls}>Booth Image *</label>
+            <label className={labelCls}>Theme Image *</label>
             <ImageUploadField
               value={form.booth_image}
               onChange={(url) => set("booth_image", url)}
@@ -280,7 +282,7 @@ export default function StudioForm({
           </div>
 
           <div>
-            <label className={labelCls}>Booth Additional Images</label>
+            <label className={labelCls}>Theme Additional Images <span className="normal-case tracking-normal text-gray-400">— Theme popup only</span></label>
             <div className="space-y-2 mt-1.5">
               {form.booth_additional_images.map((img, i) => (
                 <div key={i} className="flex gap-2 items-start">
