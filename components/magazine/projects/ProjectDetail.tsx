@@ -136,7 +136,12 @@ export default function ProjectDetail({
       </header>
 
       {/* ── Two columns: the project (left) + other projects (right), like the Magazine article page ── */}
-      <div className="px-6 md:px-10 pb-16 grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_300px] xl:grid-cols-[minmax(0,1fr)_340px] gap-12">
+      {/* No other projects → no sidebar column: the project uses the full width. */}
+      <div
+        className={`px-6 md:px-10 pb-16 grid grid-cols-1 gap-12 ${
+          others.length > 0 ? "lg:grid-cols-[minmax(0,1fr)_300px] xl:grid-cols-[minmax(0,1fr)_340px]" : ""
+        }`}
+      >
       <div className="min-w-0">
 
       {/* ── Hero: one static image (not clickable) ── */}
