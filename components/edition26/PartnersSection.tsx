@@ -91,7 +91,7 @@ const PartnersSection: React.FC = () => {
       onMouseLeave={() => setIsHovered(false)}
     >
       <SectionHeading
-        titleMain="POV PARTNERS"
+        titleMain="POV PARTNERS / SPONSORS"
         sticky={false}
         bgColor="black"
         isSectionHovered={isHovered}

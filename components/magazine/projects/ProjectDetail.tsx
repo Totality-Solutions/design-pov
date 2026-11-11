@@ -15,7 +15,9 @@ import { formatProjectDate, instagramHandle, projectLocation, type Project, type
 
 type Neighbour = Pick<Project, "slug" | "title" | "architects" | "coverImage">;
 
-const SPECS_VISIBLE = 8;
+const SPECS_VISIBLE = 4;
+/** Shared heading style for the left panel's sections (About this office, Specifications). */
+const PANEL_HEADING = "text-xs font-bold uppercase tracking-widest text-black/60 border-b border-black pb-2";
 const GALLERY_PREVIEW = 9;
 
 /** Only http(s) links from the CMS become hrefs. */
@@ -54,6 +56,8 @@ export default function ProjectDetail({
   // The hero is one static image: the chosen hero / cover photo.
   const heroImage = viewerImages[indexOf(project.coverImage)];
   const [viewer, setViewer] = useState<number | null>(null);
+  // The office photo opens on its own (it isn't part of the project gallery).
+  const [officePhotoOpen, setOfficePhotoOpen] = useState(false);
   const [moreSpecs, setMoreSpecs] = useState(false);
   const [specsOpen, setSpecsOpen] = useState(true);
   const specsListRef = useRef<HTMLDivElement>(null);
@@ -92,6 +96,18 @@ export default function ProjectDetail({
       document.body.style.overflow = "";
     };
   }, [viewer, step]);
+
+  // Same for the office photo lightbox: Esc closes it, the page behind doesn't scroll.
+  useEffect(() => {
+    if (!officePhotoOpen) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOfficePhotoOpen(false);
+    window.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
+    };
+  }, [officePhotoOpen]);
 
   // Fixed fields first, then the free-form specifications in the CMS's order.
   // Long fact sheets fold after SPECS_VISIBLE rows behind "+ More specs".
@@ -173,13 +189,72 @@ export default function ProjectDetail({
           >
           {/* Fixed width inside, so the rows don't re-wrap while the panel slides. */}
           <div className="xl:w-60">
+            {/* ── About this office ── */}
+            {project.officeName && (
+              <section aria-labelledby="project-office" className="mb-10">
+                <h2 id="project-office" className={PANEL_HEADING}>About this office</h2>
+                <div className="flex items-center gap-4 pt-4">
+                  {project.officeLogo && (
+                    // Portrait frame anchored to the top, so a photo of the architects keeps their faces in view.
+                    <button
+                      type="button"
+                      onClick={() => setOfficePhotoOpen(true)}
+                      className="group relative w-20 aspect-[3/4] shrink-0 bg-neutral-100 overflow-hidden cursor-zoom-in"
+                      aria-label={`View ${project.officeName} photo`}
+                    >
+                      <Image src={project.officeLogo} alt={project.officeName} fill sizes="200px" className="object-cover object-top transition-transform duration-500 group-hover:scale-105" />
+                    </button>
+                  )}
+                  <div className="min-w-0">
+                    <p className="text-[11px] uppercase tracking-widest text-black/50 mb-1">Office</p>
+                    <p className="text-[17px] font-medium leading-snug">{project.officeName}</p>
+                  </div>
+                </div>
+                {/* Both links are optional — each shows only when set in the CMS. Below the photo, so a long
+                    handle or address has the panel's full width. */}
+                {(project.officeInstagram || officeUrl) && (
+                  <div className="flex flex-col gap-2 mt-4">
+                    {project.officeInstagram && (
+                      <a
+                        href={project.officeInstagram}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group inline-flex items-center gap-2 text-[13px] text-black/70 hover:text-primary-red transition-colors"
+                        aria-label={`${project.officeName} on Instagram`}
+                      >
+                        <span className="w-7 h-7 shrink-0 flex items-center justify-center border border-black/15 group-hover:border-primary-red transition-colors">
+                          <FaInstagram size={14} aria-hidden />
+                        </span>
+                        <span className="truncate">{instagramHandle(project.officeInstagram)}</span>
+                      </a>
+                    )}
+                    {officeUrl && (
+                      <a
+                        href={officeUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group inline-flex items-center gap-2 text-[13px] text-black/70 hover:text-primary-red transition-colors"
+                        aria-label={`${project.officeName} website`}
+                      >
+                        <span className="w-7 h-7 shrink-0 flex items-center justify-center border border-black/15 group-hover:border-primary-red transition-colors">
+                          <FiGlobe size={14} aria-hidden />
+                        </span>
+                        <span className="truncate">{new URL(officeUrl).hostname.replace(/^www\./, "")}</span>
+                      </a>
+                    )}
+                  </div>
+                )}
+              </section>
+            )}
+
+            {/* ── Specifications ── */}
           <h2>
             <button
               type="button"
               onClick={() => setSpecsOpen((v) => !v)}
               aria-expanded={specsOpen}
               aria-controls="project-specs"
-              className="group w-full flex items-center justify-between gap-3 border-b border-black pb-2 text-xs font-bold uppercase tracking-widest text-black/60 hover:text-black transition-colors"
+              className={`group w-full flex items-center justify-between gap-3 ${PANEL_HEADING} hover:text-black transition-colors`}
             >
               Specifications
               <span className="xl:hidden w-6 h-6 flex items-center justify-center border border-black/20 group-hover:border-black group-hover:bg-black group-hover:text-white transition-colors">
@@ -321,60 +396,8 @@ export default function ProjectDetail({
       )}
 
       {/* ── Office + tags ── */}
-      <section className="pb-16 grid grid-cols-1 xl:grid-cols-[240px_1fr] gap-10 xl:gap-12">
-        {project.officeName ? (
-          <div>
-            <p className="text-[11px] uppercase tracking-widest text-black/50 border-t border-black pt-4 mb-4">About this office</p>
-            <div className="flex items-center gap-4">
-              {project.officeLogo && (
-                // Portrait frame anchored to the top, so a photo of the architects keeps their faces in view.
-                <div className="relative w-24 aspect-[3/4] shrink-0 bg-neutral-100 overflow-hidden">
-                  <Image src={project.officeLogo} alt={project.officeName} fill sizes="96px" className="object-cover object-top" />
-                </div>
-              )}
-              <div className="min-w-0">
-                <p className="text-lg font-medium">{project.officeName}</p>
-                <p className="text-[12px] text-black/50">Office</p>
-              </div>
-            </div>
-                {/* Both links are optional — each shows only when set in the CMS. Below the photo, so a long
-                    handle or address has the column's full width. */}
-                {(project.officeInstagram || officeUrl) && (
-                  <div className="flex flex-col gap-2 mt-4">
-                    {project.officeInstagram && (
-                      <a
-                        href={project.officeInstagram}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="group inline-flex items-center gap-2 text-[13px] text-black/70 hover:text-primary-red transition-colors"
-                        aria-label={`${project.officeName} on Instagram`}
-                      >
-                        <span className="w-7 h-7 shrink-0 flex items-center justify-center border border-black/15 group-hover:border-primary-red transition-colors">
-                          <FaInstagram size={14} aria-hidden />
-                        </span>
-                        <span className="truncate">{instagramHandle(project.officeInstagram)}</span>
-                      </a>
-                    )}
-                    {officeUrl && (
-                      <a
-                        href={officeUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="group inline-flex items-center gap-2 text-[13px] text-black/70 hover:text-primary-red transition-colors"
-                        aria-label={`${project.officeName} website`}
-                      >
-                        <span className="w-7 h-7 shrink-0 flex items-center justify-center border border-black/15 group-hover:border-primary-red transition-colors">
-                          <FiGlobe size={14} aria-hidden />
-                        </span>
-                        <span className="truncate">{new URL(officeUrl).hostname.replace(/^www\./, "")}</span>
-                      </a>
-                    )}
-                  </div>
-                )}
-          </div>
-        ) : (
-          <div />
-        )}
+      <section className="pb-16 grid grid-cols-1 xl:grid-cols-[1fr] gap-10 xl:gap-12">
+        
         {tags.length > 0 && (
           <div>
             <p className="text-[11px] uppercase tracking-widest text-black/50 border-t border-black pt-4 mb-4">Tags</p>
@@ -426,6 +449,29 @@ export default function ProjectDetail({
         </aside>
       )}
       </div>
+
+      {/* ── Office photo lightbox ── */}
+      {officePhotoOpen && project.officeLogo && (
+        <div
+          className="fixed inset-0 z-[9991] bg-black/95 flex flex-col"
+          role="dialog"
+          aria-modal="true"
+          aria-label={`${project.officeName} photo`}
+          onClick={() => setOfficePhotoOpen(false)}
+        >
+          <div className="flex items-center justify-between px-4 md:px-6 h-14 text-white/80 text-[13px] shrink-0">
+            <span className="truncate">{project.officeName}</span>
+            <button type="button" onClick={() => setOfficePhotoOpen(false)} className="p-2 hover:text-white" aria-label="Close">
+              <FiX size={26} />
+            </button>
+          </div>
+          <div className="relative flex-1 min-h-0 mx-4 md:mx-20 mb-6">
+            <div className="absolute inset-0" onClick={(e) => e.stopPropagation()}>
+              <Image src={project.officeLogo} alt={project.officeName} fill sizes="100vw" className="object-contain" />
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ── Full-screen viewer ── */}
       {viewer !== null && viewerImages[viewer] && (

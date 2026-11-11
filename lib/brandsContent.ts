@@ -39,7 +39,7 @@ export const DEFAULT_BRANDS: BrandsPageContent = {
   apply: {
     enabled: true,
     partner: {
-      title: "Become a Partner",
+      title: "Become a Partner / Sponsor",
       description: "Align with a platform shaping design culture and create meaningful visibility through considered partnerships.",
       buttonLabel: "Apply as a Partner",
     },

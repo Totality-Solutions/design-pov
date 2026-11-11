@@ -32,7 +32,7 @@ export const DEFAULT_COLLABORATE: CollaboratePageContent = {
       { name: "Object", href: "/ecosystem/objects", description: "Exploring the boundary between art and utility through a curated collection of physical artifacts that redefine spaces." },
       { name: "Elevate", href: "/ecosystem/elevate", description: "A dedicated platform designed to amplify emerging talent and high-concept projects within the global design community." },
       { name: "Brand Participations", href: "/edition/brands", description: "Bridging the gap between corporate identity and immersive physical experience design through spatial storytelling." },
-      { name: "Partnership", href: "/edition/brands", description: "Empowering the creative economy by providing brands with high-impact platforms to integrate with global design movements." },
+      { name: "Partnership / Sponsorship", href: "/edition/brands", description: "Empowering the creative economy by providing brands with high-impact platforms to integrate with global design movements." },
       { name: "Media Enquiry", href: "/contact", description: "For press kits, interview requests, and media collaborations, reach out to our communications team for official insights." },
     ],
   },

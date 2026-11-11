@@ -22,18 +22,6 @@ export default async function HomePage() {
   return (
     <>
       {home.hero.enabled && <Hero slides={home.hero.slides} />}
-      {home.intro.enabled && <ScrollMaskText {...home.intro} />}
-      {home.whatPov.enabled && <WhatPOV paragraphs={home.whatPov.paragraphs} items={home.whatPov.items} />}
-      {home.theme.enabled && (
-        <DeferredRender minHeight="720px">
-          <Theme {...home.theme} />
-        </DeferredRender>
-      )}
-      {home.ecosystem.enabled && (
-        <DeferredRender minHeight="620px">
-          <Ecosystem heading={home.ecosystem.heading} items={home.ecosystem.items} />
-        </DeferredRender>
-      )}
       {home.ctaStrip.enabled && (
         <DeferredRender minHeight="120px">
           <div className="w-full z-10 bg-white border-t border-b border-[#DFDFDF]">
@@ -48,6 +36,19 @@ export default async function HomePage() {
           </div>
         </DeferredRender>
       )}
+      {home.whatPov.enabled && <WhatPOV paragraphs={home.whatPov.paragraphs} items={home.whatPov.items} />}
+      {home.theme.enabled && (
+        <DeferredRender minHeight="720px">
+          <Theme {...home.theme} />
+        </DeferredRender>
+      )}
+      {home.ecosystem.enabled && (
+        <DeferredRender minHeight="620px">
+          <Ecosystem heading={home.ecosystem.heading} items={home.ecosystem.items} />
+        </DeferredRender>
+      )}
+      {home.intro.enabled && <ScrollMaskText {...home.intro} />}
+      
       {home.coreCollective.enabled && (
         <DeferredRender minHeight="680px">
           <FeaturedDesigners heading={home.coreCollective.heading} tiles={home.coreCollective.tiles} />

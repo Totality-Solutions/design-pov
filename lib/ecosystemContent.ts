@@ -66,7 +66,7 @@ export const DEFAULT_ECOSYSTEM: EcosystemPageContent = {
       { label: "Objects",     image: home("OBJECT.jpeg") },
       { label: "Elevate",     image: home("N-2.jpg") },
       { label: "Brands",      image: cdn("/temp/ecosystem/brand-hero.png") },
-      { label: "Partnership", image: cdn("/temp/about/3.png") },
+      { label: "Partnership / Sponsorship", image: cdn("/temp/about/3.png") },
     ],
   },
 };

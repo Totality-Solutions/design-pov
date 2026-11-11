@@ -28,11 +28,11 @@ export type CoreTile = { media: CoreMedia[] };
 
 export type HomeContent = {
   hero:           { enabled: boolean; slides: HeroSlide[] };
-  intro:          { enabled: boolean; text: string; highlight: string; ctaLabel: string; ctaHref: string };
+  ctaStrip:       { enabled: boolean; title: string; ctaLabel: string; ctaHref: string };
   whatPov:        { enabled: boolean; paragraphs: string[]; items: MarqueeItem[] };
   theme:          { enabled: boolean; heading: string; description: string; ctaLabel: string; ctaHref: string; media: ThemeMedia[] };
   ecosystem:      { enabled: boolean; heading: string; items: EcosystemItem[] };
-  ctaStrip:       { enabled: boolean; title: string; ctaLabel: string; ctaHref: string };
+  intro:          { enabled: boolean; text: string; highlight: string; ctaLabel: string; ctaHref: string };
   coreCollective: { enabled: boolean; heading: string; tiles: CoreTile[] };
   partners:       { enabled: boolean; heading: string };
   magazine:       { enabled: boolean; heading: string };
@@ -44,11 +44,11 @@ export type HomeSectionKey = keyof HomeContent;
 /** CMS accordion order and labels — matches the order on the home page. */
 export const HOME_SECTIONS: SectionMeta<HomeSectionKey>[] = [
   { key: "hero",           label: "Hero Banner",          hint: "Full-width slider at the top" },
-  { key: "intro",          label: "Intro Strip",          hint: "Black strip with the \"Explore the Show\" button" },
+  { key: "ctaStrip",       label: "Apply CTA Strip",      hint: "\"Become a part of...\" strip" },
   { key: "whatPov",        label: "What is POV",          hint: "Scroll-reveal text and media marquee" },
   { key: "theme",          label: "Theme",                hint: "Theme heading and the image/video grid" },
   { key: "ecosystem",      label: "POV Ecosystem",        hint: "Expanding panels: Core, Circle, Objects..." },
-  { key: "ctaStrip",       label: "Apply CTA Strip",      hint: "\"Become a part of...\" strip" },
+  { key: "intro",          label: "Intro Strip",          hint: "Black strip with the \"Explore the Show\" button" },
   { key: "coreCollective", label: "Core Collective",      hint: "9-tile grid of studios" },
   { key: "partners",       label: "POV Partners",         hint: "Logos come from CMS → Brand Partners (sponsors)" },
   { key: "magazine",       label: "Magazine",             hint: "Posts come from CMS → Blogs (published)" },
@@ -71,13 +71,13 @@ export const DEFAULT_HOME: HomeContent = {
       { src: cdn("/video/POV ad 1.mp4"), type: "video", poster: cdn("/temp/home/section2/1.jpg"), alt: "Design POV film" },
     ],
   },
-  intro: {
+  ctaStrip: {
     enabled: true,
-    text: "A platform where architects, brands, artists, and thinkers come together to shape environments that go beyond the",
-    highlight: "visual.",
-    ctaLabel: "Explore the Show",
-    ctaHref: "/edition",
+    title: "Become a part of a design led platform like no other.",
+    ctaLabel: "Apply Now",
+    ctaHref: "/collaborate",
   },
+  
   whatPov: {
     enabled: true,
     paragraphs: [
@@ -162,11 +162,12 @@ export const DEFAULT_HOME: HomeContent = {
       },
     ],
   },
-  ctaStrip: {
+  intro: {
     enabled: true,
-    title: "Become a part of a design led platform like no other.",
-    ctaLabel: "Apply Now",
-    ctaHref: "/collaborate",
+    text: "A platform where architects, brands, artists, and thinkers come together to shape environments that go beyond the",
+    highlight: "visual.",
+    ctaLabel: "Explore the Show",
+    ctaHref: "/edition",
   },
   coreCollective: {
     enabled: true,
@@ -183,7 +184,7 @@ export const DEFAULT_HOME: HomeContent = {
       { media: [{ src: core("STUDIO ARCHOHM.jpg"), type: "image", name: "Studio Archohm", link: "/edition/core?designer=15" }, { src: core("TALATI & PARTNER.jpg"), type: "image", name: "Talati & Partners", link: "/edition/core?designer=16" }] },
     ],
   },
-  partners: { enabled: true, heading: "POV PARTNERS" },
+  partners: { enabled: true, heading: "POV PARTNERS / SPONSORS" },
   magazine: { enabled: true, heading: "Magazine" },
   brands:   { enabled: true, headingMain: "Brands", headingBold: "2026" },
 };
