@@ -59,7 +59,7 @@ export async function GET() {
     "- Who exhibits: architecture and interior design studios (The Core), luxury home and lifestyle brands, artists and makers (art installations, POV Objects).",
     `- Next edition: ${NEXT_EDITION.name}, ${day(start)} to ${day(end)}, ${NEXT_EDITION.venueName}, ${NEXT_EDITION.city}, India. Show hours 11am–8pm.`,
     `- Editions: ${EDITIONS.map((e) => `${e.name} (${day(new Date(e.startDate))} – ${day(new Date(e.endDate))})`).join("; ")} — all at ${NEXT_EDITION.venueName}, Mumbai.`,
-    "- Founded by Asif Sataar and Gagan Bhatia; produced by Intotality Media and Events Pvt. Ltd., Mumbai.",
+    "- Founded by Asif Sataar and Gagan Bhatia. Design POV is a brand of Intotality Media and Events Pvt. Ltd. (Intotality), Mumbai, which produces the show.",
     "- Programmes: The Core (architecture studios' spatial showcase), The Circle (talks and conversations), POV Objects, POV Elevate, and the Design POV Magazine.",
     "- Contact: marketing@designpovindia.com · 501, Janki Centre, Off Veera Desai Rd, Andheri West, Mumbai 400053.",
     `- Official profiles: ${SOCIAL_PROFILES.join(", ")}`,

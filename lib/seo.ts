@@ -25,6 +25,17 @@ export const ALTERNATE_NAMES = ["Design POV India", "Design POV Mumbai", "Design
 export const FOUNDERS = ["Asif Sataar", "Gagan Bhatia"];
 
 /**
+ * The company behind Design POV (as in the Terms of Use). Design POV has no
+ * Google Business Profile of its own — it sits under this company — so the
+ * structured data links the two for search engines and AI models.
+ */
+export const PARENT_ORGANIZATION = {
+  name: "Intotality Media and Events Pvt. Ltd.",
+  alternateName: ["Intotality", "InTotality"],
+  addressLocality: "Mumbai",
+};
+
+/**
  * What people search for when looking for an event like Design POV — used in
  * the keywords tag and to steer descriptions / structured data. Search engines
  * only; nothing here appears on the pages.

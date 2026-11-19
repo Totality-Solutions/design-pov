@@ -5,7 +5,7 @@ import { Montserrat } from 'next/font/google';
 import PageLoader from "@/components/common/PageLoader";
 import ErrorBoundary from "@/components/common/ErrorBoundary";
 import JsonLd from "@/components/seo/JsonLd";
-import { ALTERNATE_NAMES, DEFAULT_SHARE_IMAGE, FOUNDERS, HOME_TITLE, SEARCH_KEYWORDS, LOGO_URL, SITE_DESCRIPTION, SITE_NAME, SITE_URL, SOCIAL_PROFILES } from "@/lib/seo";
+import { ALTERNATE_NAMES, DEFAULT_SHARE_IMAGE, FOUNDERS, HOME_TITLE, PARENT_ORGANIZATION, SEARCH_KEYWORDS, LOGO_URL, SITE_DESCRIPTION, SITE_NAME, SITE_URL, SOCIAL_PROFILES } from "@/lib/seo";
 
 const montserrat = Montserrat({
   subsets: ['latin'],
@@ -58,6 +58,13 @@ const SITE_SCHEMA = [
     logo: LOGO_URL,
     description: SITE_DESCRIPTION,
     founder: FOUNDERS.map((name) => ({ "@type": "Person", name })),
+    // Design POV is a brand of this company (no separate Business Profile).
+    parentOrganization: {
+      "@type": "Organization",
+      name: PARENT_ORGANIZATION.name,
+      alternateName: PARENT_ORGANIZATION.alternateName,
+      address: { "@type": "PostalAddress", addressLocality: PARENT_ORGANIZATION.addressLocality, addressCountry: "IN" },
+    },
     foundingLocation: { "@type": "Place", name: "Mumbai, India" },
     areaServed: { "@type": "Country", name: "India" },
     knowsAbout: [
