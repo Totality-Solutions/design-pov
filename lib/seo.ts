@@ -78,6 +78,8 @@ export const SOCIAL_PROFILES = [
   "https://www.linkedin.com/company/design-pov/",
   "https://www.youtube.com/@designpov",
   "https://in.pinterest.com/DesignPOVIndia/",
+  // Wikidata item — ties this site to the "Design POV" entity search engines and AI models use.
+  "https://www.wikidata.org/wiki/Q142212610",
 ];
 
 /**
