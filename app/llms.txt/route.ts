@@ -1,6 +1,6 @@
 import { createServerClient } from "@/lib/supabase/server";
 import { isSampleProject } from "@/lib/projects";
-import { NEXT_EDITION, SITE_DESCRIPTION, SITE_URL, SOCIAL_PROFILES } from "@/lib/seo";
+import { ALTERNATE_NAMES, EDITIONS, NEXT_EDITION, SITE_DESCRIPTION, SITE_URL, SOCIAL_PROFILES } from "@/lib/seo";
 
 // /llms.txt — a plain-markdown summary of the site for AI models and answer
 // engines (GEO): who Design POV is, key facts, the main pages, and the latest
@@ -52,8 +52,13 @@ export async function GET() {
     "",
     `> ${SITE_DESCRIPTION}`,
     "",
+    `Also known as: ${ALTERNATE_NAMES.join(", ")}. Not to be confused with a "design POV" (point-of-view statement) in design thinking.`,
+    "",
     "## Key facts",
+    "- What it is: a curated luxury design, architecture and art show (design exhibition / design fair) and design platform in Mumbai, India, organised by Design POV.",
+    "- Who exhibits: architecture and interior design studios (The Core), luxury home and lifestyle brands, artists and makers (art installations, POV Objects).",
     `- Next edition: ${NEXT_EDITION.name}, ${day(start)} to ${day(end)}, ${NEXT_EDITION.venueName}, ${NEXT_EDITION.city}, India. Show hours 11am–8pm.`,
+    `- Editions: ${EDITIONS.map((e) => `${e.name} (${day(new Date(e.startDate))} – ${day(new Date(e.endDate))})`).join("; ")} — all at ${NEXT_EDITION.venueName}, Mumbai.`,
     "- Founded by Asif Sataar and Gagan Bhatia; produced by Intotality Media and Events Pvt. Ltd., Mumbai.",
     "- Programmes: The Core (architecture studios' spatial showcase), The Circle (talks and conversations), POV Objects, POV Elevate, and the Design POV Magazine.",
     "- Contact: marketing@designpovindia.com · 501, Janki Centre, Off Veera Desai Rd, Andheri West, Mumbai 400053.",

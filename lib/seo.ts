@@ -10,7 +10,47 @@ export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || "https://www.design
 export const SITE_NAME = "Design POV";
 
 export const SITE_DESCRIPTION =
-  "Design POV is a curated design platform from Mumbai that brings together architects, interior designers, brands, artists and makers through immersive spatial experiences, The Core showcase, conversations and an editorial magazine.";
+  "Design POV is India's curated luxury design, architecture and art show at Jio World Convention Centre, Mumbai — bringing together architects, interior designers, luxury home and lifestyle brands, artists and makers through The Core showcase, immersive installations, The Circle talks and a design magazine.";
+
+/** The home page's search-result title (search engines only — not shown on the page). */
+export const HOME_TITLE = "Design POV — Design Show & Exhibition in Mumbai, India";
+
+/**
+ * Other names people search for. "Design POV" on its own is also a design-thinking
+ * term (a "point of view" statement), so these help search engines and AI models
+ * recognise the company and event.
+ */
+export const ALTERNATE_NAMES = ["Design POV India", "Design POV Mumbai", "DesignPOV", "Design POV Show", "Design POV Exhibition"];
+
+export const FOUNDERS = ["Asif Sataar", "Gagan Bhatia"];
+
+/**
+ * What people search for when looking for an event like Design POV — used in
+ * the keywords tag and to steer descriptions / structured data. Search engines
+ * only; nothing here appears on the pages.
+ */
+export const SEARCH_KEYWORDS = [
+  // the event
+  "design event Mumbai", "design show India", "design exhibition Mumbai", "design fair India", "design week India",
+  // luxury
+  "luxury design event", "luxury design show Mumbai", "luxury interiors exhibition", "luxury lifestyle event Mumbai", "luxury home and lifestyle brands",
+  // architecture
+  "architecture show India", "architectural exhibition Mumbai", "architecture event Mumbai", "architects exhibition India",
+  // art
+  "art show Mumbai", "art and design exhibition India", "collectible design India", "art installations Mumbai",
+  // interiors
+  "interior design event Mumbai", "interior design exhibition India",
+];
+
+/**
+ * Every edition, for the EventSeries structured data and llms.txt. Newest last.
+ * All dates confirmed by the Design POV team (Nov 2026). Add each new edition here.
+ */
+export const EDITIONS = [
+  { name: "Design POV 2025", startDate: "2025-06-27", endDate: "2025-06-29", status: "past" as const },
+  { name: "Design POV 2026 — Sense & Sensibility", startDate: "2026-05-15", endDate: "2026-05-17", status: "past" as const },
+  { name: "Design POV 2027", startDate: "2027-05-02T11:00:00+05:30", endDate: "2027-05-04T20:00:00+05:30", status: "upcoming" as const },
+];
 
 /** Used when a page has no image of its own. A real photo on the CDN (1200×630 is ideal; this is a landscape shot). */
 export const DEFAULT_SHARE_IMAGE = cdn("/temp/home/section2/1.jpg");

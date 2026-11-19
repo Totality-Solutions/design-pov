@@ -5,7 +5,7 @@ import { Montserrat } from 'next/font/google';
 import PageLoader from "@/components/common/PageLoader";
 import ErrorBoundary from "@/components/common/ErrorBoundary";
 import JsonLd from "@/components/seo/JsonLd";
-import { DEFAULT_SHARE_IMAGE, LOGO_URL, SITE_DESCRIPTION, SITE_NAME, SITE_URL, SOCIAL_PROFILES } from "@/lib/seo";
+import { ALTERNATE_NAMES, DEFAULT_SHARE_IMAGE, FOUNDERS, HOME_TITLE, SEARCH_KEYWORDS, LOGO_URL, SITE_DESCRIPTION, SITE_NAME, SITE_URL, SOCIAL_PROFILES } from "@/lib/seo";
 
 const montserrat = Montserrat({
   subsets: ['latin'],
@@ -17,28 +17,25 @@ const montserrat = Montserrat({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Design POV — A Platform for Design Beyond Sight",
+    default: HOME_TITLE,
     template: "%s | Design POV",
   },
   description: SITE_DESCRIPTION,
   applicationName: SITE_NAME,
-  keywords: [
-    "Design POV", "design show India", "architecture exhibition Mumbai", "interior design event",
-    "The Core", "Jio World Convention Centre", "design magazine India", "architects", "interiors",
-  ],
+  keywords: ["Design POV", ...ALTERNATE_NAMES, ...SEARCH_KEYWORDS, "The Core", "Jio World Convention Centre", "design magazine India"],
   // No canonical here: it would be inherited by every page. Each page sets its own (pageMetadata).
   openGraph: {
     type: "website",
     locale: "en_IN",
     url: SITE_URL,
     siteName: SITE_NAME,
-    title: "Design POV — A Platform for Design Beyond Sight",
+    title: HOME_TITLE,
     description: SITE_DESCRIPTION,
     images: [{ url: DEFAULT_SHARE_IMAGE, alt: "Design POV" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Design POV — A Platform for Design Beyond Sight",
+    title: HOME_TITLE,
     description: SITE_DESCRIPTION,
     images: [DEFAULT_SHARE_IMAGE],
   },
@@ -56,9 +53,17 @@ const SITE_SCHEMA = [
     "@type": "Organization",
     "@id": `${SITE_URL}/#organization`,
     name: SITE_NAME,
+    alternateName: ALTERNATE_NAMES,
     url: SITE_URL,
     logo: LOGO_URL,
     description: SITE_DESCRIPTION,
+    founder: FOUNDERS.map((name) => ({ "@type": "Person", name })),
+    foundingLocation: { "@type": "Place", name: "Mumbai, India" },
+    areaServed: { "@type": "Country", name: "India" },
+    knowsAbout: [
+      "Design exhibitions", "Luxury design events", "Architecture shows", "Art shows and installations",
+      "Interior design", "Luxury home and lifestyle brands", "Collectible design", "Product design", "Design events in India",
+    ],
     email: "marketing@designpovindia.com",
     address: {
       "@type": "PostalAddress",
@@ -75,6 +80,7 @@ const SITE_SCHEMA = [
     "@type": "WebSite",
     "@id": `${SITE_URL}/#website`,
     name: SITE_NAME,
+    alternateName: ALTERNATE_NAMES,
     url: SITE_URL,
     publisher: { "@id": `${SITE_URL}/#organization` },
     inLanguage: "en-IN",
