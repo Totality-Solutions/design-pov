@@ -51,6 +51,10 @@ export const SEARCH_KEYWORDS = [
   "art show Mumbai", "art and design exhibition India", "collectible design India", "art installations Mumbai",
   // interiors
   "interior design event Mumbai", "interior design exhibition India",
+  // brands planning where to exhibit
+  "exhibition for luxury brands India", "where to exhibit luxury brand Mumbai", "exhibition for furniture brands India",
+  "exhibition for home decor brands Mumbai", "exhibition for lighting brands India", "exhibition for tiles and surfaces brands India",
+  "best design exhibitions to exhibit in India", "upcoming design exhibitions India 2027", "stall booking exhibition Mumbai",
 ];
 
 /**

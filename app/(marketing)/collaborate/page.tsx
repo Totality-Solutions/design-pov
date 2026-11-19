@@ -15,6 +15,8 @@ export const metadata = pageMetadata({
     "Design POV stall booking", "book a stall Design POV", "Design POV exhibitor", "exhibit at Design POV", "Design POV booth",
     "Design POV sponsorship", "Design POV participation", "Design POV partner", "exhibitor registration design show Mumbai",
     "stall booking design exhibition Mumbai", "sponsor design event India", "Design POV 2027 apply",
+    "where to exhibit luxury brand India", "exhibition for furniture and lighting brands Mumbai", "exhibition for home decor brands India",
+    "design trade show India for brands", "upcoming design exhibitions India 2027",
   ],
 });
 
