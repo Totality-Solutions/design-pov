@@ -8,10 +8,14 @@ import { getPageContent } from "@/lib/pageContentServer";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
-  title: "Brands & Partners — Design POV 2026",
+  title: "Brands, Exhibitors & Sponsors — Design POV",
   description:
-    "The home and lifestyle brands, sponsors and build partners of Design POV 2026 — and how to join as a partner or participant.",
+    "Luxury home and lifestyle brands, sponsors and build partners at Design POV, Mumbai — and how to become an exhibitor, take a brand pavilion or stall, or partner with Design POV 2027.",
   path: "/edition/brands",
+  keywords: [
+    "Design POV exhibitors", "Design POV brands", "Design POV sponsors", "brand pavilion Design POV", "Design POV stall",
+    "luxury brand exhibition Mumbai", "home and lifestyle brands exhibition India", "become a partner Design POV",
+  ],
 });
 
 export const dynamic = "force-dynamic";

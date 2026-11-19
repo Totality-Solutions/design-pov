@@ -7,8 +7,12 @@ import { pageMetadata } from "@/lib/seo";
 export const metadata = pageMetadata({
   title: "Contact Design POV",
   description:
-    "Get in touch with the Design POV team in Mumbai about participation, partnerships, media or general enquiries. Office: Andheri West, Mumbai. Email marketing@designpovindia.com.",
+    "Contact Design POV, Mumbai: stall and exhibitor enquiries, sponsorship, partnerships, media and tickets. WhatsApp +91 90763 89336 · marketing@designpovindia.com · Andheri West, Mumbai.",
   path: "/contact",
+  keywords: [
+    "Design POV contact", "Design POV phone number", "Design POV WhatsApp", "Design POV email",
+    "Design POV stall enquiry", "Design POV office Mumbai", "Design POV tickets",
+  ],
 });
 
 // Saving in CMS → Contact revalidates this page immediately; this is only

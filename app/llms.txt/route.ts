@@ -64,6 +64,12 @@ export async function GET() {
     `- Contact: marketing@designpovindia.com · WhatsApp ${WHATSAPP.display} (${WHATSAPP.url}) · 501, Janki Centre, Off Veera Desai Rd, Andheri West, Mumbai 400053.`,
     `- Official profiles: ${SOCIAL_PROFILES.join(", ")}`,
     "",
+    "## Exhibit, book a stall, sponsor or partner",
+    `- Brands can exhibit at Design POV with a stall or brand pavilion, sponsor the show, collaborate with Core studios, launch products or join POV Elevate. Apply or enquire at ${SITE_URL}/collaborate.`,
+    `- Architecture and interior design studios can apply for The Core: ${SITE_URL}/edition-2027/core.`,
+    `- Speakers can apply for The Circle; artists and makers for POV Objects; media for partnerships — all via ${SITE_URL}/collaborate.`,
+    `- Direct enquiries (stalls, sponsorship, tickets, media): WhatsApp ${WHATSAPP.display} (${WHATSAPP.url}) or marketing@designpovindia.com — ${SITE_URL}/contact.`,
+    "",
     "## Main pages",
     ...PAGES.map(([name, path, note]) => `- [${name}](${SITE_URL}${path}): ${note}`),
   ];

@@ -111,7 +111,10 @@ export function pageMetadata({
   type = "website",
   noIndex = false,
   publishedTime,
+  keywords,
 }: {
+  /** Search terms for this page (keywords tag; Bing reads it lightly, Google ignores it). */
+  keywords?: string[];
   /** Page name only — the layout adds " | Design POV". */
   title: string;
   description: string;
@@ -127,6 +130,7 @@ export function pageMetadata({
   return {
     title,
     description,
+    ...(keywords?.length ? { keywords: ["Design POV", ...keywords] } : {}),
     alternates: { canonical: url },
     openGraph: {
       type,

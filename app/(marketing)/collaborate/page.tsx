@@ -7,10 +7,15 @@ import { getPageContent } from "@/lib/pageContentServer";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
-  title: "Collaborate with Design POV",
+  title: "Exhibit, Sponsor or Partner — Book a Stall at Design POV 2027",
   description:
-    "Ways to take part in Design POV: The Core, The Circle, POV Objects, POV Elevate, brand participation, sponsorship and media partnerships. Apply or send an enquiry.",
+    "Take part in Design POV 2027, Mumbai's luxury design, architecture and art show (2–4 May 2027, Jio World Convention Centre): exhibitor stalls and brand pavilions, sponsorship, The Core, speaking at The Circle, POV Objects and media partnerships.",
   path: "/collaborate",
+  keywords: [
+    "Design POV stall booking", "book a stall Design POV", "Design POV exhibitor", "exhibit at Design POV", "Design POV booth",
+    "Design POV sponsorship", "Design POV participation", "Design POV partner", "exhibitor registration design show Mumbai",
+    "stall booking design exhibition Mumbai", "sponsor design event India", "Design POV 2027 apply",
+  ],
 });
 
 // Images are edited in the CMS — re-fetch at most once a minute.

@@ -15,6 +15,10 @@ export const metadata = pageMetadata({
   description:
     "Design POV 2027 runs 2–4 May 2027 at Jio World Convention Centre, Mumbai. Meet The Core 2027 architecture and design studios, or apply to be part of The Core.",
   path: "/edition-2027/core",
+  keywords: [
+    "Design POV 2027", "Design POV dates", "Design POV May 2027", "The Core Design POV", "apply Design POV",
+    "architecture studios exhibition Mumbai", "design show Mumbai 2027", "Jio World Convention Centre May 2027",
+  ],
 });
 
 // The next edition as a schema.org Event — dates, venue and organiser for search results and AI answers.
