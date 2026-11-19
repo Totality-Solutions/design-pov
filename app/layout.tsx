@@ -68,7 +68,7 @@ const SITE_SCHEMA = [
     foundingLocation: { "@type": "Place", name: "Mumbai, India" },
     areaServed: { "@type": "Country", name: "India" },
     knowsAbout: [
-      "Design exhibitions", "Luxury design events", "Architecture shows", "Art shows and installations",
+      "Design exhibitions", "Trade exhibitions", "Interior and building products", "Luxury design events", "Architecture shows", "Art shows and installations",
       "Interior design", "Luxury home and lifestyle brands", "Collectible design", "Product design", "Design events in India",
     ],
     email: "marketing@designpovindia.com",

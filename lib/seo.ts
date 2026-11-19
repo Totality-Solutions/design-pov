@@ -10,10 +10,10 @@ export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || "https://www.design
 export const SITE_NAME = "Design POV";
 
 export const SITE_DESCRIPTION =
-  "Design POV is India's curated luxury design, architecture and art show at Jio World Convention Centre, Mumbai — bringing together architects, interior designers, luxury home and lifestyle brands, artists and makers through The Core showcase, immersive installations, The Circle talks and a design magazine.";
+  "Design POV is India's curated design, architecture and interiors exhibition at Jio World Convention Centre, Mumbai — where luxury home, lifestyle and building-product brands exhibit to architects, interior designers and trade buyers, alongside The Core showcase, art installations, The Circle talks and a design magazine.";
 
 /** The home page's search-result title (search engines only — not shown on the page). */
-export const HOME_TITLE = "Design POV — Design Show & Exhibition in Mumbai, India";
+export const HOME_TITLE = "Design POV — Design & Architecture Exhibition in Mumbai, India";
 
 /**
  * Other names people search for. "Design POV" on its own is also a design-thinking
@@ -51,6 +51,11 @@ export const SEARCH_KEYWORDS = [
   "art show Mumbai", "art and design exhibition India", "collectible design India", "art installations Mumbai",
   // interiors
   "interior design event Mumbai", "interior design exhibition India",
+  // trade exhibition (brands exhibit products to architects, designers and trade buyers)
+  "design trade exhibition Mumbai", "B2B design exhibition India", "interior products exhibition Mumbai", "building materials exhibition Mumbai",
+  "interior and building products expo India", "architecture and interiors expo Mumbai", "furniture and furnishings exhibition Mumbai",
+  "lighting exhibition Mumbai", "tiles and surfaces exhibition India", "kitchen and bath exhibition Mumbai", "home décor trade show India",
+  "design expo Mumbai 2027", "exhibitor stall booking Mumbai",
   // brands planning where to exhibit
   "exhibition for luxury brands India", "where to exhibit luxury brand Mumbai", "exhibition for furniture brands India",
   "exhibition for home decor brands Mumbai", "exhibition for lighting brands India", "exhibition for tiles and surfaces brands India",

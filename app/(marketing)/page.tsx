@@ -17,7 +17,7 @@ import { ALTERNATE_NAMES, DEFAULT_SHARE_IMAGE, EDITIONS, HOME_TITLE, NEXT_EDITIO
 
 // Search-engine / AI text only — nothing here is shown on the page.
 const HOME_DESCRIPTION =
-  "Design POV is India's luxury design, architecture and art show at Jio World Convention Centre, Mumbai. Next edition 2–4 May 2027: The Core architecture showcase, luxury brand pavilions, art installations and The Circle talks.";
+  "Design POV is India's design, architecture and interiors exhibition at Jio World Convention Centre, Mumbai. 2–4 May 2027: brand stalls and pavilions, The Core architecture showcase, art installations and The Circle talks.";
 
 export const metadata: Metadata = {
   ...pageMetadata({ title: HOME_TITLE, description: HOME_DESCRIPTION, path: "/" }),
