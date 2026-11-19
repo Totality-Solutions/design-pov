@@ -63,9 +63,13 @@ export const EDITIONS = [
   { name: "Design POV 2027", startDate: "2027-05-02T11:00:00+05:30", endDate: "2027-05-04T20:00:00+05:30", status: "upcoming" as const },
 ];
 
-/** Used when a page has no image of its own. A real photo on the CDN (1200×630 is ideal; this is a landscape shot). */
-export const DEFAULT_SHARE_IMAGE = cdn("/temp/home/section2/1.jpg");
-export const LOGO_URL = cdn("/logo/Logo.svg");
+/** Used when a page has no image of its own: the white logo on black, 1200×630 (public/og/design-pov.jpg). */
+export const DEFAULT_SHARE_IMAGE = `${SITE_URL}/og/design-pov.jpg`;
+/** Black logo on white, 1000×240 PNG (public/og/logo.png) — Google prefers a raster logo for the Organization. */
+export const LOGO_URL = `${SITE_URL}/og/logo.png`;
+
+/** WhatsApp for enquiries (structured data contactPoint + profile link). */
+export const WHATSAPP = { display: "+91 90763 89336", e164: "+919076389336", url: "https://wa.me/919076389336" };
 
 /** Official profiles — the same links as the site footer. */
 export const SOCIAL_PROFILES = [

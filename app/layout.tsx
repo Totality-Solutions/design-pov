@@ -5,7 +5,7 @@ import { Montserrat } from 'next/font/google';
 import PageLoader from "@/components/common/PageLoader";
 import ErrorBoundary from "@/components/common/ErrorBoundary";
 import JsonLd from "@/components/seo/JsonLd";
-import { ALTERNATE_NAMES, DEFAULT_SHARE_IMAGE, FOUNDERS, HOME_TITLE, PARENT_ORGANIZATION, SEARCH_KEYWORDS, LOGO_URL, SITE_DESCRIPTION, SITE_NAME, SITE_URL, SOCIAL_PROFILES } from "@/lib/seo";
+import { ALTERNATE_NAMES, DEFAULT_SHARE_IMAGE, FOUNDERS, HOME_TITLE, PARENT_ORGANIZATION, SEARCH_KEYWORDS, WHATSAPP, LOGO_URL, SITE_DESCRIPTION, SITE_NAME, SITE_URL, SOCIAL_PROFILES } from "@/lib/seo";
 
 const montserrat = Montserrat({
   subsets: ['latin'],
@@ -72,6 +72,18 @@ const SITE_SCHEMA = [
       "Interior design", "Luxury home and lifestyle brands", "Collectible design", "Product design", "Design events in India",
     ],
     email: "marketing@designpovindia.com",
+    contactPoint: [
+      {
+        "@type": "ContactPoint",
+        contactType: "customer service",
+        telephone: WHATSAPP.e164,
+        email: "marketing@designpovindia.com",
+        url: WHATSAPP.url,
+        description: "WhatsApp and email enquiries: participation, partnerships, media and tickets.",
+        areaServed: "IN",
+        availableLanguage: ["English", "Hindi"],
+      },
+    ],
     address: {
       "@type": "PostalAddress",
       streetAddress: "501, Janki Centre, Off Veera Desai Rd, Andheri West",

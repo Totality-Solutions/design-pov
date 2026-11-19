@@ -1,6 +1,6 @@
 import { createServerClient } from "@/lib/supabase/server";
 import { isSampleProject } from "@/lib/projects";
-import { ALTERNATE_NAMES, EDITIONS, NEXT_EDITION, SITE_DESCRIPTION, SITE_URL, SOCIAL_PROFILES } from "@/lib/seo";
+import { ALTERNATE_NAMES, EDITIONS, NEXT_EDITION, SITE_DESCRIPTION, SITE_URL, SOCIAL_PROFILES, WHATSAPP } from "@/lib/seo";
 
 // /llms.txt — a plain-markdown summary of the site for AI models and answer
 // engines (GEO): who Design POV is, key facts, the main pages, and the latest
@@ -61,7 +61,7 @@ export async function GET() {
     `- Editions: ${EDITIONS.map((e) => `${e.name} (${day(new Date(e.startDate))} – ${day(new Date(e.endDate))})`).join("; ")} — all at ${NEXT_EDITION.venueName}, Mumbai.`,
     "- Founded by Asif Sataar and Gagan Bhatia. Design POV is a brand of Intotality Media and Events Pvt. Ltd. (Intotality), Mumbai, which produces the show.",
     "- Programmes: The Core (architecture studios' spatial showcase), The Circle (talks and conversations), POV Objects, POV Elevate, and the Design POV Magazine.",
-    "- Contact: marketing@designpovindia.com · 501, Janki Centre, Off Veera Desai Rd, Andheri West, Mumbai 400053.",
+    `- Contact: marketing@designpovindia.com · WhatsApp ${WHATSAPP.display} (${WHATSAPP.url}) · 501, Janki Centre, Off Veera Desai Rd, Andheri West, Mumbai 400053.`,
     `- Official profiles: ${SOCIAL_PROFILES.join(", ")}`,
     "",
     "## Main pages",
