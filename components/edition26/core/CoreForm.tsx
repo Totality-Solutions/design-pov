@@ -53,7 +53,8 @@ const CoreForm = () => {
   }
 
   return (
-    <section className="w-full bg-white font-display pb-10"
+    // id: the Core page's "Apply Now" strip links here (#core-form); scroll-mt keeps the heading clear of the fixed header.
+    <section id="core-form" className="w-full bg-white font-display pb-10 scroll-mt-28"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >

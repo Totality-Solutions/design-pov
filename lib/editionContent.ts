@@ -14,7 +14,7 @@ export type EditionPageContent = {
   brands:     { enabled: boolean };
   schedule:   { enabled: boolean };
   partners:   { enabled: boolean };
-  coreCta:    { enabled: boolean; title: string; ctaLabel: string; ctaHref: string };
+  // coreCta:    { enabled: boolean; title: string; ctaLabel: string; ctaHref: string };
 };
 
 export type EditionSectionKey = keyof EditionPageContent;
@@ -27,7 +27,7 @@ export const EDITION_SECTIONS: SectionMeta<EditionSectionKey>[] = [
   { key: "brands",     label: "Brands Marquee",        hint: "Logos come from CMS → Brand Partners (brands)" },
   { key: "schedule",   label: "Schedule",              hint: "Events come from CMS → Schedule" },
   { key: "partners",   label: "Partners",              hint: "Logos come from CMS → Brand Partners" },
-  { key: "coreCta",    label: "Core Page Apply Strip", hint: "The strip at the bottom of Edition → Core" },
+  // { key: "coreCta",    label: "Core Page Apply Strip", hint: "The strip at the bottom of Edition → Core" },
 ];
 
 /** The floating theme cards have fixed positions and sizes, so the image slots are fixed too. */
@@ -82,10 +82,10 @@ export const DEFAULT_EDITION: EditionPageContent = {
   brands: { enabled: true },
   schedule: { enabled: true },
   partners: { enabled: true },
-  coreCta: {
-    enabled: true,
-    title: "Become a part of The Core Collective 2027",
-    ctaLabel: "Apply Now",
-    ctaHref: "#",
-  },
+  // coreCta: {
+  //   enabled: true,
+  //   title: "Become a part of The Core Collective 2027",
+  //   ctaLabel: "Apply Now",
+  //   ctaHref: "#core-form", // the Core Collaboration form on the same page
+  // },
 };

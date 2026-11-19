@@ -24,7 +24,7 @@ async function getStudios() {
 }
 
 export default async function CorePage2027() {
-  const [studios, { coreCta }] = await Promise.all([getStudios(), getPageContent("edition")]);
+  const [studios] = await Promise.all([getStudios(), getPageContent("edition")]);
 
   return (
     <main>
@@ -32,7 +32,7 @@ export default async function CorePage2027() {
         <CoreShowcase studios={studios} />
       </Suspense>
       <CoreForm/>
-      {coreCta.enabled && (
+      {/* {coreCta.enabled && (
         <div className="w-full z-10 bg-white">
           <CTAStrip
             title={coreCta.title}
@@ -43,7 +43,7 @@ export default async function CorePage2027() {
             hoverTextColor='var(--color-white)'
           />
         </div>
-      )}
+      )} */}
     </main>
   );
 }

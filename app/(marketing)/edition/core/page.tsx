@@ -24,7 +24,7 @@ async function getStudios() {
 }
 
 export default async function CorePage() {
-  const [studios, { coreCta }] = await Promise.all([getStudios(), getPageContent("edition")]);
+  const [studios] = await Promise.all([getStudios(), getPageContent("edition")]);
 
   return (
     <main>
@@ -32,18 +32,19 @@ export default async function CorePage() {
         <CoreShowcase studios={studios} />
       </Suspense>
       <CoreForm/>
-      {coreCta.enabled && (
+      {/* {coreCta.enabled && (
         <div className="w-full z-10 bg-white">
           <CTAStrip
             title={coreCta.title}
             ctaLabel={coreCta.ctaLabel}
-            ctaHref={coreCta.ctaHref}
+            // "#" / empty (the old default, possibly saved in the CMS) goes nowhere — fall back to the form.
+            ctaHref={coreCta.ctaHref && coreCta.ctaHref !== "#" ? coreCta.ctaHref : "#core-form"}
             hoverBgColor="#000000"
             textColor='var(--primary-red)'
             hoverTextColor='var(--color-white)'
           />
         </div>
-      )}
+      )} */}
     </main>
   );
 }
