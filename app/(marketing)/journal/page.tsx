@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
+// Unlinked placeholder with dummy articles — kept out of search results (the real editorial lives at /magazine).
 export const metadata: Metadata = {
   title: "Journal",
   description: "Design POV's editorial arm — project features, designer conversations, and material deep dives.",
+  robots: { index: false, follow: true },
 };
 
 const CATEGORIES = ["All", "Installations", "Conversations", "Materials", "Opinion", "Field Notes"];

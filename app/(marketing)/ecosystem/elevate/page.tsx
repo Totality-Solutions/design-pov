@@ -2,38 +2,17 @@
 import ElevateForm from "@/components/ecosystem/elevate/ElevateForm";
 import ElevateGallery from "@/components/ecosystem/elevate/ElevateGallery";
 import ElevateHero from "@/components/ecosystem/elevate/ElevateHero";
-import type { Metadata } from "next";
 import { getPageContent } from "@/lib/pageContentServer";
+import { pageMetadata } from "@/lib/seo";
+import { cdn } from "@/lib/cdn";
 
-export const metadata: Metadata = {
-  title: "Elevate | Design POV India",
+export const metadata = pageMetadata({
+  title: "POV Elevate",
   description:
-    "Explore Elevate by Design POV India — a curated showcase of collectible design, material expression, and contemporary Elevate shaping spatial narratives.",
-  keywords: [
-    "Design POV",
-    "Elevate",
-    "Collectible Design",
-    "Interior Design",
-    "Furniture",
-    "Design Exhibition",
-    "India Design",
-    "Contemporary Design",
-  ],
-  openGraph: {
-    title: "Elevate | Design POV India",
-    description:
-      "Explore Elevate by Design POV India — a curated showcase of collectible design, material expression, and contemporary Elevate shaping spatial narratives.",
-    url: "https://designpovindia.com/Elevate",
-    siteName: "Design POV India",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Elevate | Design POV India",
-    description:
-      "Explore Elevate by Design POV India — a curated showcase of collectible design, material expression, and contemporary Elevate shaping spatial narratives.",
-  },
-};
+    "POV Elevate takes Design POV beyond the show floor for home and lifestyle brands: curated events, launches, conversations, media and F&B partnerships, and online amplification.",
+  path: "/ecosystem/elevate",
+  image: cdn("/temp/edition/elevate/1.JPG"),
+});
 
 // Saving in CMS → Elevate revalidates this page immediately; this is only
 // the fallback refresh interval.

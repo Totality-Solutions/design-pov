@@ -110,5 +110,5 @@ export const EDITION_EDITORS: SectionEditors<EditionPageContent> = {
   brands: managedElsewhere("brand logos", "/cms/brand-partners", "Brand Partners"),
   schedule: managedElsewhere("events", "/cms/schedule", "Schedule"),
   partners: managedElsewhere("partner logos and tabs", "/cms/brand-partners", "Brand Partners"),
-  coreCta: StripEditor,
+  // coreCta: StripEditor, // "Core Page Apply Strip" — section commented out in lib/editionContent.ts
 };

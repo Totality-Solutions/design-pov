@@ -7,6 +7,14 @@ import ThemeSection from "@/components/edition26/ThemeSection";
 import ShowDeckCTA from "@/components/common/ShowDeckCTA";
 import WhoItIsFor from "@/components/edition26/WhoItIsFor";
 import { getPageContent } from "@/lib/pageContentServer";
+import { pageMetadata } from "@/lib/seo";
+
+export const metadata = pageMetadata({
+  title: "Design POV 2026 — Sense & Sensibility",
+  description:
+    "The 2026 edition of Design POV in Mumbai: the theme Sense & Sensibility, The Core Collective of architecture studios, brand pavilions, The Circle talks and the full schedule.",
+  path: "/edition",
+});
 
 // Saving a section in CMS → Edition Page revalidates this page immediately;
 // this is only the fallback refresh interval.

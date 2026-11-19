@@ -5,6 +5,10 @@ import { NormalizedBlog, normalizeDbBlog } from "@/lib/blog";
 // import { blogs as staticBlogs } from "@/data/magazineData";
 import { notFound } from "next/navigation";
 import { Container } from "@/components/common/Container";
+import { cache } from "react";
+import type { Metadata } from "next";
+import JsonLd from "@/components/seo/JsonLd";
+import { absoluteUrl, LOGO_URL, pageMetadata, SITE_NAME, SITE_URL, toDescription } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 
@@ -37,6 +41,36 @@ async function getBlogBySlug(slug: string): Promise<{ blog: NormalizedBlog; allB
   }
 }
 
+// generateMetadata and the page both need the post — cache() makes it one database read per request.
+const getPost = cache(getBlogBySlug);
+
+/** Summary for search results and link previews: description → subtitle → first paragraph. */
+function postSummary(blog: NormalizedBlog): string {
+  const firstText = blog.detailedContent.find((b) => b.type === "text")?.value ?? "";
+  return toDescription(blog.description || blog.subtitle || blog.featuredParagraphs[0] || firstText || blog.title);
+}
+
+/** The stored date is free text ("17 May 2021"); ISO when it parses, otherwise left out. */
+function isoDate(text: string): string | undefined {
+  const d = new Date(text);
+  return Number.isNaN(d.getTime()) ? undefined : d.toISOString();
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const result = await getPost(slug);
+  if (!result) return { title: "Article not found", robots: { index: false } };
+  const { blog } = result;
+  return pageMetadata({
+    title: blog.title,
+    description: postSummary(blog),
+    path: `/magazine/${blog.slug}`,
+    image: typeof blog.image === "string" ? blog.image : undefined,
+    type: "article",
+    publishedTime: isoDate(blog.date),
+  });
+}
+
 export default async function InnerMagazinePage({
   params,
 }: {
@@ -45,12 +79,26 @@ export default async function InnerMagazinePage({
   const { slug } = await params;
 
   // Try DB first
-  const dbResult = await getBlogBySlug(slug);
+  const dbResult = await getPost(slug);
 
   if (dbResult) {
+    const { blog } = dbResult;
+    const articleSchema = {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      headline: blog.title,
+      description: postSummary(blog),
+      image: typeof blog.image === "string" ? [absoluteUrl(blog.image)] : undefined,
+      datePublished: isoDate(blog.date),
+      author: blog.author ? { "@type": "Person", name: blog.author } : { "@type": "Organization", name: SITE_NAME },
+      publisher: { "@type": "Organization", "@id": `${SITE_URL}/#organization`, name: SITE_NAME, logo: { "@type": "ImageObject", url: LOGO_URL } },
+      mainEntityOfPage: absoluteUrl(`/magazine/${blog.slug}`),
+      articleSection: blog.category,
+    };
     return (
       <Container className="w-full bg-white px-6 md:px-14 py-20 lg:py-12 ">
-        <MagazineBase activeBlog={dbResult.blog} isInnerPage allBlogs={dbResult.allBlogs} />
+        <JsonLd data={articleSchema} />
+        <MagazineBase activeBlog={blog} isInnerPage allBlogs={dbResult.allBlogs} />
       </Container>
     );
   }

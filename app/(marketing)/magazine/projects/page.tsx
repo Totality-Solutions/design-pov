@@ -2,11 +2,14 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import ProjectCard from "@/components/magazine/projects/ProjectCard";
 import { getPublishedProjectCards } from "@/lib/projectsServer";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Projects | Design POV Magazine",
-  description: "Architecture and interior projects featured by Design POV — photographs, drawings and the architects’ own words.",
-};
+export const metadata: Metadata = pageMetadata({
+  title: "Architecture & Interior Projects",
+  description:
+    "Architecture and interior projects featured in the Design POV magazine — photographs, drawings, project specifications and the architects’ own words.",
+  path: "/magazine/projects",
+});
 
 // Saving in CMS → Projects revalidates this page; this is the fallback.
 export const revalidate = 300;

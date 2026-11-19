@@ -4,6 +4,14 @@ import EcosystemPillars from '@/components/ecosystem/EcosystemPillars'
 import ParticipationForm from '@/components/ecosystem/ParticipationForm'
 import StrategicSection from '@/components/ecosystem/StrategicSection'
 import { getPageContent } from '@/lib/pageContentServer'
+import { pageMetadata } from '@/lib/seo'
+
+export const metadata = pageMetadata({
+  title: 'The Design POV Ecosystem',
+  description:
+    'How Design POV works beyond the show: The Core, The Circle, POV Objects, POV Elevate and the magazine — an ecosystem connecting architects, brands, makers and audiences.',
+  path: '/ecosystem',
+})
 
 // Saving a section in CMS → Ecosystem revalidates this page immediately;
 // this is only the fallback refresh interval.

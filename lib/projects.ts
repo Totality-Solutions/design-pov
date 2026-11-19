@@ -122,6 +122,11 @@ export function countProjectImages(row: { cover_image?: string | null; gallery?:
   return srcs.size;
 }
 
+/** Test content (tagged "Sample" in the CMS): kept out of search engines and the sitemap. */
+export function isSampleProject(p: { tags?: string[] | null }): boolean {
+  return (p.tags ?? []).some((t) => t.trim().toLowerCase() === "sample");
+}
+
 /** "Modern Mokotów / BBGK Architekci" */
 export function projectHeading(p: Pick<Project, "title" | "architects">): string {
   return p.architects ? `${p.title} / ${p.architects}` : p.title;

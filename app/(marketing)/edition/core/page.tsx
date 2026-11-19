@@ -7,6 +7,14 @@ import CoreForm from "@/components/edition26/core/CoreForm";
 import { createServerClient } from "@/lib/supabase/server";
 import { normalizeStudio } from "@/lib/studios";
 import { getPageContent } from "@/lib/pageContentServer";
+import { pageMetadata } from "@/lib/seo";
+
+export const metadata = pageMetadata({
+  title: "The Core Collective 2026",
+  description:
+    "The Core at Design POV 2026: architecture and design studios interpreting Sense & Sensibility through fully realised spatial installations. Meet the studios and their work.",
+  path: "/edition/core",
+});
 
 async function getStudios() {
   try {

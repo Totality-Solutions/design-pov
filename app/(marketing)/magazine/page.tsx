@@ -12,13 +12,16 @@ import { createServerClient } from "@/lib/supabase/server";
 import { NormalizedBlog, normalizeDbBlog } from "@/lib/blog";
 import { getPageContent } from "@/lib/pageContentServer";
 import { getPublishedProjectCards } from "@/lib/projectsServer";
+import { pageMetadata } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
-  title: "Magazine",
-  description: "Exhibit, sponsor, speak, curate, or collaborate with Design POV 2026.",
-};
+export const metadata: Metadata = pageMetadata({
+  title: "Design POV Magazine",
+  description:
+    "Stories from those who consume and create design in India and beyond: features, interviews with architects and designers, projects, and news from Design POV.",
+  path: "/magazine",
+});
 
 async function getBlogs(): Promise<NormalizedBlog[]> {
   try {

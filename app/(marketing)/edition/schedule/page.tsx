@@ -3,6 +3,14 @@ import DynamicScheduleGrid from "@/components/edition26/schedule/DynamicSchedule
 import DesignPovTicket from "@/components/edition26/schedule/DesignPovTicket";
 import ShowDeckCTA from "@/components/common/ShowDeckCTA";
 import { createServerClient } from "@/lib/supabase/server";
+import { pageMetadata } from "@/lib/seo";
+
+export const metadata = pageMetadata({
+  title: "Schedule & The Circle Talks — Design POV 2026",
+  description:
+    "Day-by-day programme for Design POV 2026: The Circle panel discussions and fireside chats, workshops, launches and invite-only events.",
+  path: "/edition/schedule",
+});
 
 export const dynamic = "force-dynamic";
 

@@ -4,6 +4,14 @@ import ThemeCollaborators from "@/components/edition26/theme/ThemeCollaborators"
 import ThemeIntro from "@/components/edition26/theme/ThemeIntro";
 import { createServerClient } from "@/lib/supabase/server";
 import { normalizeStudio } from "@/lib/studios";
+import { pageMetadata } from "@/lib/seo";
+
+export const metadata = pageMetadata({
+  title: "Theme 2026: Sense & Sensibility",
+  description:
+    "Sense & Sensibility, the Design POV 2026 theme: how spaces, objects and environments engage all five senses — interpreted by the participating architecture studios.",
+  path: "/edition/theme",
+});
 
 async function getStudios() {
   try {

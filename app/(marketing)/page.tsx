@@ -11,6 +11,13 @@ import HomeSponsors from "@/components/home/HomeSponsors";
 import ShowDeckCTA from "@/components/common/ShowDeckCTA";
 import DeferredRender from "@/components/common/DeferredRender";
 import { getPageContent } from "@/lib/pageContentServer";
+import type { Metadata } from "next";
+import { pageMetadata, SITE_DESCRIPTION } from "@/lib/seo";
+
+export const metadata: Metadata = {
+  ...pageMetadata({ title: "Design POV — A Platform for Design Beyond Sight", description: SITE_DESCRIPTION, path: "/" }),
+  title: { absolute: "Design POV — A Platform for Design Beyond Sight" },
+};
 
 // Saving a section in CMS → Home revalidates "/" immediately; this is only
 // the fallback refresh interval.

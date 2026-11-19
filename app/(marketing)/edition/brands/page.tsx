@@ -5,6 +5,14 @@ import Sponsors from "@/components/edition26/brands/Sponsors";
 import BuildPartner from "@/components/edition26/brands/BuildPartner";
 import PageLoader from "@/components/common/PageLoader";
 import { getPageContent } from "@/lib/pageContentServer";
+import { pageMetadata } from "@/lib/seo";
+
+export const metadata = pageMetadata({
+  title: "Brands & Partners — Design POV 2026",
+  description:
+    "The home and lifestyle brands, sponsors and build partners of Design POV 2026 — and how to join as a partner or participant.",
+  path: "/edition/brands",
+});
 
 export const dynamic = "force-dynamic";
 

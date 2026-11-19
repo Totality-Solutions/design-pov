@@ -2,11 +2,13 @@ import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import LegalDocument from '@/components/common/LegalDocument';
 import { getPageContent } from '@/lib/pageContentServer';
+import { pageMetadata } from '@/lib/seo';
 
-export const metadata: Metadata = {
-  title: 'Privacy Policy | Design POV India',
-  description: 'Privacy policy and data protection guidelines for Designpovindia.com',
-};
+export const metadata: Metadata = pageMetadata({
+  title: 'Privacy Policy',
+  description: 'How Design POV collects, uses and protects personal information on designpovindia.com, and how to request access, correction or deletion of your data.',
+  path: '/legal/privacy-policy',
+});
 
 // Saving in CMS → Legal revalidates this page immediately; this is only the
 // fallback refresh interval.

@@ -7,6 +7,41 @@ import CoreForm from "@/components/edition26/core/CoreForm";
 import { createServerClient } from "@/lib/supabase/server";
 import { normalizeStudio } from "@/lib/studios";
 import { getPageContent } from "@/lib/pageContentServer";
+import JsonLd from "@/components/seo/JsonLd";
+import { absoluteUrl, DEFAULT_SHARE_IMAGE, NEXT_EDITION, pageMetadata, SITE_URL } from "@/lib/seo";
+
+export const metadata = pageMetadata({
+  title: "The Core 2027 — Design POV 2027, Mumbai",
+  description:
+    "Design POV 2027 runs 2–4 May 2027 at Jio World Convention Centre, Mumbai. Meet The Core 2027 architecture and design studios, or apply to be part of The Core.",
+  path: "/edition-2027/core",
+});
+
+// The next edition as a schema.org Event — dates, venue and organiser for search results and AI answers.
+const EVENT_SCHEMA = {
+  "@context": "https://schema.org",
+  "@type": "Event",
+  name: NEXT_EDITION.name,
+  description:
+    "Design POV 2027: a curated design show bringing together architects, interior designers, brands and artists through The Core spatial showcase, brand pavilions, installations and The Circle conversations.",
+  startDate: NEXT_EDITION.startDate,
+  endDate: NEXT_EDITION.endDate,
+  eventStatus: "https://schema.org/EventScheduled",
+  eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+  location: {
+    "@type": "Place",
+    name: NEXT_EDITION.venueName,
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: NEXT_EDITION.city,
+      addressRegion: NEXT_EDITION.region,
+      addressCountry: NEXT_EDITION.country,
+    },
+  },
+  image: [DEFAULT_SHARE_IMAGE],
+  url: absoluteUrl(NEXT_EDITION.url),
+  organizer: { "@type": "Organization", "@id": `${SITE_URL}/#organization`, name: "Design POV", url: SITE_URL },
+};
 
 async function getStudios() {
   try {
@@ -28,6 +63,7 @@ export default async function CorePage2027() {
 
   return (
     <main>
+      <JsonLd data={EVENT_SCHEMA} />
       <Suspense>
         <CoreShowcase studios={studios} />
       </Suspense>
